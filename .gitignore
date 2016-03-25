@@ -1,0 +1,15 @@
+# No *.pyc or *.so (compiled) files
+*.pyc
+*.so
+
+# No built files
+build/
+ExactPack.egg-info/
+
+# No temporary files
+*~
+*dSYM*
+
+# my feature/Blake dev files
+TAGS
+blakePyFiles.txt
