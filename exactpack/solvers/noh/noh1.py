@@ -11,13 +11,13 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Noh(ExactSolver):
 
-    """Computes the solution to the general Noh problem.
+    r"""Computes the solution to the general Noh problem.
 
     This is a base class with default values, which can be used to solve the Noh
     problem for a perfect-gas with any specific heat ratio, :math:`\gamma`.  It
     supports one-dimensional planar, two-dimensional cylindrical, and
     three-dimensional spherical shocks. The default values for the parameters
-    are :math:`\\rho_0=1` and :math:`u_0=1`, although the user is free to
+    are :math:`\rho_0=1` and :math:`u_0=1`, although the user is free to
     set these parameters. The default geometry is spherical, with 
     :math:`\gamma=5/3`.
 
