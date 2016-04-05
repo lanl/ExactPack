@@ -84,7 +84,6 @@ from cog11 import Cog11
 from cog12 import Cog12
 from cog13 import Cog13
 from cog14 import Cog14
-from cog15 import Cog15
 from cog16 import Cog16
 from cog17 import Cog17
 from cog18 import Cog18
