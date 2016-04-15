@@ -7,8 +7,6 @@ rc('font', **{'family':'serif','serif':['Computer Modern']})
 
 # import ExactPack solver and analysis tools
 from exactpack.contrib.riemann_jwl.kamm import RiemannJWL, RiemannJWLLee, RiemannJWLShyue
-from exactpack.analysis import CodeVerificationStudy
-from exactpack.analysis.readers.rage import *
 
 ################################################################
 rmax = 100.

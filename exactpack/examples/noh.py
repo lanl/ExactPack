@@ -9,7 +9,6 @@ from exactpack.solvers.noh.noh1 import Noh
 from exactpack.solvers.noh.timmes import Noh as NohTimmes
 from exactpack.solvers.noh import SphericalNoh, CylindricalNoh, PlanarNoh
 from exactpack.analysis import CodeVerificationStudy
-from exactpack.analysis.readers.rage import RageDump, rage_dump1D, rage_dump2D, sqrt
 
 # construct spatial grid and choose time
 # rmax = 1.2 # computational domain
