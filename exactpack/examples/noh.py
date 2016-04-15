@@ -8,7 +8,6 @@ rc('font',**{'family':'serif','serif':['Computer Modern']})
 from exactpack.solvers.noh.noh1 import Noh
 from exactpack.solvers.noh.timmes import Noh as NohTimmes
 from exactpack.solvers.noh import SphericalNoh, CylindricalNoh, PlanarNoh
-from exactpack.analysis import CodeVerificationStudy
 
 # construct spatial grid and choose time
 # rmax = 1.2 # computational domain
