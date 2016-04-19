@@ -9,8 +9,6 @@ rc('font',**{'family':'serif','serif':['Computer Modern']})
 from exactpack.solvers.riemann.kamm import Riemann as RiemannKamm
 from exactpack.solvers.riemann.timmes import Riemann as RiemannTimmes
 from exactpack.solvers.riemann import *
-from exactpack.analysis import CodeVerificationStudy
-from exactpack.analysis.readers.rage import *
 
 # create solution on r-grid
 r = np.linspace(0.0, 1.0, 200)
@@ -22,7 +20,7 @@ solver = RiemannKamm()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy',scale=0.1)
 # plot exact solution
 plt.xlim(0.0,1.0)
@@ -33,7 +31,7 @@ plt.grid(True)
 plt.show()
 
 #####################################################################
-# RiemannKamm
+# RiemannTimmes
 t = 0.25
 solver = RiemannTimmes()
 soln = solver(r,t)
@@ -56,7 +54,7 @@ solver = Sod()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy',scale=0.1)
 # plot exact solution
 plt.xlim(0.0,1.0)
@@ -73,7 +71,7 @@ solver =  Einfeldt()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
@@ -90,7 +88,7 @@ solver = StationaryContact()
 soln = solver(r,t)
 soln.plot('density',scale=100)
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
@@ -107,7 +105,7 @@ solver = SlowShock()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
@@ -124,7 +122,7 @@ solver = ShockContactShock()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy',scale=0.5)
 # plot exact solution
 plt.xlim(0.0,1.0)
@@ -141,7 +139,7 @@ solver =  LeBlanc()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
-soln.plot('velocity')
+soln.plot('velocity_x')
 soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
