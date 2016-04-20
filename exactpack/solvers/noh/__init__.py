@@ -76,7 +76,7 @@ cylindrically, and spherical geometries, respectively. To cast the equations in
 terms of dimensionless coordinates, set :math:`u_0=1` and :math:`\rho_0 = 1`.
 
 .. [Noh] W. F. Noh, Errors for Calculations of Strong Shocks Using an
-   Artificial Viscosity and an Artificial Heat Flux.  JCP **72** (1978)
+   Artificial Viscosity and an Artificial Heat Flux.  JCP **72** (1987)
 
 .. [LAUR056865] Francis X. Timmes, Galen Gisler, and George Hrbek,
    Automated analyses of the Tri-Lab verification test suite on
