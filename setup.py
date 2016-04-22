@@ -8,7 +8,7 @@ setup(
     name = "ExactPack",
     version = "dev",
     packages = find_packages(),
-    requires = [ 'importlib', 'numpy' ],
+    install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
     ext_modules = [ Extension(name = 'exactpack.solvers.noh._timmes',
                               sources = ['src/timmes/noh/noh.f'] ),
                     Extension(name = 'exactpack.solvers.sedov._timmes',
