@@ -192,6 +192,7 @@ class TestCog3(unittest.TestCase):
         ]).reshape(npts, npts)
 
         gold_velocity = np.array([
+
             -2.40000000e-01, -2.40000000e-01, -2.40000000e-01, -2.40000000e-01,
             -9.60000000e-01, -9.60000000e-01, -9.60000000e-01, -9.60000000e-01,
             -1.68000000e+00, -1.68000000e+00, -1.68000000e+00, -1.68000000e+00,
@@ -1476,6 +1477,3 @@ class TestCog21(unittest.TestCase):
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
 
-    def test_geometry_error_cog21(self):
-        """cog21 problem:"""
-        self.assertRaises(ValueError, Cog21, geometry=-1) 

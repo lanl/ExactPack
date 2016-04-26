@@ -1,6 +1,6 @@
 """A Fortran based Riemann solver.
 
-This is a Python interface to the Riemann solution code from `Frank Timmes
+This is a Python interface to the Riemann solution code from `Frank Timmes'
 website <http://cococubed.asu.edu/code_pages/exact_riemann.shtml>`_.
 """
 

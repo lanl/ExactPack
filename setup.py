@@ -6,7 +6,7 @@ from sphinx.setup_command import BuildDoc
 
 setup(
     name = "ExactPack",
-    version = "dev",
+    version = "1.3",
     packages = find_packages(),
 #    install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
     ext_modules = [ Extension(name = 'exactpack.solvers.noh._timmes',
@@ -29,7 +29,7 @@ setup(
                               f2py_options = ['only:'] + [ 'rmtv' ] + [':']),
                     Extension(name = 'exactpack.solvers.cog._timmes',
                               sources = ['src/timmes/cog8/cog8.f'],
-                              f2py_options = ['only:'] + [ 'cog8' ] + [':']),
+                              f2py_options = ['only:'] + [ 'cog8_timmes' ] + [':']),
                     Extension(name = 'exactpack.solvers.riemann._kamm',
                               sources = ['src/kamm/riemann/shktub.f90',
                                          'src/kamm/riemann/param.h'],

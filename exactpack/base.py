@@ -23,7 +23,7 @@ _whitespace_only_re = re.compile('^[ \t]+$', re.MULTILINE)
 _leading_whitespace_re = re.compile('(^[ \t]*)(?:[^ \t\n])', re.MULTILINE)
 
 def _get_margin(text):
-    """Get the common leading whitepace of text.
+    """Get the common leading whitespace of text.
 
     The code for this function is taken out of
     :func:`textwrap.dedent`, except it simply returns the leading
@@ -83,7 +83,7 @@ class Jump(object):
 
     A :class:`Jump` is a container for left and right states used by
     :class:`JumpCondition` to hold the two limiting values at
-    discountinous points in an exact solution.
+    discontinuous points in an exact solution.
     """
 
     def __init__(self, left, right=None):
@@ -91,24 +91,25 @@ class Jump(object):
         :param left: the left state
         :param right: the right state
 
-        There are three ways of constructing a :class:`Jump`.
+        There are three ways of constructing a :class:`Jump` object.
 
         1. If two arguments are provided (*left* and *right*), these
            are used for the left and right states.
-        2. Alternately, one tuple or other sequence argument can be
+        2. Alternately, one tuple or another sequence argument can be
            provided, and the first two elements will be used for the
            left and right states.
         3. Finally, providing a single argument of type :class:`Jump`
-           will act as a copy constructor.
+           will act as a copy constructor, creating a new object that
+           is a copy of the original.
         """
 
         if not right is None:
-            #: The left state, or the limiting value at the point from below
-            #: (:math:`\lim_{x \rightarrow a^-} f(x)`).
+            #: The left state, or the limiting value at the point from below 
+            #: [ :math:`\lim_{x \rightarrow a^-} f(x)` ].
             self.left = left
             
             #: The right state, or the limiting value at the point from above
-            #: (:math:`\lim_{x \rightarrow a^+} f(x)`).
+            #: [ :math:`\lim_{x \rightarrow a^+} f(x)` ].
             self.right = right
         elif isinstance(left, Jump):
             self.left = left.left
@@ -125,7 +126,7 @@ class Jump(object):
 class JumpCondition(object):
     """A class for jump conditions.
 
-    Weak solutions of differential equation may have discontinuties.
+    By definition, weak solutions of differential equations may have discontinuities.
     These are points at which the solution, considered as a function,
     has no value, but for which the left and right limits on the
     function value are different.  Numerically computed discrete
@@ -135,11 +136,11 @@ class JumpCondition(object):
 
     Each solution discontinuity has a location and a set of variables
     for which the left and right states are provided.  In addition to
-    the attributes decribed below, a :class:`JumpCondition` object
+    the attributes described below, a :class:`JumpCondition` object
     will have an attribute for each problem variable, with a value of
     type :class:`Jump` giving the left and right states.
 
-    For example, the jump in the Heavyside step function could be
+    For example, the jump in the Heaviside step function could be
     described by the following::
 
        JumpCondition(location=0,
@@ -194,18 +195,21 @@ class ExactSolver(object):
     solutions at specific points in time and space.  A solver instance
     can be invoked as a function with two arguments.  The first is a
     list of points at which to generate the exact solution, and the
-    second is the time at which the solution is required.  The points
-    list can be a :mod:`numpy` array or a Python sequence of points.
-    Depending on the solver, the points may be 1-, 2-, or
-    3-dimensional, and may be in rectangular, cylindrical, or
-    spherical coordinates.  Check the documentation for the particular
-    solver for details.
+    second is the time at which the solution is required.  The
+    points list can be a :mod:`numpy` array or a Python sequence (list or
+    tuple) of points.  Depending on the solver, each point may be 1-, 2-,
+    or 3-dimensional, and may be in rectangular, cylindrical, or spherical
+    coordinates.  For 1-dimensional problems, the points are given by a
+    rank-1 :mod:`numpy` array, or a list of scalar values.  For 2- or
+    3-dimensional problems, the points are given by a :mod:`numpy` array of
+    shape ``(N,2)`` or ``(N,3)``, or by a list of 2- or 3-tuples.  Check
+    the documentation for a particular solver for details.
     
     For an example of how to write an ExactSolver child class, see
     :ref:`adding-a-solver`.
     """
 
-    # Setting this meta-class forces all classes inhertiting from
+    # Setting this meta-class forces all classes inheriting from
     # ExactSolver to process the docstring to add information from the
     # parameters attribute before creating the class.
     __metaclass__ = _AddParametersToDocstring
@@ -245,14 +249,14 @@ class ExactSolution(numpy.recarray):
       :class:`ExactSolution`.
 
     :mod:`exactpack.base.ExactSolution` is derived from the
-    :class:`numpy.ndarray`, specficially a Numpy record array
+    :class:`numpy.ndarray`, specifically a Numpy record array
     (:ref:`numpy:structured_arrays`).  There are some special things
-    that need to be done to take care of the way an
+    that need to be done to take care of the way a
     :class:`numpy.ndarray` is created.  The code used here is based on
     the example in :ref:`numpy:basics.subclassing`.
 
     For compatibility, the field names must follow a standardized
-    naming convention.  For any variable which has an entry in the
+    naming convention.  For any variable that has an entry in the
     following table, the listed field name will be used.  Other
     problem specific variables, which are not listed in the table,
     should be fully described in the documentation for the specific
@@ -262,14 +266,18 @@ class ExactSolution(numpy.recarray):
 
     .. table:: Standardized Variable Names
 
-       ==========  ====================================
-       Field Name  Description
-       ==========  ====================================
-       density     Density
-       pressure    Pressure
-       sie         Specific internal energy
-       velocity    Velocity along the problem direction
-       ==========  ====================================
+       ==========================      ===============================================
+       Field Name                      Description
+       ==========================      ===============================================
+       density                         Density
+       pressure                        Pressure
+       specific_internal_energy        Specific internal energy
+       velocity                        Velocity along the problem direction
+       position                        Generic position variable r or x along the problem direction
+       position_x                      Cartesian position variable for x in 1D, 2D or 3D
+       position_y                      Cartesian position variable for y in 2D or 3D
+       position_z                      Cartesian position variable for z in 3D
+       ==========================      ===============================================
 
     Internally, :func:`numpy.core.records.fromarrays` is used to map
     the *data* to a structured array.
@@ -304,9 +312,9 @@ class ExactSolution(numpy.recarray):
         *name* is the name of the variable to plot.
 
         The optional argument *scale* gives a scaling factor to be
-        applied to the data before plotting.  If ``scale='auto'``,
-        :meth:`plot` will determine a scale factor that results in a
-        result which is order one.
+        applied to the data before plotting.  If ``scale='auto'``, then
+        :meth:`plot` will determine a scale factor so that the plotted
+        data will be of order one.
 
         If a *label* argument is given, it is used with no changes.
         If no *label* is given (or ``label=None``), then the label

@@ -11,7 +11,7 @@ The exact solution takes the form,
   u(r,t) &= \frac{r}{t}
   \\
   T(r,t) &= T_0 \, r^{2 - (\gamma -1)(k + 1)} \, t^{-2}
-  \\ 
+  \\[5pt]
   \alpha &= \beta + 4 + \frac{k -1}{2 - (\gamma - 1)(k + 1)}
 
 Free parameters: :math:`k`, :math:`\rho_0`, :math:`T_0`, :math:`\gamma`,

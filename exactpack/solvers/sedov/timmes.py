@@ -1,8 +1,7 @@
 """A Fortran based Sedov solver.
 
 This is a Python interface for the Sedov problem. The Fortran source code was
-adapted from `Frank Timmes website
-<http://cococubed.asu.edu/code_pages/sedov.shtml>`_.
+adapted from `Frank Timmes website <http://cococubed.asu.edu/research_pages/sedov.shtml>`_.
 
 """
 

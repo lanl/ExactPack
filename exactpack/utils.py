@@ -10,7 +10,7 @@ def discover_solvers():
 
     Solver discovery is performed by walking the directory tree
     containing the :mod:`exactpack` module, and looking for classes
-    which inherit from :class:`exactpack.base.ExactSolver`.  The return
+    that inherit from :class:`exactpack.base.ExactSolver`.  The return
     value is a list of names of solver classes.
 
     Since the directory walk is somewhat inefficient, it is suggested

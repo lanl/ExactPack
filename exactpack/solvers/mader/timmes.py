@@ -1,7 +1,7 @@
 r"""A Fortran based Mader solver.
 
 This is a Python interface to the Mader rarefaction solution code from
-`Frank Timmes website <http://cococubed.asu.edu/code_pages/mader.shtml>`_.
+`Frank Timmes' website <http://cococubed.asu.edu/research_pages/mader.shtml>`_.
 Timmes' solution code is released under LA-CC-05-101.
 
 For a CJ detonation speed of 0.8 cm/s, it takes 6.25 :math:`\mu` s to
@@ -17,8 +17,8 @@ class Mader(ExactSolver):
     """
 
     parameters = {
-        'p_cj': 'chapman-jouget pressure',
-        'd_cj': 'chapman-jouget density',
+        'p_cj': 'Chapman-Jouget pressure',
+        'd_cj': 'Chapman-Jouget density',
         'gamma': 'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
         'u_piston': 'speed of piston',
         }

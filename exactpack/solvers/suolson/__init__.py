@@ -1,12 +1,11 @@
 r"""The Su-Olson Problem
 
-This is a one-dimensional, half-space, non-Equilibrium Marshak burn
-wave. The radiative transfer model is a one-group diffusion
-approximation with a Marshak radiation boundary condition. The
-radiation temperature field (in energy units) and the matter energy
-field are denoted by :math:`T = T(z,t)` and :math:`E=E(z,t)` for
-:math:`0 \le z < \infty`. Fluid motion is neglected, and the equations
-of motion become
+The Su-Olson problem [Su1996]_ is a one-dimensional, half-space, non-Equilibrium Marshak burn
+wave. The radiative transfer model is a one-group diffusion approximation
+with a Marshak radiation boundary condition. The radiation temperature
+field (in energy units) and the matter energy density field are denoted
+by :math:`T = T(z,t)` and :math:`E=E(z,t)` for :math:`0 \le z < \infty`.
+Fluid motion is neglected, and the equations of motion become
 
 .. math::
 
@@ -27,12 +26,18 @@ can be solved for the (non-physical) model in which
 .. math::
    c_v(T) &= \alpha\, T^3
    \\
-   \kappa(T) &= constant .
+   \kappa(T) &= \text{constant} \ .
    :label: cvkappaDef
 
-When the matter radiates as a black body, :math:`E= a T^4`, and we see
-that :math:`c_v = \partial E/\partial T = 4 a`. The Marshak boundary
-condition at :math:`z=0` is
+When the matter radiates as a black body, so that :math:`E= a T^4`,
+we see that :math:`c_v = \partial E/\partial T = 4 a T^3`; therefore
+the coefficient :math:`\alpha` is related to the radiation constant
+by
+
+.. math::
+   \alpha = 4 a \ .
+
+The Marshak boundary condition at :math:`z=0` is
 
 .. math::
    E(0,t) - \frac{2}{3 \kappa(0,t)}\,\frac{\partial E(0,t)}{\partial z}

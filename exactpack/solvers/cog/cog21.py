@@ -5,7 +5,7 @@ The solution contains a shock located at
 
 .. math::
 
-  R_\text{shock} &= \frac{2}{\Gamma T_0 \,t^2} ~~\textrm{where}
+  R_\text{shock} &= \frac{2}{\Gamma T_0 \,t^2}   ~~\textrm{with}~~
   \\
   k &= 2 ~~\textrm{and}~~ \gamma = 5 \ .
 
@@ -37,7 +37,6 @@ import numpy as np
 from math import sqrt
 
 from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
-
 
 class Cog21(ExactSolver):
     """Computes the solution to the Cog21 problem. No conduction.
@@ -81,5 +80,3 @@ class Cog21(ExactSolver):
                                     'temperature',
                                     'pressure',
                                     'sie'])
-
-

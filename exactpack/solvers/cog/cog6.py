@@ -11,7 +11,7 @@ The exact solution takes the form,
   \\
   T(r,t) &= \frac{\tau^2}{\Gamma (b + 2)} \cdot 
   \frac{r^2}{(\tau^2 - t^2)^2}
-  \\
+  \\[5pt]
  \gamma &= \frac{k + 3}{k + 1}
 
 Free parameters: :math:`b`, :math:`k`, :math:`\rho_0`, :math:`\tau`,
@@ -33,10 +33,11 @@ class Cog6(ExactSolver):
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
         'rho0': "density coefficient",
-        'tau': "free parameter",
-        'b': "free parameter",
+        'tau': "free parameter with dimensions of time",
+        'b': "free dimensionless parameter",
         'Gamma': "Gruneisen gas parameter",
         }
+        
     geometry = 3
     rho0 = 1.8
     tau = 1.25

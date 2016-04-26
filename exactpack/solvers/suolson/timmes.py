@@ -1,7 +1,7 @@
 """A Fortran based Su-Olson solver.
 
 This is a Python interface to the Riemann solution code suo02.f from
-`Frank Timmes website <http://cococubed.asu.edu/code_pages/su_olson.shtml>`_.
+`Frank Timmes' website <http://cococubed.asu.edu/research_pages/su_olson.shtml>`_.
 This code is released under LA-CC-05-101.
 """
 

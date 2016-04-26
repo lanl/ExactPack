@@ -68,6 +68,9 @@ class Cog20(ExactSolver):
         if self.geometry not in [1, 2, 3]:
             raise ValueError("geometry must be 1, 2, or 3")
 
+        if self.a == 0.0:
+            raise ValueError("parameter a cannot be zero")
+                
     def _run(self, r, t):
 
         bigGamma = self.Gamma

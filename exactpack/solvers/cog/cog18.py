@@ -13,6 +13,12 @@ The exact solution takes the form,
   T(r,t) &= \frac{\alpha \tau^2}{\Gamma (2 \alpha - 2 \beta - k - 7)}
   \cdot \frac{r^2}{(\tau^2 - t^2)^2}
 
+with
+
+.. math::
+
+   \gamma = \frac{k+3}{k+1} \ .
+
 Free parameters: :math:`\alpha`, :math:`\beta`, :math:`k`, :math:`\tau`,
 :math:`\rho_0`, and :math:`\Gamma`.
 
@@ -34,7 +40,7 @@ class Cog18(ExactSolver):
         'alpha': r"dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
-        'tau': "free parameter",
+        'tau': "free parameter of dimension time",
         'Gamma': "Gruneisen gas parameter",
         }
     geometry = 3

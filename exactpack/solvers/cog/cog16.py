@@ -32,7 +32,6 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog16(ExactSolver):
     """Computes the solution to the Cog16 problem.
-       Incomplete: We need to solve for beta as a function of alpha.
     """
 
     parameters = {
@@ -57,6 +56,9 @@ class Cog16(ExactSolver):
         if self.geometry not in [2, 3]:
             raise ValueError("geometry must be 2, or 3")
 
+        if (self.geometry - 1) == self.b:
+            raise ValueError("the parameter b canot equal to geometry-1")
+
     def _run(self, r, t):
 
         bigGamma = self.Gamma
@@ -66,8 +68,8 @@ class Cog16(ExactSolver):
                          # a   = 7.5657e-15 erg cm^-3 K^-4
                          #     = 1.3720e+02 erg cm^-3 ev^-4
                          # k_B = 8.6173324e-5 eV K^-1
-        alpha = 1. - 1 / k
-        beta = alpha / 2. - 3.
+        alpha = 1.0 - 1.0 / k
+        beta = alpha / 2.0 - 3.0
         c1 = -k - self.b
         c2 = (5 * k - 1) / 2
         c3 = (k - 1) / 2

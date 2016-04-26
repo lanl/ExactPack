@@ -18,7 +18,7 @@ class Noh(ExactSolver):
     supports one-dimensional planar, two-dimensional cylindrical, and
     three-dimensional spherical shocks. The default values for the parameters
     are :math:`\rho_0=1` and :math:`u_0=1`, although the user is free to
-    set these parameters. The default geometry is spherical, with 
+    change these parameters. The default geometry is spherical, with 
     :math:`\gamma=5/3`.
 
     The solver reports jumps in the
@@ -57,11 +57,11 @@ class Noh(ExactSolver):
                            self.geometry * np.ones(shape=r.shape),
                            self.rho0 * (1 + abs(self.u0) * t / r) ** (self.geometry - 1))
         pressure = np.where(r < shock_location,
-                            (self.rho0 * self.u0 * self.u0) * 4.0 ** self.geometry / 3.0 * \
+                            (self.rho0 * self.u0 ** 2) * 4.0 ** self.geometry / 3.0 * \
                             np.ones(shape=r.shape),
                             np.zeros(shape=r.shape))
         sie = np.where(r < shock_location,
-                      (self.u0 * self.u0) * (1.0 / 2.0) * np.ones(shape=r.shape),
+                      (self.u0 ** 2) * (1.0 / 2.0) * np.ones(shape=r.shape),
                        np.zeros(shape=r.shape))
         velocity = np.where(r < shock_location,
                             np.zeros(shape=r.shape),
@@ -75,11 +75,12 @@ class Noh(ExactSolver):
                                     'velocity'],
                              jumps=[JumpCondition(shock_location,
                                     "Shock",
-                                    density=(((self.gamma + 1) / \
+                                    density=(self.rho0 * ((self.gamma + 1) / \
                                     (self.gamma - 1)) ** self.geometry,
-                                    4.0 ** (self.geometry - 1)),
-                                    pressure=(4.0 ** self.geometry / 3.0, 0),
-                                    sie=(1.0 / 2.0, 0),
+                                    self.rho0 * 4.0 ** (self.geometry - 1)),
+                                    pressure=((self.rho0 * self.u0 ** 2) * \
+                                              4.0 ** self.geometry / 3.0, 0),
+                                    sie=( (self.u0 ** 2)* 1.0 / 2.0, 0),
                                     velocity=(0, -1))
                                     ]
         )
@@ -88,7 +89,7 @@ class Noh(ExactSolver):
 class PlanarNoh(Noh):
     """The standard planar Noh problem.
 
-    The planar Noh problem as defined in [Noh]_, with a default value
+    The planar Noh problem as defined in [Noh1978]_, with a default value
     of :math:`\gamma=5/3`.
     """
 
@@ -100,7 +101,7 @@ class PlanarNoh(Noh):
 class CylindricalNoh(Noh):
     """The standard cylindrical Noh problem.
 
-    The cylindrical Noh problem as defined in [Noh]_, with a default
+    The cylindrical Noh problem as defined in [Noh1978]_, with a default
     value of :math:`\gamma=5/3`.
     """
 
@@ -112,7 +113,7 @@ class CylindricalNoh(Noh):
 class SphericalNoh(Noh):
     """The standard spherical Noh problem.
 
-    The spherical Noh problem as defined in [Noh]_, with a default
+    The spherical Noh problem as defined in [Noh1978]_, with a default
     value of :math:`\gamma=5/3`.
     """
 

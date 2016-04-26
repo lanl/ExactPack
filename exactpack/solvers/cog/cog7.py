@@ -56,9 +56,9 @@ class Cog7(ExactSolver):
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
         'tau': "free parameter",
-        'b': "free parameter",
-        'R0': "free parameter",
-        'Ri': "free parameter",
+        'b': "free dimensionless parameter",
+        'R0': "free parameter with dimensions of length",
+        'Ri': "free parameter with dimensions of length",
         'Gamma': "Gruneisen gas parameter",
         }
     geometry = 3

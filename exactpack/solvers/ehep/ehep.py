@@ -12,20 +12,12 @@ import numpy as np
 
 class EscapeOfHEProducts(ExactSolver):
     r""" Computes the solution to the Escape of HE Products problem.
-    For the complete problem definition and exact solution, see
-    Doebling, 2015. The problem default values are selected to be consistent
-    with the original problem definition in Fickett and Rivard, 1974.
+    For the complete problem definition and exact solution, see [Doebling2015]_.
+    The problem default values are selected to be consistent with the original
+    problem definition in Fickett and Rivard [Fickett1974]_.
 
-    Default values are: :math:`D=0.85 cm/\mu sec, \rho=1.6,
-    u_p=0.5, \tilde{x}=1.0, x_{max}=10., t_{max}=10.`
-
-    .. [Doebling] S. Doebling, "The Escape of High Explosive Products:
-       An Exact-Solution Problem for Verification of Hydrodynamics Codes,"
-       LA-UR-15-22547
-    .. [Fickett] W. Fickett and C. Rivard, Test Problems for Hydrocodes.
-       LASL Report, LA-5479, Los Alamos Scientific Laboratory
-       (1974, Rev 1981)
-
+    Default values are: :math:`D=0.85\,{\rm cm/\mu sec}, \rho=1.6,
+    u_p=0.5, \tilde{x}=1.0, x_{\rm max}=10., t_{\rm max}=10.`
     """
 
     parameters = {
@@ -377,9 +369,10 @@ class EscapeOfHEProducts(ExactSolver):
 
     def point_on_boundary(self, corners, point, tol=1e-12):
         r''' Determine whether a given point lies on the boundary
-          of the polygon defined by "corners"
+        of the polygon defined by "corners"
         
-          Algorithm:
+        Algorithm::
+        
             on_boundary = False
             Loop over each successive pair of corners
              (including last to first)
@@ -402,13 +395,16 @@ class EscapeOfHEProducts(ExactSolver):
         return on_bound
 
     def point_on_line(self, corners, point, tol=1e-5):
-        r'''   Corners is a list of 2 points
-               Compute distance between point and first corner
-               Compute distance between point and second corner
-               Compute distance between the two corners
-               If magnitude of the sum of the first two distances minus the
-                   third distance is less than a tolerance, then the point is
-                   on the line
+        r'''Corners is a list of 2 points
+
+        Algorithm::
+        
+          Compute distance between point and first corner
+          Compute distance between point and second corner
+          Compute distance between the two corners
+          If magnitude of the sum of the first two distances minus the
+             third distance is less than a tolerance, then the point is
+             on the line
         '''
 
         corner0 = corners[0]
