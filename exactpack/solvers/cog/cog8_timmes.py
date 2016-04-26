@@ -45,14 +45,14 @@ class Cog8(ExactSolver):
         'gamma': 'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
         'cv': 'specific heat at constant volume [erg/g/eV]',
         }
-                
-    rho0 = 3.0
-    temp0 = 2000.0
-    alpha = -1.0
-    beta = 2.0
-    gamma = 5.0 / 3.0
-    cv = 1.0
 
+    gamma = 1.4        
+    alpha = 2.0
+    beta = 1.0
+    rho0 = 1.8
+    temp0 = 1.4
+    cv = 1.0
+                
     def _run(self, r, t):
 
         den, tev, ener, pres, vel = cog8_timmes(t=t,

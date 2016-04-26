@@ -4,7 +4,7 @@ from matplotlib import rc, rcParams
 #rc('text',usetex=True)
 rc('font',**{'family':'serif','serif':['Computer Modern']})
 
-# import ExactPack solver and analysis tools
+# import ExactPack solvers
 from exactpack.solvers.cog import Cog8
 from exactpack.solvers.cog import Cog3
 from exactpack.solvers.cog.cog8_timmes import Cog8 as Cog8Timmes
@@ -21,7 +21,6 @@ soln = solver(r,t)
 
 # plot exact solution
 soln.plot('density')
-soln.plot('pressure')
 soln.plot('velocity')
 soln.plot('temperature')
 plt.xlim(0.0,rmax)
@@ -38,7 +37,6 @@ soln = solver(r,t)
 
 # plot exact solution
 soln.plot('density')
-soln.plot('pressure')
 soln.plot('velocity')
 soln.plot('temperature')
 plt.xlim(0.0,rmax)
