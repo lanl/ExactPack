@@ -28,12 +28,7 @@ makes it easy to extend the solution-code library to include
 additional exact solutions in a robust, reliable, and maintainable
 manner.
 
-This code is unclassified and has been assigned LA-CC-14-047. Los
-Alamos National Laboratory¹s Export Control Team made an in-house
-determination that this software is controlled under Department of
-Commerce regulations and the Export Control Classification Number
-(ECCN) EAR99. The export control review is attached.
-
+This code is unclassified and has been assigned LA-CC-14-047.
 The developers intend to distribute this software package under the
 OSI Certified GNU General Public License, Version 3
 (http://www.opensource.org/licenses/GPL-3.0)
@@ -58,7 +53,6 @@ package:
 
 CODE NAME:  ExactPack, Version 1.x (C14092)
 Classification Review Number: LA-CC-14-047
-Export Control Classification Number (ECCN): EAR99
 B&R Code:  DP1517070
 
 
