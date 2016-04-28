@@ -3,17 +3,13 @@ Introduction
 
 For code verification, one compares the code output against known
 exact solutions. There are many standard test problems used in this
-capacity, such as the Noh and Sedov problems. Such exact solution
-codes are usually stand-alone programs that can be downloaded from the
-web, after which the user must roll out his or her own plotting
-package and analysis utilities. When comparing across multiple codes,
-this can be a time consuming and potentially error prone
-process. ExactPack is a utility that integrates many of these exact
+capacity, such as the Noh and Sedov problems.
+ExactPack is a utility that integrates many of these exact
 solution codes into a common API (application program interface), and
 can be used as a stand-alone code or as a python package. ExactPack
 consists of python driver scripts that access a library of exact
 solutions written in Fortran or Python. The spatial profiles of the
-relevant gas quantities, such as the density, fluid velocity, sound
+relevant physical quantities, such as the density, fluid velocity, sound
 speed, or internal energy, are returned at a time specified by the
 user. The solution profiles can be viewed and examined by a command
 line interface or a graphical user interface, and a number of analysis
