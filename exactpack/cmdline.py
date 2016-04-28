@@ -19,7 +19,7 @@ def main():
 notes:
 
 The solver name is the full name of a Python class with
-"exactpack" omitted, e.g. "noh.Noh".
+"exactpack" omitted, e.g. "solvers.noh.Noh".
 
 The PARAMS are keys and values separated by an equal sign (no
 spaces), e.g. "gamma=1.4".
@@ -27,9 +27,9 @@ spaces), e.g. "gamma=1.4".
 examples:
 To plot the spherical Noh problem with gamma=5/3, you can use the
 wrapper class:
-  exactpack --plot noh.SphericalNoh
+  exactpack --plot solvers.noh.SphericalNoh
 or the general class:
-  exactpack noh.Noh --plot --params gamma=1.6667 geometry=3
+  exactpack solvers.noh.Noh --plot --params gamma=1.6667 geometry=3
 Note that in this case, solver argument must go first so it is not
 mistaken for an argument to --params.
 """

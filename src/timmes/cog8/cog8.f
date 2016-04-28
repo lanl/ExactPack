@@ -15,6 +15,8 @@ cf2py double precision :: r(nstep), t
       double precision :: deni,tevi,eneri,presi,veli,zstep
       double precision :: xl,xr,rho0,temp0,alpha,beta,gamma,cv
 
+c     How are gamma and cv being set in the python interface?
+      
       zstep = (r(nstep) - r(1))/float(nstep)
       do i=1,nstep
          xl = r(i) - 0.5d0 * zstep

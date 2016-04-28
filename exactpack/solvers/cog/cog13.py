@@ -59,6 +59,9 @@ class Cog13(ExactSolver):
         if self.geometry not in [1, 2, 3]:
             raise ValueError("geometry must be 1, 2, or 3")
 
+        if self.gamma == 1.0:
+            raise ValueError("gamma cannot be one")
+
     def _run(self, r, t):
 
         bigGamma = self.Gamma

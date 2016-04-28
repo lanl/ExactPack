@@ -1,10 +1,10 @@
 """A Fortran based Noh solver.
 
-This is a Python interface to the Noh solution code from `Frank Timmes
-website <http://cococubed.asu.edu/code_pages/noh.shtml>`_.  The code
+This is a Python interface to the Noh solution code from `Frank Timmes'
+website <http://cococubed.asu.edu/research_pages/noh.shtml>`_.  The code
 was developed at Los Alamos National Laboratory, and released under
 LA-CC-05-101.  A full description of the solution and code listing is
-in a Los Alamos report [LAUR056865]_
+in a Los Alamos report [Timmes2005]_.
 """
 
 from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
@@ -12,16 +12,16 @@ import _timmes
 
 
 class Noh(ExactSolver):
-    """Computes the solution to the spherical Noh problem.
+    r"""Computes the solution to the general Noh problem.
 
     The functionality of this class is completely superseded by
-    :class:`exactpack.noh1.SphericalNoh`, the only difference being
+    :class:`exactpack.solvers.noh1.Noh`, the only difference being
     that this class is a wrapper to a Fortran library.  This version
-    is provided primarily as an template example to developers to
+    is provided primarily as a template example to developers to
     demonstrate how to add an exact solution that is computed by an
     external Fortran code. The default geometry is spherical, with 
     :math:`\gamma=5/3`. The parameters values for the density and
-    gas velocity are are :math:`\\rho_0=1` and :math:`u_0=1`.
+    gas velocity are are :math:`\rho_0=1` and :math:`u_0=1`.
     """
 
     parameters = {

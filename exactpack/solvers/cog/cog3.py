@@ -30,9 +30,9 @@ class Cog3(ExactSolver):
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
         'rho0': "density coefficient",
-        'b': "free parameter",
-        'v': "free parameter",
-        'Gamma': "Gruneisen gas parameter",
+        'b': "free dimensionless parameter",
+        'v': "free parameter with dimensions of velocity",
+        'Gamma': "Gruneisen gas parameter"
         }
     geometry = 3
     rho0 = 1.8

@@ -47,6 +47,9 @@ class Cog4(ExactSolver):
         if self.geometry not in [1, 2, 3]:
             raise ValueError("geometry must be 1, 2, or 3")
 
+#        if self.gamma >= 1:
+#            raise ValueError("gamma must be < 1")
+
     def _run(self, r, t):
 
         bigGamma = self.Gamma
@@ -55,7 +58,6 @@ class Cog4(ExactSolver):
         x2 = -k * (self.gamma - 1) / (self.gamma + 1)
         t1 = pow(self.u0, 2) * (1 - self.gamma) / (2 * \
             self.gamma * bigGamma)
-
         density = self.rho0 * pow(r, 2 * x1) * \
             np.ones(shape=r.shape)  # mass density [g/cc]
         velocity = self.u0 * pow(r, x2) * \

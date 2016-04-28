@@ -5,13 +5,13 @@ The solution takes a particularly simple analytic form,
 
 .. math::
 
-   \rho(r,t) &= \rho_0 r^{(k-1)/(\beta - \alpha + 4)} t^{-(k+1)-
+   \rho(r,t) &= \rho_0 \, r^{(k-1)/(\beta - \alpha + 4)} t^{-(k+1)-
    (k-1)/(\beta - \alpha +4) }
    \\
-   T(r,t) &= T_0  r^{(1-k)/(\beta - \alpha + 4)}
-   t^{(1-\gamma)(k+1) + (k-1)/(\beta - \alpha +4) }
+   u(r,t) &= \frac{r}{t}
    \\
-   u(r,t) &= \frac{r}{t} \ ,
+   T(r,t) &= T_0 \,  r^{(1-k)/(\beta - \alpha + 4)}
+   t^{(1-\gamma)(k+1) + (k-1)/(\beta - \alpha +4) }   \ .
 
 Free parameters: :math:`\alpha`, :math:`\beta`, :math:`k`,
 :math:`\rho_0`, :math:`T_0`, and :math:`\gamma`.
@@ -20,11 +20,11 @@ For the values :math:`\alpha=-1`, :math:`\beta=2`, :math:`\gamma=5/3`,
 and :math:`k=2` (spherical), the solution takes the form:
 
 .. math::
-   \rho(r,t) &= \rho_0 r^{1/7} t^{-22/7}
+   \rho(r,t) &= \rho_0\, r^{1/7} t^{-22/7}
    \\
-   T(r,t) &= \rho_0 r^{-1/7} t^{-13/7}
+   u(r,t) &= r t^{-1} 
    \\
-   u(r,t) &= r t^{-1}
+   T(r,t) &= \rho_0\, r^{-1/7} t^{-13/7} \ .
 
 """
 

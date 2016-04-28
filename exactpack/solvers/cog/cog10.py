@@ -12,7 +12,7 @@ The exact solution takes the form,
   \cdot k \rho_0^{\alpha - 1} \, T_0^{\beta + 3}
   \\
   T(r,t) &= T_0 \, r^k
-  \\ 
+  \\[5pt]
   \alpha &= \beta + 4  - 1/k ~~(k \ne 0)  
 
 Free parameters: :math:`\beta`, :math:`k`, :math:`\rho_0`, :math:`T_0`,
@@ -30,7 +30,7 @@ class Cog10(ExactSolver):
     """
 
     parameters = {
-        'geometry': "1=planar, 2=cylindrical, 3=spherical",
+        'geometry': "2=cylindrical, 3=spherical",
         'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",

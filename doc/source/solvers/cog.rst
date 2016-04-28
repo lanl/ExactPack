@@ -1,5 +1,5 @@
-Coggeshall Problem
-==================
+Coggeshall Problems
+===================
 
 .. automodule:: exactpack.solvers.cog
    :members:
@@ -91,12 +91,6 @@ Coggeshall Problem
 ----------------------------------
 
 .. automodule:: exactpack.solvers.cog.cog14
-   :members:
-
-:mod:`exactpack.solvers.cog.cog15`
-----------------------------------
-
-.. automodule:: exactpack.solvers.cog.cog15
    :members:
 
 :mod:`exactpack.solvers.cog.cog16`

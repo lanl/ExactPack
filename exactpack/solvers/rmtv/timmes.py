@@ -1,7 +1,7 @@
 """A Fortran based RMTV solver.
 
 This is a Python interface to the Riemann solution code from `Frank
-Timmes website <http://cococubed.asu.edu/code_pages/rmtv.shtml>`_.
+Timmes website <http://cococubed.asu.edu/research_pages/rmtv.shtml>`_.
 This code is released under LA-CC-05-101.
 """
 

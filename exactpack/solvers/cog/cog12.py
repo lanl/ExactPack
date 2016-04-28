@@ -33,7 +33,7 @@ class Cog12(ExactSolver):
     """
 
     parameters = {
-        'geometry': "1=planar, 2=cylindrical, 3=spherical",
+        'geometry': "2=cylindrical, 3=spherical",
         'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
@@ -51,8 +51,8 @@ class Cog12(ExactSolver):
 
         super(Cog12, self).__init__(**kwargs)
 
-        if self.geometry not in [1, 2, 3]:
-            raise ValueError("geometry must be 1, 2, or 3")
+        if self.geometry not in [2, 3]:
+            raise ValueError("geometry must be 2, or 3")
 
     def _run(self, r, t):
 

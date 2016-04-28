@@ -1,10 +1,10 @@
 r"""The Escape of HE Products problem
 
 The escape of HE products (EHEP) problem was first published by Fickett
-and Rivard in 1974 [Fickett]_. In 2002, [Dykema]_ published a derivation of
-the characteristics of the exact solution in :math:`x-t` space.
+and Rivard in 1974 [Fickett1974]_. In 2002, [Dykema2002]_ published a derivation of
+the characteristics of the exact solution in :math:`x`-:math:`t` space.
 A complete description of the problem, the exact solution equations,
-and the solution algorithm is presented in [Doebling]_.
+and the solution algorithm is presented in [Doebling2015]_.
 The problem concerns a planar
 one-dimensional rod of HE extending from the origin for a length
 of :math:`\tilde{x}`, as shown in the Figure. 
@@ -18,7 +18,7 @@ of :math:`\tilde{x}`, as shown in the Figure.
 
 The HE is a polytropic
 ideal gas with adiabatic index
-:math:`\gamma=3` and C-J detonation velocity :math:`D_{CJ}`.
+:math:`\gamma=3` and C-J detonation velocity :math:`D_{\rm CJ}`.
 (The value :math:`\gamma=3` is required to enable the derivation of
 the exact solution.) The unreacted HE and the reacted HE are assumed
 to have the same material properties.
@@ -44,20 +44,19 @@ by the equation of state (EOS) for an ideal gas at constant entropy,
 .. math::
   p = (\gamma-1) \rho e  \ ,
 
-where :math:`\gamma \equiv c_p/c_v` is the ratio of specific heats at
-constant pressure and volume.
-The choice of :math:`\gamma=3` causes the solution characteristics to
-be straight lines in the :math:`x-t` plane. The values for the physical
-variables are then derived for each region defined by the characteristics.
+where :math:`\gamma \equiv c_p/c_v` is the ratio of specific heats at constant
+pressure and volume. The choice of :math:`\gamma=3` produces solution
+characteristics that are straight lines in the :math:`x`-:math:`t` plane, and
+the values for the physical variables are then derived for each region defined
+by the characteristics.
 
-To determine the solution at a given value of :math:`(x,t)`, we first
-determine in which region the point lies, then use the corresponding
-equations for :math:`\rho(x,t), p(x,t), e(x,t), u(x,t)` for that region.
-The easiest way to describe the regions is to define the coordinates of
-the vertices of the polygon that bounds each region. To close the polygons,
-we must select a maximum distance :math:`x_{max}` and maximum time
-:math:`t_{max}`. For each region, the vertices that describe its polygon
-are listed here:
+To find the solution at a given value of :math:`(x,t)`, we must first determine
+the region in which the point lies, and then use the corresponding Euler equations
+for :math:`\rho(x,t), u(x,t), p(x,t), e(x,t)` in that region. The easiest way
+to describe the regions is to define the coordinates of the vertices of the
+polygon that bounds each region. To close the polygons, we must select a maximum
+distance :math:`x_{\rm max}` and maximum time :math:`t_{\rm max}`. For each
+region, the vertices that describe its polygon are listed here:
 
 Region 0V (ahead of the shock in the void region):
 
@@ -65,8 +64,8 @@ Region 0V (ahead of the shock in the void region):
 
   (\tilde{x},0) \\
   (\tilde{x},\tilde{t}) \\
-  (x_{max},\frac{x_{max}}{D}) \\
-  (x_{max},0) \\
+  (x_{\rm max},\frac{x_{\rm max}}{D}) \\
+  (x_{\rm max},0) \\
   c_s = 0\\
   u = 0 \\
   p = 0 \\
@@ -84,7 +83,7 @@ Region 0H (ahead of the shock within the HE):
   p = 0 \\
   \rho = \rho_0
 
-For Regions I thru V, :math:`p` and :math:`\rho` are given as functions
+For Regions I through V, :math:`p` and :math:`\rho` are given as functions
 of :math:`c_s`:
 
 ..  math::
@@ -110,8 +109,8 @@ Region II (isentropic expansion into the void)
   (\tilde{x},\tilde{t}) \\
   \frac{3\tilde{x}}{2}\left(1-\frac{D}{4u_p+2D},
       \frac{1}{2u_p+D}\right) \\
-  \left( (2u_p+D/2)t_{max},t_{max} \right)\\
-  (x_{max},\frac{x_{max}}{D})	\\
+  \left( (2u_p+D/2)t_{\rm max},t_{\rm max} \right)\\
+  (x_{\rm max},\frac{x_{\rm max}}{D})	\\
   c_s = \frac{1}{2} \left(\frac{x}{t}-\frac{x-\tilde{x}}{t-\tilde{t}}\right)\\
   u = \frac{1}{2} \left(\frac{x}{t}+\frac{x-\tilde{x}}{t-\tilde{t}}\right)
 
@@ -133,8 +132,8 @@ Region IV (fluid expansion and rarefaction)
   \frac{3\tilde{x}}{2}\left(1-\frac{D}{4u_p+2D},
       \frac{1}{2u_p+D}\right) \\
   \frac{3\tilde{x}}{2u_p+D}(1,u_p) \\
-  \left(-\frac{3}{2}\tilde{x} + (2u_p+\frac{D}{2})t_{max}, t_{max}\right) \\
-  \left(x_{max}, \frac{x_{max}}{2u_p+D/2}\right) \\
+  \left(-\frac{3}{2}\tilde{x} + (2u_p+\frac{D}{2})t_{\rm max}, t_{\rm max}\right) \\
+  \left(x_{\rm max}, \frac{x_{\rm max}}{2u_p+D/2}\right) \\
   c_s = u_p + \frac{D}{2}\left(\frac{1}{2} - \frac{x-\tilde{x}}
         {Dt-\tilde{x}}\right) \\
   u = u_p + \frac{D}{2}\left(\frac{1}{2} + \frac{x-\tilde{x}}
@@ -145,8 +144,8 @@ Region V (rarefaction interaction with piston)
 ..  math::
 
   \frac{3\tilde{x}}{2u_p+D}(1,u_p) \\
-  (u_p t_{max},t_{max}) \\
-  \left(-\frac{3}{2}\tilde{x} + (2u_p+\frac{D}{2})t_{max}, t_{max}\right) \\
+  (u_p t_{\rm max},t_{\rm max}) \\
+  \left(-\frac{3}{2}\tilde{x} + (2u_p+\frac{D}{2})t_{\rm max}, t_{\rm max}\right) \\
   c_s = \frac{(D-u_p)\tilde{t}}{t-\tilde{t}} \\
   u = \frac{x-u_p\tilde{t}}{t-\tilde{t}}
 
@@ -155,21 +154,8 @@ Region 00 (behind the piston)
 ..  math::
 
   (0,0)\\
-  (0,t_{max})\\
-  (u_p t_{max},t_{max})
-
-.. [Fickett] W. Fickett and C. Rivard, Test Problems for Hydrocodes.
-   LASL Report, LA-5479, Los Alamos Scientific Laboratory
-   (1974, Rev 1981).
-
-.. [Dykema] P. Dykema, S. Brandon, J. Bolstad, T. Woods, and R. Klein,
-   Level 1 V.&V. Test Problem 10: Escape of High Explosive Products,
-   LLNL Report, UCRL-ID-150418, Lawrence Livermore National Laboratory
-   (2002).
-
-.. [Doebling] S. Doebling, "The Escape of High Explosive Products:
-   An Exact-Solution Problem for Verification of Hydrodynamics Codes,"
-   LA-UR-15-22547
+  (0,t_{\rm max})\\
+  (u_p t_{\rm max},t_{\rm max})
 """
 
 from ehep import EscapeOfHEProducts

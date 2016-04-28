@@ -1,8 +1,6 @@
 r"""A Cog5 solver in Python.
 
 This is a pure Python implementation of the Cog5 solution using Numpy.
-
-This is a pure Python implementation of the Cog4 solution using Numpy.
 The exact solution takes the form,
 
 .. math::

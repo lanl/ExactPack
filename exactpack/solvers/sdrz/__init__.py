@@ -66,7 +66,7 @@ as well as a set of time-dependent functions,
     \\
     u(t) &= (1 - \rho_0/\rho(t))D
     \\
-    cs(t) &= \sqrt{\gamma p(t)/\rho(t)} \ .
+    cs(t) &= \sqrt{\gamma p(t)/\rho(t)} 
 
 
 Special case for SDRZ problem
@@ -76,14 +76,14 @@ Assume :math:`D=D_j` and the rate function
 
 ..  math::
 
-    d\lambda/dt &= 2 \sqrt{1-\lambda} \ .
+    d\lambda/dt = 2 \sqrt{1-\lambda} 
 
 
 and thus
 
 ..  math::
 
-    \lambda &= t(2-t) \ .
+    \lambda = t(2-t) \ .
 
 
 Then the constants are

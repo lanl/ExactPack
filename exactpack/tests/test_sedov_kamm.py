@@ -1,12 +1,7 @@
 """The following test verifies the dimensionless self-similar variables of
 Kamm's Fortran code against the values published in Sedov's book and
-[LAUR006055]_, (Tables I, II, and III, for the spherical, cylindrical, and
+[Kamm2000]_, (Tables I, II, and III, for the spherical, cylindrical, and
 planar cases respectively).
-
-
-.. [LAUR006055] James R. Kamm, Evaluation of the Sedov-von Neumann-Taylor 
-   Blast Wave Solution, Dec 2000, LA-UR-00-6055.
-
 """
 
 import numpy as np

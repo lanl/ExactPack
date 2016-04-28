@@ -4,10 +4,10 @@ from matplotlib import rc, rcParams
 #rc('text',usetex=True)
 rc('font',**{'family':'serif','serif':['Computer Modern']})
 
-# import ExactPack solver and analysis tools
+# import ExactPack solvers
 from exactpack.solvers.cog import Cog8
 from exactpack.solvers.cog import Cog3
-#from exactpack.solvers.cog import Cog8Timmes
+from exactpack.solvers.cog.cog8_timmes import Cog8 as Cog8Timmes
 
 # construct sptial grid and choose time
 rmax = 2.
@@ -21,7 +21,6 @@ soln = solver(r,t)
 
 # plot exact solution
 soln.plot('density')
-soln.plot('pressure')
 soln.plot('velocity')
 soln.plot('temperature')
 plt.xlim(0.0,rmax)
@@ -31,22 +30,21 @@ plt.legend(loc=0)
 plt.grid(True)
 plt.show()
 
-# #####################################################################
-# # solver object
-# solver = Cog8Timmes()
-# soln = solver(r,t)
+#####################################################################
+# solver object
+solver = Cog8Timmes()
+soln = solver(r,t)
 
-# # plot exact solution
-# soln.plot('density')
-# soln.plot('pressure')
-# soln.plot('velocity')
-# soln.plot('temperature')
-# plt.xlim(0.0,rmax)
-# plt.ylim(0.0,5.0)
-# plt.title(r'ExactPack solver class Cog8Timmes')
-# plt.legend(loc=0)
-# plt.grid(True)
-# plt.show()
+# plot exact solution
+soln.plot('density')
+soln.plot('velocity')
+soln.plot('temperature')
+plt.xlim(0.0,rmax)
+plt.ylim(0.0,5.0)
+plt.title(r'ExactPack solver class Cog8Timmes')
+plt.legend(loc=0)
+plt.grid(True)
+plt.show()
 
 
 #####################################################################

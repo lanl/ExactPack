@@ -24,8 +24,6 @@ The exact solution takes the form,
   \right]}{\alpha (2 \beta - 4) / (1 - \alpha) + 
   2 \beta + k + 7}
   \right]^{1/(\alpha - 1)}
-  \\
-  \gamma &= \frac{k + 3}{k + 1}  
 
 Free parameters: :math:`\alpha`, :math:`\beta`, :math:`k`, :math:`\lambda_0`,
 and :math:`\Gamma`.
