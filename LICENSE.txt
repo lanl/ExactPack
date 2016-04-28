@@ -48,7 +48,7 @@ a.  submit form DOE F 241.4 to the Energy Science and Technology Software Center
 b.  provide the unique URL on the form for ESTSC to distribute, and 
 c. maintain an OSS Record available for inspection by DOE.   
 
-Following is a table briefly summarizes information for this software
+Following is a table that briefly summarizes information for this software
 package:
 
 CODE NAME:  ExactPack, Version 1.x (C14092)
