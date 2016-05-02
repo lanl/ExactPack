@@ -73,7 +73,7 @@ References
 .. [Noh1987]
    W. F. Noh, *Errors for Calculations of Strong Shocks Using an
    Artificial Viscosity and an Artificial Heat Flux*,
-   JCP **72** (1978) 78-120.
+   JCP **72** (1987) 78-120.
 
 .. [Reinicke1991] P. Reinicke and J. Meyer-ter-Vehn,
    *The point explosion with heat conduction*,
