@@ -401,7 +401,7 @@ the GUI.
    way of providing a default.  In this case we chose not to provide
    any default values in the general solution class :class:`Noh`, but
    to give the :class:`SphericalNoh` class the same default as used in
-   Noh's original paper [Noh1978]_.  This results in the following
+   Noh's original paper [Noh1987]_.  This results in the following
    behavior: :class:`Noh` requires exactly four parameters
    (``geometry`` and ``gamma``) when invoking its constructor, and
    will fail, raising an exception, otherwise.  :class:`SphericalNoh`

@@ -89,7 +89,7 @@ class Noh(ExactSolver):
 class PlanarNoh(Noh):
     """The standard planar Noh problem.
 
-    The planar Noh problem as defined in [Noh1978]_, with a default value
+    The planar Noh problem as defined in [Noh1987]_, with a default value
     of :math:`\gamma=5/3`.
     """
 
@@ -101,7 +101,7 @@ class PlanarNoh(Noh):
 class CylindricalNoh(Noh):
     """The standard cylindrical Noh problem.
 
-    The cylindrical Noh problem as defined in [Noh1978]_, with a default
+    The cylindrical Noh problem as defined in [Noh1987]_, with a default
     value of :math:`\gamma=5/3`.
     """
 
@@ -113,7 +113,7 @@ class CylindricalNoh(Noh):
 class SphericalNoh(Noh):
     """The standard spherical Noh problem.
 
-    The spherical Noh problem as defined in [Noh1978]_, with a default
+    The spherical Noh problem as defined in [Noh1987]_, with a default
     value of :math:`\gamma=5/3`.
     """
 
