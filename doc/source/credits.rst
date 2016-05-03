@@ -9,6 +9,7 @@ exact solution codes under a uniform Python API.  The initial
 implementation was done by Daniel Israel and Robert Singleton.
 
 The current development team at Los Alamos National Laboratory includes:
+
 * Scott Doebling
 * Daniel Israel
 * Robert Singleton
@@ -17,6 +18,8 @@ The current development team at Los Alamos National Laboratory includes:
 * John Walter
 
 Past contributors at Los Alamos National Laboratory include:
+
 * James Kamm
 * Frank Timmes
 * Scott Ramsey
+* Jerry Brock
