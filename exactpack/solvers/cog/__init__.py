@@ -14,14 +14,11 @@ is written
   e &= \frac{\Gamma\, T}{\gamma - 1} \ ,
 
 where :math:`\Gamma` is the Gruneisen gas constant and :math:`\gamma
-\equiv c_p/c_v` is the adiabatic exponent. Dividing these equations
+\equiv c_{\rm p}/c_{\rm v}` is the adiabatic exponent. Dividing these equations
 gives the standard adiabatic :math:`\gamma`-law EOS,
 
 .. math::
   P = (\gamma - 1) \, \rho e \ .
-
-For an ideal gas, in which the specific energy is linear in temperature, 
-the internal energy is given by :math:`e = c_v \, T`.
 
 Upon taking :math:`\rho`, :math:`u`, and :math:`T` as the independent variables,
 the conservation of mass, momentum, and energy imply the following balance equations:
@@ -45,28 +42,29 @@ the conservation of mass, momentum, and energy imply the following balance equat
 
 where :math:`k=0,1,2` is the geometry factor specifying planar, cylindrical,
 or spherical coordinates, respectively. Note that the geometry option
-in ExactPack is different, with :math:`{\rm\bf geometry} = k + 1 = 1,
-2, 3`. The quantity :math:`F` in the energy equation
-is the magnitude of the heat flux vector, which is the heat flux in the
-diffusion approximation, takes the form
+in ExactPack is different, with :math:`{\rm\bf geometry} = k + 1 = 1, 2, 3`.
+The quantity :math:`F` in the energy equation is the magnitude of the heat
+flux vector, which, in the diffusion approximation, takes the form
 
 .. math::
  {\vec F}
   =
   - \frac{c\, \lambda}{3}\, {\vec \nabla}\, a T^4 \ ,
 
-with :math:`c` being the speed of light and :math:`a` the radiation constant,
-and :math:`\lambda` being the radiation mean-free-path (mfp), which is
-parameterized in terms of :math:`\alpha` and :math:`\beta` by
+with :math:`c` being the speed of light, :math:`a` the radiation constant,
+and :math:`\lambda` the radiation mean-free-path. To obtain a semi-analytic
+solution, we parameter :math:`\lambda` by
 
 .. math::
-   \lambda(\rho,T) = \lambda_0\, \rho^\alpha T^\beta .
+   \lambda(\rho,T) = \lambda_0\, \rho^\alpha T^\beta ,
    :label: lambdaDef
 
-The parameter rages are :math:`-1 \le \alpha \le 2` and :math:`1 \le \beta \le 3`.
-The mfp :math:`\lambda` is related to the Rosseland mean opacity
-:math:`\kappa` by :math:`\lambda= 1/\kappa\rho`. Note that the
-heat conductivity :math:`K` takes the form
+
+where :math:`\lambda_0` is a dimensionfull constant, and :math:`\alpha` and
+:math:`\beta` are dimensionless parameters in the ranges  :math:`-1 \le \alpha \le 2`
+and :math:`1 \le \beta \le 3`. The mean-free-path :math:`\lambda` is related to the
+Rosseland mean opacity :math:`\kappa` by :math:`\kappa= 1/\lambda\rho`. The heat
+flux can also be written in term of the heat conductivity :math:`K`, defined by
 
 .. math::
 
