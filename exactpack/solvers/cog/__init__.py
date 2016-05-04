@@ -1,4 +1,6 @@
-r"""The Coggeshall [Coggeshall1991]_ problems are a collection of exact
+r"""The Coggeshall problems.
+
+The Coggeshall [Coggeshall1991]_ problems are a collection of exact
 solutions to the one-dimensional Euler equations with heat conduction and
 no viscosity.  The fluid field variables are the mass density :math:`\rho(r,t)`,
 the fluid velocity

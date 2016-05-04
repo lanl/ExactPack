@@ -1,4 +1,4 @@
-r"""The Su-Olson Problem
+r"""The Su-Olson Problem.
 
 The Su-Olson problem [Su1996]_ is a one-dimensional, half-space, non-Equilibrium Marshak burn
 wave. The radiative transfer model is a one-group diffusion approximation

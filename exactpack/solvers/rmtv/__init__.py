@@ -1,4 +1,4 @@
-r"""The Reinicke Meyer-ter-Vehn (RMTV) problem
+r"""The Reinicke Meyer-ter-Vehn (RMTV) problem.
 
 The Reinicke Meyer-ter-Vehn problem is defined in [Reinicke1991]_ and
 [Kamm2000a]_.

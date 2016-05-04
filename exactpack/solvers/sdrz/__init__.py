@@ -1,6 +1,4 @@
-r"""
-The Steady Detonation Reaction Zone Problem
-===========================================
+r"""The Steady Detonation Reaction Zone Problem. 
 
 The steady detonation reaction zone (SDRZ) problem tests reactive high
 explosives (HE) burn capability, and was first published by

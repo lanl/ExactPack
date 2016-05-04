@@ -1,4 +1,6 @@
-r""" The Noh problem [Noh1987]_ is a self-similar adiabatic compression
+r"""The Noh Problem.
+
+The Noh problem [Noh1987]_ is a self-similar adiabatic compression
 wave in an ideal gas, and it can be formulated in spherical,
 cylindrical, or planar geometry. The independent fluid variables are
 (i) the mass density :math:`\rho(r,t)`, (ii) the velocity of the gas

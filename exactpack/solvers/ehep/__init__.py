@@ -1,4 +1,4 @@
-r"""The Escape of HE Products problem
+r"""The Escape of HE Products problem.
 
 The escape of HE products (EHEP) problem was first published by Fickett
 and Rivard in 1974 [Fickett1974]_. In 2002, [Dykema2002]_ published a derivation of
