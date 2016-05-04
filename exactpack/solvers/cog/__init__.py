@@ -1,9 +1,10 @@
-r"""The Coggeshall [Coggeshall1991]_ problems are a collection of exact solutions to the
-one-dimensional Euler equations with heat conduction and no viscosity.  The fluid field
-variables are the mass density :math:`\rho(r,t)`, the fluid velocity
+r"""The Coggeshall [Coggeshall1991]_ problems are a collection of exact
+solutions to the one-dimensional Euler equations with heat conduction and
+no viscosity.  The fluid field variables are the mass density :math:`\rho(r,t)`,
+the fluid velocity
 :math:`u(r,t)`, the fluid temperature :math:`T(r,t)`, and the specific
 internal energy :math:`e(r,t)` of the fluid material, where :math:`r`
-is the spatial coordinate in either planar, cylindrical, or spherical
+is the spatial coordinate in planar, cylindrical, or spherical
 geometry. The :math:`\gamma`-law Equation of State (EOS) for the gas
 is written
 
@@ -17,12 +18,10 @@ where :math:`\Gamma` is the Gruneisen gas constant and :math:`\gamma
 gives the standard adiabatic :math:`\gamma`-law EOS,
 
 .. math::
-  P &= (\gamma - 1) \, \rho e \ .
+  P = (\gamma - 1) \, \rho e \ .
 
-For an ideal gas in which the specific energy is linear in temperature, 
-:math:`e = c_v \, T`, the Gruneisen coefficient can be written
-:math:`\Gamma = (\gamma - 1)\, c_v`. We shall choose :math:`\gamma` and
-:math:`c_v` as the two independent gas parameters.
+For an ideal gas, in which the specific energy is linear in temperature, 
+the internal energy is given by :math:`e = c_v \, T`.
 
 Upon taking :math:`\rho`, :math:`u`, and :math:`T` as the independent variables,
 the conservation of mass, momentum, and energy imply the following balance equations:
@@ -47,27 +46,25 @@ the conservation of mass, momentum, and energy imply the following balance equat
 where :math:`k=0,1,2` is the geometry factor specifying planar, cylindrical,
 or spherical coordinates, respectively. Note that the geometry option
 in ExactPack is different, with :math:`{\rm\bf geometry} = k + 1 = 1,
-2, 3`. Here, :math:`c` is the speed of light, :math:`a` is the
-radiation constant, :math:`{\vec F}` is the heat flux in the diffusion
-approximation, and the radiation energy density is :math:`{\cal E} = a T^4`:
-
-The quantity :math:`F = \vert {\vec F} \vert` is the heat flux in the
-diffusion approximation, which takes the form
+2, 3`. The quantity :math:`F` in the energy equation
+is the magnitude of the heat flux vector, which is the heat flux in the
+diffusion approximation, takes the form
 
 .. math::
  {\vec F}
   =
   - \frac{c\, \lambda}{3}\, {\vec \nabla}\, a T^4 \ ,
 
-where :math:`c` is the speed of light, :math:`a` is the radiation constant,
-and the radiation mean-free-path (mfp) is parameterized as
+with :math:`c` being the speed of light and :math:`a` the radiation constant,
+and :math:`\lambda` being the radiation mean-free-path (mfp), which is
+parameterized in terms of :math:`\alpha` and :math:`\beta` by
 
 .. math::
-   \lambda(\rho,T) = \lambda_0\, \rho^\alpha T^\beta ,
+   \lambda(\rho,T) = \lambda_0\, \rho^\alpha T^\beta .
    :label: lambdaDef
 
-with :math:`-1 \le \alpha \le 2` and :math:`1 \le \beta \le 3`. The mfp
-:math:`\lambda` is related to the Rosseland mean opacity
+The parameter rages are :math:`-1 \le \alpha \le 2` and :math:`1 \le \beta \le 3`.
+The mfp :math:`\lambda` is related to the Rosseland mean opacity
 :math:`\kappa` by :math:`\lambda= 1/\kappa\rho`. Note that the
 heat conductivity :math:`K` takes the form
 
