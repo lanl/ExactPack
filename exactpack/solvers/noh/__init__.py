@@ -1,13 +1,13 @@
 r""" The Noh problem [Noh1987]_ is a self-similar adiabatic compression
 wave in an ideal gas, and it can be formulated in spherical,
 cylindrical, or planar geometry. The independent fluid variables are
-(i) the gas density :math:`\rho(r,t)`, (ii) the velocity of the gas
+(i) the mass density :math:`\rho(r,t)`, (ii) the velocity of the gas
 :math:`u(r,t)`, and (iii) the pressure :math:`P(r,t)`, each at spatial
 location :math:`r` and time :math:`t`. Note that in spherical coordinates, 
 :math:`u(r,t)` is the radial velocity of the gas, and a negative value 
 indicates that gas is flowing in toward the origin. The specific
 internal energy :math:`e(r,t)` is related to the other fluid variables
-by the equation of state (EOS) for an ideal gas at constant entropy,
+by the :math:`\gamma`-law equation of state (EOS) for an ideal gas,
 
 .. math::
   P = (\gamma-1) \rho e  \ ,
