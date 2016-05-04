@@ -1,11 +1,10 @@
 r"""The Riemann problem.
 
-This problem is exercises the one-dimensional Cartesian Riemann solver for
+This problem exercises the one-dimensional Cartesian Riemann solver for
 an inviscid, non-heat conducting polytropic gas. The independent fluid variables
-are (i) the gas density :math:`\rho(r,t)`, (ii) the velocity of the gas
+are (i) the mass density :math:`\rho(r,t)`, (ii) the velocity of the gas
 :math:`u(r,t)`, and (iii) the pressure :math:`P(r,t)`, each at spatial location
-:math:`r`
-and time :math:`t`. The specific internal energy :math:`e(r,t)` is
+:math:`r` and time :math:`t`. The specific internal energy :math:`e(r,t)` is
 related to the other fluid variables by the equation of state (EOS)
 for an ideal gas at constant entropy,
 
