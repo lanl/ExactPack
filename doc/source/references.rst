@@ -81,6 +81,11 @@ References
    *The point explosion with heat conduction*,
    Phys. Fluids A **3** (1991) 1807.
 
+.. [Sedov1959]
+   L.I. Sedov,
+   *Similarity and Dimensional Methods in Mechanics*,
+   Academic Press, New York, NY, p. 147 ff. (1959).   
+   
 .. [Su1996] Bingjing Su and Gordon L. Olson,
    Benchmark Results for the Non-equilibrium Marshak Diffusion Problem,
    J. Quant. Spectrosc. Radiat. Transfer **56** 337 (1996).

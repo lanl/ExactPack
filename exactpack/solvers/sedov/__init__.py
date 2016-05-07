@@ -1,9 +1,12 @@
 r"""The Sedov Problem.
 
-The Sedov blast wave problem models a rapid point-source explosion in an
+The Sedov problem.
+
+The Sedov blast wave problem [Sedov1959]_ [Kamm2000]_ models a rapid
+point-source explosion in an
 invisid, non-heat conducting polytropic gas, caused by a release of 
 of energy :math:`E_0` at the origin :math:`r=0` at time :math:`t=0`.
-The independent fluid variables are (i) the gas density :math:`\rho(r,t)`, 
+The independent fluid variables are (i) the mas density :math:`\rho(r,t)`, 
 (ii) the velocity of the gas :math:`u(r,t)`, and (iii) the pressure
 :math:`P(r,t)`, each at spatial location :math:`r` and time :math:`t`. The 
 specific internal energy :math:`e(r,t)` is related to the other fluid variables
