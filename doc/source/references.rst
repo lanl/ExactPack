@@ -86,10 +86,12 @@ References
    *Similarity and Dimensional Methods in Mechanics*,
    Academic Press, New York, NY, p. 147 ff. (1959).   
    
-.. [Su1996] Bingjing Su and Gordon L. Olson,
+.. [Su1996]
+   Bingjing Su and Gordon L. Olson,
    Benchmark Results for the Non-equilibrium Marshak Diffusion Problem,
    J. Quant. Spectrosc. Radiat. Transfer **56** 337 (1996).
 
+      
 .. [Timmes2005]
    Francis X. Timmes, Galen Gisler, and George M. Hrbek,
    *Automated Analyses of the Tri-Lab Verification Test Suite on Uniform and Adaptive Grids for Code Project A*,

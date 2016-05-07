@@ -1,7 +1,8 @@
 r"""The Su-Olson Problem.
 
-The Su-Olson problem [Su1996]_ is a one-dimensional, half-space, non-Equilibrium Marshak burn
-wave. The radiative transfer model is a one-group diffusion approximation
+The Su-Olson problem [Su1996]_ is a one-dimensional, half-space,
+non-Equilibrium Marshak burn wave. The radiative transfer model is
+a one-group diffusion approximation
 with a Marshak radiation boundary condition. The radiation temperature
 field (in energy units) and the matter energy density field are denoted
 by :math:`T = T(z,t)` and :math:`E=E(z,t)` for :math:`0 \le z < \infty`.
@@ -26,7 +27,7 @@ can be solved for the (non-physical) model in which
 .. math::
    c_v(T) &= \alpha\, T^3
    \\
-   \kappa(T) &= \text{constant} \ .
+   \kappa(T) &= \kappa_0 \ .
    :label: cvkappaDef
 
 When the matter radiates as a black body, so that :math:`E= a T^4`,
@@ -48,10 +49,6 @@ where :math:`F_{\rm in}` is incident radiation energy flux incident on
 the :math:`z=0` surface, and the :math:`z \to \infty` boundary
 condition is :math:`E(\infty,t)=0`.  The initial conditions are
 :math:`E(z,0)=T(z,0)=0`.
-
-.. [suolson96] Bingjing Su and Gordon L. Olson,
-   Benchmark Results for the Non-equilibrium Marshak Diffusion Problem,
-   J. Quant. Spectrosc. Radiat. Transfer **56** 337 (1996)
 
 """
 
