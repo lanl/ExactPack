@@ -13,7 +13,7 @@ The current development team at Los Alamos National Laboratory includes:
 * Scott Doebling
 * Daniel Israel
 * Robert Singleton
-* C. Nathan Woods
+* C Nathan Woods
 * Ann Kaul
 * John Walter
 
