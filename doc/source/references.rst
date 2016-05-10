@@ -65,8 +65,23 @@ References
    *Enhanced Verification Test Suite for Physics Simulation Codes*,
    LA-14379, Los Alamos National Laboratory (2008).
 
-.. [Kenamond2011] Kenamond, M. A., HE Burn Table Verification Problems,  LA-UR 11-03096, 2011.   
    
+.. [KaulK22016]
+   Ann Kaul,
+   *A More General Solution of the Kenamond HE Problem 2*,
+   LA-UR-15-29547, Los Alamos National Laboratory (2015).
+
+.. [KaulK32016]
+   Ann Kaul,
+   *General Solution of the Kenamond HE Problem 3*,
+   LA-UR-15-29553, Los Alamos National Laboratory  (2015).
+   
+.. [Kenamond2011]
+   Kenamond, M. A.,
+   *HE Burn Table Verification Problems*,
+   LA-UR-11-03096, Los Alamos National Laboratory (2011).
+
+
 .. [Kirkpatrick2004]
    R. Kirkpatrick, C. Wingate, and J.R. Kamm,
    *HE Burn Test Problem*,

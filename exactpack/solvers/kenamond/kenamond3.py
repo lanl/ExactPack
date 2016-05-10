@@ -2,7 +2,7 @@ r"""A Kenamond3 solver in Python.
 
 This is a pure Python implementation of the Kenamond3 solution using Numpy.
 
-The Kenamond HE Problem 3 is used to test a code's ability to calculate
+The Kenamond HE Problem 3 [KaulK32016]_ is used to test a code's ability to calculate
 burn time tables for a single-point initiation of a single HE region
 surrounding an inert region. An infinite medium of a single HE with
 constant detonation velocity :math:`D` surrounds an inert spherical
