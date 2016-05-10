@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'ExactPack'
-copyright = u'2013, Los Alamos National Laboratory'
+copyright = u'2013, Los Alamos National Laboratory, LA-UR-16-23260'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -188,7 +188,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'ExactPack.tex', u'ExactPack Documentation',
-   u'Verification Team', 'manual'),
+   u'Verification Team, LA-UR-16-23260', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
