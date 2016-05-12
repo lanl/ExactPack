@@ -47,8 +47,8 @@ class Cog4(ExactSolver):
         if self.geometry not in [1, 2, 3]:
             raise ValueError("geometry must be 1, 2, or 3")
 
-#        if self.gamma >= 1:
-#            raise ValueError("gamma must be < 1")
+        if self.gamma >= 1:
+            print "*** warning: gamma > 1 gives T < 0 ***"
 
     def _run(self, r, t):
 
