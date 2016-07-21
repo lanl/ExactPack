@@ -14,90 +14,224 @@ import unittest
 
 import numpy as np
 
-# from exactpack.solvers.dsd.ratestick import RateStick
+from exactpack.solvers.dsd.ratestick import RateStick
 from exactpack.solvers.dsd.cylexpansion import CylindricalExpansion
 # from exactpack.solvers.dsd.explosivearc import ExplosiveArc
 
 
-# class TestRateStick(unittest.TestCase):
-#     r"""Tests for
-#     :class:`exactpack.solvers.dsd.ratestick.RateStick`.
-#
-#     Solution tests consist of comparing the calculated burn time to the
-#     analytic solution at a fixed point. Input tests check that invalid
-#     input raises the appropriate error expression.
-#     """
-#
-#     def test_burntime_2d_base(self):
-#         """Tests burntime solution at 2D point.
-#
-#         Uses default parameter values for all parameters.
-#         """
-#
-#         soln = RateStick(geometry=2)(np.array([[3.0, 4.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 5.0)
-#
-#     def test_burntime_2d_detvel(self):
-#         """Tests burntime solution at 2D point.
-#
-#         Uses default parameter values for detonator location and detonation
-#         time. HE detonation velocity is :math:`D=2.0`.
-#         """
-#
-#         soln = RateStick(geometry=2, D=2.0)(np.array([[3.0, 4.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 2.5)
-#
-#     def test_burntime_2d_dettime(self):
-#         """Tests burntime solution at 2D point.
-#
-#         Uses default parameter values for HE detonation velocity and
-#         detonator location. Detonation time is :math:`t_d=-2.0`.
-#         """
-#
-#         soln = RateStick(geometry=2, t_d=-2.0)(np.array([[3.0, 4.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 3.0)
-#
-#     def test_burntime_2d_detloc(self):
-#         """Tests burntime solution at 2D point.
-#
-#         Uses default parameter values for HE detonation velocity and
-#         detonation time. Detonator location is :math:`x_d=(1.0, 1.0)`.
-#         """
-#
-#         soln = RateStick(geometry=2,
-#                          x_d=(1.0, 1.0))(np.array([[2.5, 3.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 2.5)
-#
-#     def test_geometry_error(self):
-#         """Test for valid value of geometry."""
-#
-#         self.assertRaisesRegexp(ValueError, "geometry must be 1 or 2",
-#                                 RateStick, geometry=5)
-#
-#     def test_D_CJ_neg_error(self):
-#         """Test for valid value of HE detonation velocity, :math:`D`."""
-#
-#         self.assertRaisesRegexp(ValueError, "Det velocity must be > 0",
-#                                 RateStick, D_CJ=-1.0)
-#
-#     def test_D_CJ_zero_error(self):
-#         """Test for valid value of HE detonation velocity, :math:`D`."""
-#
-#         self.assertRaisesRegexp(ValueError, "Det velocity must be > 0",
-#                                 RateStick, D_CJ=0.0)
-#
-#     def test_detspec_2d_error(self):
-#         """Test for valid geometry of detonator, :math:`x_d`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "Detonator location and geometry " +
-#                                 "dimensions must be compatible",
-#                                 RateStick, x_d=(0.0, 0.0, 0.0))
-#
+class TestRateStick(unittest.TestCase):
+    r"""Tests for
+    :class:`exactpack.solvers.dsd.ratestick.RateStick`.
+
+    Solution tests consist of comparing the calculated burn time to the
+    analytic solution at a fixed point. Input tests check that invalid
+    input raises the appropriate error expression.
+    """
+
+    def test_burntime_IC1_planar(self):
+        """Tests burntime solution for :math:`IC=1` at 2D point.
+
+        Uses default parameter values for all parameters (except
+        :math:`xnodes` and :math:`ynodes`).
+        """
+
+        x = np.linspace(0.0, 1.0, 11)   # spacing greater than solver dx
+        y = np.linspace(0.0, 1.0, 11)
+
+        x2, y2 = np.meshgrid(x, y)
+        xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
+
+        soln = RateStick(xnodes=11, ynodes=11, t_f=2.0)(xy, 0.6)
+
+        self.assertEqual(soln.burntime[0], 0.0)
+
+    def test_burntime_IC1_cylindrical(self):
+        """Tests burntime solution for :math:`IC=1` at 2D point.
+
+        Uses default parameter values for all parameters (except
+        :math:`xnodes` and :math:`ynodes`).
+        """
+
+        x = np.linspace(0.0, 1.0, 11)   # spacing greater than solver dx
+        y = np.linspace(0.0, 1.0, 11)
+
+        x2, y2 = np.meshgrid(x, y)
+        xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
+
+        soln = RateStick(geometry=2, xnodes=11, ynodes=11, t_f=2.0)(xy, 0.6)
+
+        self.assertEqual(soln.burntime[0], 0.0)
+
+    def test_burntime_IC2_planar(self):
+        """Tests burntime solution for :math:`IC=2` at 2D point.
+
+        Uses default parameter values for all parameters (except
+        :math:`xnodes` and :math:`ynodes`).
+        """
+
+        x = np.linspace(0.0, 0.9, 10)   # spacing greater than solver dx
+        y = np.linspace(0.0, 1.0, 11)
+
+        x2, y2 = np.meshgrid(x, y)
+        xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
+
+        soln = RateStick(IC=2, xnodes=10, ynodes=11, R=0.9, omega_c=0.9,
+                         D_CJ=0.8, alpha=0.05, t_f=2.0)(xy, 0.6)
+
+        self.assertEqual(soln.burntime[0], 0.0)
+
+    def test_burntime_IC3_planar(self):
+        """Tests burntime solution for :math:`IC=2` at 2D point.
+
+        Uses default parameter values for all parameters (except
+        :math:`xnodes` and :math:`ynodes`).
+        """
+
+        x = np.linspace(0.0, 1.0, 11)   # spacing greater than solver dx
+        y = np.linspace(0.0, 1.0, 11)
+
+        x2, y2 = np.meshgrid(x, y)
+        xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
+
+        soln = RateStick(IC=3, xnodes=11, ynodes=11, t_f=2.0)(xy, 0.6)
+
+        self.assertEqual(soln.burntime[0], 0.0)
+
+    @unittest.expectedFailure
+    def test_xylist_matches_xnodes_ynodes(self):
+        """Test for valid combination of :math:`xnodes`, :math:`ynodes`
+        and size of :math:`xylist`."""
+
+        soln = RateStick(xnodes=2, ynodes=1)(np.array([[0.5, 0.5]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_xylist_matches_R(self):
+        """Test for :math:`xylist` nodes at :math:`x=R`."""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[0.5, 0.5]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_xylist_matches_zero(self):
+        """Test for :math:`xylist` nodes at :math:`x=0`."""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[0.5, 0.5]]), 0.6)
+
+    def test_geometry_error(self):
+        """Test for valid value of geometry."""
+
+        self.assertRaisesRegexp(ValueError, "geometry must be 1 or 2",
+                                RateStick, geometry=5, xnodes=1, ynodes=1)
+
+    def test_radius_neg_error(self):
+        """Test for valid value of rate stick radius, :math:`R`."""
+
+        self.assertRaisesRegexp(ValueError, "Radius/thickness must be > 0",
+                                RateStick, R=-1.0, xnodes=1, ynodes=1)
+
+    def test_radius_zero_error(self):
+        """Test for valid value of rate stick radius, :math:`R`."""
+
+        self.assertRaisesRegexp(ValueError, "Radius/thickness must be > 0",
+                                RateStick, R=0.0, xnodes=1, ynodes=1)
+
+    def test_omega_C_neg_error(self):
+        """Test for valid value of DSD edge angle, :math:`omega_c`."""
+
+        self.assertRaisesRegexp(ValueError, "DSD edge angle must be > 0",
+                                RateStick, omega_c=-1.0, xnodes=1, ynodes=1)
+
+    def test_omega_C_zero_error(self):
+        """Test for valid value of DSD edge angle, :math:`omega_c`."""
+
+        self.assertRaisesRegexp(ValueError, "DSD edge angle must be > 0",
+                                RateStick, omega_c=0.0, xnodes=1, ynodes=1)
+
+    def test_omega_C_big_error(self):
+        """Test for valid value of DSD edge angle, :math:`omega_c`."""
+
+        self.assertRaisesRegexp(ValueError, "DSD edge angle must be < pi/2",
+                                RateStick, omega_c=2.0, xnodes=1, ynodes=1)
+
+    def test_omega_C_top_error(self):
+        """Test for valid value of DSD edge angle, :math:`omega_c`."""
+
+        self.assertRaisesRegexp(ValueError, "DSD edge angle must be < pi/2",
+                                RateStick,
+                                omega_c=np.pi/2.0, xnodes=1, ynodes=1)
+
+    def test_D_CJ_neg_error(self):
+        """Test for valid value of HE detonation velocity, :math:`D`."""
+
+        self.assertRaisesRegexp(ValueError, "Detonation velocity must be > 0",
+                                RateStick, D_CJ=-1.0, xnodes=1, ynodes=1)
+
+    def test_D_CJ_zero_error(self):
+        """Test for valid value of HE detonation velocity, :math:`D`."""
+
+        self.assertRaisesRegexp(ValueError, "Detonation velocity must be > 0",
+                                RateStick, D_CJ=0.0, xnodes=1, ynodes=1)
+
+    def test_alpha_neg_error(self):
+        """Test for valid value of det velocity deviance coefficient,
+        :math:`\alpha`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Alpha must be >= 0",
+                                RateStick, alpha=-1.0, xnodes=1, ynodes=1)
+
+    def test_IC_error(self):
+        """Test for valid value of initial condition, :math:`IC`."""
+
+        self.assertRaisesRegexp(ValueError, "IC must be 1, 2 or 3",
+                                RateStick, IC=5, xnodes=1, ynodes=1)
+
+    def test_IC1limit_error(self):
+        """Test for valid value of detonation radius, :math:`r_d`, if IC=1."""
+
+        self.assertRaisesRegexp(ValueError, "Detonation radius must " +
+                                "satisfy edge angle condition",
+                                RateStick, IC=1, r_d=1.0, xnodes=1, ynodes=1)
+
+    def test_t_f_neg_error(self):
+        """Test for valid value of final time, :math:`t_f`."""
+
+        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+                                RateStick, t_f=-1.0, xnodes=1, ynodes=1)
+
+    def test_t_f_zero_error(self):
+        """Test for valid value of final time, :math:`t_f`."""
+
+        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+                                RateStick, t_f=0.0, xnodes=1, ynodes=1)
+
+    def test_xnodes_neg_error(self):
+        """Test for valid value of number of x-nodes, :math:`xnodes`."""
+
+        self.assertRaisesRegexp(ValueError, "Number of x-nodes must be " +
+                                "specified",
+                                RateStick, xnodes=-3, ynodes=1)
+
+    def test_xnodes_zero_error(self):
+        """Test for valid value of number of x-nodes, :math:`xnodes`."""
+
+        self.assertRaisesRegexp(ValueError, "Number of x-nodes must be " +
+                                "specified",
+                                RateStick, ynodes=1)
+
+    def test_ynodes_neg_error(self):
+        """Test for valid value of number of y-nodes, :math:`ynodes`."""
+
+        self.assertRaisesRegexp(ValueError, "Number of y-nodes must be " +
+                                "specified",
+                                RateStick, xnodes=1, ynodes=-3)
+
+    def test_ynodes_zero_error(self):
+        """Test for valid value of number of y-nodes, :math:`ynodes`."""
+
+        self.assertRaisesRegexp(ValueError, "Number of y-nodes must be " +
+                                "specified",
+                                RateStick, xnodes=1)
+
 
 class TestCylindricalExpansion(unittest.TestCase):
     r"""Tests for
@@ -379,50 +513,6 @@ class TestCylindricalExpansion(unittest.TestCase):
                                 "Alpha for HE2 must be >= 0",
                                 CylindricalExpansion, alpha_2=-1.0)
 
-    def test_omegac_neg_error(self):
-        """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-
-        self.assertRaisesRegexp(ValueError, "omega_c must be > 0",
-                                CylindricalExpansion, omega_c=-1.0)
-
-    def test_omegac_zero_error(self):
-        """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-
-        self.assertRaisesRegexp(ValueError, "omega_c must be > 0",
-                                CylindricalExpansion, omega_c=0.0)
-
-    def test_omegac_max_error(self):
-        """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-
-        self.assertRaisesRegexp(ValueError, "omega_c must be < pi/2",
-                                CylindricalExpansion, omega_c=2.0)
-
-    def test_omegas_neg_error(self):
-        """Test for valid value of HE free-surface angle, :math:`\omega_s`."""
-
-        self.assertRaisesRegexp(ValueError, "omega_s must be > 0",
-                                CylindricalExpansion, omega_s=-1.0)
-
-    def test_omegas_zero_error(self):
-        """Test for valid value of HE free-surface angle, :math:`\omega_s`."""
-
-        self.assertRaisesRegexp(ValueError, "omega_s must be > 0",
-                                CylindricalExpansion, omega_s=0.0)
-
-    def test_omegas_max_error(self):
-        """Test for valid value of HE free-surface angle, :math:`\omega_s`."""
-
-        self.assertRaisesRegexp(ValueError, "omega_s must be < pi/2",
-                                CylindricalExpansion, omega_s=2.0)
-
-    def test_omegac_smaller_error(self):
-        """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-
-        self.assertRaisesRegexp(ValueError,
-                                "omega_c must be >= omega_s",
-                                CylindricalExpansion,
-                                omega_c=0.4, omega_s=0.5)
-
 
 # class TestExplosiveArc(unittest.TestCase):
 #     r"""Tests for :class:`exactpack.solvers.dsd.explosivearc.ExplosiveArc`.
@@ -542,3 +632,52 @@ class TestCylindricalExpansion(unittest.TestCase):
 #         """Tests that solution points are outside the inert region."""
 #
 #         soln = ExplosiveArc()(np.array([[1.0, 0.0]]), 0.6)
+#
+#
+#
+#     def test_omegac_neg_error(self):
+#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
+#
+#         self.assertRaisesRegexp(ValueError, "omega_c must be > 0",
+#                                 CylindricalExpansion, omega_c=-1.0)
+#
+#     def test_omegac_zero_error(self):
+#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
+#
+#         self.assertRaisesRegexp(ValueError, "omega_c must be > 0",
+#                                 CylindricalExpansion, omega_c=0.0)
+#
+#     def test_omegac_max_error(self):
+#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
+#
+#         self.assertRaisesRegexp(ValueError, "omega_c must be < pi/2",
+#                                 CylindricalExpansion, omega_c=2.0)
+#
+#     def test_omegas_neg_error(self):
+#         """Test for valid value of HE free-surface angle,
+#         :math:`\omega_s`."""
+#
+#         self.assertRaisesRegexp(ValueError, "omega_s must be > 0",
+#                                 CylindricalExpansion, omega_s=-1.0)
+#
+#     def test_omegas_zero_error(self):
+#         """Test for valid value of HE free-surface angle,
+#         :math:`\omega_s`."""
+#
+#         self.assertRaisesRegexp(ValueError, "omega_s must be > 0",
+#                                 CylindricalExpansion, omega_s=0.0)
+#
+#     def test_omegas_max_error(self):
+#         """Test for valid value of HE free-surface angle,
+#         :math:`\omega_s`."""
+#
+#         self.assertRaisesRegexp(ValueError, "omega_s must be < pi/2",
+#                                 CylindricalExpansion, omega_s=2.0)
+#
+#     def test_omegac_smaller_error(self):
+#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
+#
+#         self.assertRaisesRegexp(ValueError,
+#                                 "omega_c must be >= omega_s",
+#                                 CylindricalExpansion,
+#                                 omega_c=0.4, omega_s=0.5)

@@ -16,6 +16,10 @@ indefinitely in the radial direction. At time :math:`t_d`, the inner HE is
 initiated by a circle detonator of radius :math:`r_1`. Without loss of
 generality, the entire system is assumed to be centered at the origin.
 
+The only internal boundary in the complete system (between the HE materials)
+is parallel to the burn front. Thus, none of the boundary angles need to be
+defined for this solver.
+
 For each HE material, the velocity of the detonation wave in the shock-normal
 direction, :math:`D_n`, is described by a linear deviation from the nominal
 constant Chapman-Jouguet detonation shock speed :math:`D_{CJ}`. The deviation
@@ -55,25 +59,19 @@ class CylindricalExpansion(ExactSolver):
     r"""Computes the numerical solution to the Cylindrical Expansion Problem.
 
     The HE regions are assumed to be two concentric cylindrical tubes centered
-    at the origin. All radii are assumed to be positive and large enough to
-    avoid the singularity at the origin, i.e. :math:`r_1 > \frac{\alpha_1}
-    {D_{{CJ}_1}}` and :math:`r_2 > \frac{\alpha_2}{D_{{CJ}_2}}`. The nominal
-    detonation velocities of both HEs, :math:`D_{{CJ}_i}`, must be positive.
-    The linear coefficients, :math:`\alpha_i`, of detonation velocity deviance
-    must also be positive.
+    at the origin, modeled in the :math:`r \theta`-plane. All radii are assumed
+    to be positive and large enough to avoid the singularity at the origin,
+    i.e. :math:`r_1 > \frac{\alpha_1}{D_{{CJ}_1}}` and :math:`r_2 >
+    \frac{\alpha_2}{D_{{CJ}_2}}`. No boundary angles are necessary.
 
-    The boundary angles used by DSD are HE-dependent, with a minimum angle of
-    :math:`\omega_s`, in the case of HE product expansion into a vacuum, and a
-    maximum angle of :math:`\frac{\pi}{2}`, in the case of a reflective
-    boundary or an abutting rigid inert body. The edge angle, :math:`\omega_c`,
-    between the HE and a deformable inert material must lie between these
-    two values.
+    The nominal detonation velocities of both HEs, :math:`D_{{CJ}_i}`, must
+    be positive. The linear coefficients, :math:`\alpha_i`, of detonation
+    velocity deviance must also be positive.
 
     Default values are selected to be consistent with the problem definition
     in [Bdzil]_. Default values are **geometry** :math:`=2`, :math:`r_1=1.0`,
     :math:`r_2=2.0`, :math:`D_{{CJ}_1}=0.5`, :math:`D_{{CJ}_2}=1.0`,
-    :math:`\alpha_1=0.1`, :math:`\alpha_2=0.1`, :math:`t_d=0.0`,
-    :math:`\omega_c=\frac{\pi}{4}` and :math:`\omega_s=0.5`.
+    :math:`\alpha_1=0.1`, :math:`\alpha_2=0.1` and :math:`t_d=0.0`.
 
     """
 
@@ -86,8 +84,6 @@ class CylindricalExpansion(ExactSolver):
         'alpha_1': "linear detonation velocity deviance coefficient for HE1",
         'alpha_2': "linear detonation velocity deviance coefficient for HE2",
         't_d': "initial detonation time",
-        'omega_c': "DSD edge angle between HE and inert",
-        'omega_s': "DSD free-surface angle (air and vacuum)"
         }
 
     # Default values
@@ -100,8 +96,6 @@ class CylindricalExpansion(ExactSolver):
     alpha_1 = 0.1
     alpha_2 = 0.1
     t_d = 0.0
-    omega_c = 0.7854     # pi / 4
-    omega_s = 0.5        # min omega for given HE
 
     def __init__(self, **kwargs):
 
@@ -144,24 +138,7 @@ class CylindricalExpansion(ExactSolver):
         if self.alpha_2 < 0:
             raise ValueError('Alpha for HE2 must be >= 0')
 
-        if self.omega_c <= 0:
-            raise ValueError('omega_c must be > 0')
-
-        if self.omega_c > np.pi / 2.0:
-            raise ValueError('omega_c must be < pi/2')
-
-        if self.omega_s <= 0:
-            raise ValueError('omega_s must be > 0')
-
-        if self.omega_s > np.pi / 2.0:
-            raise ValueError('omega_s must be < pi/2')
-
-        if self.omega_c < self.omega_s:
-            raise ValueError('omega_c must be >= omega_s')
-
     def _run(self, xylist, t):
-
-        omega_fix = 1.5708    # pi/2; reflective or rigid boundary; max omega
 
         veldev_1 = self.alpha_1 / self.D_CJ_1
         t_mid = self.t_d + ((self.r_2 - self.r_1) +
