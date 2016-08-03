@@ -8,7 +8,7 @@ import matplotlib.pylab as plt
 # import ExactPack solver and analysis tools
 from exactpack.solvers.dsd.ratestick import RateStick
 from exactpack.solvers.dsd.cylexpansion import CylindricalExpansion
-# from exactpack.solvers.dsd.explosivearc import ExplosiveArc
+from exactpack.solvers.dsd.explosivearc import ExplosiveArc
 
 plt.rc('font', family='serif', size=12)
 
@@ -255,9 +255,44 @@ plt.show()
 #####################################################################
 # ExplosiveArc example
 # Construct spatial grid and choose time
+nodesx = 81
+nodesy = 181
+
+r = np.linspace(2.0, 4.0, nodesx)
+theta = np.linspace(-np.pi/2.0, np.pi/2.0, nodesy)
+
+r2g, th2g = np.meshgrid(r, theta)
+x2 = r2g * np.cos(th2g)
+y2 = r2g * np.sin(th2g)
+xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
+
+time = 0.0  # time does not matter, but needs to be set for the machinery
 
 # solver object
+soln = ExplosiveArc(xnodes=nodesx, ynodes=nodesy)(xy, time)
 
-# any other calculations for analysis
+# outer boundary of HE
+obdyy = np.linspace(-4.0, 4.0, 241)
+obdyx = np.sqrt(16.0 - obdyy ** 2.0)
 
-# plot exact solutions
+# inner boundary of HE
+ibdyy = np.linspace(-2.0, 2.0, 121)
+ibdyx = np.sqrt(4.0 - ibdyy ** 2.0)
+
+# plot exact solution on requested grid
+tcontours = [0.1, 0.5, 4.0, 8.0]
+fig = plt.figure()
+p1 = plt.contour(soln1.position_x.reshape(len(y1), len(x1)),
+                 soln1.position_y.reshape(len(y1), len(x1)),
+                 soln1.burntime.reshape(len(y1), len(x1)),
+                 tcontours)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.clabel(p1, inline=1, fmt='%1.1f')
+plt.title('Burntime')
+plt.plot(obdyx, obdyy, 'k-', lw=2)
+plt.plot(ibdyx, ibdyy, 'k-', lw=2)
+
+plt.tight_layout()
+plt.show()
+

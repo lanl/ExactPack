@@ -16,7 +16,7 @@ import numpy as np
 
 from exactpack.solvers.dsd.ratestick import RateStick
 from exactpack.solvers.dsd.cylexpansion import CylindricalExpansion
-# from exactpack.solvers.dsd.explosivearc import ExplosiveArc
+from exactpack.solvers.dsd.explosivearc import ExplosiveArc
 
 
 class TestRateStick(unittest.TestCase):
@@ -514,170 +514,261 @@ class TestCylindricalExpansion(unittest.TestCase):
                                 CylindricalExpansion, alpha_2=-1.0)
 
 
-# class TestExplosiveArc(unittest.TestCase):
-#     r"""Tests for :class:`exactpack.solvers.dsd.explosivearc.ExplosiveArc`.
-#
-#     Solution tests consist of comparing the calculated burn time to the
-#     analytic solution at a fixed point. Input tests check that invalid
-#     input raises the appropriate error expression.
-#     """
-#
-#     def test_burntime_2d_base(self):
-#         """Tests burntime solution at 2D point in LOS region.
-#
-#         Uses default parameter values.
-#         """
-#
-#         soln = ExplosiveArc(geometry=2)(np.array([[4.0, 2.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 2.5)
-#
-#     def test_burntime_2d_detvel(self):
-#         """Tests burntime solution at 2D point in LOS region.
-#
-#         Uses default parameter values for inert region radius, detonator
-#         location and detonation time. HE detonation velocity is
-#         :math:`D=1.0`.
-#         """
-#
-#         soln = ExplosiveArc(geometry=2, D=1.0)(np.array([[4.0, 2.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 5.0)
-#
-#     def test_burntime_2d_dettime(self):
-#         """Tests burntime solution at 2D point in LOS region.
-#
-#         Uses default parameter values for inert region radius, HE detonation
-#         velocity and detonator location. Detonation time is :math:`t_d=-2.0`.
-#         """
-#
-#         soln = ExplosiveArc(t_d=-2.0)(np.array([[4.0, 2.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 0.5)
-#
-#     def test_burntime_2d_detloc(self):
-#         """Tests burntime solution at 2D point in LOS region.
-#
-#         Uses default parameter values for inert region radius, HE detonation
-#         velocity and detonation time. Detonator location is
-#         :math:`x_d=(0.0, -5.0)`.
-#         """
-#
-#         soln = ExplosiveArc(geometry=2,
-#                          x_d=(0.0, -5.0))(np.array([[4.0, -2.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 2.5)
-#
-#     def test_burntime_2d_inertR(self):
-#         """Tests burntime solution at 2D point in LOS region.
-#
-#         Uses default parameter values for HE detonation velocity, detonation
-#         time and detonator location. Inert region radius is :math:`R=4.0`.
-#         """
-#
-#         soln = ExplosiveArc(geometry=2, R=4.0)(np.array([[4.0, 2.0]]), 0.6)
-#
-#         self.assertEqual(soln.burntime, 2.5)
-#
-#     def test_geometry_error(self):
-#         """Test for valid value of geometry."""
-#
-#         self.assertRaisesRegexp(ValueError, "geometry must be 1",
-#                                 ExplosiveArc, geometry=5)
-#
-#     def test_R_neg_error(self):
-#         """Test for valid value of inner radius, :math:`R`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "Inert obstacle radius must be > 0",
-#                                 ExplosiveArc, R=-1.0)
-#
-#     def test_R_zero_error(self):
-#         """Test for valid value of inner radius, :math:`R`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "Inert obstacle radius must be > 0",
-#                                 ExplosiveArc, R=0.0)
-#
-#     def test_D_CJ_neg_error(self):
-#         """Test for valid value of HE detonation velocity, :math:`D`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "Detonation velocity must be > 0",
-#                                 ExplosiveArc, D_CH=-1.0)
-#
-#     def test_D_CJ_zero_error(self):
-#         """Test for valid value of HE detonation velocity, :math:`D`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "Detonation velocity must be > 0",
-#                                 ExplosiveArc, D_CJ=0.0)
-#
-#     def test_detgeom_2d_error(self):
-#         """Tests for valid geometry of detonator, :math:`x_d`."""
-#
-#         self.assertRaisesRegexp(ValueError, "Detonator location and " +
-#                                 "geometry dimensions must be compatible",
-#                                 ExplosiveArc, x_d=(0.0, 0.0, 0.0))
-#
-#     def test_detloc_2d_error(self):
-#         """Tests for valid location of detonator, :math:`x_d`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "Detonator must be outside of inert region",
-#                                 ExplosiveArc, x_d=(0.0, 1.0))
-#
-#     @unittest.expectedFailure
-#     def test_pts_in_inert(self):
-#         """Tests that solution points are outside the inert region."""
-#
-#         soln = ExplosiveArc()(np.array([[1.0, 0.0]]), 0.6)
-#
-#
-#
-#     def test_omegac_neg_error(self):
-#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-#
-#         self.assertRaisesRegexp(ValueError, "omega_c must be > 0",
-#                                 CylindricalExpansion, omega_c=-1.0)
-#
-#     def test_omegac_zero_error(self):
-#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-#
-#         self.assertRaisesRegexp(ValueError, "omega_c must be > 0",
-#                                 CylindricalExpansion, omega_c=0.0)
-#
-#     def test_omegac_max_error(self):
-#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-#
-#         self.assertRaisesRegexp(ValueError, "omega_c must be < pi/2",
-#                                 CylindricalExpansion, omega_c=2.0)
-#
-#     def test_omegas_neg_error(self):
-#         """Test for valid value of HE free-surface angle,
-#         :math:`\omega_s`."""
-#
-#         self.assertRaisesRegexp(ValueError, "omega_s must be > 0",
-#                                 CylindricalExpansion, omega_s=-1.0)
-#
-#     def test_omegas_zero_error(self):
-#         """Test for valid value of HE free-surface angle,
-#         :math:`\omega_s`."""
-#
-#         self.assertRaisesRegexp(ValueError, "omega_s must be > 0",
-#                                 CylindricalExpansion, omega_s=0.0)
-#
-#     def test_omegas_max_error(self):
-#         """Test for valid value of HE free-surface angle,
-#         :math:`\omega_s`."""
-#
-#         self.assertRaisesRegexp(ValueError, "omega_s must be < pi/2",
-#                                 CylindricalExpansion, omega_s=2.0)
-#
-#     def test_omegac_smaller_error(self):
-#         """Test for valid value of HE/inert edge angle, :math:`\omega_c`."""
-#
-#         self.assertRaisesRegexp(ValueError,
-#                                 "omega_c must be >= omega_s",
-#                                 CylindricalExpansion,
-#                                 omega_c=0.4, omega_s=0.5)
+class TestExplosiveArc(unittest.TestCase):
+    r"""Tests for :class:`exactpack.solvers.dsd.explosivearc.ExplosiveArc`.
+
+    Solution tests consist of comparing the calculated burn time to the
+    analytic solution at a fixed point. Input tests check that invalid
+    input raises the appropriate error expression.
+    """
+
+    def test_burntime_default(self):
+        """Tests burntime solution at 2D point.
+
+        Uses default parameter values for all parameters (except
+        :math:`xnodes` and :math:`ynodes`).
+        """
+
+        r = np.linspace(2.0, 4.0, 21)
+        theta = np.linspace(-np.pi/2.0, np.pi/2.0, 41)
+        
+        r2g, th2g = np.meshgrid(r, theta)
+        x2 = r2g * np.cos(th2g)
+        y2 = r2g * np.sin(th2g)
+        xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
+        
+        soln = ExplosiveArc(xnodes=21, ynodes=41, t_f=1.0)(xy, 0.6)
+
+        self.assertEqual(soln.burntime[1], 0.0)
+
+    @unittest.expectedFailure
+    def test_xylist_matches_xnodes_ynodes(self):
+        """Test for valid combination of :math:`xnodes`, :math:`ynodes`
+        and size of :math:`xylist`."""
+
+        soln = ExplosiveArc(xnodes=2, ynodes=1)(np.array([[0.5, 0.5]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_HEx_positive(self):
+        """Test for HE nodes with negative x-component`."""
+
+        soln = ExplosiveArc(xnodes=1, ynodes=1)(np.array([[-0.5, 0.5]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_HE_radius_zero(self):
+        """Test for :math:`xylist` nodes at :math:`r=0`."""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[0.0, 0.0]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_HE_radius_small(self):
+        """Test that :math:`xylist` contains nodes at :math:`r=r_2`."""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[0.0, 2.0],
+                                                       [0.0, 3.0],
+                                                       [0.0, -2.0],
+                                                       [0.0, -3.0]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_HE_radius_large(self):
+        """Test that :math:`xylist` contains nodes at :math:`r=r_1`."""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[0.0, 4.0],
+                                                       [0.0, 3.0],
+                                                       [0.0, -4.0],
+                                                       [0.0, -3.0]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_HE_theta_neg(self):
+        """Test that :math:`xylist` contains nodes at
+        :math:`\theta = - \frac{\pi}{2}`"""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[2.0, 0.0],
+                                                       [3.0, 0.0],
+                                                       [4.0, 0.0],
+                                                       [0.0, 2.0],
+                                                       [0.0, 3.0],
+                                                       [0.0, 4.0]]), 0.6)
+
+    @unittest.expectedFailure
+    def test_HE_theta_pos(self):
+        """Test that :math:`xylist` contains nodes at
+        :math:`\theta = \frac{\pi}{2}`"""
+
+        soln = RateStick(xnodes=1, ynodes=1)(np.array([[2.0, 0.0],
+                                                       [3.0, 0.0],
+                                                       [4.0, 0.0],
+                                                       [0.0, -2.0],
+                                                       [0.0, -3.0],
+                                                       [0.0, -4.0]]), 0.6)
+
+    def test_geometry_error(self):
+        """Test for valid value of geometry."""
+
+        self.assertRaisesRegexp(ValueError, "geometry must be 1",
+                                ExplosiveArc, geometry=5, xnodes=1,
+                                ynodes=1)
+
+    def test_r1_neg_error(self):
+        """Test for valid value of inner radius, :math:`r_1`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Inner radius must be > 0",
+                                ExplosiveArc, r_1=-1.0, xnodes=1, ynodes=1)
+
+    def test_r1_zero_error(self):
+        """Test for valid value of inner radius, :math:`r_1`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Inner radius must be > 0",
+                                ExplosiveArc, r_1=0.0, xnodes=1, ynodes=1)
+
+    def test_r2_neg_error(self):
+        """Test for valid value of outer radius, :math:`r_2`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Outer radius must be > 0",
+                                ExplosiveArc, r_2=-1.0, xnodes=1, ynodes=1)
+
+    def test_r2_zero_error(self):
+        """Test for valid value of outer radius, :math:`r_2`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Outer radius must be > 0",
+                                ExplosiveArc, r_2=0.0, xnodes=1, ynodes=1)
+
+    def test_r2_smaller_error(self):
+        """Test for valid value of outer radius, :math:`r_2`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Outer radius must be larger than " +
+                                "inner radius",
+                                ExplosiveArc, r_2=1.0, xnodes=1, ynodes=1)
+
+    def test_omegain_neg_error(self):
+        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Inner DSD edge angle must be > 0",
+                                ExplosiveArc, omega_in=-1.0,
+                                xnodes=1, ynodes=1)
+
+    def test_omegain_zero_error(self):
+        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Inner DSD edge angle must be > 0",
+                                ExplosiveArc, omega_in=0.0,
+                                xnodes=1, ynodes=1)
+
+    def test_omegain_max_error(self):
+        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Inner DSD edge angle must be < pi/2",
+                                ExplosiveArc, omega_in=2.0,
+                                xnodes=1, ynodes=1)
+
+    def test_omegain_max2_error(self):
+        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Inner DSD edge angle must be < pi/2",
+                                ExplosiveArc, omega_in=np.pi/2.0,
+                                xnodes=1, ynodes=1)
+
+    def test_omegaout_min_error(self):
+        """Test for valid value of outer edge angle, :math:`\omega_{out}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Outer DSD edge angle must be >= inner " +
+                                "DSD edge angle",
+                                ExplosiveArc, omega_out=0.5,
+                                xnodes=1, ynodes=1)
+
+    def test_omegaout_max_error(self):
+        """Test for valid value of outer edge angle, :math:`\omega_s{out}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Outer DSD edge angle must be <= pi/2",
+                                ExplosiveArc, omega_out=2.0,
+                                xnodes=1, ynodes=1)
+
+    def test_detloc_zero_error(self):
+        """Tests for valid location of detonator, :math:`x_d`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Detonator position must be < 0",
+                                ExplosiveArc, x_d=0.0, xnodes=1, ynodes=1)
+
+    def test_detloc_pos_error(self):
+        """Tests for valid location of detonator, :math:`x_d`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Detonator position must be < 0",
+                                ExplosiveArc, x_d=1.0, xnodes=1, ynodes=1)
+
+    def test_D_CJ_neg_error(self):
+        """Test for valid value of HE detonation velocity, :math:`D_{CJ}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Detonation velocity must be > 0",
+                                ExplosiveArc, D_CJ=-1.0,
+                                xnodes=1, ynodes=1)
+
+    def test_D_CJ_zero_error(self):
+        """Test for valid value of HE detonation velocity, :math:`D_{CJ}`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Detonation velocity must be > 0",
+                                ExplosiveArc, D_CJ=0.0,
+                                xnodes=1, ynodes=1)
+
+    def test_alpha_neg_error(self):
+        """Test for valid value of det velocity deviance coefficient,
+        :math:`\alpha`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Alpha must be >= 0",
+                                ExplosiveArc, alpha=-1.0,
+                                xnodes=1, ynodes=1)
+
+    def test_t_f_neg_error(self):
+        """Test for valid value of final time, :math:`t_f`."""
+
+        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+                                ExplosiveArc, t_f=-1.0, xnodes=1, ynodes=1)
+
+    def test_t_f_zero_error(self):
+        """Test for valid value of final time, :math:`t_f`."""
+
+        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+                                ExplosiveArc, t_f=0.0, xnodes=1, ynodes=1)
+
+    def test_xnodes_neg_error(self):
+        """Test for valid value of number of x-nodes, :math:`xnodes`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Number of x-nodes must be specified",
+                                ExplosiveArc, xnodes=-3, ynodes=1)
+
+    def test_xnodes_zero_error(self):
+        """Test for valid value of number of x-nodes, :math:`xnodes`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Number of x-nodes must be specified",
+                                ExplosiveArc, ynodes=1)
+
+    def test_ynodes_neg_error(self):
+        """Test for valid value of number of y-nodes, :math:`ynodes`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Number of y-nodes must be specified",
+                                ExplosiveArc, xnodes=1, ynodes=-3)
+
+    def test_ynodes_zero_error(self):
+        """Test for valid value of number of y-nodes, :math:`ynodes`."""
+
+        self.assertRaisesRegexp(ValueError,
+                                "Number of y-nodes must be specified",
+                                ExplosiveArc, xnodes=1)

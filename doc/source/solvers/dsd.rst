@@ -16,3 +16,8 @@ The DSD Problems
 .. automodule:: exactpack.solvers.dsd.cylexpansion
    :members:
 
+:mod:`exactpack.solvers.dsd.explosivearc`
+-----------------------------------------
+
+.. automodule:: exactpack.solvers.dsd.explosivearc
+   :members:

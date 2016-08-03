@@ -170,32 +170,33 @@ class RateStick(ExactSolver):
     velocity deviance must also be positive.
 
     Detonation time is assumed to be :math:`t_d = 0.0`. The burn front
-    shock wave is assumed to have reached the confinement material at
-    detonation time, with the outer edge (:math:`x = R`) of the shock wave
-    located at :math:`y=0` before application of the boundary condition.
+    shock wave is assumed to have just reached the confinement material at
+    detonation time, with the shock wave located at :math:`y=0` at the outer
+    edge of the HE (:math:`x = R`) before application of the boundary
+    condition.
 
     The initial angle between the normal to the shock wave and the normal
     to the confinement boundary is assumed to be no more than the applied
     edge angle. Thus, if :math:`IC = 1`, the radius of the detonation front,
     :math:`r_d`, and the radius/thickness of the HE, :math:`R`, must satisfy
-    the condition :math:`r_d >= \frac{R}{\omega_c}`. This condition is
+    the condition :math:`r_d >= \frac{R}{\cos (\omega_c)}`. This condition is
     automatically satisfied by the other two initial conditions.
 
     Default values are selected to reflect the description in [Bdzil]_, with
     the caveat listed in the first initial condition above. Default values
-    are **geometry** :math:`= 1`, :math:`R = 1.0`, :math:`\omega_c = 0.7854`,
-    :math:`D_{CJ} = 1.0`, :math:`\alpha = 0.1`, :math:`IC = 1` and
-    :math:`r_d = \sqrt{626}`, which produces a detonator location of
-    :math:`(0.0,-25.0)`.
+    are **geometry** :math:`= 1`, :math:`R = 1.0`,
+    :math:`\omega_c = \frac{\pi}{4}`, :math:`D_{CJ} = 1.0`,
+    :math:`\alpha = 0.1`, :math:`IC = 1` and :math:`r_d = \sqrt{626}`,
+    which produces a detonator location of :math:`(0.0,-25.0)`.
 
     The solution for :math:`y` of the burn front is calculated on a fine
     :math:`(x, t)` mesh to obtain :math:`y = y(x, t)`. The solution is then
-    interpolated to the requested :math:`(x, y)` mesh and inverted to obtain
+    interpolated to the requested :math:`xy` mesh and inverted to obtain
     the burn time as :math:`t = t(x, y)`. The requested mesh must have a
     larger mesh spacing than the mesh used for the calculation. For efficiency
     in inverting the solution, the user must input the number of nodes in
     the :math:`x`-direction, :math:`xnodes`, and the number of nodes in the
-    :math:`y`-direction, :math:`ynodes`.
+    :math:`y`-direction, :math:`ynodes` in the requested mesh.
 
     """
 
@@ -216,7 +217,7 @@ class RateStick(ExactSolver):
 
     geometry = 1       # geometry = n + 1 (n is used in Bdzil document)
     R = 1.0
-    omega_c = 0.7854     # pi / 4
+    omega_c = np.pi / 4.0
     D_CJ = 1.0
     alpha = 0.1
     IC = 1
@@ -278,8 +279,6 @@ class RateStick(ExactSolver):
 
         if self.xnodes * self.ynodes != xylist.shape[0]:
             raise ValueError('xnodes and ynodes do not match xylist')
-
-        # import pdb; pdb.set_trace()
 
         if max(xylist[:, 0]) != self.R:
             raise ValueError('xylist does not match R')
