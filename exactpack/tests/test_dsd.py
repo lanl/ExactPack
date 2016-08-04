@@ -580,8 +580,7 @@ class TestExplosiveArc(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_HE_theta_neg(self):
-        """Test that :math:`xylist` contains nodes at
-        :math:`\theta = - \frac{\pi}{2}`"""
+        """Test that :math:`xylist` contains nodes at theta = - pi/2"""
 
         soln = RateStick(xnodes=1, ynodes=1)(np.array([[2.0, 0.0],
                                                        [3.0, 0.0],
@@ -592,8 +591,7 @@ class TestExplosiveArc(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_HE_theta_pos(self):
-        """Test that :math:`xylist` contains nodes at
-        :math:`\theta = \frac{\pi}{2}`"""
+        """Test that :math:`xylist` contains nodes at theta = pi/2"""
 
         soln = RateStick(xnodes=1, ynodes=1)(np.array([[2.0, 0.0],
                                                        [3.0, 0.0],
