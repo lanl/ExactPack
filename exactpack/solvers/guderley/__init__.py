@@ -1,4 +1,4 @@
-r"""The Guderley Problem
+r"""The Guderley Problem.
 
 In 1942, G. Guderley [Guderley1942]_ found a semi-analytic solution for
 a self-similar convergent shock wave in an invisid, non-heat conducting

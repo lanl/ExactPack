@@ -18,7 +18,7 @@ class TestMaderTimmes(unittest.TestCase):
     single point; therefore, these tests really use
     :math:`r=[0.7,0.8]` and the the first spatial point is
     selected. This is because Timmes' solution code returns cell
-    averaged values. Fix this.
+    averaged values.
 
     """
 

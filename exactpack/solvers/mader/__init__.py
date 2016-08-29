@@ -1,4 +1,4 @@
-r"""The Mader rarefaction burn wave
+r"""The Mader rarefaction burn wave.
 
 The Mader Problem is a one-dimensional piston-driven detonation wave with 
 a trailing polytropic rarefaction, in which a slab of high 

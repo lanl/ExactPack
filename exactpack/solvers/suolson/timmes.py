@@ -16,7 +16,7 @@ class SuOlson(ExactSolver):
     parameters = {
         'trad_bc_ev': r'radiation boundary condition, i.e. :math:`T(0,t)= \
         {\rm trad\_bc\_ev}`',
-        'opac': r'constant opacity :math:`\kappa`',
+        'opac': r'constant opacity :math:`\kappa_0` in Eq. :eq:`cvkappaDef`',
         'alpha': r'coefficient :math:`\alpha` in Eq. :eq:`cvkappaDef` for \
          the specific heat (:math:`\alpha = 4 a`)',
         }

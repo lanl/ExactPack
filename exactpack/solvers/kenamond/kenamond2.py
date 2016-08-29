@@ -2,7 +2,7 @@ r"""A Kenamond2 solver in Python.
 
 This is a pure Python implementation of the Kenamond2 solution using Numpy.
 
-The Kenamond HE Problem 2 is used to test a code's ability to calculate burn
+The Kenamond HE Problem 2 [KaulK22016]_ is used to test a code's ability to calculate burn
 time tables for an unobstructed line-of-sight, multi-point initiation of a
 multiple HE region. An HE sphere of radius :math:`R` centered at the origin
 with constant detonation velocity :math:`D_1` is surrounded by an infinite

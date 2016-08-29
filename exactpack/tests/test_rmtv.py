@@ -11,9 +11,7 @@ from exactpack.solvers.rmtv.timmes import Rmtv
 class TestRmtvTimmes(unittest.TestCase):
     r"""Test for :class:`exactpack.rmtv.timmes.Rmtv`.
 
-    The comparisions are made at :math:`r=0.015` and
-    :math:`t=xx`. Note: This problem is only calculated at a single
-    time :math:`t=xx` 
+    The comparisions are made at :math:`r=0.015`. 
     """
 
     def test_density(self):

@@ -1,6 +1,6 @@
-r"""The Reinicke Meyer-ter-Vehn (RMTV) problem
+r"""The Reinicke Meyer-ter-Vehn problem.
 
-The Reinicke Meyer-ter-Vehn problem is defined in [Reinicke1991]_ and
+The Reinicke Meyer-ter-Vehn (RMTV) problem is defined in [Reinicke1991]_ and
 [Kamm2000a]_.
 
 The energy source of the problem considered here is sufficiently large
@@ -40,7 +40,7 @@ written
    P = \Gamma \rho T ~~{\rm and}~~ e = \frac{\Gamma T}{\gamma - 1} \ ,
    :label: BigGamma
 
-where :math:`\Gamma` is the Gruneisen gas coefficient. The initial
+where :math:`\Gamma` is the Gruneisen coefficient. The initial
 cold (:math:`T=0`) density profile is
 
 .. math::

@@ -1,9 +1,12 @@
-r"""The Coggeshall [Coggeshall1991]_ problems are a collection of exact solutions to the
-one-dimensional Euler equations with heat conduction and no viscosity.  The fluid field
-variables are the mass density :math:`\rho(r,t)`, the fluid velocity
+r"""The Coggeshall problems.
+
+The Coggeshall [Coggeshall1991]_ problems are a collection of exact
+solutions to the one-dimensional Euler equations with heat conduction and
+no viscosity.  The fluid field variables are the mass density :math:`\rho(r,t)`,
+the fluid velocity
 :math:`u(r,t)`, the fluid temperature :math:`T(r,t)`, and the specific
 internal energy :math:`e(r,t)` of the fluid material, where :math:`r`
-is the spatial coordinate in either planar, cylindrical, or spherical
+is the spatial coordinate in planar, cylindrical, or spherical
 geometry. The :math:`\gamma`-law Equation of State (EOS) for the gas
 is written
 
@@ -13,16 +16,11 @@ is written
   e &= \frac{\Gamma\, T}{\gamma - 1} \ ,
 
 where :math:`\Gamma` is the Gruneisen gas constant and :math:`\gamma
-\equiv c_p/c_v` is the adiabatic exponent. Dividing these equations
+\equiv c_{\rm p}/c_{\rm v}` is the adiabatic exponent. Dividing these equations
 gives the standard adiabatic :math:`\gamma`-law EOS,
 
 .. math::
-  P &= (\gamma - 1) \, \rho e \ .
-
-For an ideal gas in which the specific energy is linear in temperature, 
-:math:`e = c_v \, T`, the Gruneisen coefficient can be written
-:math:`\Gamma = (\gamma - 1)\, c_v`. We shall choose :math:`\gamma` and
-:math:`c_v` as the two independent gas parameters.
+  P = (\gamma - 1) \, \rho e \ .
 
 Upon taking :math:`\rho`, :math:`u`, and :math:`T` as the independent variables,
 the conservation of mass, momentum, and energy imply the following balance equations:
@@ -46,30 +44,29 @@ the conservation of mass, momentum, and energy imply the following balance equat
 
 where :math:`k=0,1,2` is the geometry factor specifying planar, cylindrical,
 or spherical coordinates, respectively. Note that the geometry option
-in ExactPack is different, with :math:`{\rm\bf geometry} = k + 1 = 1,
-2, 3`. Here, :math:`c` is the speed of light, :math:`a` is the
-radiation constant, :math:`{\vec F}` is the heat flux in the diffusion
-approximation, and the radiation energy density is :math:`{\cal E} = a T^4`:
-
-The quantity :math:`F = \vert {\vec F} \vert` is the heat flux in the
-diffusion approximation, which takes the form
+in ExactPack is different, with :math:`{\rm\bf geometry} = k + 1 = 1, 2, 3`.
+The quantity :math:`F` in the energy equation is the magnitude of the heat
+flux vector, which, in the diffusion approximation, takes the form
 
 .. math::
  {\vec F}
   =
   - \frac{c\, \lambda}{3}\, {\vec \nabla}\, a T^4 \ ,
 
-where :math:`c` is the speed of light, :math:`a` is the radiation constant,
-and the radiation mean-free-path (mfp) is parameterized as
+with :math:`c` being the speed of light, :math:`a` the radiation constant,
+and :math:`\lambda` the radiation mean-free-path. To obtain a semi-analytic
+solution, we parameter :math:`\lambda` by
 
 .. math::
    \lambda(\rho,T) = \lambda_0\, \rho^\alpha T^\beta ,
    :label: lambdaDef
 
-with :math:`-1 \le \alpha \le 2` and :math:`1 \le \beta \le 3`. The mfp
-:math:`\lambda` is related to the Rosseland mean opacity
-:math:`\kappa` by :math:`\lambda= 1/\kappa\rho`. Note that the
-heat conductivity :math:`K` takes the form
+
+where :math:`\lambda_0` is a dimensionfull constant, and :math:`\alpha` and
+:math:`\beta` are dimensionless parameters in the ranges  :math:`-1 \le \alpha \le 2`
+and :math:`1 \le \beta \le 3`. The mean-free-path :math:`\lambda` is related to the
+Rosseland mean opacity :math:`\kappa` by :math:`\kappa= 1/\lambda\rho`. The heat
+flux can also be written in term of the heat conductivity :math:`K`, defined by
 
 .. math::
 
