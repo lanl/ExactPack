@@ -20,7 +20,7 @@ ExactPack is designed to be an open project, readily expandable to include new t
   * Programmed burn timing
   * Steady-detonation reaction-zone
   * Mader problem
-  * Detonation Shock Dynamics problems
+  * Detonation Shock Dynamics problems (beta)
     * Rate stick
     * Cylindrical expansion
     * Explosive arc
