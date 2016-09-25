@@ -61,7 +61,7 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
         self.assertEqual(slvr.blake_debug, dbgflag)
 
     def test_check_cavity_radius(self):
-        """Test cavity_radius parameter positive  check."""
+        """Test cavity_radius parameter positive check."""
         self.assertRaisesRegexp(ValueError, "cavity_radius.*non-positive",
                                 Blake, cavity_radius=-1.0)
 
