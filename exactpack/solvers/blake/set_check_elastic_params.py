@@ -6,11 +6,10 @@ parameters.
 #
 # In this version, function set_elastic_params() uses compile() and a namespace
 # dict 'ns' to store internal param variables introduced by use of exec.
-# This is to avoid the version-dependent problems with the 'exec' statement 
+# This is to avoid the version-dependent problems with the 'exec' statement
 # in the previous coding.
 
 
-# import sys            # for sys.exit()
 import warnings
 import numpy as np
 
@@ -212,7 +211,7 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
     *False*, the elas_prm_names and elas_prm_order arguments must still agree.
     In particular, the elas_prm_names list *must* contain the same six strings
     as does the corresponding attribute of :class:`Blake`.
-    
+
     The blk_dbg_prm argument is True/False and enables available debugging
     code throughout this module when True.
     """
@@ -233,13 +232,13 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
 
     # Internal param var names (same order as elas_prm_names):
     int_var_names = ('plda', 'pg', 'pe', 'pnu', 'pk', 'pm')
-    
+
     # make a reverse dict from internal var names to external param names.
     ivar_pnms = dict(zip(int_var_names, elas_prm_names))
 
     # Create local elastic param vars w/ COMPLEX init. value.
     # ipr, ips are intermediate variables (called R, S in [#gur83])
-    # which are computed in some cases.  
+    # which are computed in some cases.
     # Complex value makes lack of overrite easy to detect at end.
 
     ns = {}             # namespace for local vars introduced by exec.
@@ -289,8 +288,8 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
                         ' is non-positive.')
                 )
 
-    # Ensure elas_prm_order[ekey0] < elas_prm_order[ekey1]: 
-    # coding below depends on this.
+    # Ensure elas_prm_order[ekey0] < elas_prm_order[ekey1].
+    # Coding below depends on this.
     eprmkys = elas_prm_args.keys()
     if elas_prm_order[eprmkys[0]] < elas_prm_order[eprmkys[1]]:
         [eky0, eky1] = eprmkys
@@ -394,14 +393,14 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         # given -- lame_mod, shear_mod
         # Neg. poisson and FPEs not possible.
         check_ii(prmcase, eky0, ns['plda'], eky1, ns['pg'], blk_dbg_prm)
-        ns['pe'] = (   ns['pg'] * (3 * ns['plda'] + 2 * ns['pg'])
-                     / (ns['plda'] + ns['pg']) )
+        ns['pe'] = (ns['pg'] * (3 * ns['plda'] + 2 * ns['pg']) /
+                    (ns['plda'] + ns['pg']))
         ns['pnu'] = ns['plda'] / (2 * (ns['plda'] + ns['pg']))
     elif prmcase == 1:
         # given -- lame_mod, youngs_mod
         # Neg. poisson and FPEs not possible.
         ns['ipr'] = (
-            pow(ns['pe']**2 + 9*ns['plda']**2 + 2*ns['pe']*ns['plda'], 0.5) )
+            pow(ns['pe']**2 + 9*ns['plda']**2 + 2*ns['pe']*ns['plda'], 0.5))
         ns['pnu'] = 2 * ns['plda'] / (ns['pe'] + ns['plda'] + ns['ipr'])
         ns['pg'] = 0.25 * (ns['pe'] - 3 * ns['plda'] + ns['ipr'])
         check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
@@ -427,16 +426,16 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         ns['pg'] = 3 * (ns['pk'] - ns['plda']) / 2
         check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
                  blk_dbg_prm)
-        ns['pe'] = (   9 * ns['pk'] * (ns['pk'] - ns['plda'])
-                     / (3 * ns['pk'] - ns['plda']) )
+        ns['pe'] = (9 * ns['pk'] * (ns['pk'] - ns['plda']) /
+                    (3 * ns['pk'] - ns['plda']))
     elif prmcase == 4:
         # given -- lame_mod, long_mod
         # Neg. poisson and FPEs not possible.
         ns['pg'] = (ns['pm'] - ns['plda']) / 2
         check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
                  blk_dbg_prm)
-        ns['pe'] = (   (ns['pm'] - ns['plda']) * (ns['pm'] + 2 * ns['plda'])
-                     / (ns['pm'] + ns['plda']) )
+        ns['pe'] = ((ns['pm'] - ns['plda']) * (ns['pm'] + 2 * ns['plda']) /
+                    (ns['pm'] + ns['plda']))
         ns['pnu'] = ns['plda'] / (ns['pm'] + ns['plda'])
     #
     # eky0 == 'shear_mod'
@@ -449,8 +448,8 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         if np.isclose(ns['pe'], icb, rtol=reltol, atol=abstol):
             term_nan_lame(prmcase, pnames, pvals, blk_dbg_prm)
 
-        ns['plda'] = (  ns['pg'] * (ns['pe'] - 2 * ns['pg'])
-                        / (3 * ns['pg'] - ns['pe']) )
+        ns['plda'] = (ns['pg'] * (ns['pe'] - 2 * ns['pg']) /
+                      (3 * ns['pg'] - ns['pe']))
         ns['pnu'] = (ns['pe'] / (2 * ns['pg'])) - 1
         warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
         check_iv(prmcase, eky0, ns['pg'], ivar_pnms['pnu'], ns['pnu'],
@@ -484,16 +483,15 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         check_iv(prmcase, eky0, ns['pg'], ivar_pnms['pnu'], ns['pnu'],
                  blk_dbg_prm)
         ns['plda'] = ns['pm'] - 2 * ns['pg']
-        ns['pe'] = (   ns['pg'] * (3 * ns['pm'] - 4 * ns['pg'])
-                    / (ns['pm'] - ns['pg']) )
+        ns['pe'] = (ns['pg'] * (3 * ns['pm'] - 4 * ns['pg']) /
+                    (ns['pm'] - ns['pg']))
     #
     # eky0 == 'youngs_mod'
     elif prmcase == 9:
         # given -- youngs_mod, poisson_ratio
         # Neg. poisson and FPEs not possible.
         check_v(prmcase, eky0, ns['pe'], eky1, ns['pnu'], blk_dbg_prm)
-        ns['plda'] = (   ns['pe'] * ns['pnu']
-                       / ((1 + ns['pnu']) * (1 - 2 * ns['pnu'])) )
+        ns['plda'] = ns['pe']*ns['pnu']/((1 + ns['pnu'])*(1 - 2 * ns['pnu']))
         ns['pg'] = 0.5 * ns['pe'] / (1 + ns['pnu'])
     elif prmcase == 10:
         # given -- youngs_mod, bulk_mod
@@ -504,8 +502,8 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         if np.isclose(ns['pe'], icb, rtol=reltol, atol=abstol):
             term_nan_lame(prmcase, pnames, pvals, blk_dbg_prm)
 
-        ns['plda'] = (   3 * ns['pk'] * (3 * ns['pk'] - ns['pe'])
-                       / (9 * ns['pk'] - ns['pe']) )
+        ns['plda'] = (3 * ns['pk'] * (3 * ns['pk'] - ns['pe']) /
+                      (9 * ns['pk'] - ns['pe']))
         ns['pnu'] = (3 * ns['pk'] - ns['pe']) / (6 * ns['pk'])
         warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
         check_v(prmcase, eky0, ns['pe'], ivar_pnms['pnu'], ns['pnu'],
@@ -577,11 +575,11 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
 
     # Verify that (plda, pg, pe, pnu) have been set.
     allset = not any((v for v in (ns['plda'], ns['pg'], ns['pe'], ns['pnu'])
-                      if isinstance(v,complex)))
+                      if isinstance(v, complex)))
     errmsg = (
         """Internal: one of the internal params has not yet been set!
         Contact ExactPack team!
-        """ )
+        """)
     assert allset, errmsg
 
     # One or both of bulk_mod, long_mod may not yet have been set.
@@ -593,5 +591,5 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
 
     # Provided inputs are as described in docstring, this dict contains the
     # correct name-value mapping.
-    return dict(zip(elas_prm_names, [ns['plda'], ns['pg'], ns['pe'], 
+    return dict(zip(elas_prm_names, [ns['plda'], ns['pg'], ns['pe'],
                     ns['pnu'], ns['pk'], ns['pm']]))
