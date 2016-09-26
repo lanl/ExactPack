@@ -20,6 +20,10 @@ ExactPack is designed to be an open project, readily expandable to include new t
   * Programmed burn timing
   * Steady-detonation reaction-zone
   * Mader problem
+  * Detonation Shock Dynamics problems (beta)
+    * Rate stick
+    * Cylindrical expansion
+    * Explosive arc
 * Inviscid hydrodynamics with heat transfer (radiation, conduction)
   * Coggeshall problems
   * Reinicke Meyer-ter-Vehn problem
@@ -108,4 +112,8 @@ D. F. Aldridge, *Elastic Wave Radiation from a Pressurized Spherical Cavity*, Sa
 F. G. Blake, *Spherical Wave Propagation in Solid Media*, The Journal of the Acoustical Society of America **24**, no. 2, p. 211 (1952).
 
 G. J. Hutchens, *An Analysis of the Blake Problem*, Los Alamos report, LA-UR-05-8737 (2005).
+
+#### Detonation Shock Dynamics Problems
+
+J.B. Bdzil, R. J. Henninger, and J. W. Walter, *Test Problems for DSD2D*, LA-14277 (2006).
 
