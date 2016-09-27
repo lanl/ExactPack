@@ -7,6 +7,7 @@ import numpy as np
 from exactpack.solvers.blake import Blake
 from exactpack.solvers.blake import set_check_elastic_params as elas_prms_mod
 
+
 class TestSetCheckElasErrsWarns(unittest.TestCase):
     """Exercise all exception-producing auxilliary funtions
     in :mod:`blake.set_check_elastic_params`.

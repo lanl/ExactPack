@@ -219,9 +219,9 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
     # Sanity check defaults, construct default dict & return if
     # defaulted == True.
     nelprm = 6          # number of elastic parameters
-    if (len(elas_prm_names) == nelprm and
-        len(elas_prm_dflt_vals) == nelprm and
-        len(elas_prm_order) == nelprm):
+    if(len(elas_prm_names) == nelprm and
+       len(elas_prm_dflt_vals) == nelprm and
+       len(elas_prm_order) == nelprm):
         elas_prm_dflts = dict(zip(elas_prm_names, elas_prm_dflt_vals))
         if defaulted:
             return elas_prm_dflts

@@ -96,6 +96,7 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
         self.assertRaisesRegexp(ValueError, "blake_debug.*boolean.*",
                                 Blake, blake_debug='string')
 
+
 class TestBlakeSolution(unittest.TestCase):
     r"""Tests :class:`exactpack.blake.Blake` solver.
 
@@ -220,7 +221,7 @@ class TestBlakeSolution(unittest.TestCase):
         # in this case.  Non-elastic params are specified exactly here,
         # so they aren't the cause.
         # However, the given elastic params here are NOT those used internally
-        # for default soln calculation.  Calculation of the internal 
+        # for default soln calculation.  Calculation of the internal
         # elastic params causes this loss of accuracy.
         # This is dependent on which params are given here.
         np.testing.assert_allclose(curr_soln_2d, blk_dflt_std,
