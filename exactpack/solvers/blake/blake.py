@@ -1,7 +1,7 @@
 r"""A python solver for the spherical, isotropic, linear elastic Blake problem.
 
 This Blake version handles only spherical geometry with a constant (for
-:math:`t > 0`) pressure history as in :ref:`formul-soln` above.  
+:math:`t > 0`) pressure history as in :ref:`formul-soln` above.
 """
 
 from ...base import ExactSolver, ExactSolution
@@ -10,6 +10,7 @@ from . import set_check_elastic_params as elas_prms_mod
 import warnings
 import math as ma
 import numpy as np
+
 
 class Blake(ExactSolver):
     r"""Compute a solution \"snapshot\" for the spherical Blake problem.
@@ -42,7 +43,7 @@ class Blake(ExactSolver):
     ==================================== ========
 
     The material is determined by specifying any **two** of these six; the
-    other four are calculated internally.  Consequently, class Blake requires 
+    other four are calculated internally.  Consequently, class Blake requires
     any two of these to create a solver instance.  For further detail, see the
     documentation for :func:`set_elastic_params` in module
     :mod:`set_check_elastic_params`.
@@ -167,7 +168,7 @@ class Blake(ExactSolver):
         else:
             # Some user-given params.
             # *Individual* non-elastic parameters may be defaulted.
-            # Elastic params must be specified as a pair: 
+            # Elastic params must be specified as a pair:
             # either defaulted or exactly two params given.
             if len(set(kwargs.keys()) & set(Blake.elas_prm_names)) > 0:
                 elas_dflt = False
@@ -175,7 +176,7 @@ class Blake(ExactSolver):
                 elas_dflt = True
 
         # Handle blake_debug parameter.
-        if kwargs.get('blake_debug') == None:
+        if kwargs.get('blake_debug') is None:
             dbg_arg = self.prob_param_dflts['blake_debug']
         else:
             dbg_arg = kwargs['blake_debug']
@@ -187,7 +188,6 @@ class Blake(ExactSolver):
                 Blake.elas_prm_order, elas_dflt, dbg_arg,
                 **kwargs))
         kwargs.update(elas_param_vals)
-        # 
         self.elas_param_values.update(elas_param_vals)
 
         # Parent-class constructor traps any invalid param names.
@@ -229,7 +229,7 @@ class Blake(ExactSolver):
         # Local vars
         third = 1.0 / 3.0
         zero_r = np.zeros(radii.size, dtype=np.float64)
-        # 
+
         geom = self.geometry
         cavrad = self.cavity_radius
         ref_dens = self.ref_density
@@ -269,7 +269,7 @@ class Blake(ExactSolver):
         tp_r = tsnap - (radii - cavrad) / cl
 
         # Scalars for radial strain
-        eacts   = ma.exp(n * (tsnap + cavrad / cl))
+        eacts = ma.exp(n * (tsnap + cavrad / cl))
         emacts = ma.exp(-n * (tsnap + cavrad / cl))
         # arrays
         enrc_r = np.exp((n / cl) * radii)

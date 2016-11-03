@@ -7,6 +7,7 @@ import numpy as np
 from exactpack.solvers.blake import Blake
 from exactpack.solvers.blake import set_check_elastic_params as elas_prms_mod
 
+
 class TestSetCheckElasErrsWarns(unittest.TestCase):
     """Exercise all exception-producing auxilliary funtions
     in :mod:`blake.set_check_elastic_params`.
@@ -156,7 +157,6 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
 
     def test_term_nan_poisson_pc8(self):
         """Test term_nan_poisson() given: shear_mod, long_mod."""
-        """Produce a call to term_nan_poisson, given shear_mod, long_mod."""
 
         dflt_vals = TestSetCheckElasErrsWarns.dflt_vals
         dflt_order = TestSetCheckElasErrsWarns.dflt_order
@@ -192,9 +192,9 @@ class TestSetElasticParams(unittest.TestCase):
     # Make these Blake.* available to this class.
     elas_prm_dflts = Blake.elas_prm_dflts               # orig. dict
     dflt_order = Blake.elas_prm_order                   # orig. dict
-    dflt_keys = Blake.elas_prm_names                   # orig. tuple
-    dflt_vals = Blake.elas_prm_dflt_vals               # orig. tuple
-    debug_prm = False
+    dflt_keys = Blake.elas_prm_names                    # orig. tuple
+    dflt_vals = Blake.elas_prm_dflt_vals                # orig. tuple
+    debug_prm = True
 
     def test_set_elastic_params(self):
         r"""Test normal function of set_elastic_params().
@@ -206,7 +206,7 @@ class TestSetElasticParams(unittest.TestCase):
         """
 
         # puts blank line after test title.
-        print ' '
+        # print ' '
         # Local refs to TestSetElasPrms.* objects
         dflt_keys = TestSetElasticParams.dflt_keys               # orig. tuple
         dflt_vals = TestSetElasticParams.dflt_vals               # orig. tuple
@@ -237,7 +237,6 @@ class TestSetElasticParams(unittest.TestCase):
                 if eky1 not in done_eky0:
                     # print '\nIn test_check_elas_params: blk_cnt, eky0, eky1'
                     # print str(blk_cnt) + ', ' + eky0 + ', ' + eky1      #dbg
-                    # This use of elas_prm_dflts is OK as we access by key.
                     kwargs = {k: v for k, v in elas_prm_dflts.iteritems()
                               if k in (eky0, eky1)}
                     kwargs.update({'geometry': 3})

@@ -66,8 +66,8 @@ plt.grid(True)
 plt.show()
 
 # pause() causes active fig to update and display
-# Needed on Mac but don't use on Linux
-#plt.pause(1e-6)
+# Needed on OS X (mac) but don't use on Linux.
+# plt.pause(1e-6)
 
 # releases all memory assoc. w/ curr. figure.
 plt.close()
