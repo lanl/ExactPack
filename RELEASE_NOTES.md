@@ -1,6 +1,10 @@
 Release Notes for ExactPack
 ===========================
 
+Version 1.4.1 (Nov 2016)
+-------------------------
+
+* Fixed a bug in the Blake solver that was dependent upon Python version
 
 Version 1.4.0 (Sept 2016)
 -------------------------
