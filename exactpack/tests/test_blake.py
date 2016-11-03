@@ -61,7 +61,7 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
         self.assertEqual(slvr.blake_debug, dbgflag)
 
     def test_check_cavity_radius(self):
-        """Test cavity_radius parameter positive  check."""
+        """Test cavity_radius parameter positive check."""
         self.assertRaisesRegexp(ValueError, "cavity_radius.*non-positive",
                                 Blake, cavity_radius=-1.0)
 
@@ -95,6 +95,7 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
         """Test that blake_debug parameter is boolean."""
         self.assertRaisesRegexp(ValueError, "blake_debug.*boolean.*",
                                 Blake, blake_debug='string')
+
 
 class TestBlakeSolution(unittest.TestCase):
     r"""Tests :class:`exactpack.blake.Blake` solver.
@@ -220,7 +221,7 @@ class TestBlakeSolution(unittest.TestCase):
         # in this case.  Non-elastic params are specified exactly here,
         # so they aren't the cause.
         # However, the given elastic params here are NOT those used internally
-        # for default soln calculation.  Calculation of the internal 
+        # for default soln calculation.  Calculation of the internal
         # elastic params causes this loss of accuracy.
         # This is dependent on which params are given here.
         np.testing.assert_allclose(curr_soln_2d, blk_dflt_std,

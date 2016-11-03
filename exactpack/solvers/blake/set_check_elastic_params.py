@@ -2,6 +2,14 @@ r"""Set and check values of a complete set of isotropic, linear elastic
 parameters.
 """
 
+# (Sat Sep 24 2016) walter
+#
+# In this version, function set_elastic_params() uses compile() and a namespace
+# dict 'ns' to store internal param variables introduced by use of exec.
+# This is to avoid the version-dependent problems with the 'exec' statement
+# in the previous coding.
+
+
 import warnings
 import numpy as np
 
@@ -80,8 +88,8 @@ def check_v(prmcase, E_name, E, nu_name, nu, blk_dbg_prm):
 
         raise ValueError(msg)
 
-# Additional elastic parameter checking fcns.
 
+# Additional elastic parameter checking fcns.
 
 def warn_negative_poisson(prmcase, nu, pnm, pv, blk_dbg_prm):
     r"""Issue a warning if Poisson's Ratio is non-positive.
@@ -202,8 +210,8 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
     and with the ordinality specified in elas_prm_order.  Even if defaulted is
     *False*, the elas_prm_names and elas_prm_order arguments must still agree.
     In particular, the elas_prm_names list *must* contain the same six strings
-    as the corresponding attribute of :class:`Blake`.
-    
+    as does the corresponding attribute of :class:`Blake`.
+
     The blk_dbg_prm argument is True/False and enables available debugging
     code throughout this module when True.
     """
@@ -211,9 +219,9 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
     # Sanity check defaults, construct default dict & return if
     # defaulted == True.
     nelprm = 6          # number of elastic parameters
-    if (len(elas_prm_names) == nelprm and
-        len(elas_prm_dflt_vals) == nelprm and
-        len(elas_prm_order) == nelprm):
+    if(len(elas_prm_names) == nelprm and
+       len(elas_prm_dflt_vals) == nelprm and
+       len(elas_prm_order) == nelprm):
         elas_prm_dflts = dict(zip(elas_prm_names, elas_prm_dflt_vals))
         if defaulted:
             return elas_prm_dflts
@@ -222,21 +230,29 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
 
     #           Setup for generic case
 
-    # Internal param vars (same order as elas_prm_names):
+    # Internal param var names (same order as elas_prm_names):
     int_var_names = ('plda', 'pg', 'pe', 'pnu', 'pk', 'pm')
+
     # make a reverse dict from internal var names to external param names.
     ivar_pnms = dict(zip(int_var_names, elas_prm_names))
 
-    # Create local elas param vars w/ COMPLEX init. value.
-    # ipr, ips are intermediate variables (sometimes called R, S)
+    # Create local elastic param vars w/ COMPLEX init. value.
+    # ipr, ips are intermediate variables (called R, S in [#gur83])
     # which are computed in some cases.
-    ipr = ips = 1j
-    for nm in int_var_names:
+    # Complex value makes lack of overrite easy to detect at end.
+
+    ns = {}             # namespace for local vars introduced by exec.
+    vnmlst = ['ipr', 'ips']     # Include these params in loop.
+    vnmlst.extend(int_var_names)
+    for nm in vnmlst:
         stmt = nm + ' = ' + str(1j)
-        exec(stmt, None, None)
+        # print '\nstmt str is: ', stmt                 #dbg
+        cobj = compile(stmt, '<string>', 'exec')
+        exec cobj in ns
 
+    #
     #          Generic case
-
+    #
     # Store the valid param names from kwargs.key().
     elas_prm_args = {}
     for ky in elas_prm_dflts:
@@ -272,8 +288,8 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
                         ' is non-positive.')
                 )
 
-    # Ensure elas_prm_order[ekey0] < elas_prm_order[ekey1]: 
-    # coding below depends on this.
+    # Ensure elas_prm_order[ekey0] < elas_prm_order[ekey1].
+    # Coding below depends on this.
     eprmkys = elas_prm_args.keys()
     if elas_prm_order[eprmkys[0]] < elas_prm_order[eprmkys[1]]:
         [eky0, eky1] = eprmkys
@@ -285,64 +301,64 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
 
     # Set prmcase and local param vars.
     if eky0 == 'lame_mod':
-        plda = elas_prm_args[eky0]
+        ns['plda'] = elas_prm_args[eky0]
         if eky1 == 'shear_mod':
             prmcase = 0
-            pg = elas_prm_args[eky1]
+            ns['pg'] = elas_prm_args[eky1]
         elif eky1 == 'youngs_mod':
             prmcase = 1
-            pe = elas_prm_args[eky1]
+            ns['pe'] = elas_prm_args[eky1]
         elif eky1 == 'poisson_ratio':
             prmcase = 2
-            pnu = elas_prm_args[eky1]
+            ns['pnu'] = elas_prm_args[eky1]
         elif eky1 == 'bulk_mod':
             prmcase = 3
-            pk = elas_prm_args[eky1]
+            ns['pk'] = elas_prm_args[eky1]
         elif eky1 == 'long_mod':
             prmcase = 4
-            pm = elas_prm_args[eky1]
+            ns['pm'] = elas_prm_args[eky1]
 
     elif eky0 == 'shear_mod':
-        pg = elas_prm_args[eky0]
+        ns['pg'] = elas_prm_args[eky0]
         if eky1 == 'youngs_mod':
             prmcase = 5
-            pe = elas_prm_args[eky1]
+            ns['pe'] = elas_prm_args[eky1]
         elif eky1 == 'poisson_ratio':
             prmcase = 6
-            pnu = elas_prm_args[eky1]
+            ns['pnu'] = elas_prm_args[eky1]
         elif eky1 == 'bulk_mod':
             prmcase = 7
-            pk = elas_prm_args[eky1]
+            ns['pk'] = elas_prm_args[eky1]
         elif eky1 == 'long_mod':
             prmcase = 8
-            pm = elas_prm_args[eky1]
+            ns['pm'] = elas_prm_args[eky1]
 
     elif eky0 == 'youngs_mod':
-        pe = elas_prm_args[eky0]
+        ns['pe'] = elas_prm_args[eky0]
         if eky1 == 'poisson_ratio':
             prmcase = 9
-            pnu = elas_prm_args[eky1]
+            ns['pnu'] = elas_prm_args[eky1]
         elif eky1 == 'bulk_mod':
             prmcase = 10
-            pk = elas_prm_args[eky1]
+            ns['pk'] = elas_prm_args[eky1]
         elif eky1 == 'long_mod':
             prmcase = 11
-            pm = elas_prm_args[eky1]
+            ns['pm'] = elas_prm_args[eky1]
 
     elif eky0 == 'poisson_ratio':
-        pnu = elas_prm_args[eky0]
+        ns['pnu'] = elas_prm_args[eky0]
         if eky1 == 'bulk_mod':
             prmcase = 12
-            pk = elas_prm_args[eky1]
+            ns['pk'] = elas_prm_args[eky1]
         elif eky1 == 'long_mod':
             prmcase = 13
-            pm = elas_prm_args[eky1]
+            ns['pm'] = elas_prm_args[eky1]
 
     elif eky0 == 'bulk_mod':
-        pk = elas_prm_args[eky0]
+        ns['pk'] = elas_prm_args[eky0]
         if eky1 == 'long_mod':
             prmcase = 14
-            pm = elas_prm_args[eky1]
+            ns['pm'] = elas_prm_args[eky1]
 
     if blk_dbg_prm:
         print 'prmcase = ', prmcase
@@ -376,105 +392,123 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
     if prmcase == 0:
         # given -- lame_mod, shear_mod
         # Neg. poisson and FPEs not possible.
-        check_ii(prmcase, eky0, plda, eky1, pg, blk_dbg_prm)
-        pe = pg * (3 * plda + 2 * pg) / (plda + pg)
-        pnu = plda / (2 * (plda + pg))
+        check_ii(prmcase, eky0, ns['plda'], eky1, ns['pg'], blk_dbg_prm)
+        ns['pe'] = (ns['pg'] * (3 * ns['plda'] + 2 * ns['pg']) /
+                    (ns['plda'] + ns['pg']))
+        ns['pnu'] = ns['plda'] / (2 * (ns['plda'] + ns['pg']))
     elif prmcase == 1:
         # given -- lame_mod, youngs_mod
         # Neg. poisson and FPEs not possible.
-        ipr = pow(pe**2 + 9*plda**2 + 2*pe*plda, 0.5)
-        pnu = 2 * plda / (pe + plda + ipr)
-        pg = 0.25 * (pe - 3 * plda + ipr)
-        check_ii(prmcase, eky0, plda, ivar_pnms['pg'], pg, blk_dbg_prm)
+        ns['ipr'] = (
+            pow(ns['pe']**2 + 9*ns['plda']**2 + 2*ns['pe']*ns['plda'], 0.5))
+        ns['pnu'] = 2 * ns['plda'] / (ns['pe'] + ns['plda'] + ns['ipr'])
+        ns['pg'] = 0.25 * (ns['pe'] - 3 * ns['plda'] + ns['ipr'])
+        check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
+                 blk_dbg_prm)
     elif prmcase == 2:
         # given -- lame_mod, poisson_ratio
         # Neg. poisson and FPEs not possible.
-        pe = plda * (1 + pnu) * (1 - 2 * pnu) / pnu
-        pg = plda * (1 - 2 * pnu) / (2 * pnu)
-        check_ii(prmcase, eky0, plda, ivar_pnms['pg'], pg, blk_dbg_prm)
+        ns['pe'] = ns['plda']*(1 + ns['pnu'])*(1 - 2 * ns['pnu'])/ns['pnu']
+        ns['pg'] = ns['plda']*(1 - 2 * ns['pnu']) / (2*ns['pnu'])
+        check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
+                 blk_dbg_prm)
     elif prmcase == 3:
         # given -- lame_mod, bulk_mod
         # check for poisson_mod = NaN
         pnames = (eky0, eky1)
-        pvals = (plda, pk)
-        icb = 3*pk
-        if np.isclose(plda, icb, rtol=reltol, atol=abstol):
+        pvals = (ns['plda'], ns['pk'])
+        icb = 3*ns['pk']
+        if np.isclose(ns['plda'], icb, rtol=reltol, atol=abstol):
             term_nan_poisson(prmcase, pnames, pvals, blk_dbg_prm)
-        pnu = plda / (3 * pk - plda)
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        pg = 3 * (pk - plda) / 2
-        check_ii(prmcase, eky0, plda, ivar_pnms['pg'], pg, blk_dbg_prm)
-        pe = 9 * pk * (pk - plda) / (3 * pk - plda)
+
+        ns['pnu'] = ns['plda'] / (3 * ns['pk'] - ns['plda'])
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        ns['pg'] = 3 * (ns['pk'] - ns['plda']) / 2
+        check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
+                 blk_dbg_prm)
+        ns['pe'] = (9 * ns['pk'] * (ns['pk'] - ns['plda']) /
+                    (3 * ns['pk'] - ns['plda']))
     elif prmcase == 4:
         # given -- lame_mod, long_mod
         # Neg. poisson and FPEs not possible.
-        pg = (pm - plda) / 2
-        check_ii(prmcase, eky0, plda, ivar_pnms['pg'], pg, blk_dbg_prm)
-        pe = (pm - plda) * (pm + 2 * plda) / (pm + plda)
-        pnu = plda / (pm + plda)
+        ns['pg'] = (ns['pm'] - ns['plda']) / 2
+        check_ii(prmcase, eky0, ns['plda'], ivar_pnms['pg'], ns['pg'],
+                 blk_dbg_prm)
+        ns['pe'] = ((ns['pm'] - ns['plda']) * (ns['pm'] + 2 * ns['plda']) /
+                    (ns['pm'] + ns['plda']))
+        ns['pnu'] = ns['plda'] / (ns['pm'] + ns['plda'])
     #
     # eky0 == 'shear_mod'
     elif prmcase == 5:
         # given -- shear_mod, youngs_mod
         # check for lame_mod = NaN
         pnames = (eky0, eky1)
-        pvals = (pg, pe)
-        icb = 3 * pg            # (pe = icb) --> div-zero
-        if np.isclose(pe, icb, rtol=reltol, atol=abstol):
+        pvals = (ns['pg'], ns['pe'])
+        icb = 3 * ns['pg']            # (pe = icb) --> div-zero
+        if np.isclose(ns['pe'], icb, rtol=reltol, atol=abstol):
             term_nan_lame(prmcase, pnames, pvals, blk_dbg_prm)
-        plda = pg * (pe - 2 * pg) / (3 * pg - pe)
-        pnu = (pe / (2 * pg)) - 1
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        check_iv(prmcase, eky0, pg, ivar_pnms['pnu'], pnu, blk_dbg_prm)
+
+        ns['plda'] = (ns['pg'] * (ns['pe'] - 2 * ns['pg']) /
+                      (3 * ns['pg'] - ns['pe']))
+        ns['pnu'] = (ns['pe'] / (2 * ns['pg'])) - 1
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        check_iv(prmcase, eky0, ns['pg'], ivar_pnms['pnu'], ns['pnu'],
+                 blk_dbg_prm)
     elif prmcase == 6:
         # given -- shear_mod, poisson_ratio
         # Neg. poisson and FPEs not possible.
-        check_iv(prmcase, eky0, pg, eky1, pnu, blk_dbg_prm)
-        plda = 2 * pg * pnu / (1 - 2 * pnu)
-        pe = 2 * pg * (1 + pnu)
+        check_iv(prmcase, eky0, ns['pg'], eky1, ns['pnu'], blk_dbg_prm)
+        ns['plda'] = 2 * ns['pg'] * ns['pnu'] / (1 - 2 * ns['pnu'])
+        ns['pe'] = 2 * ns['pg'] * (1 + ns['pnu'])
     elif prmcase == 7:
         # given -- shear_mod, bulk_mod
         pnames = (eky0, eky1)
-        pvals = (pg, pm)
-        pnu = (3 * pk - 2 * pg) / (6 * pk + 2 * pg)
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        check_iii(prmcase, eky0, pg, eky1, pk, blk_dbg_prm)
-        plda = pk - 2 * pg / 3
-        pe = 9 * pk * pg / (3 * pk + pg)
+        pvals = (ns['pg'], ns['pm'])
+        ns['pnu'] = (3 * ns['pk'] - 2 * ns['pg'])/(6 * ns['pk'] + 2 * ns['pg'])
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        check_iii(prmcase, eky0, ns['pg'], eky1, ns['pk'], blk_dbg_prm)
+        ns['plda'] = ns['pk'] - 2 * ns['pg'] / 3
+        ns['pe'] = 9 * ns['pk'] * ns['pg'] / (3 * ns['pk'] + ns['pg'])
     elif prmcase == 8:
         # given -- shear_mod, long_mod
         # check for poisson_mod = NaN
         pnames = (eky0, eky1)
-        pvals = (pg, pm)
+        pvals = (ns['pg'], ns['pm'])
         #                       # (pm = pg) --> div-zero
-        if np.isclose(pm, pg, rtol=reltol, atol=abstol):
+        if np.isclose(ns['pm'], ns['pg'], rtol=reltol, atol=abstol):
             term_nan_poisson(prmcase, pnames, pvals, blk_dbg_prm)
-        pnu = (pm - 2 * pg) / (2 * pm - 2 * pg)
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        check_iv(prmcase, eky0, pg, ivar_pnms['pnu'], pnu, blk_dbg_prm)
-        plda = pm - 2 * pg
-        pe = pg * (3 * pm - 4 * pg) / (pm - pg)
+
+        ns['pnu'] = (ns['pm'] - 2 * ns['pg']) / (2 * ns['pm'] - 2 * ns['pg'])
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        check_iv(prmcase, eky0, ns['pg'], ivar_pnms['pnu'], ns['pnu'],
+                 blk_dbg_prm)
+        ns['plda'] = ns['pm'] - 2 * ns['pg']
+        ns['pe'] = (ns['pg'] * (3 * ns['pm'] - 4 * ns['pg']) /
+                    (ns['pm'] - ns['pg']))
     #
     # eky0 == 'youngs_mod'
     elif prmcase == 9:
         # given -- youngs_mod, poisson_ratio
         # Neg. poisson and FPEs not possible.
-        check_v(prmcase, eky0, pe, eky1, pnu, blk_dbg_prm)
-        plda = pe * pnu / ((1 + pnu) * (1 - 2 * pnu))
-        pg = 0.5 * pe / (1 + pnu)
+        check_v(prmcase, eky0, ns['pe'], eky1, ns['pnu'], blk_dbg_prm)
+        ns['plda'] = ns['pe']*ns['pnu']/((1 + ns['pnu'])*(1 - 2 * ns['pnu']))
+        ns['pg'] = 0.5 * ns['pe'] / (1 + ns['pnu'])
     elif prmcase == 10:
         # given -- youngs_mod, bulk_mod
         # check for lame_mod = NaN
         pnames = (eky0, eky1)
-        pvals = (pe, pk)
-        icb = 9 * pk            # (pe = icb) --> div-zero
-        if np.isclose(pe, icb, rtol=reltol, atol=abstol):
+        pvals = (ns['pe'], ns['pk'])
+        icb = 9 * ns['pk']            # (pe = icb) --> div-zero
+        if np.isclose(ns['pe'], icb, rtol=reltol, atol=abstol):
             term_nan_lame(prmcase, pnames, pvals, blk_dbg_prm)
-        plda = 3 * pk * (3 * pk - pe) / (9 * pk - pe)
-        pnu = (3 * pk - pe) / (6 * pk)
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        check_v(prmcase, eky0, pe, ivar_pnms['pnu'], pnu, blk_dbg_prm)
-        pg = 3 * pk * pe / (9 * pk - pe)
+
+        ns['plda'] = (3 * ns['pk'] * (3 * ns['pk'] - ns['pe']) /
+                      (9 * ns['pk'] - ns['pe']))
+        ns['pnu'] = (3 * ns['pk'] - ns['pe']) / (6 * ns['pk'])
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        check_v(prmcase, eky0, ns['pe'], ivar_pnms['pnu'], ns['pnu'],
+                blk_dbg_prm)
+        ns['pg'] = 3 * ns['pk'] * ns['pe'] / (9 * ns['pk'] - ns['pe'])
     elif prmcase == 11:
         # given -- youngs_mod, long_mod
         # check for poisson = Complex
@@ -493,62 +527,69 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         # f(pe, alpha*pe) with alpha > 1.
         # Thus ips is real provided only that pm > pg.
         pnames = (eky0, eky1)
-        pvals = (pe, pm)
-        ips2 = pe**2 + 9 * pm**2 - 10*pe*pm
+        pvals = (ns['pe'], ns['pm'])
+        ips2 = ns['pe']**2 + 9 * ns['pm']**2 - 10*ns['pe']*ns['pm']
         if ips2 < 0.0:
             term_cmplx_poisson(prmcase, pnames, pvals, blk_dbg_prm)
-        ips = pow(ips2, 0.5)
-        pnu = 0.25 * (pe - pm + ips) / pm
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        check_v(prmcase, eky0, pe, ivar_pnms['pnu'], pnu, blk_dbg_prm)
-        plda = 0.25 * (pm - pe + ips)
-        pg = 0.125 * (3 * pm + pe - ips)
+
+        ns['ips'] = pow(ips2, 0.5)
+        ns['pnu'] = 0.25 * (ns['pe'] - ns['pm'] + ns['ips']) / ns['pm']
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        check_v(prmcase, eky0, ns['pe'], ivar_pnms['pnu'], ns['pnu'],
+                blk_dbg_prm)
+        ns['plda'] = 0.25 * (ns['pm'] - ns['pe'] + ns['ips'])
+        ns['pg'] = 0.125 * (3 * ns['pm'] + ns['pe'] - ns['ips'])
     #
     # eky0 == 'poisson_ratio'
     elif prmcase == 12:
         # given -- poisson_ratio, bulk_mod
         # Neg. poisson and FPEs not possible.
-        pg = 3 * pk * (1 - 2 * pnu) / (2 * (1 + pnu))
-        check_iv(prmcase, ivar_pnms['pg'], pg, eky0, pnu, blk_dbg_prm)
-        plda = 3 * pk * pnu / (1 + pnu)
-        pe = 3 * pk * (1 - 2 * pnu)
+        ns['pg'] = 3 * ns['pk'] * (1 - 2 * ns['pnu']) / (2 * (1 + ns['pnu']))
+        check_iv(prmcase, ivar_pnms['pg'], ns['pg'], eky0, ns['pnu'],
+                 blk_dbg_prm)
+        ns['plda'] = 3 * ns['pk'] * ns['pnu'] / (1 + ns['pnu'])
+        ns['pe'] = 3 * ns['pk'] * (1 - 2 * ns['pnu'])
     elif prmcase == 13:
         # given -- poisson_ratio, long_mod
         # Neg. poisson and FPEs not possible.
-        pg = 0.5 * pm * (1 - 2 * pnu) / (1 - pnu)
-        check_iv(prmcase, ivar_pnms['pg'], pg, eky0, pnu, blk_dbg_prm)
-        plda = pm * pnu / (1 - pnu)
-        pe = 2 * (1 + pnu) * pg
+        ns['pg'] = 0.5 * ns['pm'] * (1 - 2 * ns['pnu']) / (1 - ns['pnu'])
+        check_iv(prmcase, ivar_pnms['pg'], ns['pg'], eky0, ns['pnu'],
+                 blk_dbg_prm)
+        ns['plda'] = ns['pm'] * ns['pnu'] / (1 - ns['pnu'])
+        ns['pe'] = 2 * (1 + ns['pnu']) * ns['pg']
     #
     # eky0 == 'bulk_mod'
     elif prmcase == 14:
         # given -- bulk_mod, long_mod
         pnames = (eky0, eky1)
-        pvals = (pk, pm)
-        pg = 0.75 * (pm - pk)
-        check_iii(prmcase, ivar_pnms['pg'], pg, eky0, pk, blk_dbg_prm)
-        pnu = (3 * pk - pm) / (3 * pk + pm)
-        warn_negative_poisson(prmcase, pnu, pnames, pvals, blk_dbg_prm)
-        plda = 0.5 * (3 * pk - pm)
-        pe = 9 * pk * (pm - pk) / (3 * pk + pm)
+        pvals = (ns['pk'], ns['pm'])
+        ns['pg'] = 0.75 * (ns['pm'] - ns['pk'])
+        check_iii(prmcase, ivar_pnms['pg'], ns['pg'], eky0, ns['pk'],
+                  blk_dbg_prm)
+        ns['pnu'] = (3 * ns['pk'] - ns['pm']) / (3 * ns['pk'] + ns['pm'])
+        warn_negative_poisson(prmcase, ns['pnu'], pnames, pvals, blk_dbg_prm)
+        ns['plda'] = 0.5 * (3 * ns['pk'] - ns['pm'])
+        ns['pe'] = 9*ns['pk']*(ns['pm'] - ns['pk']) / (3*ns['pk'] + ns['pm'])
 
     # end if prmcase
 
     # Verify that (plda, pg, pe, pnu) have been set.
-    allset = not any((v for v in (plda, pg, pe, pnu) if isinstance(v,complex)))
+    allset = not any((v for v in (ns['plda'], ns['pg'], ns['pe'], ns['pnu'])
+                      if isinstance(v, complex)))
     errmsg = (
         """Internal: one of the internal params has not yet been set!
         Contact ExactPack team!
-        """ )
+        """)
     assert allset, errmsg
 
-    # One or both of bulk_modd, long_mod may not yet have been set.
+    # One or both of bulk_mod, long_mod may not yet have been set.
     # plda and pg have been set.
-    if isinstance(pk, complex):
-        pk = plda + 2 * pg / 3
-    if isinstance(pm, complex):
-        pm = plda + 2 * pg
+    if isinstance(ns['pk'], complex):
+        ns['pk'] = ns['plda'] + 2 * ns['pg'] / 3
+    if isinstance(ns['pm'], complex):
+        ns['pm'] = ns['plda'] + 2 * ns['pg']
 
     # Provided inputs are as described in docstring, this dict contains the
     # correct name-value mapping.
-    return dict(zip(elas_prm_names, [plda, pg, pe, pnu, pk, pm]))
+    return dict(zip(elas_prm_names, [ns['plda'], ns['pg'], ns['pe'],
+                    ns['pnu'], ns['pk'], ns['pm']]))
