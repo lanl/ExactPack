@@ -1,7 +1,8 @@
 """A Fortran based Sedov solver.
 
 This is a Python interface for the Sedov problem. The Fortran source code was
-adapted from `Frank Timmes website <http://cococubed.asu.edu/research_pages/sedov.shtml>`_.
+adapted from
+`Frank Timmes website <http://cococubed.asu.edu/research_pages/sedov.shtml>`_.
 
 """
 
@@ -13,25 +14,32 @@ from scipy.interpolate import interp1d
 
 class Sedov(ExactSolver):
     """ Computes the solution to the Sedov problem.
+
     """
 
     parameters = {
         'geometry': '1=planar, 2=cylindrical, 3=spherical',
         'gamma': 'specific heat ratio :math:`\gamma \equiv c_p/c_v`',
         'eblast': 'total amount of energy deposited at the origin at \
-        time zero',
+                   time zero',
+        'rho0': 'initial density',
+        'omega': 'initial density power-law exponent,\
+                  :math:`\\rho \equiv \\rho_0 r^{-\omega}`'
         }
 
     geometry = 3
     gamma = 7.0 / 5.0
     eblast = 0.851072
+    rho0 = 1.0
+    omega = 0.0
 
     def __init__(self, interpolation_points=5000, **kwargs):
         """Initialize the Sedov solver class.
 
         :param integer interpolation_points: interpolate the Sedov solution
-          from a representation using this number of points (faster, but
-          not quite as accurate).  If 0, then don't do interpolation.
+        from a representation using this number of points (faster, but
+        not quite as accurate).  If 0, then don't do interpolation.
+
         """
 
         if 'geometry' in kwargs and not kwargs['geometry'] in [1, 2, 3]:
@@ -50,9 +58,9 @@ class Sedov(ExactSolver):
         soln = sed_1d(time=t,
                       xpos=r,
                       eblast=self.eblast,
-                      omega_in=0.0,
+                      omega_in=self.omega,
                       xgeom_in=self.geometry,
-                      rho0=1.0,
+                      rho0=self.rho0,
                       vel0=0.0,
                       ener0=0.0,
                       pres0=1.4e-22,
@@ -67,8 +75,7 @@ class Sedov(ExactSolver):
         return ExactSolution([r, den, ener, pres, vel, cs],
                              names=['position',
                                     'density',
-                                    'sie',
+                                    'specific_internal_energy',
                                     'pressure',
                                     'velocity',
-                                    'sound'])
-
+                                    'sound_speed'])
