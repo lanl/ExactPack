@@ -198,3 +198,59 @@ class TestSedovKammSelfSim(unittest.TestCase):
         """Sedov Kamm Problem: Test for valid value of geometry"""
 
         self.assertRaises(ValueError, Sedov, geometry=-1) 
+
+class TestSedovKammShock(unittest.TestCase):
+    """Tests Kamm Sedov for correct pre and post shock values.
+    """
+    # construct spatial grid and choose time
+    rmax = 1.2
+    r = np.linspace(0.0, rmax, 121)
+    t = 1.
+    solver = Sedov(eblast=0.851072, gamma=1.4, geometry=3)
+    solution = solver(r, t)
+
+    ishock = 100  # shock location
+
+    # analytic solution pre-shock (initial conditions)
+
+    analytic_preshock = {
+        'position': r[ishock+1],
+        'density': 1.0,
+        'specific_internal_energy': 0.0,
+        'pressure': 0.0,
+        'velocity': 0.0,
+        }
+
+    # analytic solution  at the shock, from Kamm & Timmes 2007,
+    # equations 13-18 (to 6 significant figures)
+
+    analytic_postshock = {
+        'position': 1.0,
+        'density': 6.0,
+        'specific_internal_energy': 5.5555e-2,
+        'pressure': 1.33333e-1,
+        'velocity': 3.33333e-1,
+        }
+
+    def test_preshock_state(self):
+        """Tests density, velocity, pressure, specific internal energy, and
+        sound speed immediately before the shock.
+        """
+
+        for ikey in self.analytic_preshock.keys():
+            self.assertAlmostEqual(self.solution[ikey][self.ishock+1],
+                                   self.analytic_preshock[ikey], places=5)
+
+    @unittest.expectedFailure
+    def test_postshock_state(self):
+        """Tests density, velocity, pressure, specific internal energy, and
+        sound speed immediately after the shock.
+
+        Currently, the Kamm solver does not return the correct value of the
+        physical variables at the shock location, for at least some cases
+        """
+
+        for ikey in self.analytic_postshock.keys():
+            self.assertAlmostEqual(self.solution[ikey][self.ishock],
+                                   self.analytic_postshock[ikey], places=5)
+

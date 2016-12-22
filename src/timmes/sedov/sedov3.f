@@ -314,7 +314,7 @@ c      write(6,87) omega,alpha
 
 c..immediate post-shock values 
 c..kamm page 14 or equations 14, 16, 5, 13
-c..r2 = shock position, u2 = shock speed, rho1 = pre-shock density,
+c..r2 = shock position, us = shock speed, rho1 = pre-shock density,
 c..u2 = post-shock material speed, rho2 = post-shock density, 
 c..p2 = post-shock pressure, e2 = post-shoock specific internal energy, 
 c..and cs2 = post-shock sound speed

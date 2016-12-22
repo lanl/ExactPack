@@ -1,89 +1,308 @@
+'''Example demonstrating Sedov solvers. Reproduces plots from Kamm & Timmes,
+"On Efficient Generation of Numerically Robust Sedov Solutions," LA-UR-07-2849
+
+Uses Doebling and (if available) Timmes Sedov solvers.
+'''
+
+
+# import standard Python packages
 import numpy as np
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 from matplotlib import rc
-#rc('text', usetex=True)
-rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 
 # import ExactPack solvers
-from exactpack.solvers.sedov import SphericalSedov as SphericalSedovTimmes
-from exactpack.solvers.sedov.kamm import Sedov as SedovKamm
+from exactpack.solvers.sedov.doebling import Sedov as SedovDoebling
 
-#####################################################################
-rmax = 1.2
-r = np.linspace(0.0, rmax, 1000)
-t = 1.
+timmes_import = True
+try:
+    from exactpack.solvers.sedov.timmes import Sedov as SedovTimmes
+except ImportError:
+    timmes_import = False
 
-#####################################################################
-solverKamm = SedovKamm(geometry=3, eblast=0.851072, gamma=1.4)
-solnKamm = solverKamm(r, t)
+# pyplot default settings
+rc('font', **{'family': 'serif', 'serif': ['Computer Modern'], 'size': 16})
+rc('grid', c='0.5', ls='-', lw=0.5)
 
-plt.figure()
-solnKamm.plot('density')
-solnKamm.plot('pressure', scale=10)
-solnKamm.plot('velocity', scale=10)
-solnKamm.plot('sie')
-plt.xlim(0.0, rmax)
-plt.ylim(0.0, 6.5)
-plt.title(r'ExactPack solver Kamm for Spherical at $t_{\rm max}=1\,{\rm s}$')
-plt.legend(loc=2)
-plt.grid(True)
-
-#####################################################################
-# construct spherical spatial grid and choose time
-solver = SphericalSedovTimmes()
-soln = solver(r, t)
-
-plt.figure()
-soln.plot('density')
-soln.plot('pressure', scale=10)
-soln.plot('velocity', scale=10)
-soln.plot('sie')
-plt.xlim(0.0, rmax)
-plt.ylim(0.0, 6.5)
-plt.title(r'ExactPack solvers Timmes at $t_{\rm max}=1\,{\rm s}$')
-plt.legend(loc=0)
-plt.grid(True)
-
-####################################################
-# Reproduce Table 3 of LA-UR-00-6053 p 19 [1]
-# Comparison with Sedov's book, Table 3, LA-UR-00-6055, p 19
-# f -> velocity -> sedov[1]
-# g -> density  -> sedov[2]
-# h -> pressure -> sedov[3]
-# V -> sie [by convention]
-#                  lambda  Sedov-f Sedov-g sedov-h
-sedov = np.array([0.9913, 0.9814, 0.8379, 0.9109,
-                  0.9773, 0.9529, 0.6457, 0.7993,
-                  0.9622, 0.9237, 0.4978, 0.7078,
-                  0.9342, 0.8744, 0.3241, 0.5923,
-                  0.9080, 0.8335, 0.2279, 0.5241,
-                  0.8747, 0.7872, 0.1509, 0.4674,
-                  0.8359, 0.7397, 0.0967, 0.4272,
-                  0.7950, 0.6952, 0.0621, 0.4021,
-                  0.7493, 0.6496, 0.0379, 0.3856,
-                  0.6788, 0.5844, 0.0174, 0.3732,
-                  0.5794, 0.4971, 0.0052, 0.3672,
-                  0.4560, 0.3909, 0.0009, 0.3656,
-                  0.3600, 0.3086, 0.0002, 0.3655,
-                  0.2960, 0.2538, 0.0000, 0.3655,
-                  0.2000, 0.1714, 0.0000, 0.3655,
-                  0.1040, 0.0892, 0.0000, 0.3655]).reshape(16, 4)
-
+# set domain variables for plots
+npts = 2001
+rvec = np.linspace(0.0, 1.2, npts)
 t = 1.0
-solver = SedovKamm(geometry=3, eblast=0.851072, gamma=1.4)
-lam = sedov[:, 0]
-soln = solver(lam, t)  # these values reproduce those of Ref [1]
 
-print 'Reproduction of Table 3 in LA-UR-00-6055 on p 19.'
-print '{0}  {1:11} {2:7} {3} {4} {5} {6} {7}'.format('lambda', 'V', \
-'Sedov-f', 'Exact-f', 'Sedov-g', 'Exact-g', 'Sedov-h', 'Exact-h')
-print '==================================================================='
-for i in range(len(lam)):
-    print '{0:.4f}  {1:.8f}  {2:.4f}  {3:.4f}  {4:.4f}  {5:.4f}  {6:.4f}  \
-    {7:.4f}'.format(soln[i][0], soln[i][2], sedov[i][1], soln[i][4], \
-                    sedov[i][2], soln[i][1], sedov[i][3], soln[i][3])
+#
+# Figure 8doebling: Standard test cases, Doebling Solver
+#
+
+solver_doebling_pla = SedovDoebling(geometry=1, eblast=0.0673185,
+                                    gamma=1.4, omega=0.)
+solution_doebling_pla = solver_doebling_pla(r=rvec, t=t)
+
+solver_doebling_cyl = SedovDoebling(geometry=2, eblast=0.311357,
+                                    gamma=1.4, omega=0.)
+solution_doebling_cyl = solver_doebling_cyl(r=rvec, t=t)
+
+solver_doebling_sph = SedovDoebling(geometry=3, eblast=0.851072,
+                                    gamma=1.4, omega=0.)
+solution_doebling_sph = solver_doebling_sph(r=rvec, t=t)
+
+fig = plt.figure(figsize=(10, 10))
+plt.suptitle('''Sedov solutions for $\gamma=1.4$, standard cases, Doebling solver.
+    Compare to Fig. 8 from Kamm & Timmes 2007''')
+
+plt.subplot(221)
+solution_doebling_pla.plot('density')
+solution_doebling_cyl.plot('density')
+solution_doebling_sph.plot('density')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 6.5)
+plt.xlabel('Position (cm)')
+plt.ylabel('Density (g/cc)')
+plt.grid(True)
+L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=3,
+               fancybox=True, shadow=True)
+L.get_texts()[0].set_text('planar')
+L.get_texts()[1].set_text('cylindrical')
+L.get_texts()[2].set_text('spherical')
+
+plt.subplot(222)
+solution_doebling_pla.plot('velocity')
+solution_doebling_cyl.plot('velocity')
+solution_doebling_sph.plot('velocity')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 0.4)
+plt.xlabel('Position (cm)')
+plt.ylabel('Particle velocity (cm/s)')
+plt.grid(True)
+plt.gca().legend().set_visible(False)
+
+plt.subplot(223)
+solution_doebling_pla.plot('specific_internal_energy')
+solution_doebling_cyl.plot('specific_internal_energy')
+solution_doebling_sph.plot('specific_internal_energy')
+plt.xlim(0.0, 1.2)
+plt.ylim(1.e-2, 1.e5)
+plt.xlabel('Position (cm)')
+plt.ylabel('Specific internal energy (erg/g)')
+plt.grid(True)
+plt.gca().set_yscale('log', nonposy='clip')
+plt.gca().legend().set_visible(False)
+
+plt.subplot(224)
+solution_doebling_pla.plot('pressure')
+solution_doebling_cyl.plot('pressure')
+solution_doebling_sph.plot('pressure')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 0.15)
+plt.xlabel('Position (cm)')
+plt.ylabel('Pressure (erg/cc)')
+plt.grid(True)
+plt.gca().legend().set_visible(False)
+
+plt.tight_layout()
+fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+#plt.savefig('fig08doebling.pdf')
 
 
-####################################################
+if timmes_import:
+    
+    #
+    # Figure 8timmes: Standard test cases, Timmes Solver
+    #
+    
+    solver_timmes_pla = SedovTimmes(geometry=1, eblast=0.0673185,
+                                        gamma=1.4)
+    solution_timmes_pla = solver_timmes_pla(r=rvec, t=t)
+    
+    solver_timmes_cyl = SedovTimmes(geometry=2, eblast=0.311357,
+                                        gamma=1.4)
+    solution_timmes_cyl = solver_timmes_cyl(r=rvec, t=t)
+    
+    solver_timmes_sph = SedovTimmes(geometry=3, eblast=0.851072,
+                                        gamma=1.4)
+    solution_timmes_sph = solver_timmes_sph(r=rvec, t=t)
+    
+    fig = plt.figure(figsize=(10, 10))
+    plt.suptitle('''Sedov solutions for $\gamma=1.4$, standard cases, Timmes solver.
+        Compare to Fig. 8 from Kamm & Timmes 2007''')
+    
+    plt.subplot(221)
+    solution_timmes_pla.plot('density')
+    solution_timmes_cyl.plot('density')
+    solution_timmes_sph.plot('density')
+    plt.xlim(0.0, 1.2)
+    plt.ylim(0.0, 6.5)
+    plt.xlabel('Position (cm)')
+    plt.ylabel('Density (g/cc)')
+    plt.grid(True)
+    L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=3,
+                   fancybox=True, shadow=True)
+    L.get_texts()[0].set_text('planar')
+    L.get_texts()[1].set_text('cylindrical')
+    L.get_texts()[2].set_text('spherical')
+    
+    plt.subplot(222)
+    solution_timmes_pla.plot('velocity')
+    solution_timmes_cyl.plot('velocity')
+    solution_timmes_sph.plot('velocity')
+    plt.xlim(0.0, 1.2)
+    plt.ylim(0.0, 0.4)
+    plt.xlabel('Position (cm)')
+    plt.ylabel('Particle velocity (cm/s)')
+    plt.grid(True)
+    plt.gca().legend().set_visible(False)
+    
+    plt.subplot(223)
+    solution_timmes_pla.plot('specific_internal_energy')
+    solution_timmes_cyl.plot('specific_internal_energy')
+    solution_timmes_sph.plot('specific_internal_energy')
+    plt.xlim(0.0, 1.2)
+    plt.ylim(1.e-2, 1.e5)
+    plt.xlabel('Position (cm)')
+    plt.ylabel('Specific internal energy (erg/g)')
+    plt.grid(True)
+    plt.gca().set_yscale('log', nonposy='clip')
+    plt.gca().legend().set_visible(False)
+    
+    plt.subplot(224)
+    solution_timmes_pla.plot('pressure')
+    solution_timmes_cyl.plot('pressure')
+    solution_timmes_sph.plot('pressure')
+    plt.xlim(0.0, 1.2)
+    plt.ylim(0.0, 0.15)
+    plt.xlabel('Position (cm)')
+    plt.ylabel('Pressure (erg/cc)')
+    plt.grid(True)
+    plt.gca().legend().set_visible(False)
+    
+    plt.tight_layout()
+    fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+    #plt.savefig('fig08timmes.pdf')
+
+#
+# Figure 9: Singular test cases
+#
+
+solver_doebling_cyl = SedovDoebling(geometry=2, eblast=2.45749,
+                                    gamma=1.4, omega=1.66667)
+solution_doebling_cyl = solver_doebling_cyl(r=rvec, t=t)
+
+solver_doebling_sph = SedovDoebling(geometry=3, eblast=4.90875,
+                                    gamma=1.4, omega=2.33333)
+solution_doebling_sph = solver_doebling_sph(r=rvec, t=t)
+
+fig = plt.figure(figsize=(10, 10))
+plt.suptitle('''Sedov solutions for $\gamma=1.4$, singular cases, Doebling solver.
+    Compare to Fig. 9 from Kamm & Timmes 2007''')
+
+plt.subplot(221)
+solution_doebling_cyl.plot('density')
+solution_doebling_sph.plot('density')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 12.0)
+plt.xlabel('Position (cm)')
+plt.ylabel('Density (g/cc)')
+plt.grid(True)
+L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=2,
+               fancybox=True, shadow=True)
+L.get_texts()[0].set_text('cylindrical')
+L.get_texts()[1].set_text('spherical')
+
+plt.subplot(222)
+solution_doebling_cyl.plot('velocity')
+solution_doebling_sph.plot('velocity')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 0.8)
+plt.xlabel('Position (cm)')
+plt.ylabel('Particle velocity (cm/s)')
+plt.grid(True)
+plt.gca().legend().set_visible(False)
+
+plt.subplot(223)
+solution_doebling_cyl.plot('specific_internal_energy')
+solution_doebling_sph.plot('specific_internal_energy')
+plt.xlim(0.0, 1.2)
+plt.ylim(1.e-5, 1.e0)
+plt.xlabel('Position (cm)')
+plt.ylabel('Specific internal energy (erg/g)')
+plt.grid(True)
+plt.gca().set_yscale('log', nonposy='clip')
+plt.gca().legend().set_visible(False)
+
+plt.subplot(224)
+solution_doebling_cyl.plot('pressure')
+solution_doebling_sph.plot('pressure')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 0.7)
+plt.xlabel('Position (cm)')
+plt.ylabel('Pressure (erg/cc)')
+plt.grid(True)
+plt.gca().legend().set_visible(False)
+
+plt.tight_layout()
+fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+#plt.savefig('fig09.pdf')
+
+#
+# Figure 10: Vacuum test cases
+#
+
+solver_doebling_cyl = SedovDoebling(geometry=2, eblast=2.67315,
+                                    gamma=1.4, omega=1.7)
+solution_doebling_cyl = solver_doebling_cyl(r=rvec, t=t)
+
+solver_doebling_sph = SedovDoebling(geometry=3, eblast=5.45670,
+                                    gamma=1.4, omega=2.4)
+solution_doebling_sph = solver_doebling_sph(r=rvec, t=t)
+
+fig = plt.figure(figsize=(10, 10))
+plt.suptitle('''Sedov solutions for $\gamma=1.4$, vacuum cases, Doebling solver
+    Compare to Fig. 10 from Kamm & Timmes 2007''')
+
+plt.subplot(221)
+solution_doebling_cyl.plot('density')
+solution_doebling_sph.plot('density')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 20.0)
+plt.xlabel('Position (cm)')
+plt.ylabel('Density (g/cc)')
+plt.grid(True)
+L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=2,
+               fancybox=True, shadow=True)
+L.get_texts()[0].set_text('cylindrical')
+L.get_texts()[1].set_text('spherical')
+
+plt.subplot(222)
+solution_doebling_cyl.plot('velocity')
+solution_doebling_sph.plot('velocity')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 0.8)
+plt.xlabel('Position (cm)')
+plt.ylabel('Particle velocity (cm/s)')
+plt.grid(True)
+plt.gca().legend().set_visible(False)
+
+plt.subplot(223)
+solution_doebling_cyl.plot('specific_internal_energy')
+solution_doebling_sph.plot('specific_internal_energy')
+plt.xlim(0.0, 1.2)
+plt.ylim(1.e-5, 1.e0)
+plt.xlabel('Position (cm)')
+plt.ylabel('Specific internal energy (erg/g)')
+plt.grid(True)
+plt.gca().set_yscale('log', nonposy='clip')
+plt.gca().legend().set_visible(False)
+
+plt.subplot(224)
+solution_doebling_cyl.plot('pressure')
+solution_doebling_sph.plot('pressure')
+plt.xlim(0.0, 1.2)
+plt.ylim(0.0, 0.7)
+plt.xlabel('Position (cm)')
+plt.ylabel('Pressure (erg/cc)')
+plt.grid(True)
+plt.gca().legend().set_visible(False)
+
+plt.tight_layout()
+fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+#plt.savefig('fig10.pdf')
+
 plt.show()
-

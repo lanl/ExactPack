@@ -11,7 +11,13 @@ The Sedov Problem
    :members:
 
 :mod:`exactpack.solvers.sedov.kamm`
--------------------------------------
+-----------------------------------
 
 .. automodule:: exactpack.solvers.sedov.kamm
+   :members:
+
+:mod:`exactpack.solvers.sedov.doebling`
+---------------------------------------
+
+.. automodule:: exactpack.solvers.sedov.doebling
    :members:

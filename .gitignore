@@ -4,11 +4,13 @@
 
 # No built files
 build/
+dist/
 ExactPack.egg-info/
 
 # No temporary files
 *~
 *dSYM*
+*.swp
 
 # my feature/Blake dev files
 TAGS
