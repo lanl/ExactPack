@@ -22,7 +22,6 @@ setup(
     author = 'Los Alamos National Laboratory',
     author_email = '',
     license = read('LICENSE.txt'),
-    version = "1.4.1",
     packages = find_packages(),
 #    install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
     ext_modules = [ Extension(name = 'exactpack.solvers.noh._timmes',
