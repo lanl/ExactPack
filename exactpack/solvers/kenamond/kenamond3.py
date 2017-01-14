@@ -68,7 +68,7 @@ class Kenamond3(ExactSolver):
     surface of the inert region for burn time calculation.
 
     Default values are selected to be consistent with the problem
-    definition in [Kenamond]_. Default values are
+    definition in [Kenamond2011]_. Default values are
     **geometry** :math:`=2`, :math:`R=3.0`, :math:`D=2.0`,
     :math:`x_d=(0.0, 5.0)`, and :math:`t_d=0.0`.
 

@@ -70,7 +70,7 @@ class Kenamond2(ExactSolver):
     locations and all five detonation times.
 
     Default values are selected to be consistent with the problem
-    definition in [Kenamond]_. Default values are
+    definition in [Kenamond2011]_. Default values are
     **geometry** :math:`=2`, :math:`R=3.0`, :math:`D_1=2.0`,
     :math:`D_2 = 1.0`, :math:`t_d=[2.0, 1.0, 0.0, 1,0, 2.0]`, and
     **dets** :math:`=[10.0, 5.0, -5.0, -10.0]`.
