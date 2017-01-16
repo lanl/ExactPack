@@ -40,7 +40,7 @@ The preferred method for installing ExactPack as a user is via the Anaconda pyth
 
 `conda install exactpack -c lanl-exactpack`
 
-For developers, the repository may be cloned from the GitHub repository located at https://github.com/losalamos/ExactPack, and installed using the usual command: `python setup.py install`. The following dependencies are required:
+For developers, the repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using the usual command: `python setup.py install`. The following dependencies are required:
 
 ### Dependencies
 
