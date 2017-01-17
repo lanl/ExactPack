@@ -1,20 +1,34 @@
-from setuptools import setup, find_packages
+import os
+
+from setuptools import find_packages
 from numpy.distutils.core import setup, Extension
 from sphinx.setup_command import BuildDoc
 
-
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name = "ExactPack",
     version = "1.4.1",
+    description = "Exact solution API for physics code verification",
+    long_description = read('README.md'),
+    classifiers = ['Development Status :: 4 - Beta',
+                   'Intended Audience :: Science/Research',
+                   'Programming Language :: Python :: 2 :: Only',
+                   'Programming Language :: Fortran',
+                   'Topic :: Scientific/Engineering :: Physics'],
+    keywords = 'verification',
+    url = 'https://github.com/lanl/exactpack',
+    author = 'Los Alamos National Laboratory',
+    author_email = '',
+    license = read('LICENSE.txt'),
     packages = find_packages(),
 #    install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
     ext_modules = [ Extension(name = 'exactpack.solvers.noh._timmes',
                               sources = ['src/timmes/noh/noh.f'] ),
                     Extension(name = 'exactpack.solvers.sedov._timmes',
                               sources = ['src/timmes/sedov/sedov3.f'],
-                              f2py_options = (['only:'] + [ 'sed_1d' ] + [':'] +
-                                              ['free-form'] + [':'])), 
+                              f2py_options = (['only:'] + [ 'sed_1d' ] + [':'])), 
                     Extension(name = 'exactpack.solvers.riemann._timmes',
                               sources = ['src/timmes/riemann/exact_riemann.f'],
                               f2py_options = ['only:'] + [ 'riemann' ] + [':']),
@@ -66,6 +80,7 @@ setup(
         ],
     },
     cmdclass = { 'build_sphinx' : BuildDoc },
-    test_suite = "exactpack.tests"
+    test_suite = "exactpack.tests",
+    package_data = {'exactpack.examples.data':['*.dat', '*.vtk']}
     )
 

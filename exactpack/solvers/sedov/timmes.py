@@ -34,11 +34,12 @@ class Sedov(ExactSolver):
     omega = 0.0
 
     def __init__(self, interpolation_points=5000, **kwargs):
-        """Initialize the Sedov solver class.
+        """Initialization of the Sedov solver class.
 
-        :param integer interpolation_points: interpolate the Sedov solution
-        from a representation using this number of points (faster, but
-        not quite as accurate).  If 0, then don't do interpolation.
+        :param integer interpolation_points: Interpolate the Sedov \
+        solution from a representation using this number of points \
+        (faster, but not quite as accurate). If 0, then don't do \
+        interpolation.
 
         """
 

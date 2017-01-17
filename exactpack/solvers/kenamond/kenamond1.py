@@ -28,9 +28,10 @@ class Kenamond1(ExactSolver):
     :math:`\vec{x}_d`, and detonation time, :math:`t_d`. Supports
     2D and 3D Cartesian solutions.
 
-    Default values are selected to be consistent with the problem
-    definition in [Kenamond]_. Default values are: **geometry** :math:`=2`,
-    :math:`D=1.0`, :math:`x_d=(0.0, 0.0)`, and :math:`t_d=0.0`.
+    Default values are selected to be consistent with the problem 
+    definition in [Kenamond2011]_. Default values are: **geometry** \ 
+    :math:`=2`, :math:`D=1.0`, :math:`x_d=(0.0, 0.0)`, and \ 
+    :math:`t_d=0.0`.
 
     """
 

@@ -3,6 +3,7 @@
 
 import os
 import unittest
+import pkg_resources
 
 from exactpack.analysis.readers import TextReader, VTKReader
 
@@ -15,8 +16,11 @@ class TestTextReader(unittest.TestCase):
         reader = TextReader(
             names=['x_position', 'velocity_x', 'pressure', 'temperature']
         )
-        data = reader(os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                   "../examples/data/coarse.dat"))
+        data_file = pkg_resources.resource_filename(
+            'exactpack.examples.data','coarse.dat')
+        data = reader(data_file)
+#        data = reader(os.path.join(os.path.abspath(os.path.dirname(__file__)),
+#                                   "../examples/data/coarse.dat"))
         self.assertAlmostEqual(data['x_position'][5], -4.89)
 
     def test_missing_file(self):
@@ -34,7 +38,10 @@ class TestVTKReader(unittest.TestCase):
     def test_read(self):
         """Test that VTK files read point data correctly."""
         reader = VTKReader(name_mapping={'U': 'velocity'})
-        data = reader(os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                   "../examples/data/shockTube_COARSE.vtk"))
+        data_file = pkg_resources.resource_filename(
+            'exactpack.examples.data','shockTube_COARSE.vtk')
+        data = reader(data_file)
+#        data = reader(os.path.join(os.path.abspath(os.path.dirname(__file__)),
+#                                   "../examples/data/shockTube_COARSE.vtk"))
         # Round to number of places which are used in the *.vtk (ASCII) file.
         self.assertAlmostEqual(data['velocity_x'][120], 12.5429, places=4)
