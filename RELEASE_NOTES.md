@@ -1,6 +1,11 @@
 Release Notes for ExactPack
 ===========================
 
+Version 1.5.1 (Jan 2017)
+-------------------------
+
+* Updated credits.rst
+
 Version 1.5.0 (Jan 2017)
 -------------------------
 

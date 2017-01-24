@@ -14,11 +14,12 @@ The current development team at Los Alamos National Laboratory includes:
 * Daniel Israel
 * Robert Singleton
 * C Nathan Woods
-* Ann Kaul
 * John Walter
+* Kyle Hickmann
 
 Past contributors at Los Alamos National Laboratory include:
 
+* Ann Kaul
 * James Kamm
 * Frank Timmes
 * Scott Ramsey
