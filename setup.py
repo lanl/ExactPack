@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name = "ExactPack",
-    version = "1.5.0",
+    version = "1.5.1",
     description = "Exact solution API for physics code verification",
     long_description = read('README.md'),
     classifiers = ['Development Status :: 4 - Beta',
