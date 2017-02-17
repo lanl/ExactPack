@@ -12,7 +12,7 @@ echo "============================================================"
 echo "=============== Building Conda Evironment =================="
 echo "============================================================"
 # Build base conda environment
-conda create -n testEP python=2.7 numpy scipy sphinx matplotlib \
+conda create -n testEP python=2.7 numpy=1.11.3 scipy sphinx matplotlib \
       vtk pytest pytest-cov wxpython
 
 # Activate conda environment
