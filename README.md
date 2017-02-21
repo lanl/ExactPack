@@ -43,7 +43,7 @@ The repository may be cloned from the GitHub repository located at https://githu
 Python dependencies:
 * Python 2.7
 * setuptools
-* numpy
+* numpy (version 1.12.0 is known to be broken)
 * sphinx
 * matplotlib
 * scipy
