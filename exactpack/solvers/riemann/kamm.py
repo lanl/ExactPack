@@ -50,7 +50,7 @@ class Riemann(ExactSolver):
                              names=['position',
                                     'density',
                                     'pressure',
-                                    'velocity_x',
+                                    'velocity',
                                     'sound',
                                     'energy',
                                     'entropy'])
