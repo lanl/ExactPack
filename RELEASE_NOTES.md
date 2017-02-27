@@ -1,6 +1,14 @@
 Release Notes for ExactPack
 ===========================
 
+Version 1.5.2 (Feb 2017)
+-------------------------
+
+* Changed recommended installation method for ExactPack from conda install to "build from source"
+* Noted that NumPy 1.12.0 is not compatible with ExactPack
+* Changed Jenkins script to specify NumPy version 1.11.3
+* Deleted an extraneous file in the Noh solver directory
+
 Version 1.5.1 (Jan 2017)
 -------------------------
 
