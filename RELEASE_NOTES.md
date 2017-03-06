@@ -1,6 +1,12 @@
 Release Notes for ExactPack
 ===========================
 
+Version 1.5.3 (Mar 2017)
+-------------------------
+
+* Cleaned up variable names and formatting
+* Fixed error in test_riemann.py that prevented some tests from being discovered
+
 Version 1.5.2 (Feb 2017)
 -------------------------
 

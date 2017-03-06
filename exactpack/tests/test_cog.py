@@ -1,37 +1,38 @@
-"""Tests for the Cog1 problem. 
+"""Tests for the Cog1 problem.
 """
 
 import unittest
 
 import numpy as np
 
-from exactpack.solvers.cog.cog1 import Cog1 as Cog1
-from exactpack.solvers.cog.cog2 import Cog2 as Cog2
-from exactpack.solvers.cog.cog3 import Cog3 as Cog3
-from exactpack.solvers.cog.cog4 import Cog4 as Cog4
-from exactpack.solvers.cog.cog5 import Cog5 as Cog5
-from exactpack.solvers.cog.cog6 import Cog6 as Cog6
-from exactpack.solvers.cog.cog7 import Cog7 as Cog7
-from exactpack.solvers.cog.cog8 import Cog8 as Cog8
-from exactpack.solvers.cog.cog9 import Cog9 as Cog9
-from exactpack.solvers.cog.cog10 import Cog10 as Cog10
-from exactpack.solvers.cog.cog11 import Cog11 as Cog11
-from exactpack.solvers.cog.cog12 import Cog12 as Cog12
-from exactpack.solvers.cog.cog13 import Cog13 as Cog13
-from exactpack.solvers.cog.cog14 import Cog14 as Cog14
-from exactpack.solvers.cog.cog16 import Cog16 as Cog16
-from exactpack.solvers.cog.cog17 import Cog17 as Cog17
-from exactpack.solvers.cog.cog18 import Cog18 as Cog18
-from exactpack.solvers.cog.cog19 import Cog19 as Cog19
-from exactpack.solvers.cog.cog20 import Cog20 as Cog20
-from exactpack.solvers.cog.cog21 import Cog21 as Cog21
+from exactpack.solvers.cog.cog1 import Cog1
+from exactpack.solvers.cog.cog2 import Cog2
+from exactpack.solvers.cog.cog3 import Cog3
+from exactpack.solvers.cog.cog4 import Cog4
+from exactpack.solvers.cog.cog5 import Cog5
+from exactpack.solvers.cog.cog6 import Cog6
+from exactpack.solvers.cog.cog7 import Cog7
+from exactpack.solvers.cog.cog8 import Cog8
+from exactpack.solvers.cog.cog9 import Cog9
+from exactpack.solvers.cog.cog10 import Cog10
+from exactpack.solvers.cog.cog11 import Cog11
+from exactpack.solvers.cog.cog12 import Cog12
+from exactpack.solvers.cog.cog13 import Cog13
+from exactpack.solvers.cog.cog14 import Cog14
+from exactpack.solvers.cog.cog16 import Cog16
+from exactpack.solvers.cog.cog17 import Cog17
+from exactpack.solvers.cog.cog18 import Cog18
+from exactpack.solvers.cog.cog19 import Cog19
+from exactpack.solvers.cog.cog20 import Cog20
+from exactpack.solvers.cog.cog21 import Cog21
 
-## cog1 ##########################
+
+# cog1 ##########################
 class TestCog1(unittest.TestCase):
     """Test for Coggeshall problems: cog1
 
     """
- 
+
     def test_cog1(self):
         """cog1 problem:"""
 
@@ -77,100 +78,102 @@ class TestCog1(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=4)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=4)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**6,  gold_pressure[ri,ti]/10**6, places=7)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**6,  gold_pressure[ri, ti]/10**6, places=7)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=5)
 
     def test_geometry_error_cog1(self):
         """cog1 problem:"""
-        self.assertRaises(ValueError, Cog1, geometry=-1) 
+        self.assertRaises(ValueError, Cog1, geometry=-1)
 
-## cog2 ##########################
+
+# cog2 ##########################
 class TestCog2(unittest.TestCase):
-     """Test for Coggeshall problems: cog2
+    """Test for Coggeshall problems: cog2
 
      """
 
-     def test_cog2(self):
-         """cog2 problem:"""
+    def test_cog2(self):
+        """cog2 problem:"""
 
-         npts = 4
-         r = np.linspace(0.1, 1.0, npts)
-         t = np.linspace(0.1, 1.0, npts)
-         sol = Cog2(geometry=3, gamma=1.4, rho0=1.8, b=1.2, Gamma=40.)
+        npts = 4
+        r = np.linspace(0.1, 1.0, npts)
+        t = np.linspace(0.1, 1.0, npts)
+        sol = Cog2(geometry=3, gamma=1.4, rho0=1.8, b=1.2, Gamma=40.)
 
-         gold_density = np.array([
-             4.78930511e+01, 1.25853422e+00, 2.89661083e-01, 1.13572322e-01,
-             2.52781039e+02, 6.64258342e+00, 1.52884036e+00, 5.99438309e-01,
-             4.94754956e+02, 1.30011771e+01, 2.99231837e+00, 1.17324889e+00,
-             7.59053706e+02, 1.99464231e+01, 4.59081879e+00, 1.80000000e+00
+        gold_density = np.array([
+            4.78930511e+01, 1.25853422e+00, 2.89661083e-01, 1.13572322e-01,
+            2.52781039e+02, 6.64258342e+00, 1.52884036e+00, 5.99438309e-01,
+            4.94754956e+02, 1.30011771e+01, 2.99231837e+00, 1.17324889e+00,
+            7.59053706e+02, 1.99464231e+01, 4.59081879e+00, 1.80000000e+00
          ]).reshape(npts, npts)
 
-         gold_velocity = np.array([
-             6.25000000e-01, 1.56250000e-01, 8.92857143e-02, 6.25000000e-02,
-             2.50000000e+00, 6.25000000e-01, 3.57142857e-01, 2.50000000e-01,
-             4.37500000e+00, 1.09375000e+00, 6.25000000e-01, 4.37500000e-01,
-             6.25000000e+00, 1.56250000e+00, 8.92857143e-01, 6.25000000e-01
-         ]).reshape(npts, npts)
+        gold_velocity = np.array([
+            6.25000000e-01, 1.56250000e-01, 8.92857143e-02, 6.25000000e-02,
+            2.50000000e+00, 6.25000000e-01, 3.57142857e-01, 2.50000000e-01,
+            4.37500000e+00, 1.09375000e+00, 6.25000000e-01, 4.37500000e-01,
+            6.25000000e+00, 1.56250000e+00, 8.92857143e-01, 6.25000000e-01
+        ]).reshape(npts, npts)
 
-         gold_temperature = np.array([
-             1.83105469e-03, 1.14440918e-04, 3.73684630e-05, 1.83105469e-05,
-             2.92968750e-02, 1.83105469e-03, 5.97895408e-04, 2.92968750e-04,
-             8.97216797e-02, 5.60760498e-03, 1.83105469e-03, 8.97216797e-04,
-             1.83105469e-01, 1.14440918e-02, 3.73684630e-03, 1.83105469e-03
-         ]).reshape(npts, npts)
+        gold_temperature = np.array([
+            1.83105469e-03, 1.14440918e-04, 3.73684630e-05, 1.83105469e-05,
+            2.92968750e-02, 1.83105469e-03, 5.97895408e-04, 2.92968750e-04,
+            8.97216797e-02, 5.60760498e-03, 1.83105469e-03, 8.97216797e-04,
+            1.83105469e-01, 1.14440918e-02, 3.73684630e-03, 1.83105469e-03
+        ]).reshape(npts, npts)
 
-         gold_pressure = np.array([
-             3.50779183e+00, 5.76111245e-03, 4.32967579e-04, 8.31828530e-05,
-             2.96227780e+02, 4.86517341e-01, 3.65634653e-02, 7.02466769e-03,
-             1.77560983e+03, 2.91621863e+00, 2.19163943e-01, 4.21063445e-02,
-             5.55947539e+03, 9.13074790e+00, 6.86207368e-01, 1.31835938e-01
-         ]).reshape(npts, npts)
+        gold_pressure = np.array([
+            3.50779183e+00, 5.76111245e-03, 4.32967579e-04, 8.31828530e-05,
+            2.96227780e+02, 4.86517341e-01, 3.65634653e-02, 7.02466769e-03,
+            1.77560983e+03, 2.91621863e+00, 2.19163943e-01, 4.21063445e-02,
+            5.55947539e+03, 9.13074790e+00, 6.86207368e-01, 1.31835938e-01
+        ]).reshape(npts, npts)
 
-         gold_sie = np.array([
-             1.83105469e-01, 1.14440918e-02, 3.73684630e-03, 1.83105469e-03,
-             2.92968750e+00, 1.83105469e-01, 5.97895408e-02, 2.92968750e-02,
-             8.97216797e+00, 5.60760498e-01, 1.83105469e-01, 8.97216797e-02,
-             1.83105469e+01, 1.14440918e+00, 3.73684630e-01, 1.83105469e-01
-         ]).reshape(npts, npts)
+        gold_sie = np.array([
+            1.83105469e-01, 1.14440918e-02, 3.73684630e-03, 1.83105469e-03,
+            2.92968750e+00, 1.83105469e-01, 5.97895408e-02, 2.92968750e-02,
+            8.97216797e+00, 5.60760498e-01, 1.83105469e-01, 8.97216797e-02,
+            1.83105469e+01, 1.14440918e+00, 3.73684630e-01, 1.83105469e-01
+        ]).reshape(npts, npts)
 
-         for ti in range(npts):
-             ts = t[ti]
-             solrt = sol(r,ts)
-             # density
-             for ri in range(npts):
-                 self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=6)
-             # velocity
-             for ri in range(npts):
-                 self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
-             # temperature
-             for ri in range(npts):
-                 self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
-             # pressure
-             for ri in range(npts):
-                 self.assertAlmostEqual(solrt.pressure[ri]/10**3,  gold_pressure[ri,ti]/10**3, places=6)
-             # sie
-             for ri in range(npts):
-                 self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=7)
+        for ti in range(npts):
+            ts = t[ti]
+            solrt = sol(r, ts)
+            # density
+            for ri in range(npts):
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=6)
+            # velocity
+            for ri in range(npts):
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
+            # temperature
+            for ri in range(npts):
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
+            # pressure
+            for ri in range(npts):
+                self.assertAlmostEqual(solrt.pressure[ri]/10**3,  gold_pressure[ri, ti]/10**3, places=6)
+            # sie
+            for ri in range(npts):
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
 
-     def test_geometry_error_cog2(self):
-         """cog2 problem:"""
-         self.assertRaises(ValueError, Cog2, geometry=-1) 
+    def test_geometry_error_cog2(self):
+        """cog2 problem:"""
+        self.assertRaises(ValueError, Cog2, geometry=-1)
 
-## cog3 ##########################
+
+# cog3 ##########################
 class TestCog3(unittest.TestCase):
     """Test for Coggeshall problems: cog3
 
@@ -223,28 +226,29 @@ class TestCog3(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
 
     def test_geometry_error_cog3(self):
         """cog3 problem:"""
-        self.assertRaises(ValueError, Cog3, geometry=-1) 
+        self.assertRaises(ValueError, Cog3, geometry=-1)
 
-## cog4 ##########################
+
+# cog4 ##########################
 class TestCog4(unittest.TestCase):
     """Test for Coggeshall problems: cog4
 
@@ -260,64 +264,65 @@ class TestCog4(unittest.TestCase):
         # T > 0 only when gamma < 1
 
         gold_density = np.array([
-            8.35485990e+01, 8.35485990e+01, 8.35485990e+01, 8.35485990e+01, 
-            8.28907087e+00, 8.28907087e+00, 8.28907087e+00, 8.28907087e+00, 
-            3.26168817e+00, 3.26168817e+00, 3.26168817e+00, 3.26168817e+00, 
+            8.35485990e+01, 8.35485990e+01, 8.35485990e+01, 8.35485990e+01,
+            8.28907087e+00, 8.28907087e+00, 8.28907087e+00, 8.28907087e+00,
+            3.26168817e+00, 3.26168817e+00, 3.26168817e+00, 3.26168817e+00,
             1.80000000e+00, 1.80000000e+00, 1.80000000e+00, 1.80000000e+00
         ]).reshape(npts, npts)
 
         gold_velocity = np.array([
-            4.95519979e+00, 4.95519979e+00, 4.95519979e+00, 4.95519979e+00, 
-            3.12158026e+00, 3.12158026e+00, 3.12158026e+00, 3.12158026e+00, 
-            2.59037013e+00, 2.59037013e+00, 2.59037013e+00, 2.59037013e+00, 
+            4.95519979e+00, 4.95519979e+00, 4.95519979e+00, 4.95519979e+00,
+            3.12158026e+00, 3.12158026e+00, 3.12158026e+00, 3.12158026e+00,
+            2.59037013e+00, 2.59037013e+00, 2.59037013e+00, 2.59037013e+00,
             2.30000000e+00, 2.30000000e+00, 2.30000000e+00, 2.30000000e+00
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
-            -8.76928747e-02, -8.76928747e-02, -8.76928747e-02, -8.76928747e-02, 
-            -3.48009404e-02, -3.48009404e-02, -3.48009404e-02, -3.48009404e-02, 
-            -2.39643478e-02, -2.39643478e-02, -2.39643478e-02, -2.39643478e-02, 
+            -8.76928747e-02, -8.76928747e-02, -8.76928747e-02, -8.76928747e-02,
+            -3.48009404e-02, -3.48009404e-02, -3.48009404e-02, -3.48009404e-02,
+            -2.39643478e-02, -2.39643478e-02, -2.39643478e-02, -2.39643478e-02,
             -1.88928571e-02, -1.88928571e-02, -1.88928571e-02, -1.88928571e-02
         ]).reshape(npts, npts)
 
         gold_pressure = np.array([
-            -2.93064673e+02, -2.93064673e+02, -2.93064673e+02, -2.93064673e+02, 
-            -1.15386985e+01, -1.15386985e+01, -1.15386985e+01, -1.15386985e+01, 
-            -3.12656919e+00, -3.12656919e+00, -3.12656919e+00, -3.12656919e+00, 
+            -2.93064673e+02, -2.93064673e+02, -2.93064673e+02, -2.93064673e+02,
+            -1.15386985e+01, -1.15386985e+01, -1.15386985e+01, -1.15386985e+01,
+            -3.12656919e+00, -3.12656919e+00, -3.12656919e+00, -3.12656919e+00,
             -1.36028571e+00, -1.36028571e+00, -1.36028571e+00, -1.36028571e+00
         ]).reshape(npts, npts)
 
         gold_sie = np.array([
-            -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, 
-            -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, 
-            -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, 
+            -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, -8.76928747e+00,
+            -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, -3.48009404e+00,
+            -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, -2.39643478e+00,
             -1.88928571e+00, -1.88928571e+00, -1.88928571e+00, -1.88928571e+00
         ]).reshape(npts, npts)
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
 
     def test_geometry_error_cog4(self):
         """cog4 problem:"""
-        self.assertRaises(ValueError, Cog4, geometry=-1) 
+        self.assertRaises(ValueError, Cog4, geometry=-1)
 
-## cog5 ##########################
+
+# cog5 ##########################
 class TestCog5(unittest.TestCase):
     """Test for Coggeshall problems: cog5
 
@@ -332,9 +337,9 @@ class TestCog5(unittest.TestCase):
         sol = Cog5(rho0=1.8, u0=2.3, Gamma=40.)
 
         gold_density = np.array([
-            1.80000000e+02, 1.80000000e+02, 1.80000000e+02, 1.80000000e+02, 
-            1.12500000e+01, 1.12500000e+01, 1.12500000e+01, 1.12500000e+01, 
-            3.67346939e+00, 3.67346939e+00, 3.67346939e+00, 3.67346939e+00, 
+            1.80000000e+02, 1.80000000e+02, 1.80000000e+02, 1.80000000e+02,
+            1.12500000e+01, 1.12500000e+01, 1.12500000e+01, 1.12500000e+01,
+            3.67346939e+00, 3.67346939e+00, 3.67346939e+00, 3.67346939e+00,
             1.80000000e+00, 1.80000000e+00, 1.80000000e+00, 1.80000000e+00
         ]).reshape(npts, npts)
 
@@ -346,50 +351,51 @@ class TestCog5(unittest.TestCase):
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
-            5.75000000e-03, 5.75000000e-03, 5.75000000e-03, 5.75000000e-03, 
+            5.75000000e-03, 5.75000000e-03, 5.75000000e-03, 5.75000000e-03,
             2.30000000e-02, 2.30000000e-02, 2.30000000e-02, 2.30000000e-02,
-            4.02500000e-02, 4.02500000e-02, 4.02500000e-02, 4.02500000e-02, 
+            4.02500000e-02, 4.02500000e-02, 4.02500000e-02, 4.02500000e-02,
             5.75000000e-02, 5.75000000e-02, 5.75000000e-02, 5.75000000e-02
         ]).reshape(npts, npts)
 
         gold_pressure = np.array([
-            4.14000000e+01, 4.14000000e+01, 4.14000000e+01, 4.14000000e+01, 
-            1.03500000e+01, 1.03500000e+01, 1.03500000e+01, 1.03500000e+01, 
-            5.91428571e+00, 5.91428571e+00, 5.91428571e+00, 5.91428571e+00, 
+            4.14000000e+01, 4.14000000e+01, 4.14000000e+01, 4.14000000e+01,
+            1.03500000e+01, 1.03500000e+01, 1.03500000e+01, 1.03500000e+01,
+            5.91428571e+00, 5.91428571e+00, 5.91428571e+00, 5.91428571e+00,
             4.14000000e+00, 4.14000000e+00, 4.14000000e+00, 4.14000000e+00
         ]).reshape(npts, npts)
 
         gold_sie = np.array([
-            -4.60000000e-01, -4.60000000e-01, -4.60000000e-01, -4.60000000e-01, 
-            -1.84000000e+00, -1.84000000e+00, -1.84000000e+00, -1.84000000e+00, 
-            -3.22000000e+00, -3.22000000e+00, -3.22000000e+00, -3.22000000e+00, 
+            -4.60000000e-01, -4.60000000e-01, -4.60000000e-01, -4.60000000e-01,
+            -1.84000000e+00, -1.84000000e+00, -1.84000000e+00, -1.84000000e+00,
+            -3.22000000e+00, -3.22000000e+00, -3.22000000e+00, -3.22000000e+00,
             -4.60000000e+00, -4.60000000e+00, -4.60000000e+00, -4.60000000e+00
         ]).reshape(npts, npts)
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
 
     def test_geometry_error_cog5(self):
         """cog5 problem:"""
-        self.assertRaises(ValueError, Cog5, geometry=1) 
+        self.assertRaises(ValueError, Cog5, geometry=1)
 
-## cog6 ##########################
+
+# cog6 ##########################
 class TestCog6(unittest.TestCase):
     """Test for Coggeshall problems: cog6
 
@@ -440,28 +446,29 @@ class TestCog6(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
 
     def test_geometry_error_cog6(self):
         """cog6 problem:"""
-        self.assertRaises(ValueError, Cog6, geometry=-1) 
+        self.assertRaises(ValueError, Cog6, geometry=-1)
 
-## cog7 ##########################
+
+# cog7 ##########################
 class TestCog7(unittest.TestCase):
     """Test for Coggeshall problems: cog7
 
@@ -512,28 +519,29 @@ class TestCog7(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
 
     def test_geometry_error_cog7(self):
         """cog7 problem:"""
-        self.assertRaises(ValueError, Cog7, geometry=-1) 
+        self.assertRaises(ValueError, Cog7, geometry=-1)
 
-## cog8 ##########################
+
+# cog8 ##########################
 class TestCog8(unittest.TestCase):
     """Test for Coggeshall problems: cog8
 
@@ -545,9 +553,8 @@ class TestCog8(unittest.TestCase):
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
         t = np.linspace(0.1, 1.0, npts)
-        sol = Cog8(geometry=3, rho0=1.8, temp0=1.4, alpha=2.0, beta=1.0, \
+        sol = Cog8(geometry=3, rho0=1.8, temp0=1.4, alpha=2.0, beta=1.0,
                    gamma=1.4, Gamma=40.)
-
 
         gold_density = np.array([
             1.80000000e+03, 1.77176398e+01, 2.74333623e+00, 8.35485990e-01,
@@ -586,29 +593,30 @@ class TestCog8(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri,ti]/10**5, places=6)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
             # sie
             scaled = 10**5
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri]/scaled,  gold_sie[ri,ti]/scaled, places=6)
+                self.assertAlmostEqual(solrt.sie[ri]/scaled,  gold_sie[ri, ti]/scaled, places=6)
 
     def test_geometry_error_cog8(self):
         """cog8 problem:"""
-        self.assertRaises(ValueError, Cog8, geometry=-1) 
+        self.assertRaises(ValueError, Cog8, geometry=-1)
 
-## cog9 ##########################
+
+# cog9 ##########################
 class TestCog9(unittest.TestCase):
     """Test for Coggeshall problems: cog9
 
@@ -659,29 +667,30 @@ class TestCog9(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             scale = 10**6
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/scale,  gold_density[ri,ti]/scale, places=5)
+                self.assertAlmostEqual(solrt.density[ri]/scale,  gold_density[ri, ti]/scale, places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri,ti]/10**5, places=6)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog9(self):
         """cog9 problem:"""
-        self.assertRaises(ValueError, Cog9, geometry=-1) 
+        self.assertRaises(ValueError, Cog9, geometry=-1)
 
-## cog10 ##########################
+
+# cog10 ##########################
 class TestCog10(unittest.TestCase):
     """Test for Coggeshall problems: cog10
 
@@ -695,11 +704,10 @@ class TestCog10(unittest.TestCase):
         t = np.linspace(0.1, 1.0, npts)
         sol = Cog10(geometry=3, gamma=1.4, temp0=1.4, beta=1.0, rho0=1.8, lambda0=0.1, Gamma=40.)
 
-
         gold_density = np.array([
-            1.80000000e+02, 1.80000000e+02, 1.80000000e+02, 1.80000000e+02, 
-            1.12500000e+01, 1.12500000e+01, 1.12500000e+01, 1.12500000e+01, 
-            3.67346939e+00, 3.67346939e+00, 3.67346939e+00, 3.67346939e+00, 
+            1.80000000e+02, 1.80000000e+02, 1.80000000e+02, 1.80000000e+02,
+            1.12500000e+01, 1.12500000e+01, 1.12500000e+01, 1.12500000e+01,
+            3.67346939e+00, 3.67346939e+00, 3.67346939e+00, 3.67346939e+00,
             1.80000000e+00, 1.80000000e+00, 1.80000000e+00, 1.80000000e+00
         ]).reshape(npts, npts)
 
@@ -711,50 +719,51 @@ class TestCog10(unittest.TestCase):
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
-            1.40000000e-02, 1.40000000e-02, 1.40000000e-02, 1.40000000e-02, 
-            2.24000000e-01, 2.24000000e-01, 2.24000000e-01, 2.24000000e-01, 
-            6.86000000e-01, 6.86000000e-01, 6.86000000e-01, 6.86000000e-01, 
+            1.40000000e-02, 1.40000000e-02, 1.40000000e-02, 1.40000000e-02,
+            2.24000000e-01, 2.24000000e-01, 2.24000000e-01, 2.24000000e-01,
+            6.86000000e-01, 6.86000000e-01, 6.86000000e-01, 6.86000000e-01,
             1.40000000e+00, 1.40000000e+00, 1.40000000e+00, 1.40000000e+00
         ]).reshape(npts, npts)
 
         gold_pressure = np.array([
-            1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 
-            1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 
-            1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 
+            1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02,
+            1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02,
+            1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02,
             1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02
         ]).reshape(npts, npts)
 
         gold_sie = np.array([
-            1.40000000e+00, 1.40000000e+00, 1.40000000e+00, 1.40000000e+00, 
-            2.24000000e+01, 2.24000000e+01, 2.24000000e+01, 2.24000000e+01, 
-            6.86000000e+01, 6.86000000e+01, 6.86000000e+01, 6.86000000e+01, 
+            1.40000000e+00, 1.40000000e+00, 1.40000000e+00, 1.40000000e+00,
+            2.24000000e+01, 2.24000000e+01, 2.24000000e+01, 2.24000000e+01,
+            6.86000000e+01, 6.86000000e+01, 6.86000000e+01, 6.86000000e+01,
             1.40000000e+02, 1.40000000e+02, 1.40000000e+02, 1.40000000e+02
         ]).reshape(npts, npts)
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri]/10**11,  gold_velocity[ri,ti]/10**11, places=7)
+                self.assertAlmostEqual(solrt.velocity[ri]/10**11,  gold_velocity[ri, ti]/10**11, places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog10(self):
         """cog10 problem:"""
-        self.assertRaises(ValueError, Cog10, geometry=-1) 
+        self.assertRaises(ValueError, Cog10, geometry=-1)
 
-## cog11 ##########################
+
+# cog11 ##########################
 class TestCog11(unittest.TestCase):
     """Test for Coggeshall problems: cog11
 
@@ -805,28 +814,29 @@ class TestCog11(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri,ti]/10**5, places=6)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri]/10**6,  gold_sie[ri,ti]/10**6, places=6)
+                self.assertAlmostEqual(solrt.sie[ri]/10**6,  gold_sie[ri, ti]/10**6, places=6)
 
     def test_geometry_error_cog11(self):
         """cog11 problem:"""
-        self.assertRaises(ValueError, Cog11, geometry=-1) 
+        self.assertRaises(ValueError, Cog11, geometry=-1)
 
-## cog12 ##########################
+
+# cog12 ##########################
 class TestCog12(unittest.TestCase):
     """Test for Coggeshall problems: cog12
 
@@ -841,64 +851,65 @@ class TestCog12(unittest.TestCase):
         sol = Cog12(geometry=3, gamma=1.4, rho0=1.8, u0=2.3, beta=1.0, Gamma=40.)
 
         gold_density = np.array([
-            8.35485990e+01, 8.35485990e+01, 8.35485990e+01, 8.35485990e+01, 
-            8.28907087e+00, 8.28907087e+00, 8.28907087e+00, 8.28907087e+00, 
-            3.26168817e+00, 3.26168817e+00, 3.26168817e+00, 3.26168817e+00, 
+            8.35485990e+01, 8.35485990e+01, 8.35485990e+01, 8.35485990e+01,
+            8.28907087e+00, 8.28907087e+00, 8.28907087e+00, 8.28907087e+00,
+            3.26168817e+00, 3.26168817e+00, 3.26168817e+00, 3.26168817e+00,
             1.80000000e+00, 1.80000000e+00, 1.80000000e+00, 1.80000000e+00
         ]).reshape(npts, npts)
 
         gold_velocity = np.array([
-            4.95519979e+00, 4.95519979e+00, 4.95519979e+00, 4.95519979e+00, 
-            3.12158026e+00, 3.12158026e+00, 3.12158026e+00, 3.12158026e+00, 
-            2.59037013e+00, 2.59037013e+00, 2.59037013e+00, 2.59037013e+00, 
+            4.95519979e+00, 4.95519979e+00, 4.95519979e+00, 4.95519979e+00,
+            3.12158026e+00, 3.12158026e+00, 3.12158026e+00, 3.12158026e+00,
+            2.59037013e+00, 2.59037013e+00, 2.59037013e+00, 2.59037013e+00,
             2.30000000e+00, 2.30000000e+00, 2.30000000e+00, 2.30000000e+00
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
-            -8.76928747e-02, -8.76928747e-02, -8.76928747e-02, -8.76928747e-02, 
-            -3.48009404e-02, -3.48009404e-02, -3.48009404e-02, -3.48009404e-02, 
-            -2.39643478e-02, -2.39643478e-02, -2.39643478e-02, -2.39643478e-02, 
+            -8.76928747e-02, -8.76928747e-02, -8.76928747e-02, -8.76928747e-02,
+            -3.48009404e-02, -3.48009404e-02, -3.48009404e-02, -3.48009404e-02,
+            -2.39643478e-02, -2.39643478e-02, -2.39643478e-02, -2.39643478e-02,
             -1.88928571e-02, -1.88928571e-02, -1.88928571e-02, -1.88928571e-02
         ]).reshape(npts, npts)
 
         gold_pressure = np.array([
-            -2.93064673e+02, -2.93064673e+02, -2.93064673e+02, -2.93064673e+02, 
-            -1.15386985e+01, -1.15386985e+01, -1.15386985e+01, -1.15386985e+01, 
-            -3.12656919e+00, -3.12656919e+00, -3.12656919e+00, -3.12656919e+00, 
+            -2.93064673e+02, -2.93064673e+02, -2.93064673e+02, -2.93064673e+02,
+            -1.15386985e+01, -1.15386985e+01, -1.15386985e+01, -1.15386985e+01,
+            -3.12656919e+00, -3.12656919e+00, -3.12656919e+00, -3.12656919e+00,
             -1.36028571e+00, -1.36028571e+00, -1.36028571e+00, -1.36028571e+00
         ]).reshape(npts, npts)
 
         gold_sie = np.array([
-            -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, 
-            -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, 
-            -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, 
+            -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, -8.76928747e+00,
+            -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, -3.48009404e+00,
+            -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, -2.39643478e+00,
             -1.88928571e+00, -1.88928571e+00, -1.88928571e+00, -1.88928571e+00
         ]).reshape(npts, npts)
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog12(self):
         """cog12 problem:"""
-        self.assertRaises(ValueError, Cog12, geometry=-1) 
+        self.assertRaises(ValueError, Cog12, geometry=-1)
 
-## cog13 ##########################
+
+# cog13 ##########################
 class TestCog13(unittest.TestCase):
     """Test for Coggeshall problems: cog13
 
@@ -949,28 +960,29 @@ class TestCog13(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog13(self):
         """cog13 problem:"""
-        self.assertRaises(ValueError, Cog13, geometry=-1) 
+        self.assertRaises(ValueError, Cog13, geometry=-1)
 
-## cog14 ##########################
+
+# cog14 ##########################
 class TestCog14(unittest.TestCase):
     """Test for Coggeshall problems: cog14
 
@@ -984,67 +996,66 @@ class TestCog14(unittest.TestCase):
         t = np.linspace(0.1, 1.0, npts)
         sol = Cog14(geometry=3, gamma=1.4, rho0=1.8, alpha=2.0, beta=1.0, lambda0=0.1, Gamma=40.)
 
-
         gold_density = np.array([
-            5.69209979e+02, 5.69209979e+02, 5.69209979e+02, 5.69209979e+02, 
-            1.77878118e+01, 1.77878118e+01, 1.77878118e+01, 1.77878118e+01, 
-            4.39063571e+00, 4.39063571e+00, 4.39063571e+00, 4.39063571e+00, 
+            5.69209979e+02, 5.69209979e+02, 5.69209979e+02, 5.69209979e+02,
+            1.77878118e+01, 1.77878118e+01, 1.77878118e+01, 1.77878118e+01,
+            4.39063571e+00, 4.39063571e+00, 4.39063571e+00, 4.39063571e+00,
             1.80000000e+00, 1.80000000e+00, 1.80000000e+00, 1.80000000e+00
         ]).reshape(npts, npts)
 
         gold_velocity = np.array([
-            2.01074758e-01, 2.01074758e-01, 2.01074758e-01, 2.01074758e-01, 
-            4.02149516e-01, 4.02149516e-01, 4.02149516e-01, 4.02149516e-01, 
-            5.31993805e-01, 5.31993805e-01, 5.31993805e-01, 5.31993805e-01, 
+            2.01074758e-01, 2.01074758e-01, 2.01074758e-01, 2.01074758e-01,
+            4.02149516e-01, 4.02149516e-01, 4.02149516e-01, 4.02149516e-01,
+            5.31993805e-01, 5.31993805e-01, 5.31993805e-01, 5.31993805e-01,
             6.35854215e-01, 6.35854215e-01, 6.35854215e-01, 6.35854215e-01
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
-            3.36925486e-04, 3.36925486e-04, 3.36925486e-04, 3.36925486e-04, 
-            1.34770194e-03, 1.34770194e-03, 1.34770194e-03, 1.34770194e-03, 
-            2.35847840e-03, 2.35847840e-03, 2.35847840e-03, 2.35847840e-03, 
+            3.36925486e-04, 3.36925486e-04, 3.36925486e-04, 3.36925486e-04,
+            1.34770194e-03, 1.34770194e-03, 1.34770194e-03, 1.34770194e-03,
+            2.35847840e-03, 2.35847840e-03, 2.35847840e-03, 2.35847840e-03,
             3.36925486e-03, 3.36925486e-03, 3.36925486e-03, 3.36925486e-03
         ]).reshape(npts, npts)
 
         gold_pressure = np.array([
-            7.67125395e+00, 7.67125395e+00, 7.67125395e+00, 7.67125395e+00, 
-            9.58906744e-01, 9.58906744e-01, 9.58906744e-01, 9.58906744e-01, 
-            4.14208780e-01, 4.14208780e-01, 4.14208780e-01, 4.14208780e-01, 
+            7.67125395e+00, 7.67125395e+00, 7.67125395e+00, 7.67125395e+00,
+            9.58906744e-01, 9.58906744e-01, 9.58906744e-01, 9.58906744e-01,
+            4.14208780e-01, 4.14208780e-01, 4.14208780e-01, 4.14208780e-01,
             2.42586350e-01, 2.42586350e-01, 2.42586350e-01, 2.42586350e-01
         ]).reshape(npts, npts)
 
         gold_sie = np.array([
-            3.36925486e-02, 3.36925486e-02, 3.36925486e-02, 3.36925486e-02, 
-            1.34770194e-01, 1.34770194e-01, 1.34770194e-01, 1.34770194e-01, 
-            2.35847840e-01, 2.35847840e-01, 2.35847840e-01, 2.35847840e-01, 
+            3.36925486e-02, 3.36925486e-02, 3.36925486e-02, 3.36925486e-02,
+            1.34770194e-01, 1.34770194e-01, 1.34770194e-01, 1.34770194e-01,
+            2.35847840e-01, 2.35847840e-01, 2.35847840e-01, 2.35847840e-01,
             3.36925486e-01, 3.36925486e-01, 3.36925486e-01, 3.36925486e-01
         ]).reshape(npts, npts)
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog14(self):
         """cog14 problem:"""
-        self.assertRaises(ValueError, Cog14, geometry=-1) 
+        self.assertRaises(ValueError, Cog14, geometry=-1)
 
 
-## cog16 ##########################
+# cog16 ##########################
 class TestCog16(unittest.TestCase):
     """Test for Coggeshall problems: cog16
 
@@ -1059,64 +1070,65 @@ class TestCog16(unittest.TestCase):
         sol = Cog16(geometry=3, gamma=1.4, u0=2.3, b=1.2, lambda0=0.1, Gamma=40.)
 
         gold_density = np.array([
-            9.82644232e+21, 9.82644232e+21, 9.82644232e+21, 9.82644232e+21, 
-            1.16360167e+20, 1.16360167e+20, 1.16360167e+20, 1.16360167e+20, 
-            1.94125497e+19, 1.94125497e+19, 1.94125497e+19, 1.94125497e+19, 
+            9.82644232e+21, 9.82644232e+21, 9.82644232e+21, 9.82644232e+21,
+            1.16360167e+20, 1.16360167e+20, 1.16360167e+20, 1.16360167e+20,
+            1.94125497e+19, 1.94125497e+19, 1.94125497e+19, 1.94125497e+19,
             6.20006595e+18, 6.20006595e+18, 6.20006595e+18, 6.20006595e+18
         ]).reshape(npts, npts)
 
         gold_velocity = np.array([
-            1.45120189e-01, 1.45120189e-01, 1.45120189e-01, 1.45120189e-01, 
-            7.65948951e-01, 7.65948951e-01, 7.65948951e-01, 7.65948951e-01, 
-            1.49915136e+00, 1.49915136e+00, 1.49915136e+00, 1.49915136e+00, 
+            1.45120189e-01, 1.45120189e-01, 1.45120189e-01, 1.45120189e-01,
+            7.65948951e-01, 7.65948951e-01, 7.65948951e-01, 7.65948951e-01,
+            1.49915136e+00, 1.49915136e+00, 1.49915136e+00, 1.49915136e+00,
             2.30000000e+00, 2.30000000e+00, 2.30000000e+00, 2.30000000e+00
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
-            7.89745100e-04, 7.89745100e-04, 7.89745100e-04, 7.89745100e-04, 
-            2.20004173e-02, 2.20004173e-02, 2.20004173e-02, 2.20004173e-02, 
-            8.42795554e-02, 8.42795554e-02, 8.42795554e-02, 8.42795554e-02, 
+            7.89745100e-04, 7.89745100e-04, 7.89745100e-04, 7.89745100e-04,
+            2.20004173e-02, 2.20004173e-02, 2.20004173e-02, 2.20004173e-02,
+            8.42795554e-02, 8.42795554e-02, 8.42795554e-02, 8.42795554e-02,
             1.98375000e-01, 1.98375000e-01, 1.98375000e-01, 1.98375000e-01
         ]).reshape(npts, npts)
 
         gold_pressure = np.array([
-            3.10415387e+20, 3.10415387e+20, 3.10415387e+20, 3.10415387e+20, 
-            1.02398890e+20, 1.02398890e+20, 1.02398890e+20, 1.02398890e+20, 
-            6.54432424e+19, 6.54432424e+19, 6.54432424e+19, 6.54432424e+19, 
+            3.10415387e+20, 3.10415387e+20, 3.10415387e+20, 3.10415387e+20,
+            1.02398890e+20, 1.02398890e+20, 1.02398890e+20, 1.02398890e+20,
+            6.54432424e+19, 6.54432424e+19, 6.54432424e+19, 6.54432424e+19,
             4.91975233e+19, 4.91975233e+19, 4.91975233e+19, 4.91975233e+19
         ]).reshape(npts, npts)
 
         gold_sie = np.array([
-            7.89745100e-02, 7.89745100e-02, 7.89745100e-02, 7.89745100e-02, 
-            2.20004173e+00, 2.20004173e+00, 2.20004173e+00, 2.20004173e+00, 
-            8.42795554e+00, 8.42795554e+00, 8.42795554e+00, 8.42795554e+00, 
+            7.89745100e-02, 7.89745100e-02, 7.89745100e-02, 7.89745100e-02,
+            2.20004173e+00, 2.20004173e+00, 2.20004173e+00, 2.20004173e+00,
+            8.42795554e+00, 8.42795554e+00, 8.42795554e+00, 8.42795554e+00,
             1.98375000e+01, 1.98375000e+01, 1.98375000e+01, 1.98375000e+01
         ]).reshape(npts, npts)
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/10**21,  gold_density[ri,ti]/10**21, places=5)
+                self.assertAlmostEqual(solrt.density[ri]/10**21,  gold_density[ri, ti]/10**21, places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri,ti]/10**20, places=6)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri, ti]/10**20, places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog16(self):
         """cog16 problem:"""
-        self.assertRaises(ValueError, Cog16, geometry=1) 
+        self.assertRaises(ValueError, Cog16, geometry=1)
 
-## cog17 ##########################
+
+# cog17 ##########################
 class TestCog17(unittest.TestCase):
     """Test for Coggeshall problems: cog17
 
@@ -1129,7 +1141,6 @@ class TestCog17(unittest.TestCase):
         r = np.linspace(0.1, 1.0, npts)
         t = np.linspace(0.1, 1.0, npts)
         sol = Cog17(geometry=3, gamma=1.4, alpha=2.0, beta=1.0, lambda0=0.1, Gamma=40.)
-
 
         gold_density = np.array([
             2.02580193e-09, 3.31907389e-05, 1.66833500e-03, 2.02580193e-02,
@@ -1168,28 +1179,29 @@ class TestCog17(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/10**21,  gold_density[ri,ti]/10**21, places=5)
+                self.assertAlmostEqual(solrt.density[ri]/10**21,  gold_density[ri, ti]/10**21, places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri,ti]/10**20, places=6)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri, ti]/10**20, places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog17(self):
         """cog17 problem:"""
-        self.assertRaises(ValueError, Cog17, geometry=-1) 
+        self.assertRaises(ValueError, Cog17, geometry=-1)
 
-## cog18 ##########################
+
+# cog18 ##########################
 class TestCog18(unittest.TestCase):
     """Test for Coggeshall problems: cog18
 
@@ -1202,7 +1214,6 @@ class TestCog18(unittest.TestCase):
         r = np.linspace(0.1, 1.0, npts)
         t = np.linspace(0.1, 1.0, npts)
         sol = Cog18(geometry=3, alpha=2.0, beta=1.0, rho0=1.8, tau=1.25, Gamma=40.)
-
 
         gold_density = np.array([
             9.86420334e+05, 8.68762552e+05, 6.21253904e+05, 2.77284545e+05,
@@ -1241,28 +1252,29 @@ class TestCog18(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/10**5,  gold_density[ri,ti]/10**5, places=5)
+                self.assertAlmostEqual(solrt.density[ri]/10**5,  gold_density[ri, ti]/10**5, places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri]/10**10,  gold_temperature[ri,ti]/10**10, places=6)
+                self.assertAlmostEqual(solrt.temperature[ri]/10**10,  gold_temperature[ri, ti]/10**10, places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**4,  gold_pressure[ri,ti]/10**4, places=6)
+                self.assertAlmostEqual(solrt.pressure[ri]/10**4,  gold_pressure[ri, ti]/10**4, places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog18(self):
         """cog18 problem:"""
-        self.assertRaises(ValueError, Cog18, geometry=-1) 
+        self.assertRaises(ValueError, Cog18, geometry=-1)
 
-## cog19 ##########################
+
+# cog19 ##########################
 class TestCog19(unittest.TestCase):
     """Test for Coggeshall problems: cog19
 
@@ -1314,28 +1326,29 @@ class TestCog19(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog19(self):
         """cog19 problem:"""
-        self.assertRaises(ValueError, Cog19, geometry=-1) 
+        self.assertRaises(ValueError, Cog19, geometry=-1)
 
-## cog20 ##########################
+
+# cog20 ##########################
 class TestCog20(unittest.TestCase):
     """Test for Coggeshall problems: cog20
 
@@ -1387,28 +1400,29 @@ class TestCog20(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
 
     def test_geometry_error_cog20(self):
         """cog20 problem:"""
-        self.assertRaises(ValueError, Cog20, geometry=-1) 
+        self.assertRaises(ValueError, Cog20, geometry=-1)
 
-## cog21 ##########################
+
+# cog21 ##########################
 class TestCog21(unittest.TestCase):
     """Test for Coggeshall problems: cog21
 
@@ -1432,9 +1446,9 @@ class TestCog21(unittest.TestCase):
 
         gold_velocity = np.array([
             0.00000000e+00, 2.50000000e-01, 1.42857140e-01, 1.00000000e-01,
-            4.00000000e+00, 1.00000000e+00, 5.71428570e-01, 4.00000000e-01,   
+            4.00000000e+00, 1.00000000e+00, 5.71428570e-01, 4.00000000e-01,
             7.00000000e+00, 1.75000000e+00, 1.00000000e+00, 7.00000000e-01,
-            1.00000000e+01, 2.50000000e+00, 1.42857143e+00, 1.00000000e+00        
+            1.00000000e+01, 2.50000000e+00, 1.42857143e+00, 1.00000000e+00
         ]).reshape(npts, npts)
 
         gold_temperature = np.array([
@@ -1460,20 +1474,19 @@ class TestCog21(unittest.TestCase):
 
         for ti in range(npts):
             ts = t[ti]
-            solrt = sol(r,ts)
+            solrt = sol(r, ts)
             # density
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri,ti], places=5)
+                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
             # velocity
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri,ti], places=7)
+                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
             # temperature
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
             # pressure
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri,ti], places=6)
+                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
             # sie
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri,ti], places=6)
-
+                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
