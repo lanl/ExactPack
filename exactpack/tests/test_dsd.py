@@ -173,7 +173,7 @@ class TestRateStick(unittest.TestCase):
 
     def test_alpha_neg_error(self):
         """Test for valid value of det velocity deviance coefficient,
-        :math:`\alpha`."""
+        :math:`alpha`."""
 
         self.assertRaisesRegexp(ValueError,
                                 "Alpha must be >= 0",
@@ -281,7 +281,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_2`, :math:`D_{{CJ}_1}`,
-        :math:`D_{{CJ}_2}`, :math:`\alpha_1`, :math:`\alpha_2`, :math:`t_d`.
+        :math:`D_{{CJ}_2}`, :math:`alpha_1`, :math:`alpha_2`, :math:`t_d`.
         The inner radius of HE1 is :math:`r_1=1.2`.
         """
 
@@ -302,7 +302,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_1`, :math:`D_{{CJ}_1}`,
-        :math:`D_{{CJ}_2}`, :math:`\alpha_1`, :math:`\alpha_2`, :math:`t_d`.
+        :math:`D_{{CJ}_2}`, :math:`alpha_1`, :math:`alpha_2`, :math:`t_d`.
         The radius of interface between HE1 and HE2 is :math:`r_2=2.5`.
         """
 
@@ -323,7 +323,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_1`, :math:`r_2`,
-        :math:`D_{{CJ}_2}`, :math:`\alpha_1`, :math:`\alpha_2`, :math:`t_d`.
+        :math:`D_{{CJ}_2}`, :math:`alpha_1`, :math:`alpha_2`, :math:`t_d`.
         The CJ detonation velocity of HE1 is :math:`D_{{CJ}_1}=1.0`.
         """
 
@@ -344,7 +344,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_1`, :math:`r_2`,
-        :math:`D_{{CJ}_1}`, :math:`\alpha_1`, :math:`\alpha_2`, :math:`t_d`.
+        :math:`D_{{CJ}_1}`, :math:`alpha_1`, :math:`alpha_2`, :math:`t_d`.
         The CJ detonation velocity of HE1 is :math:`D_{{CJ}_2}=0.5`.
         """
 
@@ -365,8 +365,8 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_1`, :math:`r_2`,
-        :math:`D_{{CJ}_1}`, :math:`D_{{CJ}_2}`, :math:`\alpha_2`, :math:`t_d`.
-        The CJ detonation velocity of HE1 is :math:`\alpha_1=0.05`.
+        :math:`D_{{CJ}_1}`, :math:`D_{{CJ}_2}`, :math:`alpha_2`, :math:`t_d`.
+        The CJ detonation velocity of HE1 is :math:`alpha_1=0.05`.
         """
 
         points = np.array([[0.9, 1.2], [1.8, 2.4]])
@@ -386,8 +386,8 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_1`, :math:`r_2`,
-        :math:`D_{{CJ}_1}`, :math:`D_{{CJ}_2}`, :math:`\alpha_1`, :math:`t_d`.
-        The CJ detonation velocity of HE1 is :math:`\alpha_2=0.05`.
+        :math:`D_{{CJ}_1}`, :math:`D_{{CJ}_2}`, :math:`alpha_1`, :math:`t_d`.
+        The CJ detonation velocity of HE1 is :math:`alpha_2=0.05`.
         """
 
         points = np.array([[0.9, 1.2], [1.8, 2.4]])
@@ -407,8 +407,8 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests burntime solution at points in each HE region.
 
         Uses default parameter values for :math:`r_1`, :math:`r_2`,
-        :math:`D_{{CJ}_1}`, :math:`D_{{CJ}_2}`, :math:`\alpha_1`,
-        :math:`\alpha_2`. Detonation time of HE1 is :math:`t_d=3.0`.
+        :math:`D_{{CJ}_1}`, :math:`D_{{CJ}_2}`, :math:`alpha_1`,
+        :math:`alpha_2`. Detonation time of HE1 is :math:`t_d=3.0`.
         """
 
         points = np.array([[0.9, 1.2], [1.8, 2.4]])
@@ -499,7 +499,7 @@ class TestCylindricalExpansion(unittest.TestCase):
 
     def test_alpha1_neg_error(self):
         """Test for valid value of inner region det velocity deviance
-        coefficient, :math:`\alpha_1`."""
+        coefficient, :math:`alpha_1`."""
 
         self.assertRaisesRegexp(ValueError,
                                 "Alpha for HE1 must be >= 0",
@@ -507,7 +507,7 @@ class TestCylindricalExpansion(unittest.TestCase):
 
     def test_alpha2_neg_error(self):
         """Test for valid value of outer region det velocity deviance
-        coefficient, :math:`\alpha_2`."""
+        coefficient, :math:`alpha_2`."""
 
         self.assertRaisesRegexp(ValueError,
                                 "Alpha for HE2 must be >= 0",
@@ -724,7 +724,7 @@ class TestExplosiveArc(unittest.TestCase):
 
     def test_alpha_neg_error(self):
         """Test for valid value of det velocity deviance coefficient,
-        :math:`\alpha`."""
+        :math:`alpha`."""
 
         self.assertRaisesRegexp(ValueError,
                                 "Alpha must be >= 0",
