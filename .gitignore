@@ -10,6 +10,7 @@ ExactPack.egg-info/
 # No temporary files
 *~
 *dSYM*
+*.bak
 *.swp
 
 # my feature/Blake dev files
