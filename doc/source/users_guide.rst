@@ -257,30 +257,30 @@ Although ExactPack can provide solutions for any user script for
 analyzing convergence, there are also some built-in tools for
 convergence analysis in :mod:`exactpack.analysis`.  The basic object
 for doing verification analysis is
-:class:`~exactpack.analysis.CodeVerificationStudy`.  To perform a code
+:class:`~exactpack.analysis.Study`.  To perform a code
 verification study, instantiate a study object by passing it a list of
 data files, an ExactPack solver, and a data reader::
 
-    from exactpack.analysis import CodeVerificationStudy
+    from exactpack.analysis import Study
     from exactpack.analysis.readers import TextReader
     from exactpack.solvers.riemann import Sod
 
-    study = CodeVerificationStudy(['coarse.dat', 'medium.dat', 'fine.dat'],
-                                  Sod(),
-				  reader=TextReader)
-    
-The study object has some built in plotting routines.  For example,
-to plot the density profiles for all the cases against the exact
-solution::
+    study = Study(['coarse.dat', 'medium.dat', 'fine.dat'],
+                  reference=Sod(),
+                  reader=TextReader)
 
-    study.plot('density')
+The user can then perform and display a convergence fit using one of several routines,
+for example::
 
-The :meth:`~exactpack.analysis.CodeVerificationStudy.convergence`
-method produces a :class:`~exactpack.analysis.CodeVerificationResult`
-object, which also has built-in plotting::
+    from exactpack.analysis import FitConvergenceRate
 
-    study.convergence('density', norm=PointNorm()).plot()
+    fitstudy = FitConvergenceRate(study)
 
-This will generate a convergence plot showing the density error
-computed using a pointwise norm and the best fit convergence rate.
+    print fitstudy.report()
 
+    fitstudy.plot('pressure')
+    plt.show() 
+
+The above works for three convergence fit methods: :class:`~exactpack.analysis.FitConvergenceRate` (uses scipy optimization fit), :class:`~exactpack.analysis.RoacheConvergenceRate`,
+(uses Richardson-extrapolation based method as described in Roache's book), 
+and :class:`~exactpack.analysis.RegressionConvergenceRate` (uses linear regression).
