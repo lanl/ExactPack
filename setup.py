@@ -23,7 +23,7 @@ setup(
     author_email = '',
     license = read('LICENSE.txt'),
     packages = find_packages(),
-#    install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
+#   install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
     ext_modules = [ Extension(name = 'exactpack.solvers.noh._timmes',
                               sources = ['src/timmes/noh/noh.f'] ),
                     Extension(name = 'exactpack.solvers.sedov._timmes',
@@ -70,7 +70,11 @@ setup(
                                          'src/kamm/sedov/param.h'],
                               f2py_options = (['only:'] +
                                               [ 'sedov_kamm_1d' ] + [':'])),
-                  ],
+                    Extension(name = 'exactpack.solvers.heat._dawes',
+                              sources = ['src/dawes/planar_sandwich.f90'],
+                              f2py_options = (['only:'] +
+                                              [ 'planar_sand' ] + [':'] + ['free-form'] + [':'])),
+                            ],
     entry_points = {
         'console_scripts' : [
             'exactpack = exactpack.cmdline:main',
