@@ -364,3 +364,4 @@ class ExactSolution(numpy.recarray):
         
             writer.writerow(self.dtype.names)
             writer.writerows(self)
+

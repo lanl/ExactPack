@@ -15,6 +15,16 @@ References
    *Analytic solutions of hydrodynamics equations*,
    Phys. Fluids A **3** (1991) 757.
 
+.. [Dawes2015]
+  A Dawes, 
+  *3D Multi-Material Polyhedral Methods for Diffusion*, 
+  MultiMat Conference, Warzberg, Germany (2015).    
+   
+.. [Dawes2016]
+   A. Dawes, C. Malone, M. Shashkov,
+   *Some New Verification Test Problems for Multimaterial Diffusion on Meshes that are Non-Aligned with Material Boundaries.*,
+   LA-UR-16-24696, Los Alamos National Laboratory (2016).
+   
 .. [Doebling2015]
    S. Doebling,
    *The Escape of High Explosive Products: An Exact-Solution Problem for Verification of Hydrodynamics Codes*,
@@ -54,7 +64,8 @@ References
    *Evaluation of the Sedov-von Neumann-Taylor Blast Wave Solution*,
    LA-UR-00-6055, Los Alamos National Laboratory (2000).
 
-.. [Kamm2000a] James R. Kamm,
+.. [Kamm2000a]
+   James R. Kamm,
    *Investigation of the Reinicke & Meyer-ter-Vehn Equations: I. The Strong Conduction Case*,
    LA-UR-00-4304, Los Alamos National Laboratory (2000).
 
@@ -64,7 +75,6 @@ References
    and V. Gregory Weirs,
    *Enhanced Verification Test Suite for Physics Simulation Codes*,
    LA-14379, Los Alamos National Laboratory (2008).
-
    
 .. [KaulK22016]
    Ann Kaul,
@@ -81,7 +91,6 @@ References
    *HE Burn Table Verification Problems*,
    LA-UR-11-03096, Los Alamos National Laboratory (2011).
 
-
 .. [Kirkpatrick2004]
    R. Kirkpatrick, C. Wingate, and J.R. Kamm,
    *HE Burn Test Problem*,
@@ -92,6 +101,10 @@ References
    Artificial Viscosity and an Artificial Heat Flux*,
    JCP **72** (1987) 78-120.
 
+.. [Hutchens2009]   
+   G J Hutchens, *A Generalized Set of Heat Conduction Test Problems*,
+   LA-UR-09-01692, Los Alamos National Laboratory (2009).   
+   
 .. [Reinicke1991] P. Reinicke and J. Meyer-ter-Vehn,
    *The point explosion with heat conduction*,
    Phys. Fluids A **3** (1991) 1807.
@@ -105,7 +118,6 @@ References
    Bingjing Su and Gordon L. Olson,
    Benchmark Results for the Non-equilibrium Marshak Diffusion Problem,
    J. Quant. Spectrosc. Radiat. Transfer **56** 337 (1996).
-
       
 .. [Timmes2005]
    Francis X. Timmes, Galen Gisler, and George M. Hrbek,
