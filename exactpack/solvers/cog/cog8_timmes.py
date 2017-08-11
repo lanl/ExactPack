@@ -68,6 +68,6 @@ class Cog8(ExactSolver):
                              names=['position',
                                     'density',
                                     'temperature',
-                                    'sie',
+                                    'specific_internal_energy',
                                     'pressure',
                                     'velocity'])

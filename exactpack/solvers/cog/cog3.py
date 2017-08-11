@@ -71,7 +71,7 @@ class Cog3(ExactSolver):
                                     'velocity',
                                     'temperature',
                                     'pressure',
-                                    'sie'])
+                                    'specific_internal_energy'])
 
 
 class PlanarCog3(Cog3):

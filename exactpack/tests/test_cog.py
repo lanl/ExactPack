@@ -69,7 +69,7 @@ class TestCog1(unittest.TestCase):
             1.59757234e+06, 4.72942746e+03, 4.50867327e+02, 1.00800000e+02
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             2.21885047e+03, 2.21885047e+03, 2.21885047e+03, 2.21885047e+03,
             4.20393552e+02, 4.20393552e+02, 4.20393552e+02, 4.20393552e+02,
             2.14788185e+02, 2.14788185e+02, 2.14788185e+02, 2.14788185e+02,
@@ -91,9 +91,9 @@ class TestCog1(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**6,  gold_pressure[ri, ti]/10**6, places=7)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=5)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=5)
 
     def test_geometry_error_cog1(self):
         """cog1 problem:"""
@@ -142,7 +142,7 @@ class TestCog2(unittest.TestCase):
             5.55947539e+03, 9.13074790e+00, 6.86207368e-01, 1.31835938e-01
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             1.83105469e-01, 1.14440918e-02, 3.73684630e-03, 1.83105469e-03,
             2.92968750e+00, 1.83105469e-01, 5.97895408e-02, 2.92968750e-02,
             8.97216797e+00, 5.60760498e-01, 1.83105469e-01, 8.97216797e-02,
@@ -164,9 +164,9 @@ class TestCog2(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**3,  gold_pressure[ri, ti]/10**3, places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog2(self):
         """cog2 problem:"""
@@ -217,7 +217,7 @@ class TestCog3(unittest.TestCase):
         ]).reshape(npts, npts)
 
         # unphysical sign since gamma < 1
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -1.72800000e-01, -1.72800000e-01, -1.72800000e-01, -1.72800000e-01,
             -2.76480000e+00, -2.76480000e+00, -2.76480000e+00, -2.76480000e+00,
             -8.46720000e+00, -8.46720000e+00, -8.46720000e+00, -8.46720000e+00,
@@ -239,9 +239,9 @@ class TestCog3(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog3(self):
         """cog3 problem:"""
@@ -291,7 +291,7 @@ class TestCog4(unittest.TestCase):
             -1.36028571e+00, -1.36028571e+00, -1.36028571e+00, -1.36028571e+00
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, -8.76928747e+00,
             -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, -3.48009404e+00,
             -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, -2.39643478e+00,
@@ -313,9 +313,9 @@ class TestCog4(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog4(self):
         """cog4 problem:"""
@@ -364,7 +364,7 @@ class TestCog5(unittest.TestCase):
             4.14000000e+00, 4.14000000e+00, 4.14000000e+00, 4.14000000e+00
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -4.60000000e-01, -4.60000000e-01, -4.60000000e-01, -4.60000000e-01,
             -1.84000000e+00, -1.84000000e+00, -1.84000000e+00, -1.84000000e+00,
             -3.22000000e+00, -3.22000000e+00, -3.22000000e+00, -3.22000000e+00,
@@ -386,9 +386,9 @@ class TestCog5(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog5(self):
         """cog5 problem:"""
@@ -437,7 +437,7 @@ class TestCog6(unittest.TestCase):
             1.44781462e-01, 2.19604273e-01, 6.59650080e-01, 9.29908448e+00,
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             3.03877181e-03, 3.72353608e-03, 6.36746703e-03, 2.31481481e-02,
             4.86203490e-02, 5.95765773e-02, 1.01879473e-01, 3.70370370e-01,
             1.48899819e-01, 1.82453268e-01, 3.12005885e-01, 1.13425926e+00,
@@ -459,9 +459,9 @@ class TestCog6(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog6(self):
         """cog6 problem:"""
@@ -510,7 +510,7 @@ class TestCog7(unittest.TestCase):
             8.07562375e-02, 1.23556967e-01, 3.78725944e-01, 5.53532305e+00
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             1.24611898e-05, 2.48745892e-04, 1.36278879e-03, 1.11102725e-02,
             4.04093368e-02, 5.01487465e-02, 8.83007362e-02, 3.37709102e-01,
             1.36614566e-01, 1.68347421e-01, 2.91689485e-01, 1.08539172e+00,
@@ -532,9 +532,9 @@ class TestCog7(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=7)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog7(self):
         """cog7 problem:"""
@@ -584,7 +584,7 @@ class TestCog8(unittest.TestCase):
             1.59757234e+06, 4.72942746e+03, 4.50867327e+02, 1.00800000e+02
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             2.21885047e+03, 6.67333167e+02, 4.10875016e+02, 3.01620857e+02,
             1.39778821e+03, 4.20393552e+02, 2.58835041e+02, 1.90009233e+02,
             1.15992174e+03, 3.48853724e+02, 2.14788185e+02, 1.57674703e+02,
@@ -606,10 +606,10 @@ class TestCog8(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
-            # sie
+            # specific_internal_energy
             scaled = 10**5
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri]/scaled,  gold_sie[ri, ti]/scaled, places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri]/scaled,  gold_specific_internal_energy[ri, ti]/scaled, places=6)
 
     def test_geometry_error_cog8(self):
         """cog8 problem:"""
@@ -658,7 +658,7 @@ class TestCog9(unittest.TestCase):
             -3.30077367e-01, -1.79975960e-01, -1.40891682e-01, -1.20535714e-01
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -1.67410714e-01, -1.04631696e-02, -3.41654519e-03, -1.67410714e-03,
             -2.67857143e+00, -1.67410714e-01, -5.46647230e-02, -2.67857143e-02,
             -8.20312500e+00, -5.12695312e-01, -1.67410714e-01, -8.20312500e-02,
@@ -681,9 +681,9 @@ class TestCog9(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog9(self):
         """cog9 problem:"""
@@ -732,7 +732,7 @@ class TestCog10(unittest.TestCase):
             1.00800000e+02, 1.00800000e+02, 1.00800000e+02, 1.00800000e+02
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             1.40000000e+00, 1.40000000e+00, 1.40000000e+00, 1.40000000e+00,
             2.24000000e+01, 2.24000000e+01, 2.24000000e+01, 2.24000000e+01,
             6.86000000e+01, 6.86000000e+01, 6.86000000e+01, 6.86000000e+01,
@@ -754,9 +754,9 @@ class TestCog10(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog10(self):
         """cog10 problem:"""
@@ -805,7 +805,7 @@ class TestCog11(unittest.TestCase):
             1.59757234e+06, 4.72942746e+03, 4.50867327e+02, 1.00800000e+02
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             2.21885047e+03, 1.38678154e+02, 4.52826626e+01, 2.21885047e+01,
             6.72629683e+03, 4.20393552e+02, 1.37271364e+02, 6.72629683e+01,
             1.05246211e+04, 6.57788816e+02, 2.14788185e+02, 1.05246211e+02,
@@ -827,9 +827,9 @@ class TestCog11(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri]/10**6,  gold_sie[ri, ti]/10**6, places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri]/10**6,  gold_specific_internal_energy[ri, ti]/10**6, places=6)
 
     def test_geometry_error_cog11(self):
         """cog11 problem:"""
@@ -878,7 +878,7 @@ class TestCog12(unittest.TestCase):
             -1.36028571e+00, -1.36028571e+00, -1.36028571e+00, -1.36028571e+00
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -8.76928747e+00, -8.76928747e+00, -8.76928747e+00, -8.76928747e+00,
             -3.48009404e+00, -3.48009404e+00, -3.48009404e+00, -3.48009404e+00,
             -2.39643478e+00, -2.39643478e+00, -2.39643478e+00, -2.39643478e+00,
@@ -900,9 +900,9 @@ class TestCog12(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog12(self):
         """cog12 problem:"""
@@ -951,7 +951,7 @@ class TestCog13(unittest.TestCase):
             2.26997266e+01, 1.41873291e+00, 4.63259726e-01, 2.26997266e-01
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             3.15273980e-02, 5.00466248e-02, 6.03097428e-02, 6.79237200e-02,
             7.94440649e-02, 1.26109592e-01, 1.51971029e-01, 1.71157049e-01,
             1.15368388e-01, 1.83135900e-01, 2.20691786e-01, 2.48553657e-01,
@@ -973,9 +973,9 @@ class TestCog13(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog13(self):
         """cog13 problem:"""
@@ -1024,7 +1024,7 @@ class TestCog14(unittest.TestCase):
             2.42586350e-01, 2.42586350e-01, 2.42586350e-01, 2.42586350e-01
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             3.36925486e-02, 3.36925486e-02, 3.36925486e-02, 3.36925486e-02,
             1.34770194e-01, 1.34770194e-01, 1.34770194e-01, 1.34770194e-01,
             2.35847840e-01, 2.35847840e-01, 2.35847840e-01, 2.35847840e-01,
@@ -1046,9 +1046,9 @@ class TestCog14(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog14(self):
         """cog14 problem:"""
@@ -1097,7 +1097,7 @@ class TestCog16(unittest.TestCase):
             4.91975233e+19, 4.91975233e+19, 4.91975233e+19, 4.91975233e+19
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             7.89745100e-02, 7.89745100e-02, 7.89745100e-02, 7.89745100e-02,
             2.20004173e+00, 2.20004173e+00, 2.20004173e+00, 2.20004173e+00,
             8.42795554e+00, 8.42795554e+00, 8.42795554e+00, 8.42795554e+00,
@@ -1119,9 +1119,9 @@ class TestCog16(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri, ti]/10**20, places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog16(self):
         """cog16 problem:"""
@@ -1170,7 +1170,7 @@ class TestCog17(unittest.TestCase):
             -1.70167362e-09, -1.74251379e-06, -2.86000286e-05, -1.70167362e-04
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -2.10000000e+00, -1.31250000e-01, -4.28571429e-02, -2.10000000e-02,
             -3.36000000e+01, -2.10000000e+00, -6.85714286e-01, -3.36000000e-01,
             -1.02900000e+02, -6.43125000e+00, -2.10000000e+00, -1.02900000e+00,
@@ -1192,9 +1192,9 @@ class TestCog17(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri, ti]/10**20, places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog17(self):
         """cog17 problem:"""
@@ -1243,7 +1243,7 @@ class TestCog18(unittest.TestCase):
             -5.77764402e-01, -6.23515615e-01, -7.62476584e-01, -1.23717915e+00
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             -2.77830566e-03, -3.40437585e-03, -5.82168414e-03, -2.11640212e-02,
             -4.44528905e-02, -5.44700136e-02, -9.31469463e-02, -3.38624339e-01,
             -1.36136977e-01, -1.66814417e-01, -2.85262523e-01, -1.03703704e+00,
@@ -1265,9 +1265,9 @@ class TestCog18(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri]/10**4,  gold_pressure[ri, ti]/10**4, places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog18(self):
         """cog18 problem:"""
@@ -1317,7 +1317,7 @@ class TestCog19(unittest.TestCase):
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             0.00000000e+00, 2.64500000e+00, 2.64500000e+00, 2.64500000e+00,
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 2.64500000e+00,
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
@@ -1339,9 +1339,9 @@ class TestCog19(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog19(self):
         """cog19 problem:"""
@@ -1391,7 +1391,7 @@ class TestCog20(unittest.TestCase):
             0.00000000e+00, 0.0000000000e+00, 0.00000000000e+00, 0.00000000000e+00,
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             0.00000000e+00, 3.4155475200e+00, 4.23810287000e+00, 5.39795918000e+00,
             0.00000000e+00, 0.0000000000e+00, 0.00000000000e+00, 5.39795918000e+00,
             0.00000000e+00, 0.0000000000e+00, 0.00000000000e+00, 0.00000000000e+00,
@@ -1413,9 +1413,9 @@ class TestCog20(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog20(self):
         """cog20 problem:"""
@@ -1465,7 +1465,7 @@ class TestCog21(unittest.TestCase):
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
         ]).reshape(npts, npts)
 
-        gold_sie = np.array([
+        gold_specific_internal_energy = np.array([
             2.90000000e-01, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
@@ -1487,6 +1487,6 @@ class TestCog21(unittest.TestCase):
             # pressure
             for ri in range(npts):
                 self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # sie
+            # specific_internal_energy
             for ri in range(npts):
-                self.assertAlmostEqual(solrt.sie[ri],  gold_sie[ri, ti], places=6)
+                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)

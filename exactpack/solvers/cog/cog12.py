@@ -90,7 +90,7 @@ class Cog12(ExactSolver):
                                     'velocity',
                                     'temperature',
                                     'pressure',
-                                    'sie'])
+                                    'specific_internal_energy'])
 
 
     

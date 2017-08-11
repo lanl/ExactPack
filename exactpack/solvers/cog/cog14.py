@@ -99,7 +99,7 @@ class Cog14(ExactSolver):
                                     'velocity',
                                     'temperature',
                                     'pressure',
-                                    'sie'])
+                                    'specific_internal_energy'])
 
 
 class PlanarCog14(Cog14):

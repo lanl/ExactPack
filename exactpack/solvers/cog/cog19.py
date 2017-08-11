@@ -89,7 +89,7 @@ class Cog19(ExactSolver):
                                     'velocity',
                                     'temperature',
                                     'pressure',
-                                    'sie'])
+                                    'specific_internal_energy'])
     
 class PlanarCog19(Cog19):
     """The planar Cog19 problem.
