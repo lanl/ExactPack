@@ -14,7 +14,7 @@ import scipy.stats
 
 class PointNorm(object):
     r"""Pointwise error norm.
-        
+
     Returns a callable which computes the pointwise error norm according to
     the formula:
 
@@ -24,15 +24,24 @@ class PointNorm(object):
 
     where :math:`N` is the number of points, and :math:`n` is the
     order of the norm, *ord*.
+
+    .. note::
+
+        The norm is normalized by the number of points.  This makes
+        this norm suitable for intrinsic properties, like density or
+        velocity, and not for extrinsic properties, like mass or
+        momentum.
     """
+
     def __init__(self, ord=1):
         """*ord* is the order of the norm."""
         self.ord = ord
-    
-    def __call__(self, data):
-        return numpy.linalg.norm(data, self.ord)/(len(data)**(1.0/self.ord))
 
-        
+    def __call__(self, data, var):
+        return numpy.linalg.norm(data[var], self.ord) \
+            / (len(data[var])**(1.0 / self.ord))
+
+
 class CellNorm(object):
     r"""Volume weighted cell error norm.
 
@@ -41,25 +50,37 @@ class CellNorm(object):
 
     ..  math::
 
-        L_n (d) = \left[ \frac{\sum_i | w_i d_i |^n}{\sum_i w_i^n} \right]^{1/n}
-    
+        L_n (d) = \left[ \sum_i | w_i d_i |^n \right]^{1/n}
+
     where :math:`n` is the order of the norm, *ord*.  The weights
     :math:`w_i` are chosen based on the  dimensionality of the problem:
     For 1D Cartesian, they are the zone lengths, for 2D Cartesian, they
     are the zone areas, and for 2D axisymmetric and 3D they are the zone
     volumes.
-    """
-    def __init__(self, ord=1):
-        """*ord* is the order of the norm."""
-        self.ord = ord
 
-    def __call__(self, data):
-        return numpy.linalg.norm(data[var]*data.cell_volume, self.ord)/ \
-               numpy.linalg.norm(data.cell_volume, self.ord)
+    .. note::
+
+        The default weights are the cell volumes.  This is only valid
+        intrinsic properties, like density or velocity, and not for
+        extrinsic properties, like mass or momentum.
+
+        In general, if the weights are extrinsic properties, such as
+        mass or volume, then the norm should be used on intrinsic
+        variables.  If the weights are intrinsic properties, then the
+        norm should be used on extrinsic variables.
+    """
+
+    def __init__(self, weights='cell_volume', ord=1):
+        """*ord* is the order of the norm and *weights* is the name of the
+        variable to use for the weights."""
+        self.ord = ord
+        self.weights = weights
+
+    def __call__(self, data, var):
+        return numpy.linalg.norm(data[var] * data[self.weights], self.ord)
 
 
 class Study(object):
-
     """Container object for building parameter studies.
 
     The :class:`Study` is a base class which loads data from multiple runs to
@@ -101,6 +122,7 @@ class Study(object):
           or ['x_position', 'r_position', 'radius'][self.reference.geometry-1]
 
     def __getitem__(self, index):
+        """Return a new study with only the specificed data sets."""
         try:
             datasets = [ self.datasets[i] for i in index ]
             study_parameters = [ self.study_parameters[i] for i in index ]
@@ -270,21 +292,26 @@ class ComputeNorms(FilterStudy):
         super(ComputeNorms, self).__init__(study)
     
     def filter(self, dataset):
-        dataset.errors = { varname[6:]: self.norm(dataset[varname])
+        dataset.errors = { varname[6:]: self.norm(dataset, varname)
                            for varname in dataset.dtype.names
                            if varname.startswith("Error:") }
         return dataset
 
-    def plot(self, var, label=None, **kwargs):
+    def plot(self, var, *args, **kwargs):
         """Plot the norms.
 
-        Plot the error norms of *var* versus the :attr:`study_parameters`.
+        Plot the error norms of *var* versus the
+        :attr:`~Study.study_parameters`.  The remaining arguments are
+        passed to :func:`matplotlib.pyplot.plot`.
+
         """
+        # If the user doesn't provide a label, use the variable name.
+        kwargs.setdefault('label', var)
         plotret = plt.loglog(
             self.study_parameters,
-            [ dataset.errors[var] for dataset in self.datasets ],
-            's',
-            label=label or var,
+            [dataset.errors[var] for dataset in self.datasets],
+            # If the user doesn't provide a format, use squares.
+            args[0] if args else "s",
             **kwargs
             )
         lsize = 18
@@ -313,21 +340,44 @@ class GlobalConvergenceRate(object):
         self.exact = ComputeExact(self.study)
         self.errors = ComputeErrors(self.exact)
         self.norms = ComputeNorms(self.errors, norm)
+        self.domain = domain
 
     def __getitem__(self, index):
         return self.__class__(
             self.study[index],
-            norm = self.norm,
-            domain = self.domain,
-            fiducials = self.fiducials,
-            )
-    
-    def plot_fiducial(self, var):
+            norm=self.norms.norm,
+            domain=self.domain,
+            fiducials=self.fiducials,
+        )
+
+    def p(self, var):
+        """The convergence rate for *var*."""
+        return NotImplemented
+
+    def goodness(self, var):
+        """The goodness of fit for *var*."""
+        return NotImplemented
+
+    def plot_fit(self, *args, **kwargs):
+        """Plot the fit.
+
+        Since :class:`GlobalConvergenceRate` is a base class, there is
+        nothing to plot.
+
+        """
+        return
+
+    def plot_fiducial(self, var,
+                      *args, **kwargs):
         """Plot the fiducual curve.
 
-        Plot a fiducial line with slope (in log-log coordinates) specified in
-        the :attr:`fiducials` dictionary, for comparision to the fitted data.
+        Plot a fiducial line with slope (in log-log coordinates)
+        specified in the :attr:`fiducials` dictionary, for comparision
+        to the fitted data.
+
         """
+        kwargs['label'] = kwargs.get(
+            'label', 'convergence fiducial: slope = {:4.3f}').format(self.fiducials[var])
         n = len(self.norms.study_parameters)
 
         if n == 0:
@@ -340,15 +390,34 @@ class GlobalConvergenceRate(object):
             left = sorted(self.norms.study_parameters)[(n-1)/2]
             right = 2*left
 
-        plt.plot([left, right, right, left],
-                 [bottom, bottom, bottom*(right/left)**self.fiducials[var], bottom],
-                 'k-',
-                 label='convergence fiducial: slope = {:4.3f}'.format(self.fiducials[var]))
-                
-    def plot(self, var, label=None, fiducial=True):
-        if fiducial and var in self.fiducials:
+        return plt.plot([left, right, right, left],
+                        [bottom, bottom,
+                         bottom * (right / left)**self.fiducials[var], bottom],
+                        # If the user doesn't provide a format, use a black line.
+                        args[0] if args else 'k-',
+                        **kwargs
+                        )
+
+    def plot(self, var, *args, **kwargs):
+        """Plot the convergence study.
+
+        Plot the convergence study.  A fiducial line is plotted if a
+        fiducial ``p`` is available.  If a symbol is specified, it is
+        used for the data; the fit is plotted with a line only in the
+        same color as the data.  If more control over the plotting
+        parameters is desired, :meth:`plot` method of the :attr:`norms`
+        attribute and the :meth:`plot_fiducial` and :meth:`plot_fit`
+        methods can be called directly.
+
+        """
+        if var in self.fiducials:
             self.plot_fiducial(var)
-        return self.norms.plot(var, label=label)
+        line, = self.norms.plot(var, *args, **dict(kwargs,
+                                                   label=None,
+                                                   linestyle='None'))
+        self.plot_fit(var, *args, **dict(kwargs,
+                                         marker='None',
+                                         color=line.get_color()))
 
         
 class FitConvergenceRate(GlobalConvergenceRate):
@@ -359,6 +428,8 @@ class FitConvergenceRate(GlobalConvergenceRate):
     a optimization procedure to fit the study data to a specified fitting
     function.
     """
+    label = "{var}: p={popt[0]:4.3f}, std={pcov[0][0]:4.3f}"
+
     def __init__(self, study, fitting_function=lambda n, p, a: a*n**p,
                  *args, **kwargs):
         """Create a :class:`FitConvergenceRate` object.
@@ -385,22 +456,26 @@ class FitConvergenceRate(GlobalConvergenceRate):
                 [ dataset.errors[varname] for dataset in self.norms.datasets ]
                 )
 
-    def plot(self, var, label="{var}: p={popt[0]:4.3f}, std={pcov[0][0]:4.3f}", **kwargs):
+    def plot_fit(self, var,
+                 *args, **kwargs):
         """Create a standard convergence rate plot.
 
-        This method uses :func:`matplotlib.pyplot.plot` to plot the error norms and the best
-        fit converegence rate.  It is necessary to do an explicit
-        :func:`~matplotlib.pyplot.show` to display the plot.
+        This method uses :func:`matplotlib.pyplot.plot` to plot the
+        error norms and the best fit converegence rate.  It is
+        necessary to do an explicit :func:`~matplotlib.pyplot.show` to
+        display the plot.  *var* is the variable to plot, and *label*
+        is a label string to for labeling the plot.  The string will be
+        formatted with the variable name ``var`` and  ``popt`` and
+        ``pcov`` returned from :func:`scipy.optimize.curve_fit` passed
+        as formatting values.
+
         """
-        line, = super(FitConvergenceRate, self).plot(var)
-        # Remove the label, since the fit line will be labeled
-        line.set_label("")
-        # Draw the fit line, in matching color
+        kwargs['label'] = kwargs.get('label', self.label) \
+            .format(var=var, popt=self.fits[var][0], pcov=self.fits[var][1])
         plt.plot(self.norms.study_parameters,
-                 self.fitting_function(self.norms.study_parameters, *self.fits[var][0]),
-                 color=line.get_color(),
-                 label=label.format(var=var, popt=self.fits[var][0], pcov=self.fits[var][1]),
-                 **kwargs
+                 self.fitting_function(self.norms.study_parameters,
+                                       *self.fits[var][0]),
+                 *args, **kwargs
                  )
         plt.legend()
 
@@ -447,6 +522,8 @@ class RoacheConvergenceRate(GlobalConvergenceRate):
        the grids are not in order, unexpected results may be
        obtained.
     """
+    label = "{var}: p={pmin:4.2g}-{pmax:4.2g}"
+
     def __init__(self,  *args, **kwargs):
         """Create a :class:`RoacheConvergenceRate` object."""
         super(RoacheConvergenceRate, self).__init__(*args, **kwargs)
@@ -482,11 +559,26 @@ class RoacheConvergenceRate(GlobalConvergenceRate):
         """
         return numpy.array([ fit[0] for fit in self.fits[var] ])
     
-    def plot(self, var):
-        p = self.p(var)
-        line, = super(RoacheConvergenceRate, self).plot(
-            var, label="{}: p={:4.2g}-{:4.2g}".format(var, min(p), max(p))
-            )
+    def plot_fit(self, var, *args, **kwargs):
+        """Create a standard convergence rate plot.
+
+        This method uses :func:`matplotlib.pyplot.plot` to plot the
+        error norms and the best fit converegence rate.  It is
+        necessary to do an explicit :func:`~matplotlib.pyplot.show` to
+        display the plot.  *var* is the variable to plot, and *label*
+        is a label string to for labeling the plot.  The string will be
+        formatted with the variable name ``var`` and the minimum and
+        maximum :math:`p` values ``pmin`` and ``pmax`` passed as
+        formatting values.
+
+        """
+        kwargs['label'] = kwargs.get('label', self.label). \
+            format(var=var, pmin=min(self.p(var)), pmax=max(self.p(var)))
+        plt.plot(self.study.study_parameters,
+                 [dataset.errors[var] for dataset in self.norms.datasets],
+                 *args, **kwargs
+                 )
+        plt.legend()
         
     def __str__(self):
         """Return a table with the fits as a string.
@@ -527,6 +619,8 @@ class RegressionConvergenceRate(GlobalConvergenceRate):
     by applying linear regression to the logarithm of the errors and
     deltas.
     """
+    label = "{var}: p={slope:4.3f}, cor={rvalue:4.3f}"
+
     def __init__(self, *args, **kwargs):
         """Create a :class:`RegressionConvergenceRate` object."""
         super(RegressionConvergenceRate, self).__init__(*args, **kwargs)
@@ -544,22 +638,27 @@ class RegressionConvergenceRate(GlobalConvergenceRate):
                 numpy.log(numpy.array([dataset.errors[varname] for dataset in self.norms.datasets]))
                 )
 
-    def plot(self, var, label="{var}: p={slope:4.3f}, cor={rvalue:4.3f}", **kwargs):
-        line, = super(RegressionConvergenceRate, self).plot(var)
-        # Remove the label, since the fit line will be labeled
-        line.set_label("")
-        # Draw the fit line, in matching color
+    def plot_fit(self, var, *args, **kwargs):
+        """Create a standard convergence rate plot.
+
+        This method uses :func:`matplotlib.pyplot.plot` to plot the
+        error norms and the best fit converegence rate.  It is
+        necessary to do an explicit :func:`~matplotlib.pyplot.show` to
+        display the plot.  *var* is the variable to plot, and *label*
+        is a label string to for labeling the plot.  The string will be
+        formatted with the variable name ``var`` and  ``popt`` and
+        ``pcov`` returned from :func:`scipy.optimize.curve_fit` passed
+        as formatting values.
+
+        """
+        kwargs['label'] = kwargs.get('label', self.label) \
+            .format(var=var, slope=self.fits[var][0], intercept=self.fits[var][1],
+                    rvalue=self.fits[var][2], pvalue=self.fits[var][3],
+                    stderr=self.fits[var][4])
         plt.plot(self.norms.study_parameters,
                  math.exp(self.fits[var][1])
-                 *self.norms.study_parameters**self.fits[var][0],
-                 color=line.get_color(),
-                 label=label.format(var=var,
-                                    slope=self.fits[var][0],
-                                    intercept=self.fits[var][1],
-                                    rvalue=self.fits[var][2],
-                                    pvalue=self.fits[var][3],
-                                    stderr=self.fits[var][4]),
-                 **kwargs)
+                 * self.norms.study_parameters**self.fits[var][0],
+                 *args, **kwargs)
         plt.legend()
 
     def p(self, var):
