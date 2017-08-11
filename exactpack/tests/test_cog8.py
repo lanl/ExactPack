@@ -65,7 +65,7 @@ class TestCog8(unittest.TestCase):
         t = 0.6
         solrt = sol(r,t)
         scale = 10**15
-        self.assertAlmostEqual(solrt.sie[0]/scale,357174945635878.8/scale,places=7)
+        self.assertAlmostEqual(solrt.specific_internal_energy[0]/scale,357174945635878.8/scale,places=7)
 
     def test_sie(self):
         """cog8 problem: sie"""
@@ -73,7 +73,7 @@ class TestCog8(unittest.TestCase):
         r = numpy.array([0.1, 0.2])
         t = 0.6
         solrt = sol(r,t)
-        self.assertAlmostEqual(solrt.sie[0],358807872802985.2)
+        self.assertAlmostEqual(solrt.specific_internal_energy[0],358807872802985.2)
 
     def test_pressure_timmes(self):
         """cog8 problem: pressure timmes"""

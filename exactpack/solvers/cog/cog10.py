@@ -86,7 +86,7 @@ class Cog10(ExactSolver):
                                     'velocity',
                                     'temperature',
                                     'pressure',
-                                    'sie'])
+                                    'specific_internal_energy'])
 
     
 class CylindricalCog10(Cog10):

@@ -75,7 +75,7 @@ class Cog6(ExactSolver):
                                     'velocity',
                                     'temperature',
                                     'pressure',
-                                    'sie'])
+                                    'specific_internal_energy'])
     
 class PlanarCog6(Cog6):
     """The planar Cog6 problem.
