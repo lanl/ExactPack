@@ -16,6 +16,7 @@ The current development team at Los Alamos National Laboratory includes:
 * C Nathan Woods
 * John Walter
 * Kyle Hickmann
+* Gowri Srinivasan
 
 Past contributors at Los Alamos National Laboratory include:
 

@@ -1,6 +1,13 @@
 Release Notes for ExactPack
 ===========================
 
+Version 1.6.0 (Aug 2017)
+-------------------------
+
+* Added solver for Uniform Collapse problem (a.k.a. Noh2, Shockless Noh)
+* Added solvers for heat conduction problems
+* Added additional methods to fit convergence rate, and refactored verification analysis syntax
+
 Version 1.5.3 (Mar 2017)
 -------------------------
 
