@@ -11,6 +11,7 @@ ExactPack is designed to be an open project, readily expandable to include new t
 
 * Hydrodynamics
   * Noh problem 
+  * Uniform collapse problem (a.k.a. Noh2, Shockless Noh)
   * Sedov problem 
   * Several common shock tube problems (Sod, Einfeldt, Stationary Contact, Slow Shock, Shock Contact Shock, LeBlanc)
   * Shock tube problem with JWL equation of state
@@ -30,6 +31,9 @@ ExactPack is designed to be an open project, readily expandable to include new t
   * Su-Olson problem
 * Solid mechanics
   * Blake problem
+* Heat Conduction
+  * Planar sandwich
+  * Cylindrical sandwich
 
 The analysis capabilities of ExactPack include the import of data from computational physics codes, calculation of error norms between exact solutions and numerical results, and the calculation of spatial convergence rates. These tools follow the standards defined by the American Society of Mechanical Engineers (ASME).
 
@@ -66,8 +70,10 @@ Francis X. Timmes, Galen Gisler, George Hrbek, *Automated analyses of the Tri-La
 
 M. Gehmeyr, B. Cheng, D. Mihalas, *Noh's Constant-Velocity Shock Problem Revisited*, Shock Waves, **7** 255 (1997).
 
-#### The Sedov Problem
+#### Uniform collapse problem (a.k.a. Noh2, Shockless Noh)
+W. F. Noh, *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*, Journal of Computational Physics, **72** (1978), pp 78-120.
 
+#### The Sedov Problem
 L. I. Sedov, *Similarity and Dimensional Methods in Mechanics*, Academic Press, New York, NY, p. 146 ff. (1959).
 
 #### The Riemann Problem
@@ -110,6 +116,11 @@ F. G. Blake, *Spherical Wave Propagation in Solid Media*, The Journal of the Aco
 G. J. Hutchens, *An Analysis of the Blake Problem*, Los Alamos report, LA-UR-05-8737 (2005).
 
 #### Detonation Shock Dynamics Problems
-
 J.B. Bdzil, R. J. Henninger, and J. W. Walter, *Test Problems for DSD2D*, LA-14277 (2006).
 
+#### Heat Conduction Problems
+A Dawes, *3D Multi-Material Polyhedral Methods for Diffusion*, MultiMat Conference, Warzberg, Germany (2015).    
+
+A. Dawes, C. Malone, M. Shashkov, *Some New Verification Test Problems for Multimaterial Diffusion on Meshes that are Non-Aligned with Material Boundaries.*, LA-UR-16-24696, Los Alamos National Laboratory (2016).
+
+G J Hutchens, *A Generalized Set of Heat Conduction Test Problems*, LA-UR-09-01692, Los Alamos National Laboratory (2009).   
