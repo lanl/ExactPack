@@ -54,7 +54,7 @@ class Cog10(ExactSolver):
             raise ValueError("geometry must be 2, or 3")
 
         if self.beta < 1.0 or self.beta > 3.0:
-            print "*** warning: beta lies outside range [1,3] ***"
+            print("*** warning: beta lies outside range [1,3] ***")
         
     def _run(self, r, t):
 
@@ -62,7 +62,7 @@ class Cog10(ExactSolver):
         k = self.geometry - 1.
         alpha = self.beta + 4 - 1 / k
         if alpha < -2.0 or alpha > -1.0:
-            print "*** warning: alpha lies outside range [-2,-1] ***"
+            print("*** warning: alpha lies outside range [-2,-1] ***")
         c = 2.997e10   # speed of light [cm/s]
         a = 1.3720e+02  # erg cm^-3 ev^-4
         c1 = 4 * c * self.lambda0 * a / 3
