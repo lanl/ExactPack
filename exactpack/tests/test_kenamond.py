@@ -125,25 +125,25 @@ class TestKenamond1(unittest.TestCase):
     def test_geometry_error(self):
         """Test for valid value of geometry."""
 
-        self.assertRaisesRegexp(ValueError, "geometry must be 2 or 3",
+        self.assertRaisesRegex(ValueError, "geometry must be 2 or 3",
                                 Kenamond1, geometry=1)
 
     def test_D_neg_error(self):
         """Test for valid value of HE detonation velocity, :math:`D`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity must be > 0",
+        self.assertRaisesRegex(ValueError, "Detonation velocity must be > 0",
                                 Kenamond1, D=-1.0)
 
     def test_D_zero_error(self):
         """Test for valid value of HE detonation velocity, :math:`D`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity must be > 0",
+        self.assertRaisesRegex(ValueError, "Detonation velocity must be > 0",
                                 Kenamond1, D=0.0)
 
     def test_detspec_2d_error(self):
         """Test for valid geometry of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator location and geometry " +
                                 "dimensions must be compatible",
                                 Kenamond1, x_d=(0.0, 0.0, 0.0))
@@ -151,7 +151,7 @@ class TestKenamond1(unittest.TestCase):
     def test_detspec_3d_error(self):
         """Test for valid geometry of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator location and geometry " +
                                 "dimensions must be compatible",
                                 Kenamond1, geometry=3, x_d=(0.0, 0.0))
@@ -497,26 +497,26 @@ class TestKenamond2(unittest.TestCase):
     def test_geometry_error(self):
         """Test for valid value of geometry."""
 
-        self.assertRaisesRegexp(ValueError, "geometry must be 2 or 3",
+        self.assertRaisesRegex(ValueError, "geometry must be 2 or 3",
                                 Kenamond2, geometry=1)
 
     def test_R_neg_error(self):
         """Test for valid value of inner radius, :math:`R`."""
 
-        self.assertRaisesRegexp(ValueError, "Inner HE radius must be > 0",
+        self.assertRaisesRegex(ValueError, "Inner HE radius must be > 0",
                                 Kenamond2, R=-1.0)
 
     def test_R_zero_error(self):
         """Test for valid value of inner radius, :math:`R`."""
 
-        self.assertRaisesRegexp(ValueError, "Inner HE radius must be > 0",
+        self.assertRaisesRegex(ValueError, "Inner HE radius must be > 0",
                                 Kenamond2, R=0.0)
 
     def test_D1_neg_error(self):
         """Test for valid value of inner region HE detonation velocity,
         :math:`D_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 1 must be > 0",
                                 Kenamond2, D1=-1.0)
 
@@ -524,7 +524,7 @@ class TestKenamond2(unittest.TestCase):
         """Test for valid value of inner region HE detonation velocity,
         :math:`D_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 1 must be > 0",
                                 Kenamond2, D1=0.0)
 
@@ -532,7 +532,7 @@ class TestKenamond2(unittest.TestCase):
         """Tests for valid value of outer region HE detonation velocity,
         :math:`D_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 2 must be > 0",
                                 Kenamond2, D2=-1.0)
 
@@ -540,7 +540,7 @@ class TestKenamond2(unittest.TestCase):
         """Tests for valid value of outer region HE detonation velocity,
         :math:`D_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 2 must be > 0",
                                 Kenamond2, D2=0.0)
 
@@ -548,21 +548,21 @@ class TestKenamond2(unittest.TestCase):
         """Tests for valid value of outer region HE detonation velocity,
         :math:`D_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "D1 must be > D2",
                                 Kenamond2, D2=3.0)
 
     def test_dets_notenough_error(self):
         """Tests for valid number of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "4 detonator locations must be specified",
                                 Kenamond2, dets=[10.0, 5.0, -5.0])
 
     def test_dets_toomany_error(self):
         """Tests for valid number of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "4 detonator locations must be specified",
                                 Kenamond2,
                                 dets=[10.0, 5.0, -5.0, -10.0, -15.0])
@@ -570,7 +570,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_2d_d1_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 1 must be in outer HE region",
                                 Kenamond2,
                                 dets=[1.0, 5.0, -5.0, -10.0])
@@ -578,7 +578,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_2d_d2_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 2 must be in outer HE region",
                                 Kenamond2,
                                 dets=[10.0, 2.0, -5.0, -10.0])
@@ -586,7 +586,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_2d_d4_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 4 must be in outer HE region",
                                 Kenamond2,
                                 dets=[10.0, 5.0, -3.0, -10.0])
@@ -594,7 +594,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_2d_d5_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 5 must be in outer HE region",
                                 Kenamond2,
                                 dets=[10.0, 5.0, -5.0, -1.0])
@@ -602,7 +602,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_3d_d1_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 1 must be in outer HE region",
                                 Kenamond2, geometry=3,
                                 dets=[1.0, 5.0, -5.0, -10.0])
@@ -610,7 +610,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_3d_d2_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 2 must be in outer HE region",
                                 Kenamond2, geometry=3,
                                 dets=[10.0, 2.0, -5.0, -10.0])
@@ -618,7 +618,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_3d_d4_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 4 must be in outer HE region",
                                 Kenamond2, geometry=3,
                                 dets=[10.0, 5.0, -3.0, -10.0])
@@ -626,7 +626,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dets_3d_d5_error(self):
         """Tests for valid location of detonators, **dets**."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator 5 must be in outer HE region",
                                 Kenamond2, geometry=3,
                                 dets=[10.0, 5.0, -5.0, -1.0])
@@ -634,14 +634,14 @@ class TestKenamond2(unittest.TestCase):
     def test_dettimes_notenough_error(self):
         """Tests for valid number of detonation times, :math:`t_{d_i}`."""
 
-        self.assertRaisesRegexp(ValueError, "5 detonation times must " +
+        self.assertRaisesRegex(ValueError, "5 detonation times must " +
                                 "be specified", Kenamond2,
                                 t_d=[2.0, 1.0, 0.0, 1.0])
 
     def test_dettimes_toomany_error(self):
         """Tests for valid number of detonation times, :math:`t_{d_i}`."""
 
-        self.assertRaisesRegexp(ValueError, "5 detonation times must " +
+        self.assertRaisesRegex(ValueError, "5 detonation times must " +
                                 "be specified", Kenamond2,
                                 t_d=[2.0, 1.0, 0.0, 1.0, 2.0, 3.0])
 
@@ -650,35 +650,35 @@ class TestKenamond2(unittest.TestCase):
     def test_dettimes_2d_t1_error(self):
         """Tests for valid detonation times, :math:`t_{d_1}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 1 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 1 must be " +
                                 "no less than -5.5",
                                 Kenamond2, t_d=[-7.0, 1.0, 0.0, 1.0, 2.0])
 
     def test_dettimes_2d_t2_error(self):
         """Tests for valid detonation times, :math:`t_{d_2}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 2 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 2 must be " +
                                 "no less than -0.5",
                                 Kenamond2, t_d=[2.0, -1.0, 0.0, 1.0, 2.0])
 
     def test_dettimes_2d_t4_error(self):
         """Tests for valid detonation times, :math:`t_{d_4}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 4 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 4 must be " +
                                 "no less than -0.5",
                                 Kenamond2, t_d=[2.0, 1.0, 0.0, -1.0, 2.0])
 
     def test_dettimes_2d_t5_error(self):
         """Tests for valid detonation times, :math:`t_{d_5}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 5 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 5 must be " +
                                 "no less than -5.5",
                                 Kenamond2, t_d=[2.0, 1.0, 0.0, 1.0, -7.0])
 
     def test_dettimes_3d_t1_error(self):
         """Tests for valid detonation times, :math:`t_{d_1}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 1 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 1 must be " +
                                 "no less than -5.5",
                                 Kenamond2, geometry=3,
                                 t_d=[-7.0, 1.0, 0.0, 1.0, 2.0])
@@ -686,7 +686,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dettimes_3d_t2_error(self):
         """Tests for valid detonation times, :math:`t_{d_2}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 2 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 2 must be " +
                                 "no less than -0.5",
                                 Kenamond2, geometry=3,
                                 t_d=[2.0, -1.0, 0.0, 1.0, 2.0])
@@ -694,7 +694,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dettimes_3d_t4_error(self):
         """Tests for valid detonation times, :math:`t_{d_3}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 4 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 4 must be " +
                                 "no less than -0.5",
                                 Kenamond2, geometry=3,
                                 t_d=[2.0, 1.0, 0.0, -1.0, 2.0])
@@ -702,7 +702,7 @@ class TestKenamond2(unittest.TestCase):
     def test_dettimes_3d_t5_error(self):
         """Tests for valid detonation times, :math:`t_{d_4}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation time 5 must be " +
+        self.assertRaisesRegex(ValueError, "Detonation time 5 must be " +
                                 "no less than -5.5",
                                 Kenamond2, geometry=3,
                                 t_d=[2.0, 1.0, 0.0, 1.0, -7.0])
@@ -974,62 +974,62 @@ class TestKenamond3(unittest.TestCase):
     def test_geometry_error(self):
         """Test for valid value of geometry."""
 
-        self.assertRaisesRegexp(ValueError, "geometry must be 2 or 3",
+        self.assertRaisesRegex(ValueError, "geometry must be 2 or 3",
                                 Kenamond3, geometry=1)
 
     def test_R_neg_error(self):
         """Test for valid value of inner radius, :math:`R`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inert obstacle radius must be > 0",
                                 Kenamond3, R=-1.0)
 
     def test_R_zero_error(self):
         """Test for valid value of inner radius, :math:`R`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inert obstacle radius must be > 0",
                                 Kenamond3, R=0.0)
 
     def test_D_neg_error(self):
         """Test for valid value of HE detonation velocity, :math:`D`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity must be > 0",
                                 Kenamond3, D=-1.0)
 
     def test_D_zero_error(self):
         """Test for valid value of HE detonation velocity, :math:`D`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity must be > 0",
                                 Kenamond3, D=0.0)
 
     def test_detgeom_2d_error(self):
         """Tests for valid geometry of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonator location and " +
+        self.assertRaisesRegex(ValueError, "Detonator location and " +
                                 "geometry dimensions must be compatible",
                                 Kenamond3, x_d=(0.0, 0.0, 0.0))
 
     def test_detgeom_3d_error(self):
         """Tests for valid geometry of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonator location and " +
+        self.assertRaisesRegex(ValueError, "Detonator location and " +
                                 "geometry dimensions must be compatible",
                                 Kenamond3, geometry=3, x_d=(0.0, 0.0))
 
     def test_detloc_2d_error(self):
         """Tests for valid location of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator must be outside of inert region",
                                 Kenamond3, x_d=(0.0, 1.0))
 
     def test_detloc_3d_error(self):
         """Tests for valid location of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator must be outside of inert region",
                                 Kenamond3, geometry=3, x_d=(0.0, 0.0, 1.0))
 

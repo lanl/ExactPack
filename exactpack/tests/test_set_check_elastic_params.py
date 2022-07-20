@@ -55,7 +55,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         args = [prmcase, 'lame_mod', 0.0, 'shear_mod', 0.0, dbg_prm]
         kwargs = {}
         repatrn = 'Given or calculated values of lame_mod.*and shear_mod.*'
-        self.assertRaisesRegexp(ValueError, repatrn,
+        self.assertRaisesRegex(ValueError, repatrn,
                                 elas_prms_mod.check_ii, *args, **kwargs)
 
     def test_check_iii(self):
@@ -65,7 +65,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         args = [prmcase, 'shear_mod', 0.0, 'bulk_mod', 0.0, dbg_prm]
         kwargs = {}
         repatrn = 'Given or calculated values of shear_mod.*and bulk_mod.*'
-        self.assertRaisesRegexp(ValueError, repatrn,
+        self.assertRaisesRegex(ValueError, repatrn,
                                 elas_prms_mod.check_iii, *args, **kwargs)
 
     def test_check_iv(self):
@@ -75,7 +75,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         args = [prmcase, 'shear_mod', 0.0, 'poisson_ratio', 1.0, dbg_prm]
         kwargs = {}
         repatrn = 'Given or calculated values of shear_mod.*and poisson.*'
-        self.assertRaisesRegexp(ValueError, repatrn,
+        self.assertRaisesRegex(ValueError, repatrn,
                                 elas_prms_mod.check_iv, *args, **kwargs)
 
     def test_check_v(self):
@@ -85,7 +85,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         args = [prmcase, 'youngs_mod', 0.0, 'poisson_ratio', 1.0, dbg_prm]
         kwargs = {}
         repatrn = 'Given or calculated values of youngs_mod.*and poisson.*'
-        self.assertRaisesRegexp(ValueError, repatrn,
+        self.assertRaisesRegex(ValueError, repatrn,
                                 elas_prms_mod.check_v, *args, **kwargs)
 
     #
@@ -103,7 +103,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         long_val = 35.0e9  # will produce cmplx poisson_mod w/ dflt youngs_mod
         kwargs = dict(zip(('long_mod', 'youngs_mod'),
                           (long_val,  dflt_vals[dflt_order['youngs_mod']])))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, '.*complex value for Poisson.*',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -121,7 +121,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         youngs_val = 3 * dflt_vals[dflt_order['shear_mod']]
         kwargs = dict(zip(('youngs_mod', 'shear_mod'),
                           (youngs_val, dflt_vals[dflt_order['shear_mod']])))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, '.*NaN value for the Lame.*',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -136,7 +136,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         youngs_val = 9 * dflt_vals[dflt_order['bulk_mod']]
         kwargs = dict(zip(('youngs_mod', 'bulk_mod'),
                           (youngs_val, dflt_vals[dflt_order['bulk_mod']])))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, '.*NaN value for the Lame.*',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -151,7 +151,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         lame_val = 3 * dflt_vals[dflt_order['bulk_mod']]
         kwargs = dict(zip(('lame_mod', 'bulk_mod'),
                           (lame_val,  dflt_vals[dflt_order['bulk_mod']])))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, '.*a NaN value for the Poisson.*',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -166,7 +166,7 @@ class TestSetCheckElasErrsWarns(unittest.TestCase):
         long_val = dflt_vals[dflt_order['shear_mod']]
         kwargs = dict(zip(('long_mod', 'shear_mod'),
                           (long_val,  dflt_vals[dflt_order['shear_mod']])))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, '.*a NaN value for the Poisson.*',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -237,7 +237,7 @@ class TestSetElasticParams(unittest.TestCase):
                 if eky1 not in done_eky0:
                     # print '\nIn test_check_elas_params: blk_cnt, eky0, eky1'
                     # print str(blk_cnt) + ', ' + eky0 + ', ' + eky1      #dbg
-                    kwargs = {k: v for k, v in elas_prm_dflts.iteritems()
+                    kwargs = {k: v for k, v in elas_prm_dflts.items()
                               if k in (eky0, eky1)}
                     kwargs.update({'geometry': 3})
                     # print '\nIn test_check_elas_params: kwargs = '      #dbg
@@ -279,10 +279,10 @@ class TestSetElasticParams(unittest.TestCase):
         args = [wrong, dflt_vals, dflt_order, False, dbg_prm]
         kwargs = dict(zip(dflt_keys[0:2], dflt_vals[0:2]))
 
-        # Appears that to have assertRaisesRegexp() use regex
+        # Appears that to have assertRaisesRegex() use regex
         # with any RE flag value, it must be compiled.
         # Stay with exact matches for now.
-        self.assertRaisesRegexp(ValueError, 'Length of default',
+        self.assertRaisesRegex(ValueError, 'Length of default',
                                 elas_prms_mod.set_elastic_params,
                                 *args, **kwargs)
 
@@ -296,7 +296,7 @@ class TestSetElasticParams(unittest.TestCase):
         dbg_prm = TestSetElasticParams.debug_prm
         args = [dflt_keys, dflt_vals, dflt_order, False, dbg_prm]
         kwargs = dict(zip(dflt_keys[0:1], dflt_vals[0:1]))      # len != 2
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, 'Invalid number of elastic',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -310,7 +310,7 @@ class TestSetElasticParams(unittest.TestCase):
         bad_poisson = 10.0
         kwargs = dict(zip(('lame_mod', 'poisson_ratio'),
                           (dflt_vals[0], bad_poisson)))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, 'Specified value of poisson_ratio',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 
@@ -324,7 +324,7 @@ class TestSetElasticParams(unittest.TestCase):
         bad_lame = -1.0
         kwargs = dict(zip(('lame_mod', 'shear_mod'),
                           (bad_lame, dflt_vals[1])))
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValueError, 'Specified value of lame_mod is non-positive',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
 

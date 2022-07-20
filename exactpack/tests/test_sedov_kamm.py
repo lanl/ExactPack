@@ -53,12 +53,12 @@ class TestSedovKammSelfSim(unittest.TestCase):
             self.assertAlmostEqual(solution.g[row] , sedovsph[row,5], delta=1.e-4)
             self.assertAlmostEqual(solution.h[row], sedovsph[row,7], delta=1.e-4)
             if (verbose):
-                print ""
-                print row, sedovsph[row,0], sedovsph[row,1], solution[row][2]
-                print "       f                 g                 h"
-                print 'Sedov: {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovsph[row,2], sedovsph[row,4], sedovsph[row,6])
-                print 'Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovsph[row,3], sedovsph[row,5], sedovsph[row,7])
-                print 'ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row])
+                print("")
+                print(row, sedovsph[row,0], sedovsph[row,1], solution[row][2])
+                print("       f                 g                 h")
+                print('Sedov: {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovsph[row,2], sedovsph[row,4], sedovsph[row,6]))
+                print('Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovsph[row,3], sedovsph[row,5], sedovsph[row,7]))
+                print('ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row]))
 
 
     def test_self_similar_cyl(self):
@@ -107,12 +107,12 @@ class TestSedovKammSelfSim(unittest.TestCase):
             self.assertAlmostEqual(solution.g[row] , sedovcyl[row,5], delta=1.e-4)
             self.assertAlmostEqual(solution.h[row], sedovcyl[row,7], delta=1.e-4)
             if (verbose):
-                print ""
-                print row, sedovcyl[row,0], sedovcyl[row,1], solution[row][2]
-                print "       f                 g                 h"
-                print 'Sedov: {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovcyl[row,2], sedovcyl[row,4], sedovcyl[row,6])
-                print 'Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovcyl[row,3], sedovcyl[row,5], sedovcyl[row,7])
-                print 'ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row])
+                print("")
+                print(row, sedovcyl[row,0], sedovcyl[row,1], solution[row][2])
+                print("       f                 g                 h")
+                print('Sedov: {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovcyl[row,2], sedovcyl[row,4], sedovcyl[row,6]))
+                print('Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovcyl[row,3], sedovcyl[row,5], sedovcyl[row,7]))
+                print('ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row]))
 
 
 
@@ -158,12 +158,12 @@ class TestSedovKammSelfSim(unittest.TestCase):
             self.assertAlmostEqual(solution.g[row] , sedovpla[row,5], delta=1.e-4)
             self.assertAlmostEqual(solution.h[row], sedovpla[row,7], delta=1.e-4)
             if (verbose):
-                print ""
-                print row, sedovpla[row,0], sedovpla[row,1], solution[row][2]
-                print "       f                 g                 h"
-                print 'Sedov: {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovpla[row,2], sedovpla[row,4], sedovpla[row,6])
-                print 'Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovpla[row,3], sedovpla[row,5], sedovpla[row,7])
-                print 'ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row])
+                print("")
+                print(row, sedovpla[row,0], sedovpla[row,1], solution[row][2])
+                print("       f                 g                 h")
+                print('Sedov: {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovpla[row,2], sedovpla[row,4], sedovpla[row,6]))
+                print('Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovpla[row,3], sedovpla[row,5], sedovpla[row,7]))
+                print('ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row]))
 
     def test_shock_state_interpolated(self):
         r"""Sedov Kamm Problem: pre and post shock values, with interpolation to
@@ -237,7 +237,7 @@ class TestSedovKammShock(unittest.TestCase):
         sound speed immediately before the shock.
         """
 
-        for ikey in self.analytic_preshock.keys():
+        for ikey in self.analytic_preshock:
             self.assertAlmostEqual(self.solution[ikey][self.ishock+1],
                                    self.analytic_preshock[ikey], places=5)
 
@@ -250,7 +250,7 @@ class TestSedovKammShock(unittest.TestCase):
         physical variables at the shock location, for at least some cases
         """
 
-        for ikey in self.analytic_postshock.keys():
+        for ikey in self.analytic_postshock:
             self.assertAlmostEqual(self.solution[ikey][self.ishock],
                                    self.analytic_postshock[ikey], places=5)
 
