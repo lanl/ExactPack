@@ -14,6 +14,6 @@ between two high explosives.
 
 """
 
-from kenamond1 import Kenamond1
-from kenamond2 import Kenamond2
-from kenamond3 import Kenamond3
+from .kenamond1 import Kenamond1
+from .kenamond2 import Kenamond2
+from .kenamond3 import Kenamond3

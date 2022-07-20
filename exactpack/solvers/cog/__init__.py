@@ -75,25 +75,25 @@ flux can also be written in term of the heat conductivity :math:`K`, defined by
   \frac{4 c \lambda a T^3}{3} ~ {\vec \nabla} T \equiv K(\rho,T) {\vec \nabla} T .
 """
 
-from cog1  import Cog1
-from cog2  import Cog2
-from cog3  import Cog3
-from cog4  import Cog4
-from cog5  import Cog5
-from cog6  import Cog6
-from cog7  import Cog7
-from cog8  import Cog8
-from cog9  import Cog9
-from cog10 import Cog10
-from cog11 import Cog11
-from cog12 import Cog12
-from cog13 import Cog13
-from cog14 import Cog14
-from cog16 import Cog16
-from cog17 import Cog17
-from cog18 import Cog18
-from cog19 import Cog19
-from cog20 import Cog20
-from cog21 import Cog21
+from .cog1  import Cog1
+from .cog2  import Cog2
+from .cog3  import Cog3
+from .cog4  import Cog4
+from .cog5  import Cog5
+from .cog6  import Cog6
+from .cog7  import Cog7
+from .cog8  import Cog8
+from .cog9  import Cog9
+from .cog10 import Cog10
+from .cog11 import Cog11
+from .cog12 import Cog12
+from .cog13 import Cog13
+from .cog14 import Cog14
+from .cog16 import Cog16
+from .cog17 import Cog17
+from .cog18 import Cog18
+from .cog19 import Cog19
+from .cog20 import Cog20
+from .cog21 import Cog21
 
 

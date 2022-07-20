@@ -164,4 +164,4 @@ Note: Corrected value 0.70125 to 0.65875 for x value at t=1.2
 (Error in original table and formula)
 """
 
-from sdrz import SteadyDetonationReactionZone
+from .sdrz import SteadyDetonationReactionZone

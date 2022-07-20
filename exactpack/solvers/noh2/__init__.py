@@ -321,5 +321,5 @@ By default, :py:mod:`exactpack.solvers.noh2` loads
 :py:mod:`exactpack.solvers.noh2.noh2`.
 """
 
-from noh2 import Noh2, PlanarNoh2, CylindricalNoh2, SphericalNoh2
+from .noh2 import Noh2, PlanarNoh2, CylindricalNoh2, SphericalNoh2
 

@@ -40,4 +40,4 @@ units is :math:`\rho_0= 1\,{\rm g/cm^3}`.
 Note:  :py:mod:`exactpack.solvers.guderley` loads :py:mod:`exactpack.solvers.guderley.ramsey`. 
 
 """
-from ramsey import Guderley
+from .ramsey import Guderley
