@@ -31,4 +31,4 @@ where :math:`k=1,2,3` for planar, cylindrical, and spherical coordinates
 respectively.
 """
 
-from kamm import RiemannJWL
+from .kamm import RiemannJWL
