@@ -363,7 +363,7 @@ class TestBlakeVsKamm(unittest.TestCase):
         print('\nAbs. tolerance = ', abstol)
 
         for ky in attr_to_kmprms:
-            cmd = 'pyth = soln.' + ky
+            cmd = 'global pyth; pyth = soln.' + ky
             exec(cmd, None, None)
             kamm = kamm_sph_dat[:, attr_to_kmprms[ky][0]]
             errormsg = ('Blake solver and Kamm data for: ' + ky +
