@@ -282,13 +282,13 @@ class TestEhepSolution(unittest.TestCase):
 
             for i in range(len(x)):
                 result = solution._run([x[i]], time)
-                self.assertAlmostEqual(result['density'],
+                np.testing.assert_array_almost_equal(result['density'],
                                        density[i], 4)
-                self.assertAlmostEqual(result['pressure'],
+                np.testing.assert_array_almost_equal(result['pressure'],
                                        pressure[i], 4)
-                self.assertAlmostEqual(result['velocity'],
+                np.testing.assert_array_almost_equal(result['velocity'],
                                        velocity[i], 4)
-                self.assertAlmostEqual(result['sound_speed'],
+                np.testing.assert_array_almost_equal(result['sound_speed'],
                                        sound_speed[i], 4)
 
             return
@@ -353,13 +353,13 @@ class TestEhepSolution(unittest.TestCase):
 
                 result = solution._run([x[i]], t[i])
                 #  Check for correct values of the physical variables
-                self.assertAlmostEqual(result['density'],
+                np.testing.assert_array_almost_equal(result['density'],
                                        density[i], 4)
-                self.assertAlmostEqual(result['pressure'],
+                np.testing.assert_array_almost_equal(result['pressure'],
                                        pressure[i], 4)
-                self.assertAlmostEqual(result['velocity'],
+                np.testing.assert_array_almost_equal(result['velocity'],
                                        velocity[i], 4)
-                self.assertAlmostEqual(result['sound_speed'],
+                np.testing.assert_array_almost_equal(result['sound_speed'],
                                        sound_speed[i], 4)
 
             return
