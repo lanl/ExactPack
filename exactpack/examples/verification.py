@@ -35,21 +35,21 @@ plt.show()
 fiducials = { 'pressure': 1 }
 
 fitstudy = FitConvergenceRate(study, fiducials=fiducials)
-print fitstudy
+print(fitstudy)
 fitstudy.plot('pressure')
 plt.title("Sod Shock Tube Convergence: Best fit to exponential")
 plt.xlabel("Zone size")
 plt.show()
 
 roachestudy = RoacheConvergenceRate(study, fiducials=fiducials)
-print roachestudy
+print(roachestudy)
 roachestudy.plot('pressure')
 plt.title("Sod Shock Tube Convergence: Roache's Formula")
 plt.xlabel("Zone size")
 plt.show()
 
 linregstudy = RegressionConvergenceRate(study, fiducials=fiducials)
-print linregstudy
+print(linregstudy)
 linregstudy.plot('pressure')
 plt.title("Sod Shock Tube Convergence: Linear regression")
 plt.xlabel("Zone size")
