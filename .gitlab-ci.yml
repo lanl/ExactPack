@@ -23,7 +23,7 @@ build_ep:
   script:
     - apt-get update
     - apt-get install -y gcc
-    - apt-cache search fortran
+    - apt-get install -y gfortran
     - gcc --version
     - pip install -U numpy
     - pip install -U scipy
