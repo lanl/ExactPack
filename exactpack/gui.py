@@ -101,7 +101,7 @@ class MainWindow(wx.Frame):
             return
 
         self.params.SetValue(",".join(["{}={}".format(p, getattr(self.solver, p, "<missing>"))
-                                       for p in self.solver.parameters.iterkeys()]))
+                                       for p in self.solver.parameters.keys()]))
 
     def plotter(self, event):
         """A callback to overlay plot the current solution."""

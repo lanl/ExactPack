@@ -259,7 +259,7 @@ autodoc_member_order = 'bysource'
 
 # Allow over-riding the default MathJax path, based on the MATHJAX_PATH environment
 # variable, for use behind a firewall.
-if os.environ.has_key('MATHJAX_PATH'):
+if 'MATHJAX_PATH' in os.environ:
     mathjax_path = os.environ['MATHJAX_PATH']
 
 def pep257(app, what, name, obj, options, lines):
@@ -277,7 +277,7 @@ def pep257(app, what, name, obj, options, lines):
     #import pdb; pdb.set_trace()
     #if len(lines)>2 and lines[1].isspace():
     #    del lines[:2]
-    print "What: {}\nName: {}\nObj: {}\noptions: {}\nlines: {}".format(what, name, obj, options, lines)
+    print("What: {}\nName: {}\nObj: {}\noptions: {}\nlines: {}".format(what, name, obj, options, lines))
 
 #from sphinx.ext.autodoc import cut_lines
     
