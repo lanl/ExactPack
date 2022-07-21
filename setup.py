@@ -34,10 +34,10 @@ setup(
                               sources = ['src/timmes/riemann/exact_riemann.f90'],
                               f2py_options = ['only:'] + [ 'riemann' ] + [':']
                               ),
-                    Extension(name = 'exactpack.solvers.suolson._timmes',
-                              sources = ['src/timmes/suolson/suo02.f90'],
-                              f2py_options = ['only:'] + [ 'suolson' ] + [':']
-                              ),
+                    # Extension(name = 'exactpack.solvers.suolson._timmes',
+                    #           sources = ['src/timmes/suolson/suo02.f90'],
+                    #           f2py_options = ['only:'] + [ 'suolson' ] + [':']
+                    #           ),
                     Extension(name = 'exactpack.solvers.mader._timmes',
                               sources = ['src/timmes/mader/rarefaction.f90'],
                               f2py_options = ['only:'] + [ 'mader' ] + [':']
@@ -83,7 +83,7 @@ setup(
                     Extension(name = 'exactpack.solvers.heat._dawes',
                               sources = ['src/dawes/planar_sandwich.f90'],
                               f2py_options = (['only:'] +
-                                              [ 'planar_sand' ] + [':'] + ['free-form'] + [':']
+                                              [ 'planar_sand' ] + [':'] + ['free-form'] + [':'])
                               ),
                             ],
     entry_points = {
