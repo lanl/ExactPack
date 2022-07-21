@@ -87,8 +87,8 @@ class VTKReader(object):
         print("")
         print(" Name in VTK File   | Name in ExactPack  ")
         print("--------------------+--------------------")
-        for key in data.PointData.keys():
-            if self.name_mapping.has_key(key):
+        for key in data.PointData:
+            if key in self.name_mapping:
                 if data.PointData[key].ndim==1:
                     names.append(self.name_mapping[key])
                     print("{:20s}|{:20s}".format(key, self.name_mapping[key]))
