@@ -48,8 +48,7 @@ setup(
                               ),
                     Extension(name = 'exactpack.solvers.cog._timmes',
                               sources = ['src/timmes/cog8/cog8.f90'],
-                              f2py_options = 
-                              
+                              f2py_options = ['only:'] + [ 'cog8_timmes' ] + [':']
                               ),
                     Extension(name = 'exactpack.solvers.riemann._kamm',
                               sources = ['src/kamm/riemann/shktub.f90',
@@ -84,7 +83,7 @@ setup(
                     Extension(name = 'exactpack.solvers.heat._dawes',
                               sources = ['src/dawes/planar_sandwich.f90'],
                               f2py_options = (['only:'] +
-                                              [ 'planar_sand' ] + [':'] + ['free-form'] + [':'])
+                                              [ 'planar_sand' ] + [':'] + ['free-form'] + [':']
                               ),
                             ],
     entry_points = {
