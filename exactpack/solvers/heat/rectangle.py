@@ -43,16 +43,16 @@ class Rectangle(ExactSolver):
         # specific nonhomogeneous contribution \bar T(x,y)
         tempnonhom = 0
         temperature = 0
-        for n in xrange(1, self.Nsum):
+        for n in range(1, self.Nsum):
             kn = n * np.pi / self.a
             Ttopn = 2 * self.Ttop * (1 - (-1)**n) / (n * np.pi)
             tmp = Ttopn * np.sin(kn * x) * np.sinh(kn * y) / np.sinh(kn * self.b)
             tempnonhom += tmp
         # general homogeneous contribution \tilde T(x, y, t)
         if self.NonHomogeneousOnly == False:
-            for n in xrange(0, self.Nsum):
+            for n in range(0, self.Nsum):
                 kn = (2 * n + 1) * np.pi / self.a
-                for m in xrange(1, self.Nsum):
+                for m in range(1, self.Nsum):
                     km = m * np.pi / self.b
                     alpha2 = kn**2 + km**2
                     Anm = 4 * self.Ttop * 2 * (-1)**m * (m / (2 * n + 1)) / alpha2 / self.b**2

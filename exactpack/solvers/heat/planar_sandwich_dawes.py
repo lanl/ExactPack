@@ -6,7 +6,7 @@ to Alan Dawes' fortran code.
 import numpy as np
 
 from ...base import ExactSolver, ExactSolution
-import ._dawes
+from ._dawes import planar_sand
 
 
 class PlanarSandwichDawes(ExactSolver):
@@ -34,7 +34,7 @@ class PlanarSandwichDawes(ExactSolver):
         super(PlanarSandwichDawes, self).__init__(**kwargs)
 
     def _run(self, y, t):
-        temperature = _dawes.planar_sand(t, self.Nsum, self.L, self.TB, self.TT, y)
+        temperature = planar_sand(t, self.Nsum, self.L, self.TB, self.TT, y)
 
         return ExactSolution([y, temperature],
                                 names=['position', 'temperature']
