@@ -258,8 +258,7 @@ key-value pair consisting of a parameter name and a corresponding help
 string.  This allows the base class to provide uniform error checking,
 documentation, and other functionality.  This attribute is also used
 by other functions to determine the valid parameters for the solver
-class.  For example, the GUI uses this to build a dialog box that
-includes the appropriate parameters for a given solver class.
+class.
 
 Providing a constructor is optional.  The default constructor for
 :class:`ExactSolver` takes an arbitrary list of keyword arguments, and
@@ -311,7 +310,7 @@ The :class:`ExactSolver` class uses some Python magic (in particular,
 meta-classes; for details see the source code) to simplify documenting
 the parameters.  We want the parameters to be consistently documented
 in the manual, the :func:`help` function, and to have the help
-information available to tools such as the GUI.  This is done in an
+information available to other tools.  This is done in an
 automated fashion via the :attr:`ExactSolver.parameters` attribute.
 As described above, this attribute consists of a :class:`dict` with
 all parameters of the solver class as keywords, and a short, one-line
@@ -393,9 +392,8 @@ In this case, the class definition does not include any methods; they
 are all defined in the parent class.  The ``geometry`` attribute
 defaults to 3, corresponding to spherical geometry.  There is no
 ``geometry`` attribute in the ``parameters`` list, since we
-don't want users to change it: ``geometry`` will neither be a legal 
-parameter to the constructor, nor will it show up as a parameter in 
-the GUI.
+don't want users to change it: ``geometry`` will not be a legal 
+parameter to the constructor.
 
 .. Setting a value of ``gamma`` in the class definition is the correct
    way of providing a default.  In this case we chose not to provide
