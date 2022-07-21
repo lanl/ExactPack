@@ -18,28 +18,24 @@ cache:
     - .cache/pip
     - venv/
 
-build_ep:
-  stage: build
-  script:
-    - apt-get update
-    - apt-get install -y gcc
-    - apt-get install -y gfortran
-    - gcc --version
-    - pip install -U numpy
-    - pip install -U scipy
-    - pip install -U sphinx
-    - pip install -U matplotlib
-    - pip install -U pytest
-    - pip install -U pytest-cov
-    - pip install -U vtk
-    - pip install -U matplotlib
-    - python setup.py develop --user
-  artifacts:
-    paths:
-      - build
-      - exactpack
-      - doc
-      - dist
+before_script:
+  - apt-get update
+  - apt-get install -y gcc
+  - apt-get install -y gfortran
+  - gcc --version
+  - pip install -U numpy
+  - pip install -U scipy
+  - pip install -U sphinx
+  - pip install -U matplotlib
+  - pip install -U pytest
+  - pip install -U pytest-cov
+  - pip install -U vtk
+  - pip install -U matplotlib
+  - python setup.py develop --user
+  # artifacts:
+  #   paths:
+  #     - exactpack
+  #     - doc
 
 ep_tests:
   stage: test
