@@ -6,7 +6,7 @@ to Alan Dawes' fortran code.
 import numpy as np
 
 from ...base import ExactSolver, ExactSolution
-import _dawes
+import ._dawes
 
 
 class PlanarSandwichDawes(ExactSolver):

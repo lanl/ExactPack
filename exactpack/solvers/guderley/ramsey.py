@@ -3,7 +3,7 @@
 This is a Python interface to Scott Ramsey's Guderley fortran code.
 """
 from ...base import ExactSolver, ExactSolution
-from _ramsey import guderley_1d
+from ._ramsey import guderley_1d
 
 
 class Guderley(ExactSolver):

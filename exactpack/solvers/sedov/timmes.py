@@ -7,7 +7,7 @@ adapted from
 """
 
 from ...base import ExactSolver, ExactSolution
-from _timmes import sed_1d
+from ._timmes import sed_1d
 from numpy import linspace
 from scipy.interpolate import interp1d
 

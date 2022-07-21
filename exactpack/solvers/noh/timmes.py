@@ -8,7 +8,7 @@ in a Los Alamos report [Timmes2005]_.
 """
 
 from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
-import _timmes
+import ._timmes
 
 
 class Noh(ExactSolver):
