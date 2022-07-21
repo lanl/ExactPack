@@ -163,7 +163,8 @@ plt.plot(obdyx, obdyz, 'k-', lw=2)
 plt.plot(ibdyx, ibdyz, 'k--')
 
 fig.add_subplot(2, 2, 4, aspect=1.)
-start = (len(phi) + 1) / 2 - 1
+start = int((len(phi) + 1) / 2 - 1)
+
 p4 = plt.contour(soln3.position_x[start::len(phi)].reshape(len(r),
                                                            len(theta3)),
                  soln3.position_y[start::len(phi)].reshape(len(r),
@@ -274,7 +275,7 @@ plt.plot(obdyx, obdyz, 'k-', lw=2)
 plt.plot(ibdyx, ibdyz, 'k-', lw=2)
 
 plt.subplot(2, 2, 4)
-start = (len(phi) + 1) / 2 - 1
+start = int((len(phi) + 1) / 2 - 1)
 p4 = plt.contour(soln3.position_x[start::len(phi)].reshape(len(r),
                                                            len(theta3)),
                  soln3.position_y[start::len(phi)].reshape(len(r),
