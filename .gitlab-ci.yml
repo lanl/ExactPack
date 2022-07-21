@@ -34,10 +34,12 @@ build_ep:
     - pip install -U vtk
     - pip install -U matplotlib
     - python setup.py develop --user
-  # artifacts:
-  #   paths:
-  #     - exactpack
-  #     - doc
+  artifacts:
+    paths:
+      - build
+      - exactpack
+      - doc
+      - dist
 
 ep_tests:
   stage: test
