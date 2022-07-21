@@ -14,7 +14,7 @@ setup(
     long_description = read('README.md'),
     classifiers = ['Development Status :: 4 - Beta',
                    'Intended Audience :: Science/Research',
-                   'Programming Language :: Python :: 2 :: Only',
+                   'Programming Language :: Python :: 3 :: Only',
                    'Programming Language :: Fortran',
                    'Topic :: Scientific/Engineering :: Physics'],
     keywords = 'verification',
