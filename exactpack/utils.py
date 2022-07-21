@@ -38,7 +38,7 @@ def discover_solvers():
                 # Ignore the following in the package root
                 for d in ['analysis', 'tests']:
                     dirs.remove(d)
-                for f in ['cmdline.py', 'utils.py', 'gui.py', 'base.py']:
+                for f in ['cmdline.py', 'utils.py', 'base.py']:
                     files.remove(f)
             for file in files:
                 if file[-3:]==".py" and file!="__init__.py":

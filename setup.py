@@ -79,9 +79,6 @@ setup(
         'console_scripts' : [
             'exactpack = exactpack.cmdline:main',
         ],
-        'gui_scripts' : [
-            'epgui = exactpack.gui:main',
-        ],
     },
     cmdclass = { 'build_sphinx' : BuildDoc },
     test_suite = "exactpack.tests",
