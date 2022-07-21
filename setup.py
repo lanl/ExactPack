@@ -30,61 +30,62 @@ setup(
                               sources = ['src/timmes/sedov/sedov3.f90'],
                               f2py_options = (['only:'] + [ 'sed_1d' ] + [':'])
                               ),
-                   #  Extension(name = 'exactpack.solvers.riemann._timmes',
-                   #            sources = ['src/timmes/riemann/exact_riemann.f'],
-                   #            # f2py_options = ['only:'] + [ 'riemann' ] + [':']
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.suolson._timmes',
-                   #            sources = ['src/timmes/suolson/suo02.f'],
-                   #            # f2py_options = ['only:'] + [ 'suolson' ] + [':']
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.mader._timmes',
-                   #            sources = ['src/timmes/mader/rarefaction.f'],
-                   #            # f2py_options = ['only:'] + [ 'mader' ] + [':']
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.rmtv._timmes',
-                   #            sources = ['src/timmes/rmtv/rmtv.f'],
-                   #            # f2py_options = ['only:'] + [ 'rmtv' ] + [':']
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.cog._timmes',
-                   #            sources = ['src/timmes/cog8/cog8.f'],
-                   #            # f2py_options = ['only:'] + [ 'cog8_timmes' ] + [':']
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.riemann._kamm',
-                   #            sources = ['src/kamm/riemann/shktub.f90',
-                   #                       'src/kamm/riemann/param.h'],
-                   #            # f2py_options = ['only:'] + [ 'riemann_kamm' ] + [':']
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.guderley._ramsey',
-                   #            sources = ['src/ramsey/guderley/guderley_1D.f',
-                   #                       'src/ramsey/guderley/d1mach.f',
-                   #                       'src/ramsey/guderley/deroot.f',
-                   #                       'src/ramsey/guderley/exp.f',
-                   #                       'src/ramsey/guderley/interp_laz.f',
-                   #                       'src/ramsey/guderley/ode.f',
-                   #                       'src/ramsey/guderley/zeroin_a.f',
-                   #                       'src/ramsey/guderley/zeroin.f'],
-                   #            # f2py_options = (['only:'] + [ 'guderley_1d' ] +
-                   #            #                 [':'])
-                   #            ),
-                   #  Extension(name = 'exactpack.contrib.riemann_jwl._kamm',
-                   #            sources = ['src/kamm/riemann_jwl/riemjwl.f90',
-                   #                       'src/kamm/riemann_jwl/param.h'],
-                   #            # f2py_options = (['only:'] +
-                   #            #                 [ 'riemann_kamm_jwl'] + [':'])
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.sedov._kamm',
-                   #            sources = ['src/kamm/sedov/sedov.f90',
-                   #                       'src/kamm/sedov/slatec.f90',
-                   #                       'src/kamm/sedov/param.h'],
-                   #            # f2py_options = (['only:'] +
-                   #            #                 [ 'sedov_kamm_1d' ] + [':'])
-                   #            ),
-                   #  Extension(name = 'exactpack.solvers.heat._dawes',
-                   #            sources = ['src/dawes/planar_sandwich.f90'],
-                   #            # f2py_options = (['only:'] +
-                   #            #                 [ 'planar_sand' ] + [':'] + ['free-form'] + [':'])
-                   #            ),
+                    Extension(name = 'exactpack.solvers.riemann._timmes',
+                              sources = ['src/timmes/riemann/exact_riemann.f90'],
+                              f2py_options = ['only:'] + [ 'riemann' ] + [':']
+                              ),
+                    Extension(name = 'exactpack.solvers.suolson._timmes',
+                              sources = ['src/timmes/suolson/suo02.f90'],
+                              f2py_options = ['only:'] + [ 'suolson' ] + [':']
+                              ),
+                    Extension(name = 'exactpack.solvers.mader._timmes',
+                              sources = ['src/timmes/mader/rarefaction.f90'],
+                              f2py_options = ['only:'] + [ 'mader' ] + [':']
+                              ),
+                    Extension(name = 'exactpack.solvers.rmtv._timmes',
+                              sources = ['src/timmes/rmtv/rmtv.f90'],
+                              f2py_options = ['only:'] + [ 'rmtv' ] + [':']
+                              ),
+                    Extension(name = 'exactpack.solvers.cog._timmes',
+                              sources = ['src/timmes/cog8/cog8.f90'],
+                              f2py_options = 
+                              
+                              ),
+                    Extension(name = 'exactpack.solvers.riemann._kamm',
+                              sources = ['src/kamm/riemann/shktub.f90',
+                                         'src/kamm/riemann/param.h'],
+                              f2py_options = ['only:'] + [ 'riemann_kamm' ] + [':']
+                              ),
+                    Extension(name = 'exactpack.solvers.guderley._ramsey',
+                              sources = ['src/ramsey/guderley/guderley_1D.f90',
+                                         'src/ramsey/guderley/d1mach.f90',
+                                         'src/ramsey/guderley/deroot.f90',
+                                         'src/ramsey/guderley/exp.f90',
+                                         'src/ramsey/guderley/interp_laz.f90',
+                                         'src/ramsey/guderley/ode.f90',
+                                         'src/ramsey/guderley/zeroin_a.f90',
+                                         'src/ramsey/guderley/zeroin.f90'],
+                              f2py_options = (['only:'] + [ 'guderley_1d' ] +
+                                              [':'])
+                              ),
+                    Extension(name = 'exactpack.contrib.riemann_jwl._kamm',
+                              sources = ['src/kamm/riemann_jwl/riemjwl.f90',
+                                         'src/kamm/riemann_jwl/param.h'],
+                              f2py_options = (['only:'] +
+                                              [ 'riemann_kamm_jwl'] + [':'])
+                              ),
+                    Extension(name = 'exactpack.solvers.sedov._kamm',
+                              sources = ['src/kamm/sedov/sedov.f90',
+                                         'src/kamm/sedov/slatec.f90',
+                                         'src/kamm/sedov/param.h'],
+                              f2py_options = (['only:'] +
+                                              [ 'sedov_kamm_1d' ] + [':'])
+                              ),
+                    Extension(name = 'exactpack.solvers.heat._dawes',
+                              sources = ['src/dawes/planar_sandwich.f90'],
+                              f2py_options = (['only:'] +
+                                              [ 'planar_sand' ] + [':'] + ['free-form'] + [':'])
+                              ),
                             ],
     entry_points = {
         'console_scripts' : [
