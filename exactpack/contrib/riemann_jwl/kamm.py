@@ -3,7 +3,7 @@
 """
 
 from ...base import ExactSolver, ExactSolution
-from _kamm import riemann_kamm_jwl
+from ._kamm import riemann_kamm_jwl
 
 
 class RiemannJWL(ExactSolver):
