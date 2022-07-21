@@ -244,4 +244,4 @@ References
 
 """
 
-from blake import Blake
+from .blake import Blake

@@ -386,8 +386,8 @@ class GlobalConvergenceRate(object):
             right = 0.1
         else:
             bottom = sorted([ dataset.errors[var]
-                              for dataset in self.norms.datasets ])[(n-1)/2]/2
-            left = sorted(self.norms.study_parameters)[(n-1)/2]
+                              for dataset in self.norms.datasets ])[int((n-1)/2)]/2
+            left = sorted(self.norms.study_parameters)[int((n-1)/2)]
             right = 2*left
 
         return plt.plot([left, right, right, left],

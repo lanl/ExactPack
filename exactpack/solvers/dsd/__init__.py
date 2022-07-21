@@ -43,6 +43,6 @@ being evaluated.
 
 """
 
-from ratestick import RateStick
-from cylexpansion import CylindricalExpansion
-from explosivearc import ExplosiveArc
+from .ratestick import RateStick
+from .cylexpansion import CylindricalExpansion
+from .explosivearc import ExplosiveArc

@@ -805,7 +805,7 @@ class TestSedovDoeblingShock(unittest.TestCase):
         sound speed immediately before the shock.
         """
 
-        for ikey in self.analytic_preshock.keys():
+        for ikey in self.analytic_preshock:
             self.assertAlmostEqual(self.solution[ikey][self.ishock+1],
                                    self.analytic_preshock[ikey], places=5)
 
@@ -814,7 +814,7 @@ class TestSedovDoeblingShock(unittest.TestCase):
         sound speed immediately after the shock.
         """
 
-        for ikey in self.analytic_postshock.keys():
+        for ikey in self.analytic_postshock:
             self.assertAlmostEqual(self.solution[ikey][self.ishock],
                                    self.analytic_postshock[ikey], places=5)
 

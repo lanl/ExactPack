@@ -8,7 +8,7 @@ in a Los Alamos report [Timmes2005]_.
 """
 
 from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
-import _timmes
+from ._timmes import noh_1d
 
 
 class Noh(ExactSolver):
@@ -41,7 +41,7 @@ class Noh(ExactSolver):
 
     def _run(self, r, t):
 
-        density, sie, pressure, velocity, jumps = _timmes.noh_1d(
+        density, sie, pressure, velocity, jumps = noh_1d(
             t, r, 1.0, -1.0, self.gamma, self.geometry)
 
         return ExactSolution([r, density, sie, pressure, velocity],

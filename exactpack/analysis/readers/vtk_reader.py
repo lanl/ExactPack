@@ -87,8 +87,10 @@ class VTKReader(object):
         print("")
         print(" Name in VTK File   | Name in ExactPack  ")
         print("--------------------+--------------------")
+        # The PointData object does not have a true dict interface. Trying to
+        # iterate over it directly returns values instead of keys.
         for key in data.PointData.keys():
-            if self.name_mapping.has_key(key):
+            if key in self.name_mapping:
                 if data.PointData[key].ndim==1:
                     names.append(self.name_mapping[key])
                     print("{:20s}|{:20s}".format(key, self.name_mapping[key]))

@@ -62,23 +62,23 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
 
     def test_check_cavity_radius(self):
         """Test cavity_radius parameter positive check."""
-        self.assertRaisesRegexp(ValueError, "cavity_radius.*non-positive",
-                                Blake, cavity_radius=-1.0)
+        self.assertRaisesRegex(ValueError, "cavity_radius.*non-positive",
+                               Blake, cavity_radius=-1.0)
 
     def test_check_geometry(self):
         """Test geometry parameter range check."""
-        self.assertRaisesRegexp(ValueError, "value of geometry",
-                                Blake, geometry=4)
+        self.assertRaisesRegex(ValueError, "value of geometry",
+                               Blake, geometry=4)
 
     def test_check_pressure_scale_pos(self):
         """Test pressure_scale parameter positive check."""
-        self.assertRaisesRegexp(ValueError, "pressure_scale.*non-positive",
-                                Blake, pressure_scale=-1.0)
+        self.assertRaisesRegex(ValueError, "pressure_scale.*non-positive",
+                               Blake, pressure_scale=-1.0)
 
     def test_check_ref_density(self):
         """Test ref_density parameter positive check."""
-        self.assertRaisesRegexp(ValueError, "ref_density.*non-positive",
-                                Blake, ref_density=-1.0)
+        self.assertRaisesRegex(ValueError, "ref_density.*non-positive",
+                               Blake, ref_density=-1.0)
 
     def test_pscale_warn_check(self):
         """Test the pressure_scale parameter range warning."""
@@ -93,8 +93,8 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
 
     def test_check_blake_debug(self):
         """Test that blake_debug parameter is boolean."""
-        self.assertRaisesRegexp(ValueError, "blake_debug.*boolean.*",
-                                Blake, blake_debug='string')
+        self.assertRaisesRegex(ValueError, "blake_debug.*boolean.*",
+                               Blake, blake_debug='string')
 
 
 class TestBlakeSolution(unittest.TestCase):
@@ -164,7 +164,7 @@ class TestBlakeSolution(unittest.TestCase):
         standard output, :attr:`TestBlakeSolution.blk_dflt_std`.
         """
 
-        print ' '
+        print(' ')
         tsnap = Blake.tsnap_default
         grid = TestBlakeSolution.intl_test_grid
         blk_dflt_std = self.blk_dflt_std
@@ -240,8 +240,8 @@ class TestBlakeRunChecks(unittest.TestCase):
         tsnap = Blake.tsnap_default
         args = [radii, tsnap]
         kwargs = {}
-        self.assertRaisesRegexp(ValueError, "Minimum coordinate.*is negative",
-                                blk_slvr, *args, **kwargs)
+        self.assertRaisesRegex(ValueError, "Minimum coordinate.*is negative",
+                               blk_slvr, *args, **kwargs)
 
 
 class TestBlakeVsKamm(unittest.TestCase):
@@ -360,10 +360,10 @@ class TestBlakeVsKamm(unittest.TestCase):
         soln = brock_blk_solver(radii, tsnap)
 
         abstol = 0.0
-        print '\nAbs. tolerance = ', abstol
+        print('\nAbs. tolerance = ', abstol)
 
         for ky in attr_to_kmprms:
-            cmd = 'pyth = soln.' + ky
+            cmd = 'global pyth; pyth = soln.' + ky
             exec(cmd, None, None)
             kamm = kamm_sph_dat[:, attr_to_kmprms[ky][0]]
             errormsg = ('Blake solver and Kamm data for: ' + ky +
@@ -374,7 +374,7 @@ class TestBlakeVsKamm(unittest.TestCase):
             # If here then OK
             okmsg = ('Blake solver and Kamm data agree for: ' + ky +
                      ', \twith rel. tol. = ' + str(attr_to_kmprms[ky][1]))
-            print okmsg
+            print(okmsg)
 
 
 if __name__ == '__main__':

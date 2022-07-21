@@ -96,7 +96,7 @@ These problems are implemented in the following helper classes.
    
 """
 
-from kamm import Riemann
+from .kamm import Riemann
 
 
 class Sod(Riemann):  # test1

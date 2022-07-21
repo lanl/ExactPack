@@ -5,7 +5,7 @@ website <http://cococubed.asu.edu/code_pages/exact_riemann.shtml>`_.
 """
 
 from ...base import ExactSolver, ExactSolution
-from _timmes import riemann
+from ._timmes import riemann
 
 
 class Riemann(ExactSolver):

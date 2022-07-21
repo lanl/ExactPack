@@ -30,7 +30,7 @@ Free parameters: :math:`k`, :math:`\gamma`, :math:`c_v`, :math:`\alpha`,
 """
 
 from ...base import ExactSolver, ExactSolution
-from _timmes import cog8_timmes
+from ._timmes import cog8_timmes
 
 
 class Cog8(ExactSolver):

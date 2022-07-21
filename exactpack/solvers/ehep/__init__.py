@@ -158,4 +158,4 @@ Region 00 (behind the piston)
   (u_p t_{\rm max},t_{\rm max})
 """
 
-from ehep import EscapeOfHEProducts
+from .ehep import EscapeOfHEProducts

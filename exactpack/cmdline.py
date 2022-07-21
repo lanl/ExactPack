@@ -62,7 +62,7 @@ mistaken for an argument to --params.
 
     if args.list_solvers:
         for solver in exactpack.discover_solvers():
-            print solver[10:]
+            print(solver[10:])
         sys.exit()
 
     # Get the solver name
@@ -71,7 +71,7 @@ mistaken for an argument to --params.
         mod = importlib.import_module('.'.join([''] + name[:-1]), 'exactpack')
         solver = getattr(mod, name[-1])
     except:
-        print "Can't find requested module {}".format(args.solver)
+        print("Can't find requested module {}".format(args.solver))
         sys.exit(-1)
 
     # Run the requested command
@@ -83,7 +83,7 @@ mistaken for an argument to --params.
     soln = solver(**kwargs)(numpy.linspace(0, 1.0, 500), 0.6)
 
     if args.info:
-        print solver.__doc__
+        print(solver.__doc__)
 
     if args.plot:
         import matplotlib.pyplot as plt

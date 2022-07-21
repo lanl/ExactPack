@@ -143,10 +143,10 @@ class CylindricalSandwich(ExactSolver):
     def alpha(self, N, M, a, b):
         alphax = np.zeros(shape=(N, M))
         betax = np.zeros(shape=(N, M))
-        for n in xrange(N):
+        for n in range(N):
             k = 2 * (n + 1)
             x0 = 0.1
-            for m in xrange(M):
+            for m in range(M):
                 alphanm = newton(CylindricalSandwich.bc_solve, x0, args=(k, a, b))
                 x0 = alphanm + 4
                 alphax[n, m] = alphanm
@@ -200,9 +200,9 @@ class CylindricalSandwich(ExactSolver):
         temperature = 0
         if self.NonHomogeneousOnly == False:
             alphax, betax = CylindricalSandwich.alpha(self, self.Nsum, self.Msum, self.a, self.b)
-            for n in xrange(self.Nsum):  # fragile: n <= 20
+            for n in range(self.Nsum):  # fragile: n <= 20
                 k = 2 * (n + 1)
-                for m in xrange(self.Msum):
+                for m in range(self.Msum):
                     alphanm = alphax[n, m]  # eigen values based on Bessel Functions
                     betanm = betax[n, m]  # J vs Y weighting
                     Rnm = CylindricalSandwich.R(self, r, k, m, alphanm, betanm)

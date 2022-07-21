@@ -82,4 +82,4 @@ By default, :py:mod:`exactpack.solvers.noh` loads
 :py:mod:`exactpack.solvers.noh.noh1`.
 """
 
-from noh1 import Noh, PlanarNoh, CylindricalNoh, SphericalNoh
+from .noh1 import Noh, PlanarNoh, CylindricalNoh, SphericalNoh

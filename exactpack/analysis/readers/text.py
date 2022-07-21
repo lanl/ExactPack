@@ -47,7 +47,7 @@ class TextReader(object):
             return None
 
         dump=data.view(type=numpy.recarray,
-                       dtype=zip(self.names, len(self.names)*[data.dtype]))[:,0]
+                       dtype=list(zip(self.names, len(self.names)*[data.dtype])))[:,0]
         dump.dims = self.dims
         
         return dump

@@ -21,7 +21,7 @@ regimes.
 """
 
 from ...base import ExactSolver, ExactSolution
-from _kamm import sedov_kamm_1d
+from ._kamm import sedov_kamm_1d
 from numpy import linspace
 from scipy.interpolate import interp1d
 

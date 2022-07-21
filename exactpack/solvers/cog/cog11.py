@@ -52,7 +52,7 @@ class Cog11(ExactSolver):
             raise ValueError("geometry must be 1, 2, or 3")
 
         if self.beta < 1.0 or self.beta > 3.0:
-            print "*** warning: beta lies outside range [1,3] ***"
+            print("*** warning: beta lies outside range [1,3] ***")
         
     def _run(self, r, t):
 
@@ -63,7 +63,7 @@ class Cog11(ExactSolver):
         c3 = 2 - c1
         alpha = self.beta + 4 + (k - 1) / c3
         if alpha < -2.0 or alpha > -1.0:
-            print "*** warning: alpha lies outside range [-2,-1] ***"
+            print("*** warning: alpha lies outside range [-2,-1] ***")
 
 # a = 7.5657e-15 erg cm^-3 K^-4
 #   = 1.3720e+02 erg cm^-3 ev^-4 using k_B = 8.6173324e-5 eV K^-1

@@ -95,7 +95,7 @@ class Hutchens1(ExactSolver):
         alpha = self.k / (self.rho * self.cp)
 
         temperature = np.zeros(shape=r.shape)
-        for n in xrange(1, self.Nsum):
+        for n in range(1, self.Nsum):
             nb = np.pi * n / self.b
             x = (-1)**n / float(n)
             x = x * np.where(r != 0, (2 * self.b / (np.pi * r)) * np.sin(nb * r), 0)  # bad at r=0

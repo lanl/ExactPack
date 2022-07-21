@@ -70,7 +70,7 @@ class _AddParametersToDocstring(type):
         if doc and dct['parameters']:
             doc += "\n"
 
-        for key, value in dct['parameters'].iteritems():
+        for key, value in dct['parameters'].items():
             doc += "{}:param {}: {}\n".format(margin, key, value)
         
         dct['__doc__'] = doc
@@ -168,7 +168,7 @@ class JumpCondition(object):
         self.description = description
 
         self._vars = {}
-        for key, val in kwargs.iteritems():
+        for key, val in kwargs.items():
             self._vars[key] = Jump(val)
 
     def __getattr__(self, name):
@@ -182,13 +182,13 @@ class JumpCondition(object):
 
 
         vars = [ "{}=({},{})".format(key, val.left, val.right)
-                 for key, val in self._vars.iteritems() ]
+                 for key, val in self._vars.items() ]
         
         return "JumpCondition(location={},{})".format(self.location,
                                                       ",".join(vars))
      
             
-class ExactSolver(object):
+class ExactSolver(object, metaclass=_AddParametersToDocstring):
     """A virtual base class for ExactPack solvers.
 
     Solvers are Python callable objects which can be used to generate
@@ -209,11 +209,6 @@ class ExactSolver(object):
     :ref:`adding-a-solver`.
     """
 
-    # Setting this meta-class forces all classes inheriting from
-    # ExactSolver to process the docstring to add information from the
-    # parameters attribute before creating the class.
-    __metaclass__ = _AddParametersToDocstring
-
     #: A list of parameters which can be used as keyword arguments to
     #: the solver's constructor.
     parameters = {}
@@ -221,9 +216,9 @@ class ExactSolver(object):
     def __init__(self, **params):
         
         # Check that all params are in the self.parameters list
-        if not params.viewkeys() <= set(self.parameters):
+        if not params.keys() <= set(self.parameters):
             raise ValueError("Unknown parameters: "
-                             +",".join(params.viewkeys() - set(self.parameters)))
+                             +",".join(params.keys() - set(self.parameters)))
 
         self.__dict__.update(params)
 
@@ -341,7 +336,7 @@ class ExactSolution(numpy.recarray):
         # exactpack can be imported on systems without matplotlib if
         # no plotting is done during the script.
         # 3. The performance hit should be minimal
-        from analysis.plotting import plot
+        from .analysis.plotting import plot
 
         plot(self, name, **kwargs)
 

@@ -248,7 +248,7 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
         stmt = nm + ' = ' + str(1j)
         # print '\nstmt str is: ', stmt                 #dbg
         cobj = compile(stmt, '<string>', 'exec')
-        exec cobj in ns
+        exec(cobj, ns)
 
     #
     #          Generic case
@@ -274,28 +274,23 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
     for ky in elas_prm_args:
         if (ky == 'poisson_ratio'):
             if not (-1.0 < elas_prm_args[ky] < 0.5):
-                raise(
-                    ValueError(
-                        'Specified value of ' + ky +
-                        ' is not in the open interval: (-1.0, 0.5).')
-                )
+                err_str = f'Specified value of {ky} is not in the open '
+                err_str += 'interval: (-1.0, 0.5).'
+                raise ValueError(err_str)
         else:
             # all other elas params are moduli
             if elas_prm_args[ky] <= 0.0:
-                raise(
-                    ValueError(
-                        'Specified value of ' + ky +
-                        ' is non-positive.')
-                )
+                err_str = f'Specified value of {ky} is non-positive.'
+                raise  ValueError(err_str)
 
     # Ensure elas_prm_order[ekey0] < elas_prm_order[ekey1].
     # Coding below depends on this.
-    eprmkys = elas_prm_args.keys()
+    eprmkys = list(elas_prm_args.keys())
     if elas_prm_order[eprmkys[0]] < elas_prm_order[eprmkys[1]]:
         [eky0, eky1] = eprmkys
     else:
         if blk_dbg_prm:
-            print '\neprmkeys reversed per elas_prm_order!'
+            print('\neprmkeys reversed per elas_prm_order!')
         eprmkys.reverse()
         [eky0, eky1] = eprmkys
 
@@ -361,7 +356,7 @@ def set_elastic_params(elas_prm_names, elas_prm_dflt_vals,
             ns['pm'] = elas_prm_args[eky1]
 
     if blk_dbg_prm:
-        print 'prmcase = ', prmcase
+        print('prmcase = ', prmcase)
 
     # POSITIVE-DEFINITENESS (PD) of STRAIN ENERGY FUNCTION
     # Calculation and checking of full elas param set.

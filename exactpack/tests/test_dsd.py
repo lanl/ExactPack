@@ -119,116 +119,116 @@ class TestRateStick(unittest.TestCase):
     def test_geometry_error(self):
         """Test for valid value of geometry."""
 
-        self.assertRaisesRegexp(ValueError, "geometry must be 1 or 2",
+        self.assertRaisesRegex(ValueError, "geometry must be 1 or 2",
                                 RateStick, geometry=5, xnodes=1, ynodes=1)
 
     def test_radius_neg_error(self):
         """Test for valid value of rate stick radius, :math:`R`."""
 
-        self.assertRaisesRegexp(ValueError, "Radius/thickness must be > 0",
+        self.assertRaisesRegex(ValueError, "Radius/thickness must be > 0",
                                 RateStick, R=-1.0, xnodes=1, ynodes=1)
 
     def test_radius_zero_error(self):
         """Test for valid value of rate stick radius, :math:`R`."""
 
-        self.assertRaisesRegexp(ValueError, "Radius/thickness must be > 0",
+        self.assertRaisesRegex(ValueError, "Radius/thickness must be > 0",
                                 RateStick, R=0.0, xnodes=1, ynodes=1)
 
     def test_omega_C_neg_error(self):
         """Test for valid value of DSD edge angle, :math:`omega_c`."""
 
-        self.assertRaisesRegexp(ValueError, "DSD edge angle must be > 0",
+        self.assertRaisesRegex(ValueError, "DSD edge angle must be > 0",
                                 RateStick, omega_c=-1.0, xnodes=1, ynodes=1)
 
     def test_omega_C_zero_error(self):
         """Test for valid value of DSD edge angle, :math:`omega_c`."""
 
-        self.assertRaisesRegexp(ValueError, "DSD edge angle must be > 0",
+        self.assertRaisesRegex(ValueError, "DSD edge angle must be > 0",
                                 RateStick, omega_c=0.0, xnodes=1, ynodes=1)
 
     def test_omega_C_big_error(self):
         """Test for valid value of DSD edge angle, :math:`omega_c`."""
 
-        self.assertRaisesRegexp(ValueError, "DSD edge angle must be < pi/2",
+        self.assertRaisesRegex(ValueError, "DSD edge angle must be < pi/2",
                                 RateStick, omega_c=2.0, xnodes=1, ynodes=1)
 
     def test_omega_C_top_error(self):
         """Test for valid value of DSD edge angle, :math:`omega_c`."""
 
-        self.assertRaisesRegexp(ValueError, "DSD edge angle must be < pi/2",
+        self.assertRaisesRegex(ValueError, "DSD edge angle must be < pi/2",
                                 RateStick,
                                 omega_c=np.pi/2.0, xnodes=1, ynodes=1)
 
     def test_D_CJ_neg_error(self):
         """Test for valid value of HE detonation velocity, :math:`D`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity must be > 0",
+        self.assertRaisesRegex(ValueError, "Detonation velocity must be > 0",
                                 RateStick, D_CJ=-1.0, xnodes=1, ynodes=1)
 
     def test_D_CJ_zero_error(self):
         """Test for valid value of HE detonation velocity, :math:`D`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity must be > 0",
+        self.assertRaisesRegex(ValueError, "Detonation velocity must be > 0",
                                 RateStick, D_CJ=0.0, xnodes=1, ynodes=1)
 
     def test_alpha_neg_error(self):
         """Test for valid value of det velocity deviance coefficient,
         :math:`alpha`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Alpha must be >= 0",
                                 RateStick, alpha=-1.0, xnodes=1, ynodes=1)
 
     def test_IC_error(self):
         """Test for valid value of initial condition, :math:`IC`."""
 
-        self.assertRaisesRegexp(ValueError, "IC must be 1, 2 or 3",
+        self.assertRaisesRegex(ValueError, "IC must be 1, 2 or 3",
                                 RateStick, IC=5, xnodes=1, ynodes=1)
 
     def test_IC1limit_error(self):
         """Test for valid value of detonation radius, :math:`r_d`, if IC=1."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation radius must " +
+        self.assertRaisesRegex(ValueError, "Detonation radius must " +
                                 "satisfy edge angle condition",
                                 RateStick, IC=1, r_d=1.0, xnodes=1, ynodes=1)
 
     def test_t_f_neg_error(self):
         """Test for valid value of final time, :math:`t_f`."""
 
-        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+        self.assertRaisesRegex(ValueError, "Final time must be positive",
                                 RateStick, t_f=-1.0, xnodes=1, ynodes=1)
 
     def test_t_f_zero_error(self):
         """Test for valid value of final time, :math:`t_f`."""
 
-        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+        self.assertRaisesRegex(ValueError, "Final time must be positive",
                                 RateStick, t_f=0.0, xnodes=1, ynodes=1)
 
     def test_xnodes_neg_error(self):
         """Test for valid value of number of x-nodes, :math:`xnodes`."""
 
-        self.assertRaisesRegexp(ValueError, "Number of x-nodes must be " +
+        self.assertRaisesRegex(ValueError, "Number of x-nodes must be " +
                                 "specified",
                                 RateStick, xnodes=-3, ynodes=1)
 
     def test_xnodes_zero_error(self):
         """Test for valid value of number of x-nodes, :math:`xnodes`."""
 
-        self.assertRaisesRegexp(ValueError, "Number of x-nodes must be " +
+        self.assertRaisesRegex(ValueError, "Number of x-nodes must be " +
                                 "specified",
                                 RateStick, ynodes=1)
 
     def test_ynodes_neg_error(self):
         """Test for valid value of number of y-nodes, :math:`ynodes`."""
 
-        self.assertRaisesRegexp(ValueError, "Number of y-nodes must be " +
+        self.assertRaisesRegex(ValueError, "Number of y-nodes must be " +
                                 "specified",
                                 RateStick, xnodes=1, ynodes=-3)
 
     def test_ynodes_zero_error(self):
         """Test for valid value of number of y-nodes, :math:`ynodes`."""
 
-        self.assertRaisesRegexp(ValueError, "Number of y-nodes must be " +
+        self.assertRaisesRegex(ValueError, "Number of y-nodes must be " +
                                 "specified",
                                 RateStick, xnodes=1)
 
@@ -427,41 +427,41 @@ class TestCylindricalExpansion(unittest.TestCase):
     def test_geometry_error(self):
         """Test for valid value of geometry."""
 
-        self.assertRaisesRegexp(ValueError, "geometry must be 2",
+        self.assertRaisesRegex(ValueError, "geometry must be 2",
                                 CylindricalExpansion, geometry=1)
 
     def test_r1_neg_error(self):
         """Test for valid value of inner radius, :math:`r_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner radius of HE1 must be > 0",
                                 CylindricalExpansion, r_1=-1.0)
 
     def test_r1_zero_error(self):
         """Test for valid value of inner radius, :math:`r_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner radius of HE1 must be > 0",
                                 CylindricalExpansion, r_1=0.0)
 
     def test_r2_neg_error(self):
         """Test for valid value of HE interface radius, :math:`r_2`."""
 
-        self.assertRaisesRegexp(ValueError, "Radius of interface between " +
+        self.assertRaisesRegex(ValueError, "Radius of interface between " +
                                 "HE1 and HE2 must be > 0",
                                 CylindricalExpansion, r_2=-1.0)
 
     def test_r2_zero_error(self):
         """Test for valid value of HE interface radius, :math:`r_2`."""
 
-        self.assertRaisesRegexp(ValueError, "Radius of interface between " +
+        self.assertRaisesRegex(ValueError, "Radius of interface between " +
                                 "HE1 and HE2 must be > 0",
                                 CylindricalExpansion, r_2=0.0)
 
     def test_r2_smaller_error(self):
         """Test for valid value of HE interface radius, :math:`r_2`."""
 
-        self.assertRaisesRegexp(ValueError, "Radius of interface between " +
+        self.assertRaisesRegex(ValueError, "Radius of interface between " +
                                 "HE1 and HE2 must be > inner radius",
                                 CylindricalExpansion, r_1=2.0, r_2=1.0)
 
@@ -469,7 +469,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Test for valid value of inner region HE CJ detonation velocity,
         :math:`D_{{CJ}_1}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity for " +
+        self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "inner HE must be > 0",
                                 CylindricalExpansion, D_CJ_1=-1.0)
 
@@ -477,7 +477,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Test for valid value of inner region HE CJ detonation velocity,
         :math:`D_{{CJ}_1}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity for " +
+        self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "inner HE must be > 0",
                                 CylindricalExpansion, D_CJ_1=0.0)
 
@@ -485,7 +485,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests for valid value of outer region HE CJ detonation velocity,
         :math:`D_{{CJ}_2}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity for " +
+        self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "outer HE must be > 0",
                                 CylindricalExpansion, D_CJ_2=-1.0)
 
@@ -493,7 +493,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Tests for valid value of outer region HE CJ detonation velocity,
         :math:`D_{{CJ}_2}`."""
 
-        self.assertRaisesRegexp(ValueError, "Detonation velocity for " +
+        self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "outer HE must be > 0",
                                 CylindricalExpansion, D_CJ_2=0.0)
 
@@ -501,7 +501,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Test for valid value of inner region det velocity deviance
         coefficient, :math:`alpha_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Alpha for HE1 must be >= 0",
                                 CylindricalExpansion, alpha_1=-1.0)
 
@@ -509,7 +509,7 @@ class TestCylindricalExpansion(unittest.TestCase):
         """Test for valid value of outer region det velocity deviance
         coefficient, :math:`alpha_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Alpha for HE2 must be >= 0",
                                 CylindricalExpansion, alpha_2=-1.0)
 
@@ -603,42 +603,42 @@ class TestExplosiveArc(unittest.TestCase):
     def test_geometry_error(self):
         """Test for valid value of geometry."""
 
-        self.assertRaisesRegexp(ValueError, "geometry must be 1",
+        self.assertRaisesRegex(ValueError, "geometry must be 1",
                                 ExplosiveArc, geometry=5, xnodes=1,
                                 ynodes=1)
 
     def test_r1_neg_error(self):
         """Test for valid value of inner radius, :math:`r_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner radius must be > 0",
                                 ExplosiveArc, r_1=-1.0, xnodes=1, ynodes=1)
 
     def test_r1_zero_error(self):
         """Test for valid value of inner radius, :math:`r_1`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner radius must be > 0",
                                 ExplosiveArc, r_1=0.0, xnodes=1, ynodes=1)
 
     def test_r2_neg_error(self):
         """Test for valid value of outer radius, :math:`r_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Outer radius must be > 0",
                                 ExplosiveArc, r_2=-1.0, xnodes=1, ynodes=1)
 
     def test_r2_zero_error(self):
         """Test for valid value of outer radius, :math:`r_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Outer radius must be > 0",
                                 ExplosiveArc, r_2=0.0, xnodes=1, ynodes=1)
 
     def test_r2_smaller_error(self):
         """Test for valid value of outer radius, :math:`r_2`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Outer radius must be larger than " +
                                 "inner radius",
                                 ExplosiveArc, r_2=1.0, xnodes=1, ynodes=1)
@@ -646,7 +646,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_omegain_neg_error(self):
         """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be > 0",
                                 ExplosiveArc, omega_in=-1.0,
                                 xnodes=1, ynodes=1)
@@ -654,7 +654,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_omegain_zero_error(self):
         """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be > 0",
                                 ExplosiveArc, omega_in=0.0,
                                 xnodes=1, ynodes=1)
@@ -662,7 +662,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_omegain_max_error(self):
         """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be < pi/2",
                                 ExplosiveArc, omega_in=2.0,
                                 xnodes=1, ynodes=1)
@@ -670,7 +670,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_omegain_max2_error(self):
         """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be < pi/2",
                                 ExplosiveArc, omega_in=np.pi/2.0,
                                 xnodes=1, ynodes=1)
@@ -678,7 +678,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_omegaout_min_error(self):
         """Test for valid value of outer edge angle, :math:`\omega_{out}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Outer DSD edge angle must be >= inner " +
                                 "DSD edge angle",
                                 ExplosiveArc, omega_out=0.5,
@@ -687,7 +687,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_omegaout_max_error(self):
         """Test for valid value of outer edge angle, :math:`\omega_s{out}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Outer DSD edge angle must be <= pi/2",
                                 ExplosiveArc, omega_out=2.0,
                                 xnodes=1, ynodes=1)
@@ -695,21 +695,21 @@ class TestExplosiveArc(unittest.TestCase):
     def test_detloc_zero_error(self):
         """Tests for valid location of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator position must be < 0",
                                 ExplosiveArc, x_d=0.0, xnodes=1, ynodes=1)
 
     def test_detloc_pos_error(self):
         """Tests for valid location of detonator, :math:`x_d`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonator position must be < 0",
                                 ExplosiveArc, x_d=1.0, xnodes=1, ynodes=1)
 
     def test_D_CJ_neg_error(self):
         """Test for valid value of HE detonation velocity, :math:`D_{CJ}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity must be > 0",
                                 ExplosiveArc, D_CJ=-1.0,
                                 xnodes=1, ynodes=1)
@@ -717,7 +717,7 @@ class TestExplosiveArc(unittest.TestCase):
     def test_D_CJ_zero_error(self):
         """Test for valid value of HE detonation velocity, :math:`D_{CJ}`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Detonation velocity must be > 0",
                                 ExplosiveArc, D_CJ=0.0,
                                 xnodes=1, ynodes=1)
@@ -726,7 +726,7 @@ class TestExplosiveArc(unittest.TestCase):
         """Test for valid value of det velocity deviance coefficient,
         :math:`alpha`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Alpha must be >= 0",
                                 ExplosiveArc, alpha=-1.0,
                                 xnodes=1, ynodes=1)
@@ -734,39 +734,39 @@ class TestExplosiveArc(unittest.TestCase):
     def test_t_f_neg_error(self):
         """Test for valid value of final time, :math:`t_f`."""
 
-        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+        self.assertRaisesRegex(ValueError, "Final time must be positive",
                                 ExplosiveArc, t_f=-1.0, xnodes=1, ynodes=1)
 
     def test_t_f_zero_error(self):
         """Test for valid value of final time, :math:`t_f`."""
 
-        self.assertRaisesRegexp(ValueError, "Final time must be positive",
+        self.assertRaisesRegex(ValueError, "Final time must be positive",
                                 ExplosiveArc, t_f=0.0, xnodes=1, ynodes=1)
 
     def test_xnodes_neg_error(self):
         """Test for valid value of number of x-nodes, :math:`xnodes`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Number of x-nodes must be specified",
                                 ExplosiveArc, xnodes=-3, ynodes=1)
 
     def test_xnodes_zero_error(self):
         """Test for valid value of number of x-nodes, :math:`xnodes`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Number of x-nodes must be specified",
                                 ExplosiveArc, ynodes=1)
 
     def test_ynodes_neg_error(self):
         """Test for valid value of number of y-nodes, :math:`ynodes`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Number of y-nodes must be specified",
                                 ExplosiveArc, xnodes=1, ynodes=-3)
 
     def test_ynodes_zero_error(self):
         """Test for valid value of number of y-nodes, :math:`ynodes`."""
 
-        self.assertRaisesRegexp(ValueError,
+        self.assertRaisesRegex(ValueError,
                                 "Number of y-nodes must be specified",
                                 ExplosiveArc, xnodes=1)

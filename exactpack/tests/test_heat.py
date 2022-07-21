@@ -37,7 +37,7 @@ class TestHeatCylindricalSandwich(unittest.TestCase):
         alpha1 = [3.4989852, 7.3870836, 11.61537219, 16.44862148]
         alpha2 = [6.25129196, 10.78395964, 14.42185509, 18.36175587]
         alpha3 = [8.82484366, 13.79272634, 17.8270296, 21.46822425]
-        for n in xrange(Msum):
+        for n in range(Msum):
             self.assertAlmostEqual(alphax[0][n], alpha1[n])
             self.assertAlmostEqual(alphax[1][n], alpha2[n])
             self.assertAlmostEqual(alphax[2][n], alpha3[n])
@@ -46,7 +46,7 @@ class TestHeatCylindricalSandwich(unittest.TestCase):
         beta1 = [-5.10209162e-02, -4.24170214e-01, -9.42790889e-02, 1.03030103e+00]
         beta2 = [-2.28898139e-03, -1.03916648e-01, -4.22161618e-01, -3.58574815e-01]
         beta3 = [-7.93295896e-05, -9.47241486e-03, -1.05920956e-01, -3.85130036e-01]
-        for n in xrange(Msum):
+        for n in range(Msum):
             self.assertAlmostEqual(betax[0][n], beta1[n])
             self.assertAlmostEqual(betax[1][n], beta2[n])
             self.assertAlmostEqual(betax[2][n], beta3[n])
@@ -102,8 +102,8 @@ class TestHeatCylindricalSandwich(unittest.TestCase):
         A[2, 1] = 0.0224030167834
         A[2, 2] = 0.0154832580728
         A[2, 3] = 0.0114801830117
-        for n in xrange(Nsum):
-            for m in xrange(Msum):
+        for n in range(Nsum):
+            for m in range(Msum):
                 k = 2 * (n + 1)
                 alphanm = alphax[n, m]
                 betanm = betax[n, m]
@@ -343,7 +343,7 @@ class TestRod1DFunctions(unittest.TestCase):
         kn0 = [0, 1.57079633, 3.14159265]
         An0 = [0, 0, 0]
         Bn0 = [0, 4.45633841, -0.31830989]
-        for n in xrange(Nsum):
+        for n in range(Nsum):
             self.assertAlmostEqual(solver.kn[n], kn0[n])
             self.assertAlmostEqual(solver.An[n], An0[n])
             self.assertAlmostEqual(solver.Bn[n], Bn0[n])
@@ -355,7 +355,7 @@ class TestRod1DFunctions(unittest.TestCase):
         kn0 = [0, 1.57079633, 3.14159265]
         An0 = [1, -0.81056947, 0]
         Bn0 = [0, 0, 0]
-        for n in xrange(Nsum):
+        for n in range(Nsum):
             self.assertAlmostEqual(solver.kn[n], kn0[n])
             self.assertAlmostEqual(solver.An[n], An0[n])
             self.assertAlmostEqual(solver.Bn[n], Bn0[n])
@@ -366,7 +366,7 @@ class TestRod1DFunctions(unittest.TestCase):
         kn0 = [0.78539816, 2.35619449, 3.92699082]
         An0 = [0, 0, 0]
         Bn0 = [4.6302881, 1.18317627, 0.79636651]
-        for n in xrange(Nsum):
+        for n in range(Nsum):
             self.assertAlmostEqual(solver.kn[n], kn0[n])
             self.assertAlmostEqual(solver.An[n], An0[n])
             self.assertAlmostEqual(solver.Bn[n], Bn0[n])
@@ -377,7 +377,7 @@ class TestRod1DFunctions(unittest.TestCase):
         kn0 = [0.78539816, 2.35619449, 3.92699082]
         An0 = [4.6302881, -1.18317627, 0.79636651]
         Bn0 = [0, 0, 0]
-        for n in xrange(Nsum):
+        for n in range(Nsum):
             self.assertAlmostEqual(solver.kn[n], kn0[n])
             self.assertAlmostEqual(solver.An[n], An0[n])
             self.assertAlmostEqual(solver.Bn[n], Bn0[n])

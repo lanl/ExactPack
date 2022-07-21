@@ -2,7 +2,7 @@
 """
 
 from ...base import ExactSolver, ExactSolution
-from _kamm import riemann_kamm
+from ._kamm import riemann_kamm
 
 
 class Riemann(ExactSolver):
