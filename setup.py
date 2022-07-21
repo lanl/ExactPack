@@ -28,7 +28,7 @@ setup(
                               sources = ['src/timmes/noh/noh.f90'] ),
                     Extension(name = 'exactpack.solvers.sedov._timmes',
                               sources = ['src/timmes/sedov/sedov3.f90'],
-                              # f2py_options = (['only:'] + [ 'sed_1d' ] + [':'])
+                              f2py_options = (['only:'] + [ 'sed_1d' ] + [':'])
                               ),
                    #  Extension(name = 'exactpack.solvers.riemann._timmes',
                    #            sources = ['src/timmes/riemann/exact_riemann.f'],
