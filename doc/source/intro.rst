@@ -12,7 +12,7 @@ solutions written in Fortran or Python. The spatial profiles of the
 relevant physical quantities, such as the density, fluid velocity, sound
 speed, or internal energy, are returned at a time specified by the
 user. The solution profiles can be viewed and examined by a command
-line interface or a graphical user interface, and a number of analysis
+line interface, and a number of analysis
 tools and unit tests are also provided. We have documented the physics
 of each problem in the solution library, and provided complete
 documentation on how to extend the library to include additional exact
@@ -42,8 +42,7 @@ For those who want to add new solvers to ExactPack, read the
 :ref:`coding-style` and :ref:`adding-a-solver`.  The
 :ref:`reference-guide` is mostly intended for those wishing a more
 thorough understanding of ExactPack's internals, such as developers
-adding additional functionality for the code verification tools, GUI,
-etc.
+adding additional functionality for the code verification tools, etc.
 
 Finally, the :ref:`testing` section documents what internal self-tests
 ExactPack uses to verify the solutions it provides.

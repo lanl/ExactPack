@@ -4,12 +4,12 @@
 Quickstart Guide
 ****************
 
-There are three ways to use ExactPack: in Python as a module
-(:ref:`quickstart-library`), using the GUI (:ref:`quickstart-gui`), or
+There are two ways to use ExactPack: in Python as a module
+(:ref:`quickstart-library`), or
 using the command line utility (:ref:`quickstart-cmd-line`).  The
 first is intended as the primary interface, particularly for use in
-building more complete code verification tools.  The other two are 
-easy ways to quickly visualize exact solutions, or interactively
+building more complete code verification tools.  The other is an
+easy way to quickly visualize exact solutions, or interactively
 explore data sets.
 
 Installation
@@ -28,32 +28,8 @@ install to a user specific location by using the ``--user`` flag.  All
 the other standard setup options should also be available (run
 ``python setup.py --help`` for more information).
 
-The setup script also installs the GUI and command-line scripts
+The setup script also installs the command-line scripts
 described below.
-
-.. _quickstart-gui:
-
-The ExactPack Graphical User Interface
-======================================
-
-.. warning::
-
-   As of this writing, the GUI is undergoing active, early-stage
-   development, so the interface may have major changes in subsequent
-   releases.
-
-ExactPack has a simple GUI, which can be started by running from the
-command line::
-
-   epgui
-
-The interface is relatively straightforward.  Choose a problem from
-the menu, input values for any parameters for which the defaults are
-not satisfactory, and click *Plot*.  Multiple plots can be combined,
-or you can clear the canvas before plotting using *Clear and Plot*.
-*Save* writes a CSV data file containing the data from the last item
-plotted.  To save the plot itself, use the controls in the plot
-window.
 
 .. _quickstart-cmd-line:
 

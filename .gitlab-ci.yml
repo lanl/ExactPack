@@ -18,21 +18,20 @@ cache:
     - .cache/pip
     - venv/
 
-build_ep:
-  stage: build
-  script:
-    - apt-get update
-    - apt-get install -y gcc
-    - apt-cache search fortran
-    - gcc --version
-    - pip install -U numpy
-    - pip install -U scipy
-    - pip install -U sphinx
-    - pip install -U matplotlib
-    - pip install -U pytest
-    - pip install -U pytest-cov
-    - pip install -U wxpython
-    - python setup.py develop --user
+before_script:
+  - apt-get update
+  - apt-get install -y gcc
+  - apt-get install -y gfortran
+  - gcc --version
+  - pip install -U numpy
+  - pip install -U scipy
+  - pip install -U sphinx
+  - pip install -U matplotlib
+  - pip install -U pytest
+  - pip install -U pytest-cov
+  - pip install -U vtk
+  - pip install -U matplotlib
+  - python setup.py develop --user
   # artifacts:
   #   paths:
   #     - exactpack
