@@ -22,6 +22,7 @@ class UsingDefaultWarning(UserWarning):
 _whitespace_only_re = re.compile('^[ \t]+$', re.MULTILINE)
 _leading_whitespace_re = re.compile('(^[ \t]*)(?:[^ \t\n])', re.MULTILINE)
 
+
 def _get_margin(text):
     """Get the common leading whitespace of text.
 
@@ -336,7 +337,7 @@ class ExactSolution(numpy.recarray):
         # exactpack can be imported on systems without matplotlib if
         # no plotting is done during the script.
         # 3. The performance hit should be minimal
-        from .analysis.plotting import plot
+        from .plotting import plot
 
         plot(self, name, **kwargs)
 
