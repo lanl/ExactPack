@@ -354,7 +354,7 @@ class ie_Solver(ExactSolver):
     parameters = {
         'M0': "Mach number",
         'rho0': "ambient equilibrium initial density",
-        'kappa': "ion-diffusion coefficient",
+        # 'kappa': "ion-diffusion coefficient",
         'R': "R",
         'Z': "number of available/free electrons",
         'Tref': "ambient equilibrium initial temperature",
@@ -369,7 +369,7 @@ class ie_Solver(ExactSolver):
 
     M0 = 1.4
     rho0 = 1.
-    kappa = 1.
+    # kappa = 1.
     R = 1.
     Z = 1.
     Tref = 100.
@@ -392,7 +392,7 @@ class ie_Solver(ExactSolver):
         prob = radshock.Shock_2Tie(
                M0 = self.M0,
                rho0 = self.rho0,
-               kappa = self.kappa,
+               # kappa = self.kappa,
                R = self.R,
                Z = self.Z,
                Tref = self.Tref,
