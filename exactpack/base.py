@@ -337,7 +337,7 @@ class ExactSolution(numpy.recarray):
         # exactpack can be imported on systems without matplotlib if
         # no plotting is done during the script.
         # 3. The performance hit should be minimal
-        from .analysis.plotting import plot
+        from .plotting import plot
 
         plot(self, name, **kwargs)
 
