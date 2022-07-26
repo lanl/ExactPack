@@ -46,6 +46,13 @@ ep_tests:
       junit: report.xml
       cobertura: coverage.xml
 
+teststyle:
+  stage: test
+  script:
+    # - pylint --rcfile=.pylint.conf vts/
+    # - flake8 --config .flake8rc vts/
+    - sphinx-build -W -b html docs public
+
 pages:
   stage: deploy
   script:
