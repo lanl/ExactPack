@@ -5,7 +5,7 @@ The Noh2 Problem
    :members:
 
 :mod:`exactpack.solvers.noh2.noh2`
----------------------------------
+----------------------------------
 
 .. automodule:: exactpack.solvers.noh2.noh2
    :members:

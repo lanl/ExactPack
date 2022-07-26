@@ -4,13 +4,8 @@
 Quickstart Guide
 ****************
 
-There are two ways to use ExactPack: in Python as a module
-(:ref:`quickstart-library`), or
-using the command line utility (:ref:`quickstart-cmd-line`).  The
-first is intended as the primary interface, particularly for use in
-building more complete code verification tools.  The other is an
-easy way to quickly visualize exact solutions, or interactively
-explore data sets.
+ExactPack is intended to be used as a Python module, particularly for use in
+building more complete code verification tools. 
 
 Installation
 ============
@@ -31,39 +26,13 @@ the other standard setup options should also be available (run
 The setup script also installs the command-line scripts
 described below.
 
-.. _quickstart-cmd-line:
-
-Using ExactPack from the Command Line
-=====================================
-
-.. warning::
-
-   As of this writing, the command-line interface is undergoing
-   active, early-stage development, so the interface may have major
-   changes in subsequent releases.  Users are advised not to develop
-   any scripts or code that depend on the current behavior of the
-   command-line tool.
-
-Complete and current help information can be found by running::
-
-   exactpack --help
-
-Also, running::
-
-   exactpack --doc
-
-will open this manual (in either HTML or PDF format) in an appropriate
-viewer.
-
 .. _quickstart-library:
 
 Using ExactPack as a Python Library
 ===================================
 
 ExactPack is designed to be used to be used as a Python library in
-postprocessing scripts for code verification.  It provides a number
-of tools to make it easy to compare exact solutions against the
-output of other codes, and for convergence analysis.
+postprocessing scripts for code verification.
 
 By default, importing ExactPack does not load in any specific
 solutions.  Instead you must load in the particular problem you want.
@@ -82,16 +51,12 @@ solution, with a specific-heat ratio of 1.4, and then plots it::
    soln = solver(linspace(0, 1.0), 0.3)
    soln.plot_all()
 
-To get a complete list of the available solvers use
-:func:`exactpack.utils.discover_solvers`.  Note that there may be
-several solvers for a particular problem.  For example, by default
-:mod:`exactpack.solvers.noh` loads a pure Python implementation,
+Note that there may be several solvers for a particular problem.  For example,
+by default :mod:`exactpack.solvers.noh` loads a pure Python implementation,
 :mod:`exactpack.solvers.noh.noh1`.  If you want the Fortran implementation by
 Frank Timmes, you need to explicitly import
 :mod:`exactpack.solvers.noh.timmes`.
      
 For documentation on specific solvers, including information on what
 parameters they accept and what solution methods are employed, see the
-API documentation (:mod:`exactpack`).  For information about utility
-functions and analysis tools, see the APIs for those specific packages
-(:mod:`exactpack.utils` and :mod:`exactpack.analysis`).
+API documentation (:mod:`exactpack`).

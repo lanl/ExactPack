@@ -14,15 +14,3 @@ global namespace when :mod:`exactpack` is imported.
 
 .. automodule:: exactpack.base
    :members:
-
-:mod:`exactpack.analysis`
--------------------------
-
-.. automodule:: exactpack.analysis.code_verification
-   :members:
-      
-:mod:`exactpack.utils`
-----------------------
-
-.. automodule:: exactpack.utils
-   :members:

@@ -10,4 +10,3 @@ including documentation of all of the available solvers.
 .. toctree::
    
    exactpack
-   interfaces
