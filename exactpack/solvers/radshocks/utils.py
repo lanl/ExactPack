@@ -1747,6 +1747,8 @@ class IE_discontinuousShockProfiles(IEShockProfile, ShockMethods_2T):
         self.right1 = 0
         self.continuous_shock = 1
         self.Te0 = incoming.Te0
+        # jthrussell added this line as tests won't pass without it, however I
+        # am not confident this is correct.
         self.Tecont = incoming.Te0
         self.Te_init = numpy.zeros(2)
         self.epsilon = incoming.epsilon
@@ -1783,6 +1785,8 @@ class IE_continuousShockProfiles(IEShockProfile, ShockMethods_2T):
         self.right1 = 0
         self.continuous_shock = 1
         self.Te0 = incoming.Te0
+        # jthrussell added this line as tests won't pass without it, however I
+        # am not confident this is correct.
         self.Tecont = incoming.Te0
         self.Te_init = numpy.zeros(2)
         self.epsilon = incoming.epsilon
