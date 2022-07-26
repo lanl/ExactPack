@@ -51,7 +51,7 @@ teststyle:
   script:
     # - pylint --rcfile=.pylint.conf vts/
     # - flake8 --config .flake8rc vts/
-    - sphinx-build -W -b html docs public
+    - sphinx-build -W -b html doc/source public
 
 pages:
   stage: deploy
