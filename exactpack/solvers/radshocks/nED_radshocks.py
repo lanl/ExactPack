@@ -355,7 +355,7 @@ class ie_Solver(ExactSolver):
         'M0': "Mach number",
         'rho0': "ambient equilibrium initial density",
         # 'kappa': "ion-diffusion coefficient",
-        'R': "R",
+        # 'R': "R",
         'Z': "number of available/free electrons",
         'Tref': "ambient equilibrium initial temperature",
         'Cv': "ambient equilibrium heat-capacity at constant volume",
@@ -370,7 +370,7 @@ class ie_Solver(ExactSolver):
     M0 = 1.4
     rho0 = 1.
     # kappa = 1.
-    R = 1.
+    # R = 1.
     Z = 1.
     Tref = 100.
     Cv = 1.4472799784454e12
@@ -393,7 +393,7 @@ class ie_Solver(ExactSolver):
                M0 = self.M0,
                rho0 = self.rho0,
                # kappa = self.kappa,
-               R = self.R,
+               # R = self.R,
                Z = self.Z,
                Tref = self.Tref,
                Cv = self.Cv,

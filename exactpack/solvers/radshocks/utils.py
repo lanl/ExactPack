@@ -1729,8 +1729,10 @@ class IE_discontinuousShockProfiles(IEShockProfile, ShockMethods_2T):
         print_stmnt  = '\n'
         print_stmnt += 'entered AnalyticShockProfiles __init__ for M0 = '
         print_stmnt += str(incoming.M0) + '\n'
-#         from exactpack.solvers.radshocks import fnctn_2Tie as fnctn
-        import fnctn_2Tie as fnctn
+        try:
+            import fnctn_2Tie as fnctn
+        except ImportError:
+            from exactpack.solvers.radshocks import fnctn_2Tie as fnctn
         global fnctn
         self.Z = incoming.Z
         self.right_pts = 2. * self.num_pts + 1
@@ -1745,6 +1747,7 @@ class IE_discontinuousShockProfiles(IEShockProfile, ShockMethods_2T):
         self.right1 = 0
         self.continuous_shock = 1
         self.Te0 = incoming.Te0
+        self.Tecont = incoming.Te0
         self.Te_init = numpy.zeros(2)
         self.epsilon = incoming.epsilon
         self.mult_vals = []
@@ -1762,8 +1765,10 @@ class IE_continuousShockProfiles(IEShockProfile, ShockMethods_2T):
         print_stmnt  = '\n'
         print_stmnt += 'entered AnalyticShockProfiles __init__ for M0 = '
         print_stmnt += str(incoming.M0) + '\n'
-#         from exactpack.solvers.radshocks import fnctn_2Tie as fnctn
-        import fnctn_2Tie as fnctn
+        try:
+            import fnctn_2Tie as fnctn
+        except ImportError:
+            from exactpack.solvers.radshocks import fnctn_2Tie as fnctn
         global fnctn
         self.Z = incoming.Z
         self.right_pts = 2. * self.num_pts + 1
@@ -1778,6 +1783,7 @@ class IE_continuousShockProfiles(IEShockProfile, ShockMethods_2T):
         self.right1 = 0
         self.continuous_shock = 1
         self.Te0 = incoming.Te0
+        self.Tecont = incoming.Te0
         self.Te_init = numpy.zeros(2)
         self.epsilon = incoming.epsilon
         self.mult_vals = []
