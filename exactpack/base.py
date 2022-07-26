@@ -22,6 +22,7 @@ class UsingDefaultWarning(UserWarning):
 _whitespace_only_re = re.compile('^[ \t]+$', re.MULTILINE)
 _leading_whitespace_re = re.compile('(^[ \t]*)(?:[^ \t\n])', re.MULTILINE)
 
+
 def _get_margin(text):
     """Get the common leading whitespace of text.
 

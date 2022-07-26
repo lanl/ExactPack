@@ -29,7 +29,6 @@ before_script:
   - pip install -U matplotlib
   - pip install -U pytest
   - pip install -U pytest-cov
-  - pip install -U matplotlib
   - python setup.py develop --user
   # artifacts:
   #   paths:
