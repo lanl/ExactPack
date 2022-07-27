@@ -13,7 +13,7 @@ import exactpack.solvers.noh.timmes as timmes
 
 
 class TestNoh1(unittest.TestCase):
-    """Tests for :class:`exactpack.solvers.noh.noh1.Noh`.
+    r"""Tests for :class:`exactpack.solvers.noh.noh1.Noh`.
 
     The tests consist of comparing the values at two points, one in
     front of the shock (:math:`r=0.3`) and one behind the shock
@@ -90,31 +90,31 @@ class TestNohWrappers(unittest.TestCase):
 
         numpy.testing.assert_array_equal(
             noh1.Noh(geometry=1, gamma=1.4)
-            (numpy.linspace(0, 1), 0.6),
+            (numpy.linspace(0.1, 1), 0.6),
             noh1.PlanarNoh(gamma=1.4)
-            (numpy.linspace(0, 1), 0.6))
+            (numpy.linspace(0.1, 1), 0.6))
 
     def test_cylindrical(self):
         """Cylindrical Noh wrapper"""
 
         numpy.testing.assert_array_equal(
             noh1.Noh(geometry=2, gamma=1.4)
-            (numpy.linspace(0, 1), 0.6),
+            (numpy.linspace(0.1, 1), 0.6),
             noh1.CylindricalNoh(gamma=1.4)
-            (numpy.linspace(0, 1), 0.6))
+            (numpy.linspace(0.1, 1), 0.6))
 
     def test_spherical(self):
         """Spherical Noh wrapper"""
 
         numpy.testing.assert_array_equal(
             noh1.Noh(geometry=3, gamma=1.4)
-            (numpy.linspace(0, 1), 0.6),
+            (numpy.linspace(0.1, 1), 0.6),
             noh1.SphericalNoh(gamma=1.4)
-            (numpy.linspace(0, 1), 0.6))
+            (numpy.linspace(0.1, 1), 0.6))
 
 
 class TestNohTimmes(unittest.TestCase):
-    """Tests for :class:`exactpack.solvers.noh.timmes.Noh`.
+    r"""Tests for :class:`exactpack.solvers.noh.timmes.Noh`.
 
     The tests consist of comparing the values at two points, one in
     front of the shock (:math:`r=0.3`) and one behind the shock
