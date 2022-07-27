@@ -125,21 +125,26 @@ References
    LA-UR-05-6865, Los Alamos National Laboratory (2005).
 
 .. [Guess1957]
-   Sen and Guess,
-   (1957)
+   H. Sen and A. Guess,
+   *Radiation effects in shock-wave structure*
+   Physical Review **108** (1957) 560.
 
 .. [Heaslet1963]
    Heaslet and Baldwin,
-   (1963)
+   M. Heaslet and B. Baldwin,
+   *Predictions of the structure of radiation-resisted shock waves*,
+   Physics of Fluids **6** (1963) 781.
 
 .. [Lowrie2007]
-   Lowrie,
-   (2007)
+   R. Lowrie and R. Rauenzahn,
+   *Radiative shock solutions in the equilibrium diffusion limit*
+   Shock Waves **18** (2007) 445.
 
 .. [Lowrie2008]
-   Lowrie,
-   (2008)
+   R. Lowrie and J. Edwards,
+   *Radiative shock solutions with grey nonequilibrium diffusion*
+   Shock Waves **18** (2008) 129.
 
 .. [Ferguson2017]
-   J.M. Ferguson,
-   (2017)
+   J. Ferguson, J. Morel and R. Lowrie
+   High Energy Density Physics, accepted for publication.
