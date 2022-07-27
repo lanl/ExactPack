@@ -25,6 +25,9 @@ from ...base import ExactSolver, ExactSolution
 
 class Cog3(ExactSolver):
     """Computes the solution to the Cog3 problem.
+
+    Computes the solution to the Cog3 problem with defaults, geometry = 3, rho0 = 1.8,
+    b = 1.2, v = 0.5, Gamma = 40.
     """
 
     parameters = {
@@ -32,8 +35,9 @@ class Cog3(ExactSolver):
         'rho0': "density coefficient",
         'b': "free dimensionless parameter",
         'v': "free parameter with dimensions of velocity",
-        'Gamma': "Gruneisen gas parameter"
+        'Gamma': "|Gruneisen| gas parameter"
         }
+
     geometry = 3
     rho0 = 1.8
     b = 1.2

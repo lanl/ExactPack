@@ -39,14 +39,18 @@ from math import sqrt
 from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog21(ExactSolver):
-    """Computes the solution to the Cog21 problem. No conduction.
+    """omputes the solution to the Cog21 problem.
+
+    Computes the solution to the Cog21 problem with defaults rho0 = 1.8,
+    temp0 = 2.9, Gamma = 400.
     """
 
     parameters = {
         'rho0': "density coefficient",
         'temp0': "temperature coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     rho0 = 1.8
     temp0 = 2.9
     Gamma = 400.

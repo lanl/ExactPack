@@ -16,8 +16,7 @@ The exact solution takes the form,
 
 Free parameters: :math:`b`, :math:`k`, :math:`\rho_0`, :math:`\tau`,
 and :math:`\Gamma`. For :math:`b=3`, :math:`k=2` (spherical with
-:math:`\gamma = 5/3`), this becomes the 1974 Kidder solution [R.E.
-Kidder, Nucl. Fusion **14** (1974) 53]
+:math:`\gamma = 5/3`), this becomes the 1974 Kidder solution [Kidder1974]_ .
 
 """
 
@@ -28,6 +27,9 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog6(ExactSolver):
     """Computes the solution to the Cog6 problem.
+
+    Computes the solution to the Cog6 problem with defaults geometry = 3, rho0 = 1.8,
+    tau = 1.25, b = 1.2, Gamma = 40.
     """
 
     parameters = {
@@ -35,7 +37,7 @@ class Cog6(ExactSolver):
         'rho0': "density coefficient",
         'tau': "free parameter with dimensions of time",
         'b': "free dimensionless parameter",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
         
     geometry = 3

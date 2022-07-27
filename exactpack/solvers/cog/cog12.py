@@ -30,6 +30,9 @@ from ...base import ExactSolver, ExactSolution
 
 class Cog12(ExactSolver):
     """Computes the solution to the Cog12 problem.
+
+    Computes the solution to the Cog12 problem with defaults geometry = 3,
+    gamma = 1.4, beta = 1.0, rho0 = 1.8, u0 = 2.3, Gamma = 40.
     """
 
     parameters = {
@@ -38,7 +41,7 @@ class Cog12(ExactSolver):
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
         'u0': "velocity coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
     geometry = 3
     gamma = 1.4

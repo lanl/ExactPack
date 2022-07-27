@@ -1,5 +1,7 @@
 r"""The Coggeshall problems.
 
+.. |Gruneisen| replace:: Grüneisen
+
 The Coggeshall [Coggeshall1991]_ problems are a collection of exact
 solutions to the one-dimensional Euler equations with heat conduction and
 no viscosity.  The fluid field variables are the mass density :math:`\rho(r,t)`,
@@ -7,8 +9,7 @@ the fluid velocity
 :math:`u(r,t)`, the fluid temperature :math:`T(r,t)`, and the specific
 internal energy :math:`e(r,t)` of the fluid material, where :math:`r`
 is the spatial coordinate in planar, cylindrical, or spherical
-geometry. The :math:`\gamma`-law Equation of State (EOS) for the gas
-is written
+geometry. The Equation of State (EOS) for the gas takes the form
 
 .. math::
   P &= \Gamma\, \rho T

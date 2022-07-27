@@ -24,6 +24,9 @@ from ...base import ExactSolver, ExactSolution
 
 class Cog2(ExactSolver):
     """Computes the solution to the Cog2 problem.
+
+    Computes the solution to the Cog2 problem with defaults geometry = 3, gamma = 1.4,
+    rho0 = 1.8, b = 1.2, Gamma = 40.
     """
 
     parameters = {
@@ -31,8 +34,9 @@ class Cog2(ExactSolver):
         'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'rho0': "density coefficient",
         'b': "free dimensionless parameter",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8

@@ -38,9 +38,7 @@ The exact solution takes the form,
 
 Free parameters: :math:`b`, :math:`k`, :math:`\tau`, :math:`R_0`,
 :math:`R_i`, and :math:`\Gamma`. For :math:`b = 0`, :math:`k = 2` (spherical
-with :math:`\gamma = 5/3`), this becomes Kidder's 1976 solution
-[R.E. Kidder, Nucl. Fusion **16** (1976) 33].
-
+with :math:`\gamma = 5/3`), this becomes Kidder's 1976 solution [Kidder1976]_ .
 """
 
 import numpy as np
@@ -51,6 +49,9 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog7(ExactSolver):
     """Computes the solution to the Cog7 problem.
+
+    Computes the solution to the Cog7 problem with defaults geometry = 3, tau = 1.25, b = 1.2,
+    R0 = 2.0, Ri = 0.1, Gamma = 40.
     """
 
     parameters = {
@@ -59,8 +60,9 @@ class Cog7(ExactSolver):
         'b': "free dimensionless parameter",
         'R0': "free parameter with dimensions of length",
         'Ri': "free parameter with dimensions of length",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     tau = 1.25
     b = 1.2

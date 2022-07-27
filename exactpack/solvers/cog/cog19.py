@@ -39,7 +39,10 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 
 class Cog19(ExactSolver):
-    """Computes the solution to the Cog19 problem. No conduction.
+    """Computes the solution to the Cog19 problem.
+
+    Computes the solution to the Cog19 problem with defaults geometry = 3,
+    gamma = 1.4, rho0 = 1.8, u0 = -2.3, Gamma = 40.
     """
 
     parameters = {
@@ -47,8 +50,9 @@ class Cog19(ExactSolver):
         'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'rho0': "density coefficient",
         'u0': "velocity coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8

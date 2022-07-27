@@ -162,7 +162,7 @@ References
 
 .. [Kidder1976]
    R.E. Kidder,
-  *Energy gain of laser-compressed pellets: a simple model calculation*,
+   *Energy gain of laser-compressed pellets: a simple model calculation*,
    Nucl. Fusion **16** (1976) 33.
 
 .. [Bdzil]

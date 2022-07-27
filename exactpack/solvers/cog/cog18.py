@@ -32,7 +32,9 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog18(ExactSolver):
     """Computes the solution to the Cog18 problem.
-       Note: choose alpha, beta, tau correctly.
+
+    Computes the solution to the Cog18 problem with the defaults geometry = 3,
+    alpha = 2.0, beta = 1.0, rho0 = 1.8, tau = 1.25, Gamma = 40. 
     """
 
     parameters = {
@@ -41,8 +43,9 @@ class Cog18(ExactSolver):
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
         'tau': "free parameter of dimension time",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     alpha = 2.0
     beta = 1.0

@@ -24,13 +24,17 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog5(ExactSolver):
     """Computes the solution to the Cog5 problem.
+
+    Computes the solution to the Cog5 problem with defaults rho0 = 1.8, u0 = 2.3,
+    Gamma = 40.
     """
 
     parameters = {
         'rho0': "density coefficient",
         'u0': "velocity coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     rho0 = 1.8
     u0 = 2.3
     Gamma = 40.

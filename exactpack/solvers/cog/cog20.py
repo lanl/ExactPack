@@ -43,7 +43,10 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 
 class Cog20(ExactSolver):
-    """Computes the solution to the Cog20 problem. No conduction.
+    """Computes the solution to the Cog20 problem.
+
+    Computes the solution to the Cog20 problem with defaults geometry = 3,
+    gamma = 1.4, rho0 = 1.8, u0 = 2.3, a = 0.3, Gamma = 40.
     """
 
     parameters = {
@@ -52,8 +55,9 @@ class Cog20(ExactSolver):
         'rho0': "density coefficient",
         'u0': "velocity coefficient",
         'a': "free parameter with dimensions of inverse time",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8

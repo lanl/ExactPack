@@ -34,7 +34,10 @@ from ._timmes import cog8_timmes
 
 
 class Cog8(ExactSolver):
-    """ Computes the solution to the Cog8 problem.
+    """Computes the solution to the Cog8 problem.
+
+    Computes the solution to the Cog8 problem with gamma = 1.4, alpha = 2.0, beta = 1.0,
+    rho0 = 1.8, temp0 = 1.4, cv = 1.0.
     """
     
     parameters = {
@@ -46,7 +49,7 @@ class Cog8(ExactSolver):
         'cv': 'specific heat at constant volume [erg/g/eV]',
         }
 
-    gamma = 1.4        
+    gamma = 1.4
     alpha = 2.0
     beta = 1.0
     rho0 = 1.8
