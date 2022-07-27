@@ -153,3 +153,17 @@ References
 .. [Ferguson2017]
    J. Ferguson, J. Morel and R. Lowrie
    High Energy Density Physics, accepted for publication.
+
+.. [Kidder1974]
+   R.E. Kidder,
+   *Laser-Driven Compression of Hollow Shells: Power requirements and
+   Stability Limitations*,
+   Nucl. Fusion **14** (1974) 53.
+
+.. [Kidder1976]
+   R.E. Kidder,
+  *Energy gain of laser-compressed pellets: a simple model calculation*,
+   Nucl. Fusion **16** (1976) 33.
+
+.. [Bdzil]
+   Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
