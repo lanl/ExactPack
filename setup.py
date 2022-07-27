@@ -3,13 +3,14 @@ import os
 from setuptools import find_packages
 from numpy.distutils.core import setup, Extension
 from sphinx.setup_command import BuildDoc
+from exactpack import __version__
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name = "ExactPack",
-    version = "1.6.0",
+    version = __version__,
     description = "Exact solution API for physics code verification",
     long_description = read('README.md'),
     classifiers = ['Development Status :: 4 - Beta',
@@ -93,6 +94,5 @@ setup(
     },
     cmdclass = { 'build_sphinx' : BuildDoc },
     test_suite = "exactpack.tests",
-    package_data = {'exactpack.examples.data':['*.dat', '*.vtk']}
     )
 
