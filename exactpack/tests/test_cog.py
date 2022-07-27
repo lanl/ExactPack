@@ -1,4 +1,4 @@
-"""Tests for the Cog1 problem.
+"""Unittests for the Cog solvers.
 """
 
 import unittest
@@ -29,12 +29,10 @@ from exactpack.solvers.cog.cog21 import Cog21
 
 # cog1 ##########################
 class TestCog1(unittest.TestCase):
-    """Test for Coggeshall problems: cog1
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog1`."""
 
     def test_cog1(self):
-        """cog1 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -96,18 +94,16 @@ class TestCog1(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=5)
 
     def test_geometry_error_cog1(self):
-        """cog1 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog1, geometry=-1)
 
 
 # cog2 ##########################
 class TestCog2(unittest.TestCase):
-    """Test for Coggeshall problems: cog2
-
-     """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog2.Cog2`."""
 
     def test_cog2(self):
-        """cog2 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -169,18 +165,16 @@ class TestCog2(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog2(self):
-        """cog2 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog2, geometry=-1)
 
 
 # cog3 ##########################
 class TestCog3(unittest.TestCase):
-    """Test for Coggeshall problems: cog3
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog3.Cog3`."""
 
     def test_cog3(self):
-        """cog3 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -244,18 +238,16 @@ class TestCog3(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog3(self):
-        """cog3 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog3, geometry=-1)
 
 
 # cog4 ##########################
 class TestCog4(unittest.TestCase):
-    """Test for Coggeshall problems: cog4
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog4.Cog4`."""
 
     def test_cog4(self):
-        """cog4 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -318,18 +310,16 @@ class TestCog4(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog4(self):
-        """cog4 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog4, geometry=-1)
 
 
 # cog5 ##########################
 class TestCog5(unittest.TestCase):
-    """Test for Coggeshall problems: cog5
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog5.Cog5`."""
 
     def test_cog5(self):
-        """cog5 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -391,18 +381,16 @@ class TestCog5(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog5(self):
-        """cog5 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog5, geometry=1)
 
 
 # cog6 ##########################
 class TestCog6(unittest.TestCase):
-    """Test for Coggeshall problems: cog6
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog6.Cog6`."""
 
     def test_cog6(self):
-        """cog6 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -464,18 +452,16 @@ class TestCog6(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog6(self):
-        """cog6 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog6, geometry=-1)
 
 
 # cog7 ##########################
 class TestCog7(unittest.TestCase):
-    """Test for Coggeshall problems: cog7
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog7.Cog7`."""
 
     def test_cog7(self):
-        """cog7 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -537,18 +523,16 @@ class TestCog7(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
 
     def test_geometry_error_cog7(self):
-        """cog7 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog7, geometry=-1)
 
 
 # cog8 ##########################
 class TestCog8(unittest.TestCase):
-    """Test for Coggeshall problems: cog8
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog8.Cog8`."""
 
     def test_cog8(self):
-        """cog8 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -612,18 +596,16 @@ class TestCog8(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri]/scaled,  gold_specific_internal_energy[ri, ti]/scaled, places=6)
 
     def test_geometry_error_cog8(self):
-        """cog8 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog8, geometry=-1)
 
 
 # cog9 ##########################
 class TestCog9(unittest.TestCase):
-    """Test for Coggeshall problems: cog9
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog9.Cog9`."""
 
     def test_cog9(self):
-        """cog9 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -686,18 +668,16 @@ class TestCog9(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog9(self):
-        """cog9 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog9, geometry=-1)
 
 
 # cog10 ##########################
 class TestCog10(unittest.TestCase):
-    """Test for Coggeshall problems: cog10
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog10.Cog10`."""
 
     def test_cog10(self):
-        """cog10 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -759,18 +739,16 @@ class TestCog10(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog10(self):
-        """cog10 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog10, geometry=-1)
 
 
 # cog11 ##########################
 class TestCog11(unittest.TestCase):
-    """Test for Coggeshall problems: cog11
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog11.Cog11`."""
 
     def test_cog11(self):
-        """cog11 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -832,18 +810,16 @@ class TestCog11(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri]/10**6,  gold_specific_internal_energy[ri, ti]/10**6, places=6)
 
     def test_geometry_error_cog11(self):
-        """cog11 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog11, geometry=-1)
 
 
 # cog12 ##########################
 class TestCog12(unittest.TestCase):
-    """Test for Coggeshall problems: cog12
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog12.Cog12`."""
 
     def test_cog12(self):
-        """cog12 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -905,18 +881,16 @@ class TestCog12(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog12(self):
-        """cog12 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog12, geometry=-1)
 
 
 # cog13 ##########################
 class TestCog13(unittest.TestCase):
-    """Test for Coggeshall problems: cog13
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog13.Cog13`."""
 
     def test_cog13(self):
-        """cog13 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -978,18 +952,16 @@ class TestCog13(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog13(self):
-        """cog13 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog13, geometry=-1)
 
 
 # cog14 ##########################
 class TestCog14(unittest.TestCase):
-    """Test for Coggeshall problems: cog14
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog14.Cog14`."""
 
     def test_cog14(self):
-        """cog14 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -1051,18 +1023,16 @@ class TestCog14(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog14(self):
-        """cog14 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog14, geometry=-1)
 
 
 # cog16 ##########################
 class TestCog16(unittest.TestCase):
-    """Test for Coggeshall problems: cog16
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog16.Cog16`."""
 
     def test_cog16(self):
-        """cog16 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -1124,18 +1094,16 @@ class TestCog16(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog16(self):
-        """cog16 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog16, geometry=1)
 
 
 # cog17 ##########################
 class TestCog17(unittest.TestCase):
-    """Test for Coggeshall problems: cog17
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog17.Cog17`."""
 
     def test_cog17(self):
-        """cog17 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -1197,18 +1165,16 @@ class TestCog17(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog17(self):
-        """cog17 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog17, geometry=-1)
 
 
 # cog18 ##########################
 class TestCog18(unittest.TestCase):
-    """Test for Coggeshall problems: cog18
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog18.Cog18`."""
 
     def test_cog18(self):
-        """cog18 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -1270,18 +1236,16 @@ class TestCog18(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog18(self):
-        """cog18 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog18, geometry=-1)
 
 
 # cog19 ##########################
 class TestCog19(unittest.TestCase):
-    """Test for Coggeshall problems: cog19
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog19.Cog19`."""
 
     def test_cog19(self):
-        """cog19 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -1344,18 +1308,16 @@ class TestCog19(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog19(self):
-        """cog19 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog19, geometry=-1)
 
 
 # cog20 ##########################
 class TestCog20(unittest.TestCase):
-    """Test for Coggeshall problems: cog20
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog20.Cog20`."""
 
     def test_cog20(self):
-        """cog20 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)
@@ -1418,18 +1380,16 @@ class TestCog20(unittest.TestCase):
                 self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
 
     def test_geometry_error_cog20(self):
-        """cog20 problem:"""
+        """Tests geometry flag."""
         self.assertRaises(ValueError, Cog20, geometry=-1)
 
 
 # cog21 ##########################
 class TestCog21(unittest.TestCase):
-    """Test for Coggeshall problems: cog21
-
-    """
+    """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog21.Cog21`."""
 
     def test_cog21(self):
-        """cog21 problem:"""
+        """Gold standard regression test."""
 
         npts = 4
         r = np.linspace(0.1, 1.0, npts)

@@ -1,4 +1,4 @@
-r"""Tests for the Kenamond exact solution solvers.
+r"""Unittests for the Kenamond solvers.
 
 Test problems consist of comparison of the calculated burntime for a 2D or
 3D point with the known analytic solution. Solver parameter inputs are
@@ -20,8 +20,7 @@ from exactpack.solvers.kenamond.kenamond3 import Kenamond3
 
 
 class TestKenamond1(unittest.TestCase):
-    r"""Tests for
-    :class:`exactpack.solvers.kenamond.kenamond1.Kenamond1`.
+    r"""Tests for :class:`exactpack.solvers.kenamond.kenamond1.Kenamond1`.
 
     Solution tests consist of comparing the calculated burn time to the
     analytic solution at a fixed point. Input tests check that invalid
@@ -39,7 +38,7 @@ class TestKenamond1(unittest.TestCase):
         self.assertEqual(soln.burntime, 5.0)
 
     def test_burntime_3d_base(self):
-        """Tests burntime solution at 3D point (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point.
 
         Uses default parameter values for HE detonation velocity and
         detonation time. Detonator location is specified as the 3D origin.
@@ -62,7 +61,7 @@ class TestKenamond1(unittest.TestCase):
         self.assertEqual(soln.burntime, 2.5)
 
     def test_burntime_3d_detvel(self):
-        """Tests burntime solution at 3D point (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point.
 
         Uses default parameter value for detonation time. Detonator location
         is specified as the 3D origin. HE detonation velocity is
@@ -86,7 +85,7 @@ class TestKenamond1(unittest.TestCase):
         self.assertEqual(soln.burntime, 3.0)
 
     def test_burntime_3d_dettime(self):
-        """Tests burntime solution at 3D point (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point.
 
         Uses default parameter value for HE detonation velocity. Detonator
         location is specified as the 3D origin. Detonation time is
@@ -111,7 +110,7 @@ class TestKenamond1(unittest.TestCase):
         self.assertEqual(soln.burntime, 2.5)
 
     def test_burntime_3d_detloc(self):
-        """Tests burntime solution at 3D point (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point.
 
         Uses default parameter values for HE detonation velocity and
         detonation time. Detonator location is :math:`x_d=(1.0, 1.0, 1.0)`.
@@ -158,8 +157,7 @@ class TestKenamond1(unittest.TestCase):
 
 
 class TestKenamond2(unittest.TestCase):
-    r"""Tests for
-    :class:`exactpack.solvers.kenamond.kenamond2.Kenamond2`.
+    r"""Tests for :class:`exactpack.solvers.kenamond.kenamond2.Kenamond2`.
 
     Solution tests consist of comparing the calculated burn time to the
     analytic solution at a fixed point. Input tests check that invalid
@@ -227,8 +225,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertEqual(soln.burntime, 4.5)
 
     def test_burntime_3d_base_t1(self):
-        """Tests burntime solution at 3D point in :math:`t_1` region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in :math:`t_1` region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities, detonation times and detonator locations.
@@ -239,8 +236,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertEqual(soln.burntime, 4.5)
 
     def test_burntime_3d_base_t2(self):
-        """Tests burntime solution at 3D point in :math:`t_2` region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in :math:`t_2` region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities, detonation times and detonator locations.
@@ -251,8 +247,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertEqual(soln.burntime, 3.5)
 
     def test_burntime_3d_base_t3(self):
-        """Tests burntime solution at 3D point in :math:`t_3` region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in :math:`t_3` region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities, detonation times and detonator locations.
@@ -263,8 +258,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertEqual(soln.burntime, 0.5)
 
     def test_burntime_3d_base_t4(self):
-        """Tests burntime solution at 3D point in :math:`t_4` region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in :math:`t_4` region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities, detonation times and detonator locations.
@@ -275,8 +269,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertEqual(soln.burntime, 3.5)
 
     def test_burntime_3d_base_t5(self):
-        """Tests burntime solution at 3D point in :math:`t_5` region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in :math:`t_5` region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities, detonation times and detonator locations.
@@ -287,8 +280,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertEqual(soln.burntime, 3.5)
 
     def test_burntime_3d_base_t6(self):
-        """Tests burntime solution at 3D point in :math:`t_6` region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in :math:`t_6` region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities, detonation times and detonator locations.
@@ -316,8 +308,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertTrue((soln.burntime == answer).all())
 
     def test_burntime_3d_detvel1(self):
-        """Tests burntime solution at 3D point in each region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in each region.
 
         Uses default parameter values for inner region radius, outer region
         HE detonation velocity, detonator locations and detonation times.
@@ -354,8 +345,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertTrue((soln.burntime == answer).all())
 
     def test_burntime_3d_detvel2(self):
-        """Tests burntime solution at 3D point in each region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in each region.
 
         Uses default parameter values for inner region radius, inner region
         HE detonation velocity, detonator locations and detonation times.
@@ -390,8 +380,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertTrue((soln.burntime == answer).all())
 
     def test_burntime_3d_innerR(self):
-        """Tests burntime solution at 3D point in each region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in each region.
 
         Uses default parameter values for HE detonation velocities, detonator
         locations and detonation times. The radius of the inner region is
@@ -429,8 +418,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertTrue((soln.burntime == answer).all())
 
     def test_burntime_3d_dets1(self):
-        """Tests burntime solution at 3D point in each region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in each region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities and detonation times. Detonator locations have been
@@ -472,8 +460,7 @@ class TestKenamond2(unittest.TestCase):
         self.assertTrue((soln.burntime == answer).all())
 
     def test_burntime_3d_dets2(self):
-        """Tests burntime solution at 3D point in each region
-        (**geometry** :math:`=3`).
+        """Tests burntime solution at 3D point in each region.
 
         Uses default parameter values for inner region radius, HE detonation
         velocities and detonation times. Detonator locations 1 and 2 have
@@ -513,40 +500,35 @@ class TestKenamond2(unittest.TestCase):
                                 Kenamond2, R=0.0)
 
     def test_D1_neg_error(self):
-        """Test for valid value of inner region HE detonation velocity,
-        :math:`D_1`."""
+        """Test for valid value of inner region HE detonation velocity, :math:`D_1`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 1 must be > 0",
                                 Kenamond2, D1=-1.0)
 
     def test_D1_zero_error(self):
-        """Test for valid value of inner region HE detonation velocity,
-        :math:`D_1`."""
+        """Test for valid value of inner region HE detonation velocity, :math:`D_1`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 1 must be > 0",
                                 Kenamond2, D1=0.0)
 
     def test_D2_neg_error(self):
-        """Tests for valid value of outer region HE detonation velocity,
-        :math:`D_2`."""
+        """Tests for valid value of outer region HE detonation velocity, :math:`D_2`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 2 must be > 0",
                                 Kenamond2, D2=-1.0)
 
     def test_D2_zero_error(self):
-        """Tests for valid value of outer region HE detonation velocity,
-        :math:`D_2`."""
+        """Tests for valid value of outer region HE detonation velocity, :math:`D_2`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Detonation velocity 2 must be > 0",
                                 Kenamond2, D2=0.0)
 
     def test_D2_smaller_error(self):
-        """Tests for valid value of outer region HE detonation velocity,
-        :math:`D_2`."""
+        """Tests for valid value of outer region HE detonation velocity, :math:`D_2`."""
 
         self.assertRaisesRegex(ValueError,
                                 "D1 must be > D2",
@@ -645,7 +627,7 @@ class TestKenamond2(unittest.TestCase):
                                 "be specified", Kenamond2,
                                 t_d=[2.0, 1.0, 0.0, 1.0, 2.0, 3.0])
 
-    #must allow D3 wave to exit inner region
+    # must allow D3 wave to exit inner region
 
     def test_dettimes_2d_t1_error(self):
         """Tests for valid detonation times, :math:`t_{d_1}`."""
@@ -709,8 +691,7 @@ class TestKenamond2(unittest.TestCase):
 
 
 class TestKenamond3(unittest.TestCase):
-    r"""Tests for
-    :class:`exactpack.solvers.kenamond.kenamond3.Kenamond3`.
+    r"""Tests for :class:`exactpack.solvers.kenamond.kenamond3.Kenamond3`.
 
     Solution tests consist of comparing the calculated burn time to the
     analytic solution at a fixed point. Input tests check that invalid

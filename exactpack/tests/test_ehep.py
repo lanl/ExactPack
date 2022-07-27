@@ -1,3 +1,5 @@
+"""Unittests for the Escape of High Explosive Products (EHEP) solver.
+"""
 #
 #  tests the solver implementation for the Escape of HE Products test problem
 #  (ehep for short)
@@ -12,7 +14,7 @@ from exactpack.solvers.ehep import EscapeOfHEProducts
 
 
 class TestEHEPAssignments(unittest.TestCase):
-    """Tests :class:`exactpack.solvers.ehep.EscapeOfHEProducts`.
+    """Tests :class:`exactpack.solvers.ehep.ehep.EscapeOfHEProducts`.
 
     These tests confirm proper assignment of variables, including default
     values
@@ -97,7 +99,7 @@ class TestEHEPAssignments(unittest.TestCase):
 
 
 class TestEhepSolution(unittest.TestCase):
-    """Tests :class:`exactpack.ehep.EscapeOfHEProducts`.
+    """Tests :class:`exactpack.solvers.ehep.ehep.EscapeOfHEProducts`.
 
     These tests confirm proper solution values for specific cases
     """
@@ -119,9 +121,7 @@ class TestEhepSolution(unittest.TestCase):
     #  test whether a set of points are on the boundaries of the polygon
 
     def test_point_on_boundary_1(self):
-        """Test 1 for point_on_boundary function
-
-        """
+        """Test 1 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (7.5, 5.0)  # on
@@ -129,9 +129,7 @@ class TestEhepSolution(unittest.TestCase):
                         (soln, corn, point))
 
     def test_point_on_boundary_2(self):
-        """Test 2 for point_on_boundary function
-
-        """
+        """Test 2 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (10.0, 7.5)  # on
@@ -139,9 +137,7 @@ class TestEhepSolution(unittest.TestCase):
                         (soln, corn, point))
 
     def test_point_on_boundary_3(self):
-        """Test 3 for point_on_boundary function
-
-        """
+        """Test 3 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (5., 9.99)  # on
@@ -149,9 +145,7 @@ class TestEhepSolution(unittest.TestCase):
                         (soln, corn, point))
 
     def test_point_on_boundary_4(self):
-        """Test 4 for point_on_boundary function
-
-        """
+        """Test 4 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (2.5, 2.5)  # off
@@ -159,9 +153,7 @@ class TestEhepSolution(unittest.TestCase):
                          (soln, corn, point))
 
     def test_point_on_boundary_5(self):
-        """Test 5 for point_on_boundary function
-
-        """
+        """Test 5 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (4.99, 10.)  # off
@@ -169,9 +161,7 @@ class TestEhepSolution(unittest.TestCase):
                          (soln, corn, point))
 
     def test_point_on_boundary_6(self):
-        """Test 6 for point_on_boundary function
-
-        """
+        """Test 6 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (5.0, 10.01)  # off
@@ -179,9 +169,7 @@ class TestEhepSolution(unittest.TestCase):
                          (soln, corn, point))
 
     def test_point_on_boundary_7(self):
-        """Test 7 for point_on_boundary function
-
-        """
+        """Test 7 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (5.0, 10.0)  # on
@@ -189,9 +177,9 @@ class TestEhepSolution(unittest.TestCase):
                         (soln, corn, point))
 
     def test_corners1(self):
-        """ Tests proper calculation of polygon corners by comparing to
-         results from hand calculations
+        """ Tests proper calculation of polygon corners
 
+        Compare to results from hand calculations.
         """
 
         D = 0.85       # Detonation velocity of HE
@@ -210,9 +198,9 @@ class TestEhepSolution(unittest.TestCase):
             )
 
     def test_corners2(self):
-        """ Tests proper calculation of polygon corners by comparing to
-         results from hand calculations
+        """ Tests proper calculation of polygon corners
 
+        Compare to results from hand calculations.
         """
 
         D = 0.85       # Detonation velocity of HE
@@ -234,9 +222,10 @@ class TestEhepSolution(unittest.TestCase):
             )
 
     def test_0_regions(self):
-        """ Tests proper evaluation of point locations inside
-        regions 00, 0V, and 0H, and outside of all regions
+        """ Test point locations.
 
+        Tests proper evaluation of point locations inside
+        regions 00, 0V, and 0H, and outside of all regions.
         """
 
         rho_0 = 1.6
@@ -262,9 +251,10 @@ class TestEhepSolution(unittest.TestCase):
             self.assertEqual(result['region'][0], regsoln[i])
 
     def test_fickett_table6_1(self):
-        """ Tests proper solution values by comparing default case
-        to the Table 6.1 in Fickett & Rivard
+        """ Test solution with Ficket & Rivard.
 
+        Tests proper solution values by comparing default case
+        to the Table 6.1 in Fickett & Rivard.
         """
 
         def compare_to_table(self, data, time):
@@ -324,9 +314,10 @@ class TestEhepSolution(unittest.TestCase):
         compare_to_table(self, data, time=5.00)
 
     def test_fickett_table6_2(self):
-        """ Tests proper solution values by comparing default case
-        to the Table 6.2 in Fickett & Rivard
+        """Test solution against Fickett & Rivard.
 
+        Tests proper solution values by comparing default case
+        to the Table 6.2 in Fickett & Rivard.
         """
 
         def compare_to_table(self, data):
@@ -394,6 +385,3 @@ class TestEhepSolution(unittest.TestCase):
                   6.0      3.56625 0.00003  0.56320   0.10432       0.03117
                   '''
         compare_to_table(self, data)
-
-if __name__ == '__main__':
-    unittest.main()

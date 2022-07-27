@@ -1,5 +1,4 @@
-r"""Unittests for the spherical, isotropic, linear elastic Blake solver in
-:class:`exactpack.solvers.Blake`.
+r"""Unittests for the spherical, isotropic, linear elastic Blake solver.
 """
 
 from exactpack.solvers.blake import Blake
@@ -10,12 +9,13 @@ import numpy as np
 
 
 class TestBlakeParamErrWarnChecks(unittest.TestCase):
-    r"""Test :class:`Blake` instance parameter checks."""
+    r"""Tests :class:`exactpack.solvers.blake.blake.Blake` instance parameter checks.
+    """
 
     elas_dflt_prms = Blake.elas_prm_dflts
 
     def test_defaults(self):
-        """Test default param values are present in the default solver."""
+        """Test that default param values are present in the default solver."""
 
         lame_mod = 25.0e9
         shear_mod = 25.0e9
@@ -98,9 +98,8 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
 
 
 class TestBlakeSolution(unittest.TestCase):
-    r"""Tests :class:`exactpack.blake.Blake` solver.
-
-    These tests confirm proper solution values in some specific cases.
+    r"""Tests :class:`exactpack.solvers.blake.blake.Blake`
+    to confirm proper solution values in some specific cases.
     """
 
     elas_dflt_keys = Blake.elas_prm_names
@@ -230,7 +229,7 @@ class TestBlakeSolution(unittest.TestCase):
 
 
 class TestBlakeRunChecks(unittest.TestCase):
-    r"""Test :class:`Blake` run-time checks."""
+    r"""Tests :class:`exactpack.solvers.blake.blake.Blake` run-time checks."""
 
     def test_radii_positive_check(self):
         """Test execution radial coordinates positive check."""

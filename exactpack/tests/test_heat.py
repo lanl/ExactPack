@@ -1,4 +1,4 @@
-r"""Test heat conduction problems.
+r"""Unittests for the heat conduction solvers.
 """
 
 import numpy as np
@@ -16,12 +16,10 @@ from exactpack.solvers.heat import Hutchens2
 
 
 class TestHeatCylindricalSandwich(unittest.TestCase):
-    r"""Test Heat Cylindrical Sandwich
-    """
+    r"""Tests the Cylindrical Sandwich :class:`exactpack.solvers.heat.cylindrical_sandwich.CylindricalSandwich`."""
 
     def test_heat_cylindrical_sandwich_modes(self):
-        r"""Checks the modes numbers for CylindricalSandwich
-        """
+        r"""Regression tests for modes numbers."""
         kappa = 1.0
         a = 0.25
         b = 0.85
@@ -54,8 +52,7 @@ class TestHeatCylindricalSandwich(unittest.TestCase):
             # k=8, m=98 and k=30, m=91
 
     def test_heat_cylindrical_sandwich_Rnm(self):
-        r"""Checks the modes Rnm.
-        """
+        r"""Regression tests for the modes Rnm."""
         kappa = 1.0
         a = 0.25
         b = 0.85
@@ -115,12 +112,10 @@ class TestHeatCylindricalSandwich(unittest.TestCase):
 
 
 class TestHeatRod1d(unittest.TestCase):
-    r"""Test Heat Rod1D
-    """
+    r"""Tests the 1D Rod :class:`exactpack.solvers.heat.rod1d.Rod1D`."""
 
     def test_heat_rod1d_boundary_conditions(self):
-        r"""Checks Boundary Conditions for Rod1D in rod1d.py
-        """
+        r"""Checks Boundary Conditions."""
 
         # construct spatial grid and select time
         kappa = 1.0
@@ -264,8 +259,7 @@ class TestHeatRod1d(unittest.TestCase):
         self.assertAlmostEqual(bc2, gamma2, delta=1.e-3)
 
     def test_heat_rod1d_regression(self):
-        r"""Simple regression test for Rod1D in rod1d.py
-        """
+        r"""Regression tests for 1D Rod."""
         # construct spatial grid and select time
         kappa = 1.0
         T0 = 3.0
@@ -322,12 +316,10 @@ class TestHeatRod1d(unittest.TestCase):
 
 
 class TestRod1DFunctions(unittest.TestCase):
-    r"""Test function definitions in PlanarSandwich
-    """
+    r"""Tests function definitions."""
 
     def test_heat_rod1d_modes(self):
-        r"""Checks the mode numbers and coefficients in PlanarSandwich
-        """
+        r"""Regression test for the mode numbers and coefficients."""
 
         kappa = 1.0
         T0 = 3.0
@@ -384,12 +376,10 @@ class TestRod1DFunctions(unittest.TestCase):
 
 
 class TestHeatPlanarSandwich(unittest.TestCase):
-    r"""Test Heat Planar Sandwich
-    """
+    r"""Tests the planar sandwich :class:`exactpack.solvers.heat.planar_sandwich.PlanarSandwich`"""
 
     def test_heat_planar_sandwich_regression(self):
-        r""" Simple regression test for the planar sandwich
-        """
+        r""" Regression tests for the planar sandwich."""
         # construct spatial grid and select time
         t = 0.1
         L = 2.0
@@ -421,12 +411,10 @@ class TestHeatPlanarSandwich(unittest.TestCase):
 
 
 class TestHeatPlanarHutchens(unittest.TestCase):
-    r"""Test Hutchens Solutions
-    """
+    r"""Tests the Hutchens heat solver :class:`exactpack.solvers.heat.hutchens1.Hutchens1`."""
 
     def test_heat_planar_hutchens1_regression(self):
-        r""" Simple regression test for Hutchens1
-        """
+        r""" Regression tests for Hutchens1."""
         b = 1.0
         r = [0.0, 0.25, 0.5, 0.75, 1.0]
         t = 0.1
@@ -436,9 +424,12 @@ class TestHeatPlanarHutchens(unittest.TestCase):
         for n in range(len(temp_h1)):
             self.assertAlmostEqual(soln.temperature[n], temp_h1[n])
 
+
+class TestHeatPlanarHutchens(unittest.TestCase):
+    r"""Tests the Hutchens heat solver :class:`exactpack.solvers.heat.hutchens2.Hutchens2`."""
+
     def test_heat_planar_hutchens2_regression(self):
-        r""" Simple regression test for Hutchens2
-        """
+        r""" Regression tests for Hutchens2."""
         b = 1.0
         L = 2.0
         r0 = [0.0, 0.5, 1.0]
