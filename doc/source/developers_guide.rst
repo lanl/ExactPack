@@ -37,8 +37,7 @@ style.
   :pep:`257`, except use Sphinx compatible RST markup wherever
   possible, since the docstrings are used to generate this
   documentation.  (A brief description of RST can be found in
-  :ref:`sphinx:rst-primer`, and Sphinx specific markup in
-  :ref:`sphinx:sphinxmarkup` and :ref:`sphinx:domains`.)
+  :ref:`sphinx:rst-primer`.)
 
 * Unless absolutely necessary, use only libraries in the `Anaconda
   Python Distribution <http://docs.continuum.io/anaconda/pkg-docs>`_.
@@ -89,34 +88,7 @@ A Tour of the Package Source
 ============================
 
 The main ExactPack package consists of several sub-packages, some of
-which provide solvers, while others contain supporting code.  The
-layout of the package directory is as follows (not every file or
-directory is shown)::
-
-    ExactPack/
-        doc/
-        exactpack/
-            __init__.py
-            analysis/
-            base.py
-	    contrib/
-            solvers/
-	        noh/
-                    __init__.py
-                    noh1.py
-                    timmes.py
-                    _timmes.so
-            tests/
-                __init__.py
-                test_noh.py
-            utils.py
-        examples/
-	    noh.py
-        setup.py
-        src/
-            timmes/
-                noh/
-                    noh.f
+which provide solvers, while others contain supporting code.
 
 :file:`doc/`
 
@@ -127,12 +99,6 @@ directory is shown)::
     This is the main Python code for the ExactPack package.  It
     includes several important subdirectories which are described
     below.
-
-    :file:`analysis/`
-
-	The :mod:`~exactpack.analysis` module provides tools for
-	:ref:`convergence-analysis`, as well as plotting tools and
-        data file readers.
 
     :file:`contrib/`
 
@@ -160,7 +126,7 @@ directory is shown)::
         Noh problem, ``noh1.py`` is written in pure Python code using
         Numpy, and ``timmes.py`` is a wrapper for the Fortran
         implementation whose source code is in
-        ``src/timmes/noh/noh.f``.  The dynamically loadable shared
+        ``src/timmes/noh/noh.f90``.  The dynamically loadable shared
         object library ``_timmes.so`` is not actually distributed with
         the source, as it is automatically compiled when the package
         is installed using the ``setup.py`` script, and it might have
@@ -247,8 +213,6 @@ The Python docstring is formatted using RST so that it will be
 rendered nicely by Sphinx as part of this document.  The ``r`` at the
 beginning indicates a raw string, which means that backslashes and
 other control codes will not be processed by the Python interpreter.
-(For more information on formatting docstrings for Sphinx, see the
-:ref:`sphinx:contents`.)
 
 In order to insure a uniform API, the initialization of solver
 attributes is handled by :class:`ExactSolver`, and the solver class
@@ -436,7 +400,7 @@ Python), and moving the loop over spatial points into the main
 driver routine (for efficiency).  Once this is done, the
 driver routine is decorated with F2PY directives:
 
-.. literalinclude:: ../../src/timmes/noh/noh.f
+.. literalinclude:: ../../src/timmes/noh/noh.f90
    :language: fortran
    :end-before: solves the standard case
 

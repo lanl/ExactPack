@@ -249,8 +249,8 @@ texinfo_documents = [
 intersphinx_mapping = {'matplotlib' : ('http://matplotlib.sourceforge.net', None),
                        'numpy': ('http://docs.scipy.org/doc/numpy', None),
                        'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
-                       'python': ('http://docs.python.org/2.7', None),
-                       'sphinx': ('http://sphinx-doc.org', None),
+                       'python': ('https://docs.python.org/3', None),
+                       'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
                        }
 
 todo_include_todos = True

@@ -44,10 +44,6 @@ For readability, it is often preferable to use a ``from ... import
 
     from exactpack.solvers.noh import SphericalNoh
 
-To obtain a list of all available solvers, use the
-:func:`exactpack.utils.discover_solvers` function.  The example
-scripts are also a good place to learn about importing solvers.
-      
 .. [#] Due to its simplicity, the Noh solver will be used as the
    example and reference implementation throughout this document.
 
@@ -238,49 +234,3 @@ each variable:
    >>> solution.jumps[0].density.right
    16.0
    
-.. _convergence-analysis:
-  
-Convergence Analysis
-====================
-
-ExactPack is primarily designed as a tool for code verification.  A
-comprehensive introduction to code verification is beyond the scope of
-this guide.  In brief, the idea is to compare the output of a
-numerical solution produced by a PDE solver to an exact analytic or
-semi-analytic solution, such as those provided by ExactPack.  The
-magnitude of the error in the solution is computed for a seriers of
-grid or timestep refinements, and one confirms the error converges to
-zero.  Ideally, the rate of convergence is also compared to the rate
-predicted by theory, if one is available.
-
-Although ExactPack can provide solutions for any user script for
-analyzing convergence, there are also some built-in tools for
-convergence analysis in :mod:`exactpack.analysis`.  The basic object
-for doing verification analysis is
-:class:`~exactpack.analysis.Study`.  To perform a code
-verification study, instantiate a study object by passing it a list of
-data files, an ExactPack solver, and a data reader::
-
-    from exactpack.analysis import Study
-    from exactpack.analysis.readers import TextReader
-    from exactpack.solvers.riemann import Sod
-
-    study = Study(['coarse.dat', 'medium.dat', 'fine.dat'],
-                  reference=Sod(),
-                  reader=TextReader)
-
-The user can then perform and display a convergence fit using one of several routines,
-for example::
-
-    from exactpack.analysis import FitConvergenceRate
-
-    fitstudy = FitConvergenceRate(study)
-
-    print fitstudy.report()
-
-    fitstudy.plot('pressure')
-    plt.show() 
-
-The above works for three convergence fit methods: :class:`~exactpack.analysis.FitConvergenceRate` (uses scipy optimization fit), :class:`~exactpack.analysis.RoacheConvergenceRate`,
-(uses Richardson-extrapolation based method as described in Roache's book), 
-and :class:`~exactpack.analysis.RegressionConvergenceRate` (uses linear regression).
