@@ -1,4 +1,4 @@
-r"""Unittests for all code in :module:`blake.set_check_elastic_params`."""
+r"""Unittests for all code in blake.set_check_elastic_params."""
 
 import warnings
 import unittest

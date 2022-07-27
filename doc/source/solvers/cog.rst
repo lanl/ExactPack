@@ -1,5 +1,5 @@
-Coggeshall Problems
-===================
+The Coggeshall Problems
+=======================
 
 .. automodule:: exactpack.solvers.cog
    :members:
