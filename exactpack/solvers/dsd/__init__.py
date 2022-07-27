@@ -37,10 +37,6 @@ Three angles are considered:
 
 Which, if any, of these angles need to be defined depends on the test problem
 being evaluated.
-
-.. [Bdzil] Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems
-   for DSD2D, LA-14277, 2006.
-
 """
 
 from .ratestick import RateStick
