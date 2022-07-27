@@ -221,7 +221,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
     
     
 class ExactSolution(numpy.recarray):
-    """A class for solutions returned by ExactPack solvers.
+    r"""A class for solutions returned by ExactPack solvers.
 
     :param data: a sequence of :class:`numpy.ndarray`\s (including a
       rank-2 :class:`numpy.ndarray`) to use as the fields of the
