@@ -123,3 +123,23 @@ References
    Francis X. Timmes, Galen Gisler, and George M. Hrbek,
    *Automated Analyses of the Tri-Lab Verification Test Suite on Uniform and Adaptive Grids for Code Project A*,
    LA-UR-05-6865, Los Alamos National Laboratory (2005).
+
+.. [Guess1957]
+   Sen and Guess,
+   (1957)
+
+.. [Heaslet1963]
+   Heaslet and Baldwin,
+   (1963)
+
+.. [Lowrie2007]
+   Lowrie,
+   (2007)
+
+.. [Lowrie2008]
+   Lowrie,
+   (2008)
+
+.. [Ferguson2017]
+   J.M. Ferguson,
+   (2017)
