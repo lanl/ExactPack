@@ -149,6 +149,6 @@ from .planar_sandwich_hot import PlanarSandwichHot
 from .planar_sandwich_half import PlanarSandwichHalf
 from .planar_sandwich_dawes import PlanarSandwichDawes
 from .cylindrical_sandwich import CylindricalSandwich
-from .rectangle import Rectangle
 from .hutchens1 import Hutchens1
 from .hutchens2 import Hutchens2
+from .rectangle import Rectangle
