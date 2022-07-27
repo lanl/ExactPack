@@ -6,19 +6,6 @@ from warnings import warn
 import numpy
 
 
-class UsingDefaultWarning(UserWarning):
-    """Warning category for use of default parameter settings.
-
-    Sometimes users of pre-packaged codes can be unaware of default
-    values that those codes are assuming, and that can lead to
-    confusion.  The default behavior in ExactPack is to issue a
-    :exc:`UsingDefaultWarning` in such cases to notify users what is
-    happening.  This behavior can be over-ridden using the
-    :mod:`warnings` package.
-    """
-    pass
-
-
 _whitespace_only_re = re.compile('^[ \t]+$', re.MULTILINE)
 _leading_whitespace_re = re.compile('(^[ \t]*)(?:[^ \t\n])', re.MULTILINE)
 
@@ -227,10 +214,6 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
             # Check that all parameters have been set
             if not hasattr(self, param):
                 raise ValueError("Missing parameter: {}".format(param))
-            else:
-                # And raise a warning if we are using a default value
-                if not param in self.__dict__:
-                    warn(UsingDefaultWarning("Using default value of {}={}".format(param, getattr(self, param))))
 
     def __call__(self, r, t):
 
