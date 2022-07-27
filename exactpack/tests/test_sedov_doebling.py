@@ -2,9 +2,11 @@
 """
 
 import unittest
+import warnings
 
 import numpy as np
 import scipy.optimize as sci_opt
+from scipy.integrate import IntegrationWarning
 
 from exactpack.solvers.sedov.doebling import Sedov
 
@@ -87,6 +89,8 @@ class TestSedovDoeblingAssignments(unittest.TestCase):
         #  These values are made up and not physically meaningful
         #  This is only an arbitrary test case
         #
+        # With these values the second energy integral does not onverge
+        warnings.simplefilter('ignore', category=IntegrationWarning)
 
         # here are the defaults
         geometry = 1
