@@ -1,5 +1,9 @@
+"""A Fortran based Riemann solver for the JWL EOS written by Jim Kamm.
+The Fortran source code is designed to work for any convex EOS.
 
-"""A Fortran based Riemann solver from Jim Kamm.
+Note: By \"Riemann solver\" we mean the ExactPack module that implements
+the analytic Riemann solution; we are not referring to a code that solves
+the Euler equations.
 """
 
 from ...base import ExactSolver, ExactSolution
@@ -7,31 +11,48 @@ from ._kamm import riemann_kamm_jwl
 
 
 class RiemannJWL(ExactSolver):
-    """ Computes the solution to the Riemann problem with a JWL EOS.
+    r"""Computes the solution to the Riemann problem with a JWL EOS.
+
+    Default values: interface_loc = 50.0, rhol = 0.9525, pl = 1., ul = 0.,
+    rhor = 3.810, pr = 2., ur = 0., rho0l = 1.905, sie0l = 0.,
+    gammal = 0.8938, bigal = 6.321e2, bigbl = -4.472e-2, r1l = 1.13e1,
+    r2l = 1.13, rho0r = 1.905, sie0r = 0., gammar = 0.8938, bigar = 6.321e2,
+    bigbr = -4.472e-2, r1r = 1.13e1, r2r = 1.13.
+
+    The JWL EOS is given by Eq. (54) of [Kamm2005]_:
+    
+.. math::
+    \begin{eqnarray}
+    p = p(\rho, e) = \Gamma \rho e +  & A \left(1 - \frac{\Gamma}{R_1} \frac{\rho}{\rho_0}\right)
+    {\rm exp}\left(- R_1 \frac{\rho_0}{\rho} \right) +
+    \\[5pt]
+    & B \left(1 - \frac{\Gamma}{R_2} \frac{\rho}{\rho_0}\right)
+    {\rm exp}\left(- R_2 \frac{\rho_0}{\rho} \right)
+    \end{eqnarray}
     """
 
     parameters = {
-        'interface_loc': 'initial interface location :math:`r_0`',
-        'rhol': 'initial left mass density :math:`\rho_{\rm l}`',
-        'pl': 'initial left pressure :math:`p_{\rm l}`',
-        'ul': 'initial left fluid velocityy :math:`u_{\rm l}`',
-        'rhor': 'initial right mass density :math:`\rho_{\rm r}`',
-        'pr': 'initial right pressure :math:`p_{\rm r}`',
-        'ur': 'initial right fluid velocity :math:`u_{\rm r}`',
-        'rho0l': 'initial left X :math:`X_{\rm l}',
-        'sie0l': 'initial left X :math:`X_{\rm l}',
-        'gammal': 'initial left X :math:`X_{\rm l}',
-        'bigal': 'initial left X :math:`X_{\rm l}',
-        'bigbl': 'initial left X :math:`X_{\rm l}',
-        'r1l': 'initial left X :math:`X_{\rm l}',
-        'r2l': 'initial left X :math:`X_{\rm l}',
-        'rho0r': 'initial left X :math:`X_{\rm r}',
-        'sie0r': 'initial left X :math:`X_{\rm r}',
-        'gammar': 'initial left X :math:`X_{\rm r}',
-        'bigar': 'initial left X :math:`X_{\rm r}',
-        'bigbr': 'initial left X :math:`X_{\rm r}',
-        'r1r': 'initial left X :math:`X_{\rm r}',
-        'r2r': 'initial left X :math:`X_{\rm r}'
+        'interface_loc': r'initial interface location :math:`r_0`',
+        'rhol': r'initial left mass density :math:`\rho_{\rm l}`',
+        'pl': r'initial left pressure :math:`p_{\rm l}`',
+        'ul': r'initial left fluid velocityy :math:`u_{\rm l}`',
+        'rhor': r'initial right mass density :math:`\rho_{\rm r}`',
+        'pr': r'initial right pressure :math:`p_{\rm r}`',
+        'ur': r'initial right fluid velocity :math:`u_{\rm r}`',
+        'rho0l': r'initial left X :math:`X_{\rm l}`',
+        'sie0l': r'initial left X :math:`X_{\rm l}`',
+        'gammal': r'initial left X :math:`X_{\rm l}`',
+        'bigal': r'initial left X :math:`X_{\rm l}`',
+        'bigbl': r'initial left X :math:`X_{\rm l}`',
+        'r1l': r'initial left X :math:`X_{\rm l}`',
+        'r2l': r'initial left X :math:`X_{\rm l}`',
+        'rho0r': r'initial left X :math:`X_{\rm r}`',
+        'sie0r': r'initial left X :math:`X_{\rm r}`',
+        'gammar': r'initial left X :math:`X_{\rm r}`',
+        'bigar': r'initial left X :math:`X_{\rm r}`',
+        'bigbr': r'initial left X :math:`X_{\rm r}`',
+        'r1r': r'initial left X :math:`X_{\rm r}`',
+        'r2r': r'initial left X :math:`X_{\rm r}`'
         }
 
     # default parameters: the Lee problem
@@ -98,31 +119,37 @@ class RiemannJWL(ExactSolver):
 
 
 class RiemannJWLLee(RiemannJWL):
-    """JWL Riemann for Shyue problem
+    """JWL Riemann problem for Lee.
+
+    The Lie JWL parameters: interface_loc = 50.0, rhol = 0.9525, pl = 1., ul = 0.,
+    rhor = 3.810, pr = 2., ur = 0., rho0l = 1.905, sie0l = 0., gammal = 0.8938,
+    bigal = 6.321e2, bigbl = -4.472e-2, r1l = 1.13e1, r2l = 1.13, rho0r = 1.905,
+    sie0r = 0., gammar = 0.8938, bigar = 6.321e2, bigbr = -4.472e-2, r1r = 1.13e1,
+    r2r = 1.13.
     """
 
     parameters = {
-        'interface_loc': 'initial interface location :math:`r_0`',
-        'rhol': 'initial left mass density :math:`\rho_{\rm l}`',
-        'pl': 'initial left pressure :math:`p_{\rm l}`',
-        'ul': 'initial left fluid velocityy :math:`u_{\rm l}`',
-        'rhor': 'initial right mass density :math:`\rho_{\rm r}`',
-        'pr': 'initial right pressure :math:`p_{\rm r}`',
-        'ur': 'initial right fluid velocity :math:`u_{\rm r}`',
-        'rho0l': 'initial left X :math:`X_{\rm l}',
-        'sie0l': 'initial left X :math:`X_{\rm l}',
-        'gammal': 'initial left X :math:`X_{\rm l}',
-        'bigal': 'initial left X :math:`X_{\rm l}',
-        'bigbl': 'initial left X :math:`X_{\rm l}',
-        'r1l': 'initial left X :math:`X_{\rm l}',
-        'r2l': 'initial left X :math:`X_{\rm l}',
-        'rho0r': 'initial left X :math:`X_{\rm r}',
-        'sie0r': 'initial left X :math:`X_{\rm r}',
-        'gammar': 'initial left X :math:`X_{\rm r}',
-        'bigar': 'initial left X :math:`X_{\rm r}',
-        'bigbr': 'initial left X :math:`X_{\rm r}',
-        'r1r': 'initial left X :math:`X_{\rm r}',
-        'r2r': 'initial left X :math:`X_{\rm r}'
+        'interface_loc': r'initial interface location :math:`r_0`',
+        'rhol': r'initial left mass density :math:`\rho_{\rm l}`',
+        'pl': r'initial left pressure :math:`p_{\rm l}`',
+        'ul': r'initial left fluid velocityy :math:`u_{\rm l}`',
+        'rhor': r'initial right mass density :math:`\rho_{\rm r}`',
+        'pr': r'initial right pressure :math:`p_{\rm r}`',
+        'ur': r'initial right fluid velocity :math:`u_{\rm r}`',
+        'rho0l': r'initial left X :math:`X_{\rm l}`',
+        'sie0l': r'initial left X :math:`X_{\rm l}`',
+        'gammal': r'initial left X :math:`X_{\rm l}`',
+        'bigal': r'initial left X :math:`X_{\rm l}`',
+        'bigbl': r'initial left X :math:`X_{\rm l}`',
+        'r1l': r'initial left X :math:`X_{\rm l}`',
+        'r2l': r'initial left X :math:`X_{\rm l}`',
+        'rho0r': r'initial left X :math:`X_{\rm r}`',
+        'sie0r': r'initial left X :math:`X_{\rm r}`',
+        'gammar': r'initial left X :math:`X_{\rm r}`',
+        'bigar': r'initial left X :math:`X_{\rm r}`',
+        'bigbr': r'initial left X :math:`X_{\rm r}`',
+        'r1r': r'initial left X :math:`X_{\rm r}`',
+        'r2r': r'initial left X :math:`X_{\rm r}`'
         }
 
     # parameters for the Lee problem
@@ -156,31 +183,37 @@ class RiemannJWLLee(RiemannJWL):
 
 
 class RiemannJWLShyue(RiemannJWL):
-    """JWL Riemann for Shyue problem
+    """JWL Riemann problem for Shyue.
+
+    The Shyue JWL parameters: interface_loc = 50.0, rhol = 0.9525, pl = 1., ul = 0.,
+    rhor = 3.810, pr = 2., ur = 0., rho = 1.7, pl = 10., ul = 0., rhor = 1., pr = 0.5,
+    ur = 0., rho0l = 1.84, sie0l = 0., gamma0l = 0.25, bigal = 8.545, bigbl = 0.205,
+    r1l = 4.6, r2l = 1.35, rho0r = 1.84, sie0r = 0., gamma0r = 0.25, bigar = 8.545,
+    bigbr = 0.205, r1r = 4.6, r2r = 1.35.
     """
 
     parameters = {
-        'interface_loc': 'initial interface location :math:`r_0`',
-        'rhol': 'initial left mass density :math:`\rho_{\rm l}`',
-        'pl': 'initial left pressure :math:`p_{\rm l}`',
-        'ul': 'initial left fluid velocityy :math:`u_{\rm l}`',
-        'rhor': 'initial right mass density :math:`\rho_{\rm r}`',
-        'pr': 'initial right pressure :math:`p_{\rm r}`',
-        'ur': 'initial right fluid velocity :math:`u_{\rm r}`',
-        'rho0l': 'initial left X :math:`X_{\rm l}',
-        'sie0l': 'initial left X :math:`X_{\rm l}',
-        'gammal': 'initial left X :math:`X_{\rm l}',
-        'bigal': 'initial left X :math:`X_{\rm l}',
-        'bigbl': 'initial left X :math:`X_{\rm l}',
-        'r1l': 'initial left X :math:`X_{\rm l}',
-        'r2l': 'initial left X :math:`X_{\rm l}',
-        'rho0r': 'initial left X :math:`X_{\rm r}',
-        'sie0r': 'initial left X :math:`X_{\rm r}',
-        'gammar': 'initial left X :math:`X_{\rm r}',
-        'bigar': 'initial left X :math:`X_{\rm r}',
-        'bigbr': 'initial left X :math:`X_{\rm r}',
-        'r1r': 'initial left X :math:`X_{\rm r}',
-        'r2r': 'initial left X :math:`X_{\rm r}'
+        'interface_loc': r'initial interface location :math:`r_0`',
+        'rhol': r'initial left mass density :math:`\rho_{\rm l}`',
+        'pl': r'initial left pressure :math:`p_{\rm l}`',
+        'ul': r'initial left fluid velocityy :math:`u_{\rm l}`',
+        'rhor': r'initial right mass density :math:`\rho_{\rm r}`',
+        'pr': r'initial right pressure :math:`p_{\rm r}`',
+        'ur': r'initial right fluid velocity :math:`u_{\rm r}`',
+        'rho0l': r'initial left X :math:`X_{\rm l}`',
+        'sie0l': r'initial left X :math:`X_{\rm l}`',
+        'gammal': r'initial left X :math:`X_{\rm l}`',
+        'bigal': r'initial left X :math:`X_{\rm l}`',
+        'bigbl': r'initial left X :math:`X_{\rm l}`',
+        'r1l': r'initial left X :math:`X_{\rm l}`',
+        'r2l': r'initial left X :math:`X_{\rm l}`',
+        'rho0r': r'initial left X :math:`X_{\rm r}`',
+        'sie0r': r'initial left X :math:`X_{\rm r}`',
+        'gammar': r'initial left X :math:`X_{\rm r}`',
+        'bigar': r'initial left X :math:`X_{\rm r}`',
+        'bigbr': r'initial left X :math:`X_{\rm r}`',
+        'r1r': r'initial left X :math:`X_{\rm r}`',
+        'r2r': r'initial left X :math:`X_{\rm r}`'
         }
 
     # parameters for the Shuye problem

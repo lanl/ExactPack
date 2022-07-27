@@ -27,6 +27,9 @@ from ...base import ExactSolver, ExactSolution
 
 class Cog11(ExactSolver):
     """Computes the solution to the Cog11 problem.
+
+    Computes the solution to the Cog11 problem with defaults  geometry = 3, 
+    gamma = 1.4, rho0 = 1.8, temp0 = 1.4, beta = 1.0, cv = 1.e2.
     """
 
     parameters = {
@@ -35,8 +38,9 @@ class Cog11(ExactSolver):
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
         'temp0': "temperature coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8

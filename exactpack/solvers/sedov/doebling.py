@@ -1,4 +1,4 @@
-r'''A Python implementation of the Timmes Sedov solver in double precision.
+r'''A Python implementation of the Sedov solver in double precision.
 
 This is a pure Python implentation of the Timmes Sedov solver in ExactPack.
 It uses SciPy optimization to find values of v that minimize the

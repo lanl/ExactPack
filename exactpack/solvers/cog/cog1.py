@@ -23,6 +23,9 @@ from ...base import ExactSolver, ExactSolution
 
 class Cog1(ExactSolver):
     """Computes the solution to the Cog1 problem.
+
+    Computes the solution to the Cog1 problem with defaults geometry = 3, gamma = 1.4,
+    rho0 = 1.8, temp0 = 1.4, b = 1.2, Gamma = 40.
     """
 
     parameters = {
@@ -33,6 +36,7 @@ class Cog1(ExactSolver):
         'b': "free param",
         'Gamma': "Gruneisen gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8
@@ -73,6 +77,8 @@ class Cog1(ExactSolver):
 
 class PlanarCog1(Cog1):
     """The planar Cog1.
+
+    Computes the planar (geometry = 1) solution to the Cog1 problem
     """
 
     parameters = {
@@ -87,6 +93,8 @@ class PlanarCog1(Cog1):
 
 class CylindricalCog1(Cog1):
     """The cylindrical Cog1.
+
+    Computes the cylindrical (geometry = 2) solution to the Cog1 problem
     """
 
     parameters = {
@@ -101,6 +109,8 @@ class CylindricalCog1(Cog1):
 
 class SphericalCog1(Cog1):
     """The spherical Cog1.
+
+    Computes the spherical (geometry = 3) solution to the Cog1 problem
     """
 
     parameters = {

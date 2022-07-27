@@ -1,9 +1,5 @@
-'''
-  tests the solver implementation for the Steady Detonation Reaction zone
-  test problem
-  (sdrz for short)
-'''
-
+"""Unittests for Steady Detonation Reaction (sdrz) solver.
+"""
 
 import unittest
 
@@ -18,7 +14,7 @@ class TestSDRZAssignments(unittest.TestCase):
     """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
     These tests confirm proper assignment of variables, including default
-    values
+    values.
     """
     def test_defaults(self):
 
@@ -71,15 +67,16 @@ class TestSDRZAssignments(unittest.TestCase):
                           geometry=2)
 
 class TestSDRZSolution(unittest.TestCase):
-    """Tests :class:`exactpack.contrib.sdrz.SteadyDetonationReactionZone`.
+    """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
-    These tests confirm proper solution values for specific cases
+    These tests confirm proper solution values for specific cases.
     """
 
     def test_fickett_table10_1(self):
-        """ Tests proper solution values by comparing default case
-        to the Table 10.1 in Fickett & Rivard
+        """Tests proper solution values
 
+        This test compares the default case to the Table 10.1 in
+        Fickett & Rivard
         """
 
         def compare_to_table(self, dataray):
@@ -153,10 +150,7 @@ class TestSDRZSolution(unittest.TestCase):
         compare_to_table(self, dataray)
 
     def test_sdrz_reaction_progress_limit(self):
-
-        """ Tests that burn rate is limited to be monotonic
-        and cannot exceed 1.0
-
+        """ Tests that burn rate is limited to be monotonic and cannot exceed 1.0.
         """
 
         solution = SteadyDetonationReactionZone()
@@ -175,7 +169,7 @@ class TestSDRZSolution(unittest.TestCase):
 
 
 class TestSDRZNumericalIntegration(unittest.TestCase):
-    """Tests :class:`exactpack.contrib.sdrz.SteadyDetonationReactionZone`.
+    """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
     These tests verify that the numerical integration scheme is working correctly.
     """
@@ -205,7 +199,7 @@ class TestSDRZNumericalIntegration(unittest.TestCase):
                                    resultNumerical['reaction_progress'][i])
 
 class TestSDRZFullSolution(unittest.TestCase):
-    """Tests :class:`exactpack.contrib.sdrz.SteadyDetonationReactionZone`.
+    """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
     These tests verify that the full solution to SDRZ is behaving as expected.
     """
@@ -236,8 +230,3 @@ class TestSDRZFullSolution(unittest.TestCase):
         np.testing.assert_almost_equal(result['density'], answer_density)
         
         np.testing.assert_almost_equal(result['velocity'], answer_velocity)
-        
-
-
-if __name__ == '__main__':
-    unittest.main()

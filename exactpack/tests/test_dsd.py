@@ -1,4 +1,4 @@
-r"""Tests for the DSD verification problems exact solution solvers.
+r"""Unittests for the DSD solvers.
 
 Test problems consist of comparison of the calculated burntime for a 2D
 point with the known analytic solution. Solver parameter inputs are
@@ -20,8 +20,7 @@ from exactpack.solvers.dsd.explosivearc import ExplosiveArc
 
 
 class TestRateStick(unittest.TestCase):
-    r"""Tests for
-    :class:`exactpack.solvers.dsd.ratestick.RateStick`.
+    r"""Tests for :class:`exactpack.solvers.dsd.ratestick.RateStick`.
 
     Solution tests consist of comparing the calculated burn time to the
     analytic solution at a fixed point. Input tests check that invalid
@@ -99,7 +98,9 @@ class TestRateStick(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_xylist_matches_xnodes_ynodes(self):
-        """Test for valid combination of :math:`xnodes`, :math:`ynodes`
+        """Test for valid combinations of nodes.
+
+        Test for valid combination of :math:`xnodes`, :math:`ynodes`
         and size of :math:`xylist`."""
 
         soln = RateStick(xnodes=2, ynodes=1)(np.array([[0.5, 0.5]]), 0.6)
@@ -172,8 +173,7 @@ class TestRateStick(unittest.TestCase):
                                 RateStick, D_CJ=0.0, xnodes=1, ynodes=1)
 
     def test_alpha_neg_error(self):
-        """Test for valid value of det velocity deviance coefficient,
-        :math:`alpha`."""
+        """Test for valid value of det velocity deviance coefficient, :math:`alpha`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Alpha must be >= 0",
@@ -234,8 +234,7 @@ class TestRateStick(unittest.TestCase):
 
 
 class TestCylindricalExpansion(unittest.TestCase):
-    r"""Tests for
-    :class:`exactpack.solvers.dsd.cylexpansion.CylindricalExpansion`.
+    r"""Tests for :class:`exactpack.solvers.dsd.cylexpansion.CylindricalExpansion`.
 
     Solution tests consist of comparing the calculated burn time to the
     analytic solution at a fixed point. Input tests check that invalid
@@ -466,48 +465,42 @@ class TestCylindricalExpansion(unittest.TestCase):
                                 CylindricalExpansion, r_1=2.0, r_2=1.0)
 
     def test_DCJ1_neg_error(self):
-        """Test for valid value of inner region HE CJ detonation velocity,
-        :math:`D_{{CJ}_1}`."""
+        """Test for valid value of inner region HE CJ detonation velocity, :math:`D_{{CJ}_1}`."""
 
         self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "inner HE must be > 0",
                                 CylindricalExpansion, D_CJ_1=-1.0)
 
     def test_DCJ1_zero_error(self):
-        """Test for valid value of inner region HE CJ detonation velocity,
-        :math:`D_{{CJ}_1}`."""
+        """Test for valid value of inner region HE CJ detonation velocity, :math:`D_{{CJ}_1}`."""
 
         self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "inner HE must be > 0",
                                 CylindricalExpansion, D_CJ_1=0.0)
 
     def test_DCJ2_neg_error(self):
-        """Tests for valid value of outer region HE CJ detonation velocity,
-        :math:`D_{{CJ}_2}`."""
+        """Tests for valid value of outer region HE CJ detonation velocity, :math:`D_{{CJ}_2}`."""
 
         self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "outer HE must be > 0",
                                 CylindricalExpansion, D_CJ_2=-1.0)
 
     def test_DCJ2_zero_error(self):
-        """Tests for valid value of outer region HE CJ detonation velocity,
-        :math:`D_{{CJ}_2}`."""
+        """Tests for valid value of outer region HE CJ detonation velocity, :math:`D_{{CJ}_2}`."""
 
         self.assertRaisesRegex(ValueError, "Detonation velocity for " +
                                 "outer HE must be > 0",
                                 CylindricalExpansion, D_CJ_2=0.0)
 
     def test_alpha1_neg_error(self):
-        """Test for valid value of inner region det velocity deviance
-        coefficient, :math:`alpha_1`."""
+        """Test for valid value of inner region det velocity deviance coefficient, :math:`alpha_1`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Alpha for HE1 must be >= 0",
                                 CylindricalExpansion, alpha_1=-1.0)
 
     def test_alpha2_neg_error(self):
-        """Test for valid value of outer region det velocity deviance
-        coefficient, :math:`alpha_2`."""
+        """Test for valid value of outer region det velocity deviance coefficient, :math:`alpha_2`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Alpha for HE2 must be >= 0",
@@ -531,19 +524,21 @@ class TestExplosiveArc(unittest.TestCase):
 
         r = np.linspace(2.0, 4.0, 21)
         theta = np.linspace(-np.pi/2.0, np.pi/2.0, 41)
-        
+
         r2g, th2g = np.meshgrid(r, theta)
         x2 = r2g * np.cos(th2g)
         y2 = r2g * np.sin(th2g)
         xy = np.vstack((x2.flatten(), y2.flatten())).T  # 2D grid points
-        
+
         soln = ExplosiveArc(xnodes=21, ynodes=41, t_f=1.0)(xy, 0.6)
 
         self.assertEqual(soln.burntime[1], 0.0)
 
     @unittest.expectedFailure
     def test_xylist_matches_xnodes_ynodes(self):
-        """Test for valid combination of :math:`xnodes`, :math:`ynodes`
+        """Test for valid combination of nodes.
+
+        Test for valid combination of :math:`xnodes`, :math:`ynodes`
         and size of :math:`xylist`."""
 
         soln = ExplosiveArc(xnodes=2, ynodes=1)(np.array([[0.5, 0.5]]), 0.6)
@@ -723,8 +718,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 xnodes=1, ynodes=1)
 
     def test_alpha_neg_error(self):
-        """Test for valid value of det velocity deviance coefficient,
-        :math:`alpha`."""
+        """Test for valid value of det velocity deviance coefficient, :math:`alpha`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Alpha must be >= 0",

@@ -1,7 +1,9 @@
-"""The following test verifies the dimensionless self-similar variables of
-Kamm's Fortran code against the values published in Sedov's book and
-[Kamm2000]_, (Tables I, II, and III, for the spherical, cylindrical, and
-planar cases respectively).
+"""Unittests for Kamm's Sedov solver :class:`exactpack.solvers.sedov.kamm`.
+
+The following test verifies the dimensionless self-similar variables
+of Kamm's Fortran code against the values published in Sedov's book
+and [Kamm2000]_, (Tables I, II, and III, for the spherical,
+cylindrical, and planar cases respectively).
 """
 
 import numpy as np
@@ -10,12 +12,16 @@ import unittest
 
 from exactpack.solvers.sedov.kamm import Sedov
 
+
 class TestSedovKammSelfSim(unittest.TestCase):
     r"""Tests for the Kamm's Sedov problem in self-similar variables.
     """
 
     def test_self_similar_sph(self):
-        r"""Kamm's spherical Sedov: self-similar variables
+        r"""Kamm's spherical Sedov: self-similar variables.
+
+        Compares against values in Sedov's book and Kamm's paper
+        LA-UR-00-6055, Table 3, p 19.
         """
 
 ##############################################################################
@@ -47,10 +53,10 @@ class TestSedovKammSelfSim(unittest.TestCase):
         verbose = False
         for row in range(16):
             self.assertAlmostEqual(solution.f[row], sedovsph[row,2], delta=sedovsph[row,8])
-            self.assertAlmostEqual(solution.g[row] , sedovsph[row,4], delta=sedovsph[row,9])
+            self.assertAlmostEqual(solution.g[row], sedovsph[row,4], delta=sedovsph[row,9])
             self.assertAlmostEqual(solution.h[row], sedovsph[row,6], delta=sedovsph[row,10])
             self.assertAlmostEqual(solution.f[row], sedovsph[row,3], delta=1.e-4)
-            self.assertAlmostEqual(solution.g[row] , sedovsph[row,5], delta=1.e-4)
+            self.assertAlmostEqual(solution.g[row], sedovsph[row,5], delta=1.e-4)
             self.assertAlmostEqual(solution.h[row], sedovsph[row,7], delta=1.e-4)
             if (verbose):
                 print("")
@@ -60,9 +66,11 @@ class TestSedovKammSelfSim(unittest.TestCase):
                 print('Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovsph[row,3], sedovsph[row,5], sedovsph[row,7]))
                 print('ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row]))
 
-
     def test_self_similar_cyl(self):
-        r"""Kamm's cylindrical Sedov: self-similar variables
+        r"""Kamm's cylindrical Sedov: self-similar variables.
+
+        Compares against values in Sedov's book and Kamm's paper
+        LA-UR-00-6055, Table 2, p 18.
         """
 
 ##############################################################################
@@ -101,10 +109,10 @@ class TestSedovKammSelfSim(unittest.TestCase):
         verbose = False
         for row in range(23):
             self.assertAlmostEqual(solution.f[row], sedovcyl[row,2], delta=sedovcyl[row,8])
-            self.assertAlmostEqual(solution.g[row] , sedovcyl[row,4], delta=sedovcyl[row,9])
+            self.assertAlmostEqual(solution.g[row], sedovcyl[row,4], delta=sedovcyl[row,9])
             self.assertAlmostEqual(solution.h[row], sedovcyl[row,6], delta=sedovcyl[row,10])
             self.assertAlmostEqual(solution.f[row], sedovcyl[row,3], delta=1.e-4)
-            self.assertAlmostEqual(solution.g[row] , sedovcyl[row,5], delta=1.e-4)
+            self.assertAlmostEqual(solution.g[row], sedovcyl[row,5], delta=1.e-4)
             self.assertAlmostEqual(solution.h[row], sedovcyl[row,7], delta=1.e-4)
             if (verbose):
                 print("")
@@ -114,11 +122,11 @@ class TestSedovKammSelfSim(unittest.TestCase):
                 print('Kamm : {0:.12f}    {1:.12f}    {2:.12f}'.format(sedovcyl[row,3], sedovcyl[row,5], sedovcyl[row,7]))
                 print('ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row]))
 
-
-
-
     def test_self_similar_pla(self):
-        r"""Kamm's planar Sedov: self-similar variables
+        r"""Kamm's planar Sedov: self-similar variables.
+
+        Compares against values in Sedov's book and Kamm's paper
+        LA-UR-00-6055, Table 1, p 17.
         """
 
 ##############################################################################
@@ -152,10 +160,10 @@ class TestSedovKammSelfSim(unittest.TestCase):
         verbose = False
         for row in range(18):
             self.assertAlmostEqual(solution.f[row], sedovpla[row,2], delta=sedovpla[row,8])
-            self.assertAlmostEqual(solution.g[row] , sedovpla[row,4], delta=sedovpla[row,9])
+            self.assertAlmostEqual(solution.g[row], sedovpla[row,4], delta=sedovpla[row,9])
             self.assertAlmostEqual(solution.h[row], sedovpla[row,6], delta=sedovpla[row,10])
             self.assertAlmostEqual(solution.f[row], sedovpla[row,3], delta=1.e-4)
-            self.assertAlmostEqual(solution.g[row] , sedovpla[row,5], delta=1.e-4)
+            self.assertAlmostEqual(solution.g[row], sedovpla[row,5], delta=1.e-4)
             self.assertAlmostEqual(solution.h[row], sedovpla[row,7], delta=1.e-4)
             if (verbose):
                 print("")
@@ -166,8 +174,7 @@ class TestSedovKammSelfSim(unittest.TestCase):
                 print('ExPc : {0:.12f}    {1:.12f}    {2:.12f}'.format(solution.f[row], solution.g[row], solution.h[row]))
 
     def test_shock_state_interpolated(self):
-        r"""Sedov Kamm Problem: pre and post shock values, with interpolation to
-        large number of points
+        r"""pre and post shock values, with interpolation to large number of points.
         """
 
         # construct sptial grid and choose time
@@ -198,6 +205,7 @@ class TestSedovKammSelfSim(unittest.TestCase):
         """Sedov Kamm Problem: Test for valid value of geometry"""
 
         self.assertRaises(ValueError, Sedov, geometry=-1) 
+
 
 class TestSedovKammShock(unittest.TestCase):
     """Tests Kamm Sedov for correct pre and post shock values.
@@ -233,8 +241,7 @@ class TestSedovKammShock(unittest.TestCase):
         }
 
     def test_preshock_state(self):
-        """Tests density, velocity, pressure, specific internal energy, and
-        sound speed immediately before the shock.
+        """pre shock: density, velocity, pressure, specific internal energy, and sound speed.
         """
 
         for ikey in self.analytic_preshock:
@@ -243,8 +250,7 @@ class TestSedovKammShock(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_postshock_state(self):
-        """Tests density, velocity, pressure, specific internal energy, and
-        sound speed immediately after the shock.
+        """post shock: density, velocity, pressure, specific internal energy, and sound speed.
 
         Currently, the Kamm solver does not return the correct value of the
         physical variables at the shock location, for at least some cases

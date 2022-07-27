@@ -33,6 +33,9 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog13(ExactSolver):
     """Computes the solution to the Cog13 problem.
+
+    Computes the solution to the Cog13 problem with defaults geometry = 3,
+    gamma = 1.4, rho0 = 1.8, alpha = 2.0, beta = 1.0, lambda0 = 0.1, Gamma = 40.
     """
 
     parameters = {
@@ -42,7 +45,7 @@ class Cog13(ExactSolver):
         'alpha': r"dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
     geometry = 3
     gamma = 1.4

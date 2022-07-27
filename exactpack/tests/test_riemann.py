@@ -1,4 +1,4 @@
-"""Tests for the Riemann problem.
+"""Unittests for the default Riemann solver in ExactPack.
 """
 
 import unittest
@@ -9,11 +9,11 @@ from exactpack.solvers.riemann import Sod, Einfeldt, StationaryContact, SlowShoc
 
 
 class TestRiemannKamm(unittest.TestCase):
-    r"""Test for :class:`exactpack.riemann.kamm.Riemann`.
+    r"""Tests for :class:`exactpack.solvers.riemann.kamm.Riemann`.
     """
 
     def test_Riemann_test1_Sod(self):
-        """Riemann problem 1: Sod"""
+        """Regression test for Riemann problem 1: Sod"""
 
         solver = Sod()
         t = 0.25
@@ -49,7 +49,7 @@ class TestRiemannKamm(unittest.TestCase):
         self.assertAlmostEqual(solution.velocity[1], 0.0)
 
     def test_Riemann_test2_Einfeldt(self):
-        """Riemann problem 2: Einfeldt"""
+        """Regression test for Riemann problem 2: Einfeldt"""
 
         solver = Einfeldt()
         t = 0.15
@@ -82,7 +82,7 @@ class TestRiemannKamm(unittest.TestCase):
         self.assertAlmostEqual(solution.velocity[1], 2.0)
 
     def test_Riemann_test3_StationaryContact(self):
-        """Riemann problem 3: Stationary Contact"""
+        """Regression test for Riemann problem 3: Stationary Contact"""
 
         solver = StationaryContact()
         t = 0.012
@@ -97,7 +97,7 @@ class TestRiemannKamm(unittest.TestCase):
         self.assertAlmostEqual(solution.velocity[1], -13.7524301102)
 
     def test_Riemann_test4_SlowShock(self):
-        """Riemann problem 4: Slow Shock"""
+        """Regression test for Riemann problem 4: Slow Shock"""
 
         solver = SlowShock()
         t = 1.0
@@ -112,7 +112,7 @@ class TestRiemannKamm(unittest.TestCase):
         self.assertAlmostEqual(solution.velocity[1], -3.44)
 
     def test_Riemann_test5_ShockContactShock(self):
-        """Riemann problem 5: Shock-Contact-Shock"""
+        """Regression test for Riemann problem 5: Shock-Contact-Shock"""
 
         solver = ShockContactShock()
         t = 0.3
@@ -148,7 +148,7 @@ class TestRiemannKamm(unittest.TestCase):
         self.assertAlmostEqual(solution.velocity[1], -0.50)
 
     def test_Riemann_test6_LeBlanc(self):
-        """Riemann problem 6: Le Blanc"""
+        """Regression test for Riemann problem 6: Le Blanc"""
 
         solver = LeBlanc()
         t = 0.5

@@ -1,5 +1,7 @@
 r"""The Reinicke Meyer-ter-Vehn problem.
 
+.. |Gruneisen| unicode:: Gr U+00FC neisen
+
 The Reinicke Meyer-ter-Vehn (RMTV) problem is defined in [Reinicke1991]_ and
 [Kamm2000a]_.
 
@@ -40,7 +42,7 @@ written
    P = \Gamma \rho T ~~{\rm and}~~ e = \frac{\Gamma T}{\gamma - 1} \ ,
    :label: BigGamma
 
-where :math:`\Gamma` is the Gruneisen coefficient. The initial
+where :math:`\Gamma` is the |Gruneisen| coefficient. The initial
 cold (:math:`T=0`) density profile is
 
 .. math::

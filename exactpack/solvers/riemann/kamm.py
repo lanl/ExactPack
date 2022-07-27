@@ -1,4 +1,6 @@
-"""A Fortran based Riemann solver from Jim Kamm.
+"""A Fortran based Riemann solver written by Jim Kamm.
+
+This module computes an analytic solution to the general Riemann problem.
 """
 
 from ...base import ExactSolver, ExactSolution
@@ -6,7 +8,11 @@ from ._kamm import riemann_kamm
 
 
 class Riemann(ExactSolver):
-    """ Computes the solution to the Riemann problem.
+    """Computes the solution to the Riemann problem.
+
+    Computes the solution to the Riemann problem with defaults
+    geometry = 1, gammal = 1.4, gammar = 1.4, interface_loc = 0.5,
+    rhol = 1.0, pl = 1.0, ul = 0.0, rhor = 0.125, pr = 0.1, ur = 0.0.
     """
 
     parameters = {

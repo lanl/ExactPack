@@ -1,6 +1,7 @@
-"""Tests for the Noh problem are relatively rudimentary.  Since the
-solution is an analytic expression, they essentially consist of checks
-for typographical errors.
+"""Unittests for the Noh solver.
+
+Since the solution is an analytic expression, the tests essentially
+consist of checks for typographical errors.
 """
 
 import unittest
@@ -12,7 +13,7 @@ import exactpack.solvers.noh.timmes as timmes
 
 
 class TestNoh1(unittest.TestCase):
-    """Tests for :class:`exactpack.noh.noh1.Noh`.
+    """Tests for :class:`exactpack.solvers.noh.noh1.Noh`.
 
     The tests consist of comparing the values at two points, one in
     front of the shock (:math:`r=0.3`) and one behind the shock
@@ -23,13 +24,12 @@ class TestNoh1(unittest.TestCase):
     @classmethod
     def setUpClass(self):
 
-        self.soln = noh1.Noh(geometry=3, gamma=5.0/3.0)\
-        (numpy.array([0.1, 0.3]), 0.6)
+        self.soln = noh1.Noh(geometry=3, gamma=5.0/3.0)(numpy.array([0.1, 0.3]), 0.6)
 
     def test_velocity_error(self):
         """Noh Problem: Test for valid value of velocity"""
 
-        self.assertRaises(ValueError, noh1.Noh, u0=+1) 
+        self.assertRaises(ValueError, noh1.Noh, u0=+1)
 
     def test_preshock_density(self):
         """Noh problem: Pre-shock density"""
@@ -74,13 +74,14 @@ class TestNoh1(unittest.TestCase):
     def test_geometry_error(self):
         """Noh Problem: Test for valid value of geometry"""
 
-        self.assertRaises(ValueError, noh1.Noh, geometry=-1) 
+        self.assertRaises(ValueError, noh1.Noh, geometry=-1)
+
 
 class TestNohWrappers(unittest.TestCase):
     """Test wrappers for Noh in specific geometries.
 
     Test the wrapper functions for specific geometries from
-    :mod:`exactpack.noh.noh1`, by comparing the results computed via
+    :mod:`exactpack.solvers.noh.noh1`, by comparing the results computed via
     the wrappers to those from the general solver.
     """
 
@@ -113,7 +114,7 @@ class TestNohWrappers(unittest.TestCase):
 
 
 class TestNohTimmes(unittest.TestCase):
-    """Tests for :class:`exactpack.noh.timmes.Noh`.
+    """Tests for :class:`exactpack.solvers.noh.timmes.Noh`.
 
     The tests consist of comparing the values at two points, one in
     front of the shock (:math:`r=0.3`) and one behind the shock
@@ -170,4 +171,4 @@ class TestNohTimmes(unittest.TestCase):
     def test_geometry_error(self):
         """Noh Problem: Test for valid value of geometry"""
 
-        self.assertRaises(ValueError, timmes.Noh, geometry=-1) 
+        self.assertRaises(ValueError, timmes.Noh, geometry=-1)

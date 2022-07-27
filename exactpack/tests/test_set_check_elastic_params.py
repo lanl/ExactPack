@@ -1,4 +1,5 @@
-r"""Unittests for all code in :module:`blake.set_check_elastic_params`."""
+r"""Unittests for setting the elastic parameter functions.
+"""
 
 import warnings
 import unittest
@@ -9,8 +10,7 @@ from exactpack.solvers.blake import set_check_elastic_params as elas_prms_mod
 
 
 class TestSetCheckElasErrsWarns(unittest.TestCase):
-    """Exercise all exception-producing auxilliary funtions
-    in :mod:`blake.set_check_elastic_params`.
+    r"""Auxiliary functions in :class:`exactpack.solvers.blake.blake.Blake`.
 
     The debugging argument in each test in this class is set to the debug_prm
     class attribute.  This must have value True for full coverage.
@@ -327,7 +327,3 @@ class TestSetElasticParams(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError, 'Specified value of lame_mod is non-positive',
             elas_prms_mod.set_elastic_params, *args, **kwargs)
-
-
-if __name__ == '__main__':
-    unittest.main()

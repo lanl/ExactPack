@@ -1,4 +1,5 @@
-"""A Fortran based Riemann solver.
+"""A Fortran based Riemann solver written by
+`Frank Timmes' <http://cococubed.asu.edu/code_pages/exact_riemann.shtml>`_.
 
 This is a Python interface to the Riemann solution code from `Frank Timmes'
 website <http://cococubed.asu.edu/code_pages/exact_riemann.shtml>`_.
@@ -9,7 +10,11 @@ from ._timmes import riemann
 
 
 class Riemann(ExactSolver):
-    """ Computes the solution to the Riemann problem.
+    """Computes the solution to the Riemann problem.
+
+    Computes the solution to the Riemann problem with defaults geometry = 1,
+    gamma = 1.4, interface_loc = 0.5, rhol = 1.0, pl = 1.0, ul = 0.0, rhor = 0.125,
+    pr = 0.1, ur = 0.0.
     """
 
     parameters = {

@@ -1,5 +1,4 @@
-r"""The following is a test of Timmes' Sedov code.
-
+r"""Unittests for the Timmes Sedov solver :class:`exactpack.solvers.sedov.timmes`.
 """
 
 import numpy as np
@@ -11,14 +10,17 @@ from exactpack.solvers.sedov.kamm import Sedov as SedovKamm
 
 
 class TestSedovTimmesVsKamm(unittest.TestCase):
-    r"""This test compares Timmes vs Kamm, the latter of which has been verified
-    against Sedov's book and LA-UR-00-6050.  """
+    r"""This test compares Timmes vs Kamm.
 
+    The Kamm results have been verified against Sedov's book and LA-UR-00-6050.
+    """
+    
     @unittest.expectedFailure
     def test_sedov_timmes_vs_kamm(self):
-        r"""Checks Timmes' against Kamm's Sedov solver. Expected to fail because
-        Kamm solver does not return correct values at shock for this choice of
-        parameters.
+        r"""Checks Timmes' against Kamm's Sedov solver.
+
+        Expected to fail because Kamm solver does not return correct values at
+        shock for this choice of parameters.
         """
 
         # construct spatial grid and choose time
@@ -77,8 +79,7 @@ class TestSedovTimmesShock(unittest.TestCase):
         }
 
     def test_preshock_state(self):
-        """Tests density, velocity, pressure, specific internal energy, and
-        sound speed immediately before the shock.
+        """preshock: density, velocity, pressure, specific internal energy, and sound speed.
         """
 
         for ikey in self.analytic_preshock.keys():
@@ -86,8 +87,7 @@ class TestSedovTimmesShock(unittest.TestCase):
                                    self.analytic_preshock[ikey], places=5)
 
     def test_postshock_state(self):
-        """Tests density, velocity, pressure, specific internal energy, and
-        sound speed immediately after the shock.
+        """post shock: density, velocity, pressure, specific internal energy, and sound speed.
         """
 
         for ikey in self.analytic_postshock.keys():
@@ -95,7 +95,7 @@ class TestSedovTimmesShock(unittest.TestCase):
                                    self.analytic_postshock[ikey], places=5)
 
     def test_interpolate(self):
-        r"""Sedov test: interpolation to large number of points.
+        r"""Interpolation to large number of points.
         """
 
         # construct spatial grid and choose time
@@ -124,6 +124,6 @@ class TestSedovTimmesShock(unittest.TestCase):
         self.assertTrue(err < 16.0)
 
     def test_geometry_assignment(self):
-        r"""Sedov test: geometry assignment.
+        r"""Geometry assignment.
         """
         self.assertRaises(ValueError, SedovTimmes, geometry=-1)

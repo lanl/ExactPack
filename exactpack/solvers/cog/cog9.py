@@ -28,6 +28,9 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog9(ExactSolver):
     """Computes the solution to the Cog9 problem.
+
+    Computes the solution to the Cog9 problem with geometry = 3, gamma = 1.4, 
+    alpha = 2.0, beta = 1.0, rho0 = 1.8, Gamma = 40.
     """
 
     parameters = {
@@ -36,8 +39,9 @@ class Cog9(ExactSolver):
         'alpha': r"dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     alpha = 2.0

@@ -1,5 +1,5 @@
-''' Tests the solver implementation of the Doebling Sedov code
-'''
+""" Unittests for Doebling Sedov solver :class:`exactpack.solvers.sedov.doebling`.
+"""
 
 import unittest
 
@@ -10,8 +10,11 @@ from exactpack.solvers.sedov.doebling import Sedov
 
 
 def sedovFcnTable(solution, lamvec):
-    '''helper function to find values of Sedov functions corresponding
-       to a list of lambda values, lamvec'''
+    """Test helper function
+
+    These functions find values of Sedov functions corresponding to
+    a list of lambda values, lamvec
+    """
 
     nlam = len(lamvec)
 
@@ -46,8 +49,8 @@ def sedovFcnTable(solution, lamvec):
 
 
 def sed_lam_min(v, solution, lam_want):
-    '''helper function to find value of v corresponding to
-       value of lambda'''
+    """helper function to find value of v corresponding to
+       value of lambda"""
 
     [l_fun, dlamdv, f_fun, g_fun, h_fun] = solution.sedov_funcs_standard(v)
 
@@ -144,8 +147,8 @@ class TestSedovDoeblingSpecialSingularities(unittest.TestCase):
 
 
 class TestSedovDoeblingFunctionsTable1(unittest.TestCase):
-    r''' Compare results to Kamm & Timmes, Table 1.
-    Sedov Functions for gamma=1.4, planar geometry case'''
+    r""" Compare results to Kamm & Timmes, Table 1.
+    Sedov Functions for gamma=1.4, planar geometry case"""
 
     # define vector of lambda values
 
@@ -207,8 +210,8 @@ class TestSedovDoeblingFunctionsTable1(unittest.TestCase):
 
 
 class TestSedovDoeblingFunctionsTable2(unittest.TestCase):
-    r''' Compare results to Kamm & Timmes,
-    Table 2. Sedov Functions for gamma=1.4, cylindrical geometry case'''
+    r""" Compare results to Kamm & Timmes,
+    Table 2. Sedov Functions for gamma=1.4, cylindrical geometry case"""
 
     # define vector of lambda values
 
@@ -275,8 +278,8 @@ class TestSedovDoeblingFunctionsTable2(unittest.TestCase):
 
 
 class TestSedovDoeblingFunctionsTable3(unittest.TestCase):
-    r''' Compare results to Kamm & Timmes,
-    Table 3. Sedov Functions for gamma=1.4, spherical geometry case'''
+    r""" Compare results to Kamm & Timmes,
+    Table 3. Sedov Functions for gamma=1.4, spherical geometry case"""
 
     # define vector of lambda values
 
@@ -338,9 +341,9 @@ class TestSedovDoeblingFunctionsTable3(unittest.TestCase):
 
 
 class TestSedovDoeblingFunctionsTables45(unittest.TestCase):
-    r''' Compare results to Kamm & Timmes, Tables 4 & 5
-     Values of key variables for the gamma = 1.4 uniform density
-     test cases at t=1s'''
+    r"""Compare results to Kamm & Timmes, Tables 4 & 5
+    Values of key variables for the gamma = 1.4 uniform density
+    test cases at t=1s"""
 
     ##
     # Table 4
@@ -532,8 +535,8 @@ class TestSedovDoeblingFunctionsTables45(unittest.TestCase):
 
 
 class TestSedovDoeblingFunctionsTable67(unittest.TestCase):
-    r''' Compare results to Kamm & Timmes, Tables 6 & 7.
-     Values of key variables for the gamma = 1.4 singular test cases at t=1s'''
+    r"""Compare results to Kamm & Timmes, Tables 6 & 7.
+    Values of key variables for the gamma = 1.4 singular test cases at t=1s"""
 
     ##
     #  Table 6
@@ -635,8 +638,8 @@ class TestSedovDoeblingFunctionsTable67(unittest.TestCase):
 
 
 class TestSedovDoeblingFunctionsTable89(unittest.TestCase):
-    r''' Compare results to Kamm & Timmes, Tables 8 & 9.
-     Values of key variables for the gamma = 1.4 vacuum test cases at t=1s'''
+    r"""Compare results to Kamm & Timmes, Tables 8 & 9.
+    Values of key variables for the gamma = 1.4 vacuum test cases at t=1s"""
 
     ##
     #  Table 8
@@ -801,8 +804,7 @@ class TestSedovDoeblingShock(unittest.TestCase):
         }
 
     def test_preshock_state(self):
-        """Tests density, velocity, pressure, specific internal energy, and
-        sound speed immediately before the shock.
+        """pre shock: density, velocity, pressure, specific internal energy, and sound speed.
         """
 
         for ikey in self.analytic_preshock:
@@ -810,13 +812,9 @@ class TestSedovDoeblingShock(unittest.TestCase):
                                    self.analytic_preshock[ikey], places=5)
 
     def test_postshock_state(self):
-        """Tests density, velocity, pressure, specific internal energy, and
-        sound speed immediately after the shock.
+        """post shock: density, velocity, pressure, specific internal energy, and sound speed.
         """
 
         for ikey in self.analytic_postshock:
             self.assertAlmostEqual(self.solution[ikey][self.ishock],
                                    self.analytic_postshock[ikey], places=5)
-
-if __name__ == '__main__':
-    unittest.main()

@@ -27,6 +27,9 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog10(ExactSolver):
     """Computes the solution to the Cog10 problem.
+
+    Computes the solution to the Cog10 problem with defaults geometry = 3,
+    gamma = 1.4, beta = 1.0, lambda0 = 0.1, rho0 = 1.8, temp0 = 1.4, Gamma = 40.
     """
 
     parameters = {
@@ -36,7 +39,7 @@ class Cog10(ExactSolver):
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
         'temp0': "temperature coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
     geometry = 3
     gamma = 1.4

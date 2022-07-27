@@ -33,7 +33,7 @@ located at
 
 .. math:: {(x - x_d)}^2 + {(y - y_d)}^2 = {r_d}^2
 
-where r_d is the radius of the initial detonation front, found by
+where :math:`r_d` is the radius of the initial detonation front, found by
 
 .. math:: r_d = \sqrt{{|x_d|}^2 + {\left( \frac{r_2 - r_1}{2} \right)}^2}
 

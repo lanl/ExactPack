@@ -1,6 +1,4 @@
-"""Tests for the Noh problem are relatively rudimentary.  Since the
-solution is an analytic expression, they essentially consist of checks
-for typographical errors.
+"""Unittests for the Noh2 solver.
 """
 
 import unittest
@@ -12,8 +10,7 @@ from exactpack.solvers.noh2.noh2_cog import Noh2Cog
 
 
 class TestNoh2(unittest.TestCase):
-    """Tests for the Noh2 problem
-    """
+    """Tests for the Noh2 problem :class:`exactpack.solvers.noh2.noh2.Noh2`."""
 
     def test_noh2(self):
         """Regression test for Noh2 """
@@ -28,29 +25,8 @@ class TestNoh2(unittest.TestCase):
         self.assertAlmostEqual(soln.specific_internal_energy[ri], 1.2345679012345678)
         self.assertAlmostEqual(soln.velocity[ri], -0.2962962962962963)
 
-    def test_noh2_cog(self):
-        """Noh2 is a speical case of Cog1, and this test compares them. """
-
-        t = 0.1
-        r = np.linspace(0.0, 1.2, 10)
-        solver = Noh2Cog()
-        soln = solver(r, t)
-        ri = 2
-        self.assertAlmostEqual(soln.density[ri], 1.371742112482853)
-        self.assertAlmostEqual(soln.pressure[ri], 1.1290058538953525)
-        self.assertAlmostEqual(soln.specific_internal_energy[ri], 1.2345679012345678)
-        self.assertAlmostEqual(soln.velocity[ri], -0.2962962962962963)
-
-    #
-    # Confirm that illegal parameter values raise an error
-    #
-
-    def test_illegal_value_t_noh2cog(self):
-        with self.assertRaises(ValueError):
-            solver = Noh2Cog()
-            solver(r=[], t=2.0)
-
     def test_illegal_value_t_noh2(self):
+        """Confirm that illegal parameter values raise an error"""
         with self.assertRaises(ValueError):
             solver = Noh2()
             solver(r=[], t=2.0)
@@ -93,3 +69,43 @@ class TestNoh2(unittest.TestCase):
         self.assertAlmostEqual(soln.pressure[ri], 1.1290058538953525)
         self.assertAlmostEqual(soln.specific_internal_energy[ri], 1.2345679012345678)
         self.assertAlmostEqual(soln.velocity[ri], -0.2962962962962963)
+
+
+class TestNoh2Cog(unittest.TestCase):
+    """Regression test for Noh2Cog solver.
+
+    Noh2 is a special case of Cog1. The solver Noh2Cog is implemented in
+    :class:`exactpack.solvers.noh2.noh2_cog.Noh2Cog`, which inherits from Cog1.
+    """
+
+    def test_noh2_cog(self):
+        """Regression test for Noh2Cog."""
+        t = 0.1
+        r = np.linspace(0.0, 1.2, 10)
+        solver = Noh2Cog()
+        soln = solver(r, t)
+        ri = 2
+        self.assertAlmostEqual(soln.density[ri], 1.371742112482853)
+        self.assertAlmostEqual(soln.pressure[ri], 1.1290058538953525)
+        self.assertAlmostEqual(soln.specific_internal_energy[ri], 1.2345679012345678)
+        self.assertAlmostEqual(soln.velocity[ri], -0.2962962962962963)
+
+    def test_illegal_value_t_noh2cog(self):
+        """Confirm that illegal parameter values raise an error"""
+        with self.assertRaises(ValueError):
+            solver = Noh2Cog()
+            solver(r=[], t=2.0)
+
+    def test_noh2_cog_cf(self):
+        """Compares Noh2 with Noh2Cog."""
+        t = 0.1
+        r = np.linspace(0.0, 1.2, 10)
+        solver1 = Noh2Cog()
+        soln1 = solver1(r, t)
+        solver2 = Noh2()
+        soln2 = solver2(r, t)
+        ri = 2
+        np.testing.assert_array_almost_equal(soln1.density[ri], soln2.density[ri])
+        np.testing.assert_array_almost_equal(soln1.pressure[ri], soln2.pressure[ri])
+        np.testing.assert_array_almost_equal(soln1.specific_internal_energy[ri], soln2.specific_internal_energy[ri])
+        np.testing.assert_array_almost_equal(soln1.velocity[ri], soln2.velocity[ri])
