@@ -9,7 +9,6 @@ travel 5 cm. This time has been hardwired into Timmes' code.
 """
 
 from ...base import ExactSolver, ExactSolution
-# from ._timmes import mader
 from .rarefaction import mader
 
 

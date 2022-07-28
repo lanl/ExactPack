@@ -1,23 +1,23 @@
-"""Python implementation of the mader solver."""
+"""Python implementation of the Mader solver.
+
+This is a Python re-implementation of the Fortran code from
+`Frank Timmes' website <http://cococubed.asu.edu/research_pages/mader.shtml>`_.
+Timmes' solution code is released under LA-CC-05-101.
+"""
+
 import numpy as np
 
-# t=t,
-# x=r,
-# p_cj=self.p_cj,
-# d_cj=self.d_cj,
-# gamma=self.gamma,
-# u_piston=self.u_piston
 
 def mader(t, x, p_cj, d_cj, gamma, u_piston):
-    """Blah
+    r"""Compute the rarefaction wave solution for an array of positions.
 
     Args:
-        t (float):
-        x (ndarray): Size nstep
-        p_cj (float):
-        d_cj (float):
-        gamma (float):
-        u_piston (float)
+        t (float): Time for desired solutioon (s)
+        x (ndarray): Positions at which to compute the solution (cm)
+        p_cj (float): Chapman-Jouget pressure (erg/cm**3)
+        d_cj (float): Chapman-Jouget density (g/cm**3)
+        gamma (float): ratio of specific heats :math:`\gamma \equiv c_p/c_v`
+        u_piston (float): speed of piston (cm/s)
 
     Returns:
         tuple: A 5-tuple containing:
