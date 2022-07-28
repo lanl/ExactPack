@@ -20,7 +20,7 @@ class Test_RadshockAssignments(unittest.TestCase):
          fnctn_ED.py.
     """
     def test_defaults(self):
-        warnings.filterwarnings('ignore', 'divide by zero encountered in true_divide',
+        warnings.filterwarnings('ignore', 'divide by zero encountered in',
                                 category=RuntimeWarning)
         M0 = 1.2
         prob = ED_Solver()
@@ -113,7 +113,7 @@ class Test_fnctn_nED(unittest.TestCase):
 
 class Test_ConservationEquationsSatisfied(unittest.TestCase):
     def test_ED_withContinuousShock(self):
-        warnings.filterwarnings('ignore', 'divide by zero encountered in true_divide',
+        warnings.filterwarnings('ignore', 'divide by zero encountered in',
                                 category=RuntimeWarning)
         self.prob_ED = ED_Solver()
 
