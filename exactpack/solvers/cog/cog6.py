@@ -119,7 +119,7 @@ class SphericalCog6(Cog6):
 
     
 class Kidder74(Cog6):
-    """Cog6 reduces to the 1974 Kidder solution for geometry=3, b=3,
+    r"""Cog6 reduces to the 1974 Kidder solution for geometry=3, b=3,
     and :math:`\gamma = 5/3`.
     """
 
