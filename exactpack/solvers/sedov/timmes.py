@@ -19,11 +19,11 @@ class Sedov(ExactSolver):
 
     parameters = {
         'geometry': '1=planar, 2=cylindrical, 3=spherical',
-        'gamma': 'specific heat ratio :math:`\gamma \equiv c_p/c_v`',
+        'gamma': r'specific heat ratio :math:`\gamma \equiv c_p/c_v`',
         'eblast': 'total amount of energy deposited at the origin at \
                    time zero',
         'rho0': 'initial density',
-        'omega': 'initial density power-law exponent,\
+        'omega': r'initial density power-law exponent,\
                   :math:`\\rho \equiv \\rho_0 r^{-\omega}`'
         }
 

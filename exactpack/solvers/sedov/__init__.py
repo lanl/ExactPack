@@ -83,7 +83,7 @@ except ImportError:
 
 
 class PlanarSedov(Sedov):
-    """The standard planar Sedov problem, with a default value of \
+    r"""The standard planar Sedov problem, with a default value of \
     :math:`\gamma=7/5` and :math:`E_0=0.0673185` erg.
     """
 
@@ -94,7 +94,7 @@ class PlanarSedov(Sedov):
 
 
 class CylindricalSedov(Sedov):
-    """The standard cylindrical Sedov problem, with a default value of \
+    r"""The standard cylindrical Sedov problem, with a default value of \
     :math:`\gamma=7/5` and :math:`E_0=0.3113572` erg.
     """
 
@@ -105,7 +105,7 @@ class CylindricalSedov(Sedov):
 
 
 class SphericalSedov(Sedov):
-    """The standard spherical Sedov problem, with a default value of \
+    r"""The standard spherical Sedov problem, with a default value of \
     :math:`\gamma=7/5` and :math:`E_0=0.851072` erg.
     """
 
