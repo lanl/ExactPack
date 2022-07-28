@@ -22,13 +22,13 @@ class Test_RadshockAssignments(unittest.TestCase):
     def test_defaults(self):
         warnings.filterwarnings('ignore', 'divide by zero encountered in true_divide',
                                 category=RuntimeWarning)
-        
         M0 = 1.2
         prob = ED_Solver()
         self.assertEqual(prob.M0, M0)
 
+
 class Test_fnctn_ED(unittest.TestCase):
-    r""""Bleh.
+    r""""Test the equilibrium-divide helper functions.
     """
     sigA = 0.5
     sigS = 0.5
@@ -83,7 +83,7 @@ class Test_fnctn_ED(unittest.TestCase):
 
 
 class Test_fnctn_nED(unittest.TestCase):
-    r""""Bleh.
+    r""""Test the non-equilibrium-diffusion helper functions.
     """
     sigA = 0.5
     sigS = 0.5
