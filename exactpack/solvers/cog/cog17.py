@@ -45,7 +45,7 @@ class Cog17(ExactSolver):
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'alpha': r"dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",
