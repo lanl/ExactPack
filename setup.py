@@ -39,10 +39,6 @@ setup(
                     #           sources = ['src/timmes/suolson/suo02.f90'],
                     #           f2py_options = ['only:'] + [ 'suolson' ] + [':']
                     #           ),
-                    Extension(name = 'exactpack.solvers.mader._timmes',
-                              sources = ['src/timmes/mader/rarefaction.f90'],
-                              f2py_options = ['only:'] + [ 'mader' ] + [':']
-                              ),
                     Extension(name = 'exactpack.solvers.rmtv._timmes',
                               sources = ['src/timmes/rmtv/rmtv.f90'],
                               f2py_options = ['only:'] + [ 'rmtv' ] + [':']
