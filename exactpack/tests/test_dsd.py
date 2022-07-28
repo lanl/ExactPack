@@ -639,7 +639,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 ExplosiveArc, r_2=1.0, xnodes=1, ynodes=1)
 
     def test_omegain_neg_error(self):
-        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+        r"""Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be > 0",
@@ -647,7 +647,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 xnodes=1, ynodes=1)
 
     def test_omegain_zero_error(self):
-        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+        r"""Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be > 0",
@@ -655,7 +655,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 xnodes=1, ynodes=1)
 
     def test_omegain_max_error(self):
-        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+        r"""Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be < pi/2",
@@ -663,7 +663,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 xnodes=1, ynodes=1)
 
     def test_omegain_max2_error(self):
-        """Test for valid value of inner edge angle, :math:`\omega_{in}`."""
+        r"""Test for valid value of inner edge angle, :math:`\omega_{in}`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Inner DSD edge angle must be < pi/2",
@@ -671,7 +671,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 xnodes=1, ynodes=1)
 
     def test_omegaout_min_error(self):
-        """Test for valid value of outer edge angle, :math:`\omega_{out}`."""
+        r"""Test for valid value of outer edge angle, :math:`\omega_{out}`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Outer DSD edge angle must be >= inner " +
@@ -680,7 +680,7 @@ class TestExplosiveArc(unittest.TestCase):
                                 xnodes=1, ynodes=1)
 
     def test_omegaout_max_error(self):
-        """Test for valid value of outer edge angle, :math:`\omega_s{out}`."""
+        r"""Test for valid value of outer edge angle, :math:`\omega_s{out}`."""
 
         self.assertRaisesRegex(ValueError,
                                 "Outer DSD edge angle must be <= pi/2",

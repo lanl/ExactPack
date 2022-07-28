@@ -4,6 +4,7 @@ r"""Tests for the radshocks verification problems semi-analytic solution solver,
 
 import numpy
 import unittest
+import warnings
 
 from exactpack.solvers.radshocks.nED_radshocks import ED_Solver
 from exactpack.solvers.radshocks.nED_radshocks import nED_Solver
@@ -19,34 +20,32 @@ class Test_RadshockAssignments(unittest.TestCase):
          fnctn_ED.py.
     """
     def test_defaults(self):
-        print('\n')
-        print('test_defaults')
+        warnings.filterwarnings('ignore', 'divide by zero encountered in',
+                                category=RuntimeWarning)
         M0 = 1.2
         prob = ED_Solver()
         self.assertEqual(prob.M0, M0)
 
-class Test_fnctn_ED(unittest.TestCase):
-    r""""Bleh.
-    """
-    def test_fnctn_ED(self):
-        sigA = 0.5
-        sigS = 0.5
-        self.M0 = 1.2
-        self.P0 = 1.e-4
-        self.gamma = 5./3.
-        self.sigA= sigA
-        self.sigS = sigS
-        self.expDensity_abs = 0.
-        self.expDensity_scat = 0.
-        self.expTemp_abs = 0.
-        self.expTemp_scat = 0.
 
-        print('\n')
-        print('test_sigA')
+class Test_fnctn_ED(unittest.TestCase):
+    r""""Test the equilibrium-divide helper functions.
+    """
+    sigA = 0.5
+    sigS = 0.5
+    M0 = 1.2
+    P0 = 1.e-4
+    gamma = 5./3.
+    sigA= sigA
+    sigS = sigS
+    expDensity_abs = 0.
+    expDensity_scat = 0.
+    expTemp_abs = 0.
+    expTemp_scat = 0.
+    
+    def test_sigA(self):
         self.assertEqual(fnctn_ED.sigma_a(1., self), self.sigA)
 
-        print('\n')
-        print('test_expDensity_abs')
+    def test_expDensity_abs(self):
         T = 1.1
         self.expDensity_abs = 1.
         rho = fnctn_ED.rho(T, self)
@@ -54,20 +53,17 @@ class Test_fnctn_ED(unittest.TestCase):
         self.assertEqual(numpy.allclose(fnctn_ED.sigma_a(T, self), val), True)
         self.expDensity_abs = 0.
 
-        print('\n')
-        print('test_expTemp_abs')
+    def test_expTemp_abs(self):
         T = 1.1
         self.expTemp_abs = 1.
         val = self.sigA * T**self.expTemp_abs
         self.assertEqual(numpy.allclose(fnctn_ED.sigma_a(T, self), val), True)
         self.expTemp_abs = 0.
 
-        print('\n')
-        print('test_sigS')
+    def test_sigS(self):
         self.assertEqual(fnctn_ED.sigma_s(1., self), self.sigS)
 
-        print('\n')
-        print('test_expDensity_scat')
+    def test_expDensity_scat(self):
         T = 1.1
         self.expDensity_scat = 1.
         rho = fnctn_ED.rho(T, self)
@@ -75,52 +71,50 @@ class Test_fnctn_ED(unittest.TestCase):
         self.assertEqual(numpy.allclose(fnctn_ED.sigma_s(T, self), val), True)
         self.expDensity_scat = 0.
 
-        print('\n')
-        print('test_expTemp_scat')
+    def test_expTemp_scat(self):
         T = 1.1
         self.expTemp_scat = 1.
         val = self.sigS * T**self.expTemp_scat
         self.assertEqual(numpy.allclose(fnctn_ED.sigma_s(T, self), val), True)
         self.expTemp_scat = 0.
 
-        print('\n')
-        print('test_sigT')
+    def test_sigT(self):
         self.assertEqual(fnctn_ED.sigma_t(1., self), self.sigA + self.sigS)
 
-class Test_fnctn_nED(unittest.TestCase):
-    r""""Bleh.
-    """
-    def test_fnctn_nED(self):
-        sigA = 0.5
-        sigS = 0.5
-        self.M0 = 1.2
-        self.P0 = 1.e-4
-        self.gamma = 5./3.
-        self.sigA= sigA
-        self.sigS = sigS
-        self.expDensity_abs = 0.
-        self.expDensity_scat = 0.
-        self.expTemp_abs = 0.
-        self.expTemp_scat = 0.
-        self.Pr0 = 1./3.
 
-        print('\n')
-        print('test_sigT')
+class Test_fnctn_nED(unittest.TestCase):
+    r""""Test the non-equilibrium-diffusion helper functions.
+    """
+    sigA = 0.5
+    sigS = 0.5
+    M0 = 1.2
+    P0 = 1.e-4
+    gamma = 5./3.
+    sigA= sigA
+    sigS = sigS
+    expDensity_abs = 0.
+    expDensity_scat = 0.
+    expTemp_abs = 0.
+    expTemp_scat = 0.
+    Pr0 = 1./3.
+    
+    def test_sigT(self):
         self.assertEqual(fnctn_nED.sigma_t(1./3., 1.2, self),
                          self.sigA + self.sigS)
 
-#         print('\n')
-#         print('test_mat_mach')
-#         self.Pr0 = 1./3.
-#         self.assertEqual(fnctn_nED.mat_mach(1. / 3., 1., self), self.M0)
+    # def test_mat_mach(self):
+    #     self.Pr0 = 1./3.
+    #     self.assertEqual(fnctn_nED.mat_mach(1. / 3., 1., self), self.M0)
 
-        print('\n')
-        print('test_mat_internal_energy')
+    def test_mat_internal_energy(self):
         val = 1. / self.gamma / (self.gamma - 1.)
         self.assertEqual(fnctn_nED.mat_internal_energy(1. / 3., self.M0, self), val)
 
+
 class Test_ConservationEquationsSatisfied(unittest.TestCase):
     def test_ED_withContinuousShock(self):
+        warnings.filterwarnings('ignore', 'divide by zero encountered in',
+                                category=RuntimeWarning)
         self.prob_ED = ED_Solver()
 
         print('\n')

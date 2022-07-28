@@ -28,7 +28,7 @@ class Noh(ExactSolver):
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'u0': "incident velocity (negative)",
         'rho0': "density"
         }
@@ -87,7 +87,7 @@ class Noh(ExactSolver):
 
 
 class PlanarNoh(Noh):
-    """The standard planar Noh problem.
+    r"""The standard planar Noh problem.
 
     The planar Noh problem as defined in [Noh1987]_, with a default value
     of :math:`\gamma=5/3`.
@@ -99,7 +99,7 @@ class PlanarNoh(Noh):
 
 
 class CylindricalNoh(Noh):
-    """The standard cylindrical Noh problem.
+    r"""The standard cylindrical Noh problem.
 
     The cylindrical Noh problem as defined in [Noh1987]_, with a default
     value of :math:`\gamma=5/3`.
@@ -111,7 +111,7 @@ class CylindricalNoh(Noh):
 
 
 class SphericalNoh(Noh):
-    """The standard spherical Noh problem.
+    r"""The standard spherical Noh problem.
 
     The spherical Noh problem as defined in [Noh1987]_, with a default
     value of :math:`\gamma=5/3`.

@@ -39,7 +39,7 @@ class Cog16(ExactSolver):
 
     parameters = {
         'geometry': "2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'u0': "velocity coefficient",
         'b': r"dimensionless constant",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",

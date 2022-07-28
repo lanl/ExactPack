@@ -45,7 +45,7 @@ class Cog8(ExactSolver):
         'temp0': 'temperature of the gas',
         'alpha': r'dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`',
         'beta': r'dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`',
-        'gamma': 'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
+        'gamma': r'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
         'cv': 'specific heat at constant volume [erg/g/eV]',
         }
 

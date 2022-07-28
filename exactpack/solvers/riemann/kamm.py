@@ -17,8 +17,8 @@ class Riemann(ExactSolver):
 
     parameters = {
         'interface_loc': 'initial interface location :math:`r_0`',
-        'gammal': 'left specific heat ratio :math:`\gamma \equiv c_p/c_v`',
-        'gammar': 'right specific heat ratio :math:`\gamma \equiv c_p/c_v`',
+        'gammal': r'left specific heat ratio :math:`\gamma \equiv c_p/c_v`',
+        'gammar': r'right specific heat ratio :math:`\gamma \equiv c_p/c_v`',
         'rhol': 'density on left in Eq. :eq:`riemannL`',
         'pl': 'pressure on left in Eq. :eq:`riemannL`',
         'ul': 'velocity on left in Eq. :eq:`riemannL`',

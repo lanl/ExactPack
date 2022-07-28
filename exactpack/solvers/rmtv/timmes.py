@@ -17,7 +17,7 @@ class Rmtv(ExactSolver):
         'bval': r'power :math:`b` in the thermal conductivity :eq:`chidef`',
         'chi0': r'coefficient :math:`\chi_0` in the thermal conductivity \
         :eq:`chidef`',
-        'gamma': 'ratio of specific heats :math:`\gamma \equiv c_v/c_p`',
+        'gamma': r'ratio of specific heats :math:`\gamma \equiv c_v/c_p`',
         'bigamma': r'The |Gruneisen| gas coefficient :math:`\Gamma` defined in \
         Eq. :eq:`BigGamma`',
         'rf': 'position of the heat front',
