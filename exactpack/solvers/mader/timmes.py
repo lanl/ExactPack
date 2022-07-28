@@ -19,7 +19,7 @@ class Mader(ExactSolver):
     parameters = {
         'p_cj': 'Chapman-Jouget pressure',
         'd_cj': 'Chapman-Jouget density',
-        'gamma': 'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
+        'gamma': r'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
         'u_piston': 'speed of piston',
         }
 
