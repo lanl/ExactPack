@@ -94,7 +94,7 @@ def dEdx(E, M, self):
     # beta0 defined as M0 / rho1 / C0 causes Srp(Pr1, M1, self) != 0
     beta0 = mat_beta(Ereq, Meq, self)
     val = sigt / P0 * (beta * (Em + P0 * F2) - beta0 * (Em0 + P0 * F20))
-    if (self.FLD_type is 'LP'):
+    if (self.FLD_type == 'LP'):
 ### R is "positive" for Wilson's sum theory and Larsen's sqrt limiter,
 ### but "negative" for the Levermore-Pomraning limiter,
 ### but this "negative" cancels out, which I have checked, "neat"
@@ -105,7 +105,7 @@ def dEdx(E, M, self):
       val = scipy.optimize.fsolve(lambda x:
                                   lambda_def(x)[0] * x - val, 3. * val)[0]
       self.Lambda, self.R = lambda_def(val)
-    elif (self.FLD_type is 'poly'):
+    elif (self.FLD_type == 'poly'):
       a  = (val / sigt / E * epsilon * epsilon - epsilon) / sigt / E
       b  = 3. * val / sigt / E * epsilon - 2.
       b2 = b * b
@@ -477,7 +477,7 @@ def ddM_jac(M, vals, self):
       ddE_dEdx_val  = ddP_dEdx_val / dPdx_val - dsigt_dE_val / sigt - 1. / E
       ddE_dEdx_val *= const
       ddE_dEdx_val += ddP_dEdx_val / LAMBDA**(1. / n)
-    elif (self.FLD_type is 'poly'):
+    elif (self.FLD_type == 'poly'):
       EsE = dPdx_val / sigt / E
       a_x = 2 - 3. * epsilon * EsE
       b_x = numpy.sqrt(4. + 12. * epsilon * EsE - 15. * epsilon2 * EsE * EsE)
