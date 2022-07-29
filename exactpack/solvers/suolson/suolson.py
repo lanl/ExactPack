@@ -131,14 +131,13 @@ def usolution(posx_in, tau_in, epsilon_in):
     # integrate over each oscillitory piece
     else:
         for i in range(100):
-            jwant = i
+            jwant = i + 1
             eta_int = zbrent(gamma_one_root, eta_lo, eta_hi, tol)
             xi1 = qromo(upart1, eta_lo, eta_int, eps, midpnt)
             sum1  = sum1 + xi1
             eta_lo = eta_int
             if abs(xi1) <= eps2:
-                continue
-            break
+                break
 
     # integrand may not oscillate for small values of posx
     eta_lo = 0.0
@@ -151,14 +150,13 @@ def usolution(posx_in, tau_in, epsilon_in):
     # integrate from hi to lo on this piece
     else:
         for i in range(100):
-            jwant = i
+            jwant = i + 1
             eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol)
             xi2 = qromo(upart2, eta_hi, eta_int, eps, midpnt)
             sum2  = sum2 + xi2
             eta_hi = eta_int
             if abs(xi2) <= eps2:
-                continue
-            break
+                break
         sum2 = -sum2
 
     return 1.0 - 2.0 * rt3opi * sum1 - rt3opi * exp(-tau) * sum2
@@ -195,14 +193,13 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     # from 1 to 0 on this part; this one really oscillates
     else:
         for i in range(100):
-            jwant = i
+            jwant = i + 1
             eta_int = zbrent(gamma_three_root, eta_hi, eta_lo, tol)
             xi1 = qromo(vpart1, eta_hi, eta_int, eps, midpnt)
             sum1 = sum1 + xi1
             eta_hi = eta_int
             if abs(xi1) <= eps2:
-                continue
-            break
+                break
         sum1 = -sum1
 
     # integrand may not oscillate for small values of posx
@@ -218,14 +215,13 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     # from 1 to 0 on this part; this one really oscillates
     else:
         for i in range(100):
-            jwant = i
+            jwant = i + 1
             eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol)
             xi2 = qromo(vpart2, eta_hi, eta_int, eps, midpnt)
             sum2 = sum2 + xi2
             eta_hi = eta_int
             if abs(xi2) <= eps2:
-                continue
-            break
+                break
         sum2 = -sum2
 
     # done
@@ -284,9 +280,9 @@ def gamma_one_root(eta_in):
     """used by a root finder to determine the integration inveral"""
     pi = 3.141592653589793238
     twopi = 2.0 * pi
-    
+
     root = gamma_one(eta_in, epsilon) * posx
-    root += theta_one(eta_in, epsilon) 
+    root += theta_one(eta_in, epsilon)
     root -= jwant * twopi
     return root
 
@@ -295,9 +291,9 @@ def gamma_two_root(eta_in):
     """used by a root finder to determine the integration inveral"""
     pi = 3.141592653589793238
     twopi = 2.0 * pi
-    
+
     root = gamma_two(eta_in, epsilon) * posx
-    root += theta_two(eta_in, epsilon) 
+    root += theta_two(eta_in, epsilon)
     root -= jwant * twopi
     return root
 
@@ -306,26 +302,26 @@ def gamma_three_root(eta_in):
     """used by a root finder to determine the integration inveral"""
     pi = 3.141592653589793238
     twopi = 2.0 * pi
-    
+
     root = gamma_three(eta_in, epsilon) * posx
-    root += theta_three(eta_in, epsilon) 
+    root += theta_three(eta_in, epsilon)
     root -= jwant * twopi
     return root
 
 
 def theta_one(eta, epsilon):
     """equation 38 of su & olson jqsrt 1996"""
-    return acos(sqrt(3.0 / (3.0 + 4.0 * gamma_one(eta, epsilon)**2)))
+    return acos(sqrt(3.0 / (3.0 + (4.0 * gamma_one(eta, epsilon)**2))))
 
 
 def theta_two(eta, epsilon):
     """equation 38 of su & olson jqsrt 1996"""
-    return acos(sqrt(3.0 / (3.0 + 4.0 * gamma_two(eta, epsilon)**2)))
+    return acos(sqrt(3.0 / (3.0 + (4.0 * gamma_two(eta, epsilon)**2))))
 
 
 def theta_three(eta, epsilon):
     """equation 43 of su & olson jqsrt 1996"""
-    return acos(sqrt(3.0 / (3.0 + 4.0 * gamma_three(eta, epsilon)**2)))
+    return acos(sqrt(3.0 / (3.0 + (4.0 * gamma_three(eta, epsilon)**2))))
 
 
 def gamma_one(eta, epsilon):
@@ -333,7 +329,7 @@ def gamma_one(eta, epsilon):
     tiny = 1.0e-14
 
     ein = max(tiny, min(eta, 1.0 - tiny))
-    return ein * sqrt(epsilon + 1.0 / (1.0 - ein * ein))
+    return ein * sqrt(epsilon + (1.0 / (1.0 - ein * ein)))
 
 
 def gamma_two(eta, epsilon):
@@ -341,7 +337,7 @@ def gamma_two(eta, epsilon):
     tiny = 1.0e-14
 
     ein = max(tiny, min(eta, 1.0 - tiny))
-    return sqrt((1.0 - ein) * (epsilon + 1.0 / ein))
+    return sqrt((1.0 - ein) * (epsilon + (1.0 / ein)))
 
 
 def gamma_three(eta, epsilon):
@@ -349,7 +345,7 @@ def gamma_three(eta, epsilon):
     tiny = 1.0e-14
 
     ein = max(tiny, min(eta, 1.0 - tiny))
-    return sqrt((1.0 - ein * ein) * (epsilon + 1.0 / (ein * ein)))
+    return sqrt((1.0 - ein * ein) * (epsilon + (1.0 / (ein * ein))))
 
 
 def zbrent(func, x1, x2, tol):
@@ -369,7 +365,8 @@ def zbrent(func, x1, x2, tol):
     fb = func(b)
     
     if (fa > 0.0 and fb > 0.0) or (fa < 0.0 and fb < 0.0):
-        msg = f'x1={x1}, f(x1)={fa}\nx2={x2}, f(x2)={fb}'
+        msg = f'\nx1={x1}, f(x1)={fa}'
+        msg += f'\nx2={x2}, f(x2)={fb}'
         msg += '\nroot not bracketed in routine zbrent'
         raise ValueError(msg)
 
@@ -445,7 +442,7 @@ def zbrent(func, x1, x2, tol):
     raise ValueError(msg)
 
 
-def midpont(func, a, b, n):
+def midpnt(func, a, b, s, n):
     """this routine computes the n'th stage of refinement of an extended midpoint 
     rule. func is input as the name of the function to be integrated between  
     limits a and b. when called with n=1, the routine returns as s the crudest 
@@ -499,7 +496,7 @@ def polint(xa, ya, n, x):
 
     # for each column of the table, loop over the c's and d's and update them
     ns = ns - 1
-    for m in range(n - 1):
+    for m in range(1, n):
         for i in range(n - m):
             ho = xa[i] - x
             hp = xa[i + m] - x
@@ -537,18 +534,15 @@ def qromo(func, a, b, eps, choose):
     jmax = 14
     jmaxp = jmax + 1
     k = 5
-    km = k - 1
+    # km = k - 1
     s = np.zeros(jmaxp)
     h = np.zeros(jmaxp)
 
     h[0] = 1.0
     for j in range(jmax):
-        s[j] = choose(func, a, b, j)  
+        s[j] = choose(func, a, b, s[j], j+1)
         if j >= k:
-            # This is definitely wrong. polint() is execint arrays of length k
-            # as the first two arguments. This code will only send a single
-            # value. Fix this later.
-            ss, dss = polint(h[j - km], s[j - km], k, 0.0)    
+            ss, dss = polint(h[j - k:j], s[j - k:j], k, 0.0)    
             if abs(dss) <= eps * abs(ss):
                 return ss
 
