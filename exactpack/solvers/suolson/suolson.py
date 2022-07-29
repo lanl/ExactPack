@@ -87,7 +87,7 @@ def so_wave(time,zpos,trad_bc_ev,opac,alpha):
     trad = (erad / asol)**0.25
     trad_ev = trad * kev
 
-    tmat = vans * ener_in / asol)**0.25
+    tmat = (vans * ener_in / asol)**0.25
     tmat_ev = tmat * kev
 
     return erad, trad, trad_ev, tmat, tmat_ev
@@ -132,7 +132,7 @@ def usolution(posx_in, tau_in, epsilon_in):
     else:
         for i in range(100):
             jwant = i
-            eta_int = zbrent(gamma_one_root, eta_lo, eta_hi, tol, niter)
+            eta_int = zbrent(gamma_one_root, eta_lo, eta_hi, tol)
             xi1 = qromo(upart1, eta_lo, eta_int, eps, midpnt)
             sum1  = sum1 + xi1
             eta_lo = eta_int
@@ -152,7 +152,7 @@ def usolution(posx_in, tau_in, epsilon_in):
     else:
         for i in range(100):
             jwant = i
-            eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol, niter)
+            eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol)
             xi2 = qromo(upart2, eta_hi, eta_int, eps, midpnt)
             sum2  = sum2 + xi2
             eta_hi = eta_int
@@ -188,7 +188,7 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     sum1 = 0.0
     jwant = 1
     bracket = gamma_three_root(eta_lo) * gamma_three_root(eta_hi) <= 0.0
-    if not bracket):
+    if not bracket:
         sum1 = qromo(vpart1, eta_lo, eta_hi, eps, midpnt)
 
     # integrate over each oscillitory piece
@@ -196,7 +196,7 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     else:
         for i in range(100):
             jwant = i
-            eta_int = zbrent(gamma_three_root, eta_hi, eta_lo, tol, niter)
+            eta_int = zbrent(gamma_three_root, eta_hi, eta_lo, tol)
             xi1 = qromo(vpart1, eta_hi, eta_int, eps, midpnt)
             sum1 = sum1 + xi1
             eta_hi = eta_int
@@ -219,7 +219,7 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     else:
         for i in range(100):
             jwant = i
-            eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol, niter)
+            eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol)
             xi2 = qromo(vpart2, eta_hi, eta_int, eps, midpnt)
             sum2 = sum2 + xi2
             eta_hi = eta_int
@@ -348,7 +348,7 @@ def gamma_three(eta, epsilon):
     """equation 43 of su & olson jqsrt 1996"""
     tiny = 1.0e-14
 
-    ein = max(tiny,min(eta,1.0d0-tiny))
+    ein = max(tiny, min(eta, 1.0 - tiny))
     return sqrt((1.0 - ein * ein) * (epsilon + 1.0 / (ein * ein)))
 
 
@@ -370,7 +370,7 @@ def zbrent(func, x1, x2, tol):
     
     if (fa > 0.0 and fb > 0.0) or (fa < 0.0 and fb < 0.0):
         msg = f'x1={x1}, f(x1)={fa}\nx2={x2}, f(x2)={fb}'
-        msg += 'root not bracketed in routine zbrent'
+        msg += '\nroot not bracketed in routine zbrent'
         raise ValueError(msg)
 
     c = b 
