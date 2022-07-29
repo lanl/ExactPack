@@ -45,7 +45,7 @@ The repository may be cloned from the GitHub repository located at https://githu
 ### Dependencies
 
 Python dependencies:
-* Python 2.7
+* Python 3.6
 * setuptools
 * numpy (version 1.12.0 is known to be broken)
 * sphinx
@@ -55,7 +55,6 @@ Python dependencies:
 Other dependencies:
 * C compiler
 * Fortran compiler (must support quad-precision arithmetic, i.e. REAL*16)
-* VTK
 
 The built-in test suite may be run in a similar way: `python setup.py test`.
 
