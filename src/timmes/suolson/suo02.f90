@@ -670,7 +670,8 @@ c..local variables
 
 
 
-      subroutine midpnt(func,a,b,s,n)    
+!       subroutine midpnt(func,a,b,s,n)    
+      double precision function midpnt(func,a,b,s,n)
       implicit none
       save
 
@@ -704,6 +705,7 @@ c..declare
        enddo
        s  = (s + ((b-a) * sum/tnm)) / 3.0d0 
       end if 
+      midpnt = s
       return 
       end    
 
@@ -728,11 +730,12 @@ c..declare
       external          choose,func 
       integer           j,jmax,jmaxp,k,km    
       parameter         (jmax=14, jmaxp=jmax+1, k=5, km=k-1) 
-      double precision  a,b,ss,s(jmaxp),h(jmaxp),eps,dss,func 
+      double precision  a,b,ss,s(jmaxp),h(jmaxp),eps,dss,func,choose
 
       h(1) = 1.0d0 
       do j=1,jmax 
-       call choose(func,a,b,s(j),j)  
+!        call choose(func,a,b,s(j),j)  
+       s(j) = choose(func,a,b,s(j),j)  
        if (j .ge. k) then    
         call polint(h(j-km),s(j-km),k,0.0d0,ss,dss)    
         if (abs(dss) .le. eps*abs(ss)) return    
