@@ -6,12 +6,12 @@ This code is released under LA-CC-05-101.
 """
 
 import numpy as np
-from math import sqrt, sin, acos, exp
+from math import sqrt, sin, acos, exp, pi
 from scipy.integrate import quad
 from scipy.optimize import brentq
 
 
-# common bloack variables
+# common block variables
 posx = None
 tau = None
 epsilon = None
@@ -46,12 +46,12 @@ def suolson(t, x, trad_bc_ev, opac, alpha):
     return trad_ev, tmat_ev
 
 
-def so_wave(time,zpos,trad_bc_ev,opac,alpha):
+def so_wave(time, zpos, trad_bc_ev, opac, alpha):
     """Provides solution to the Su-Olson problem.
     
     Args:
         time (float): time point where solution is desired
-        zpos (float): spaatial point where solution is desired
+        zpos (float): spatial point where solution is desired
         trad_bc_ev (float): boundary condition temperature in electron volts
         opac (float): the opacity in cm**2/g
         alpha (float): coefficient of the material equation of state c_v = alpha T_mat**3
@@ -75,9 +75,9 @@ def so_wave(time,zpos,trad_bc_ev,opac,alpha):
     # derived parameters and conversion factors
     trad_bc = trad_bc_ev / kev
     ener_in = asol * trad_bc**4
-    xpos    = rt3 * opac * zpos
-    ialpha  = 1.0 / alpha
-    tau     = a4c * opac * ialpha * time
+    xpos = rt3 * opac * zpos
+    ialpha = 1.0 / alpha
+    tau = a4c * opac * ialpha * time
     epsilon = a4 * ialpha
     
     # get the dimensionless solutions
@@ -109,7 +109,6 @@ def usolution(posx_in, tau_in, epsilon_in):
     tol = 1.0e-6
     eps = 1.0e-10
     eps2 = 1.0e-8
-    pi = 3.1415926535897932384
     rt3 = 1.7320508075688772
     rt3opi = rt3/pi
 
@@ -149,27 +148,35 @@ def usolution(posx_in, tau_in, epsilon_in):
     bracket = (gamma_two_root(eta_lo) * gamma_two_root(eta_hi)) <= 0.0
     if not bracket:
         sum2 = quad(upart2, eta_lo, eta_hi, epsabs=eps)[0]
-    # integrate from hi to lo on this piece
+    # Use eta_int to avoid integrating singularity
     else:
         for i in range(100):
             jwant = i + 1
             eta_int = brentq(gamma_two_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
-            xi2 = quad(upart2, eta_hi, eta_int, epsabs=eps)[0]
+            xi2 = quad(upart2, eta_int, eta_hi, epsabs=eps)[0]
             sum2  = sum2 + xi2
             eta_hi = eta_int
             if abs(xi2) <= eps2:
                 break
-        sum2 = -sum2
 
     return 1.0 - 2.0 * rt3opi * sum1 - rt3opi * exp(-tau) * sum2
 
 
 def vsolution(posx_in, tau_in, epsilon_in, uans):
-    """computes the v solution for the su-olson problem"""
+    """computes the v solution for the su-olson problem
+
+    Args:
+        posx_in (float): X-position
+        tau_in (float):
+        epsilon_in (float):
+        uans (float): The u-solution for the given x-position.
+
+    Returns:
+        float: uvolution_out, the value of the solution at the given x-position.
+    """
     tol = 1.0e-6
     eps = 1.0e-10
     eps2 = 1.0e-8
-    pi = 3.1415926535897932384
     rt3 = 1.7320508075688772
     rt3opi = rt3/pi
 
@@ -191,17 +198,15 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     if not bracket:
         sum1 = quad(vpart1, eta_lo, eta_hi, epsabs=eps)[0]
     # integrate over each oscillitory piece
-    # from 1 to 0 on this part; this one really oscillates
     else:
         for i in range(100):
             jwant = i + 1
             eta_int = brentq(gamma_three_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
-            xi1 = quad(vpart1, eta_hi, eta_int, epsabs=eps)[0]
+            xi1 = quad(vpart1, eta_int, eta_hi, epsabs=eps)[0]
             sum1 = sum1 + xi1
             eta_hi = eta_int
             if abs(xi1) <= eps2:
                 break
-        sum1 = -sum1
 
     # integrand may not oscillate for small values of posx
     eta_lo = 0.0
@@ -212,19 +217,16 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     if not bracket:
         sum2 = quad(vpart2, eta_lo, eta_hi, epsabs=eps)[0]
     # integrate over each oscillitory piece
-    # from 1 to 0 on this part; this one really oscillates
     else:
         for i in range(100):
             jwant = i + 1
             eta_int = brentq(gamma_two_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
-            xi2 = quad(vpart2, eta_hi, eta_int, epsabs=eps)[0]
+            xi2 = quad(vpart2, eta_int, eta_hi, epsabs=eps)[0]
             sum2 = sum2 + xi2
             eta_hi = eta_int
             if abs(xi2) <= eps2:
                 break
-        sum2 = -sum2
 
-    # done
     return uans - 2.0 * rt3opi * sum1 + rt3opi * exp(-tau) * sum2
 
 
@@ -258,8 +260,8 @@ def vpart1(eta):
 
     numer = sin(posx * gamma_three(eta, epsilon) + theta_three(eta, epsilon))
 
-    denom  = sqrt(4.0 - eta2 + 4.0 * epsilon * eta2 * (1.0 - eta2))
-    denom  = max(tiny, denom)
+    denom = sqrt(4.0 - eta2 + 4.0 * epsilon * eta2 * (1.0 - eta2))
+    denom = max(tiny, denom)
 
     return exp(-tau * (1.0 - eta2)) * numer / denom
 
@@ -278,34 +280,25 @@ def vpart2(eta):
 
 def gamma_one_root(eta_in):
     """used by a root finder to determine the integration inveral"""
-    pi = 3.141592653589793238
-    twopi = 2.0 * pi
-
     root = gamma_one(eta_in, epsilon) * posx
     root += theta_one(eta_in, epsilon)
-    root -= jwant * twopi
+    root -= jwant * pi * 2
     return root
 
 
 def gamma_two_root(eta_in):
     """used by a root finder to determine the integration inveral"""
-    pi = 3.141592653589793238
-    twopi = 2.0 * pi
-
     root = gamma_two(eta_in, epsilon) * posx
     root += theta_two(eta_in, epsilon)
-    root -= jwant * twopi
+    root -= jwant * pi * 2
     return root
 
 
 def gamma_three_root(eta_in):
     """used by a root finder to determine the integration inveral"""
-    pi = 3.141592653589793238
-    twopi = 2.0 * pi
-
     root = gamma_three(eta_in, epsilon) * posx
     root += theta_three(eta_in, epsilon)
-    root -= jwant * twopi
+    root -= jwant * pi * 2
     return root
 
 

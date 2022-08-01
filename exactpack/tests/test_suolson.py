@@ -13,17 +13,20 @@ class TestSuOlsonTimmes(unittest.TestCase):
 
     Comparisions are made at :math:`r=0.1` and :math:`t=10^{-9}`.
     """
+    solver = SuOlson(trad_bc_ev=1.0e3, opac=1.0)
+    data = numpy.linspace(0, 20.0, 4)
+    soln = solver(data, 1.e-9)
+
+    def test_mat_temperature(self):
+        """SuOlson problem: mat temperature"""
+        expected = [955.9875670217054, 388.14357235758376,
+                    72.16540048091636, 7.158933356184126]
+        result = self.soln.Tmaterial
+        numpy.testing.assert_allclose(result, expected)
+
     def test_radiation_temperature(self):
         """SuOlson problem: radiation temperature"""
-
-        result = SuOlson(trad_bc_ev=1.0e3, opac=1.0)(numpy.array([0.1]), 1.e-9).Tradiation[0]
-        self.assertAlmostEqual(result, 949.7484176757317)
-
-    def test_matter_temperature(self):
-        """SuOlson problem: matter temperature"""
-
-        result = SuOlson(trad_bc_ev=1.0e3, opac=1.0)(numpy.array([0.1]), 1.e-9).Tmaterial[0]
-        self.assertAlmostEqual(result, 948.8608008525508)
-
-
-        
+        expected = [956.7434855255531, 396.89673904429804,
+                    76.45509373805481, 7.802002997462728]
+        result = self.soln.Tradiation
+        numpy.testing.assert_allclose(result, expected)
