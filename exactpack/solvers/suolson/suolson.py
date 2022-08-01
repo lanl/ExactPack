@@ -7,6 +7,9 @@ This code is released under LA-CC-05-101.
 
 import numpy as np
 from math import sqrt, sin, acos, exp
+from scipy.integrate import quad
+from scipy.optimize import brentq
+
 
 # common bloack variables
 posx = None
@@ -81,7 +84,6 @@ def so_wave(time,zpos,trad_bc_ev,opac,alpha):
     uans = usolution(xpos, tau, epsilon)
     vans = vsolution(xpos, tau, epsilon, uans)
 
-
     # compute the physical solution
     erad = uans * ener_in
     trad = (erad / asol)**0.25
@@ -127,13 +129,13 @@ def usolution(posx_in, tau_in, epsilon_in):
     jwant = 1
     bracket = (gamma_one_root(eta_lo) * gamma_one_root(eta_hi)) <= 0.0
     if not bracket:
-        sum1 = qromo(upart1, eta_lo, eta_hi, eps, midpnt)
+        sum1 = quad(upart1, eta_lo, eta_hi, epsabs=eps)[0]
     # integrate over each oscillitory piece
     else:
         for i in range(100):
             jwant = i + 1
-            eta_int = zbrent(gamma_one_root, eta_lo, eta_hi, tol)
-            xi1 = qromo(upart1, eta_lo, eta_int, eps, midpnt)
+            eta_int = brentq(gamma_one_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
+            xi1 = quad(upart1, eta_lo, eta_int, epsabs=eps)[0]
             sum1  = sum1 + xi1
             eta_lo = eta_int
             if abs(xi1) <= eps2:
@@ -146,13 +148,13 @@ def usolution(posx_in, tau_in, epsilon_in):
     jwant = 1
     bracket = (gamma_two_root(eta_lo) * gamma_two_root(eta_hi)) <= 0.0
     if not bracket:
-        sum2 = qromo(upart2, eta_lo, eta_hi, eps, midpnt)
+        sum2 = quad(upart2, eta_lo, eta_hi, epsabs=eps)[0]
     # integrate from hi to lo on this piece
     else:
         for i in range(100):
             jwant = i + 1
-            eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol)
-            xi2 = qromo(upart2, eta_hi, eta_int, eps, midpnt)
+            eta_int = brentq(gamma_two_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
+            xi2 = quad(upart2, eta_hi, eta_int, epsabs=eps)[0]
             sum2  = sum2 + xi2
             eta_hi = eta_int
             if abs(xi2) <= eps2:
@@ -187,15 +189,14 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     jwant = 1
     bracket = gamma_three_root(eta_lo) * gamma_three_root(eta_hi) <= 0.0
     if not bracket:
-        sum1 = qromo(vpart1, eta_lo, eta_hi, eps, midpnt)
-
+        sum1 = quad(vpart1, eta_lo, eta_hi, epsabs=eps)[0]
     # integrate over each oscillitory piece
     # from 1 to 0 on this part; this one really oscillates
     else:
         for i in range(100):
             jwant = i + 1
-            eta_int = zbrent(gamma_three_root, eta_hi, eta_lo, tol)
-            xi1 = qromo(vpart1, eta_hi, eta_int, eps, midpnt)
+            eta_int = brentq(gamma_three_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
+            xi1 = quad(vpart1, eta_hi, eta_int, epsabs=eps)[0]
             sum1 = sum1 + xi1
             eta_hi = eta_int
             if abs(xi1) <= eps2:
@@ -209,15 +210,14 @@ def vsolution(posx_in, tau_in, epsilon_in, uans):
     jwant = 1
     bracket = gamma_two_root(eta_lo) * gamma_two_root(eta_hi) <= 0.0
     if not bracket:
-        sum2 = qromo(vpart2, eta_lo, eta_hi, eps, midpnt)
-
+        sum2 = quad(vpart2, eta_lo, eta_hi, epsabs=eps)[0]
     # integrate over each oscillitory piece
     # from 1 to 0 on this part; this one really oscillates
     else:
         for i in range(100):
             jwant = i + 1
-            eta_int = zbrent(gamma_two_root, eta_hi, eta_lo, tol)
-            xi2 = qromo(vpart2, eta_hi, eta_int, eps, midpnt)
+            eta_int = brentq(gamma_two_root, eta_lo, eta_hi, xtol=tol, maxiter=100)
+            xi2 = quad(vpart2, eta_hi, eta_int, epsabs=eps)[0]
             sum2 = sum2 + xi2
             eta_hi = eta_int
             if abs(xi2) <= eps2:
@@ -346,207 +346,3 @@ def gamma_three(eta, epsilon):
 
     ein = max(tiny, min(eta, 1.0 - tiny))
     return sqrt((1.0 - ein * ein) * (epsilon + (1.0 / (ein * ein))))
-
-
-def zbrent(func, x1, x2, tol):
-    """using brent's method this routine finds the root of a function func  
-    between the limits x1 and x2. the root is when accuracy is less than tol. 
- 
-    Note:
-        eps the the machine floating point precision
-    """
-    itmax = 100
-    eps = 3.0e-15
-    niter = 0
-    
-    a = x1 
-    b = x2 
-    fa = func(a)   
-    fb = func(b)
-    
-    if (fa > 0.0 and fb > 0.0) or (fa < 0.0 and fb < 0.0):
-        msg = f'\nx1={x1}, f(x1)={fa}'
-        msg += f'\nx2={x2}, f(x2)={fb}'
-        msg += '\nroot not bracketed in routine zbrent'
-        raise ValueError(msg)
-
-    c = b 
-    fc = fb    
-
-    # rename a,b,c and adjusting bound interval d
-    for i in range(itmax):
-        niter = niter + 1
-        if (fb > 0.0 and fc > 0.0) or (fb < 0.0 and fc < 0.0):            
-            c  = a    
-            fc = fa  
-            d = b - a  
-            e = d    
-
-        if abs(fc) < abs(fb):
-            a = b
-            b = c
-            c = a
-            fa = fb
-            fb = fc
-            fc = fa
-
-        tol1 = 2.0 * eps * abs(b) + 0.5 * tol 
-        xm = 0.5 * (c - b)  
-
-        # convergence check
-        if abs(xm) < tol1 or fb == 0.0:
-            return b
-
-        # attempt quadratic interpolation
-        if (abs(e) > tol1) and (abs(fa) > abs(fa)):
-            s = fb / fa    
-            if a == c:
-                p = 2.0 * xm * s    
-                q = 1.0 - s  
-            else:
-                q = fa / fc   
-                r = fb / fc   
-                p = s * (2.0 * xm * q *(q - r) - (b - a) * (r - 1.0))
-                q = (q - 1.0) * (r - 1.0) * (s - 1.0)
-
-            # check if in bounds
-            if p > 0.0:
-                q = -q
-            p = abs(p)   
-
-            # accept interpolation
-            if 2.0 * p < min(3.0 * xm * q - abs(tol1 * q), abs(e * q)):
-                 e = d
-                 d = p / q
-
-            # or bisect
-            else:
-                d = xm  
-                e = d   
-
-        # bounds decreasing to slowly use bisection 
-        else:
-            d = xm   
-            e = d    
-
-        # move best guess to a  
-        a  = b 
-        fa = fb   
-        if abs(d) > tol1:
-            b = b + d    
-        else:
-            b = b + sign(tol1, xm)
-        fb = func(b)
-
-    msg = 'too many iterations in routine zbrent'
-    raise ValueError(msg)
-
-
-def midpnt(func, a, b, s, n):
-    """this routine computes the n'th stage of refinement of an extended midpoint 
-    rule. func is input as the name of the function to be integrated between  
-    limits a and b. when called with n=1, the routine returns as s the crudest 
-    estimate of the integral of func from a to b. subsequent calls with n=2,3... 
-    improve the accuracy of s by adding 2/3*3**(n-1) addtional interior points.
-    """
-    if n == 1:
-        arg = 0.5 * (a + b)
-        s = (b - a) * func(arg) 
-    else:
-        it = 3**(n - 1)
-        tnm = it
-        delta = (b - a) / (3.0 * tnm) 
-        ddelta = delta + delta
-        x = a + (0.5 * delta)
-        x_sum = 0.0
-        for j in range(it):
-            x_sum = x_sum + func(x)
-            x = x + ddelta
-            x_sum = x_sum + func(x)
-            x = x + delta
-
-        s = (s + ((b - a) * x_sum / tnm)) / 3.0
-
-    return s
-
-
-def polint(xa, ya, n, x):
-    """given arrays xa and ya of length n and a value x, this routine returns a 
-    value y and an error estimate dy. if p(x) is the polynomial of degree n-1
-    such that ya = p(xa) ya then the returned value is y = p(x)
-    """
-    nmax = 10
-    # find the index ns of the closest table entry; initialize the c and d
-    # tables
-    ns = 1
-    dif = abs(x - xa[0])
-    c = np.zeros(n)
-    d = np.zeros(n)
-    
-    for i in range(n):
-        dift = abs(x - xa[i])
-        if dift < dif:
-            ns = i
-            dif = dift
-        c[i] = ya[i]
-        d[i] = ya[i]
-
-    # first guess for y
-    y = ya[ns]
-
-    # for each column of the table, loop over the c's and d's and update them
-    ns = ns - 1
-    for m in range(1, n):
-        for i in range(n - m):
-            ho = xa[i] - x
-            hp = xa[i + m] - x
-            w = c[i + 1] - d[i]
-            den = ho - hp
-            if den == 0.0:
-                raise ValueError('2 xa entries are the same in polint')
-            den  = w / den
-            d[i] = hp * den
-            c[i] = ho * den
-
-        # after each column is completed, decide which correction c or d, to add
-        # to the accumulating value of y, that is, which path to take in the
-        # table by forking up or down. ns is updated as we go to keep track of
-        # where we are. the last dy added is the error indicator.
-        if 2 * ns < n - m:
-            dy = c[ns + 1]
-        else:
-            dy = d[ns]
-            ns = ns - 1
-        y = y + dy
-    return y, dy
-
-
-def qromo(func, a, b, eps, choose):
-    """this routine returns as s the integral of the function func from a to b 
-    with fractional accuracy eps. 
-    jmax limits the number of steps; nsteps = 3**(jmax-1)  
-    integration is done via romberg algorithm.    
-
-    it is assumed the call to choose triples the number of steps on each call  
-    and that its error series contains only even powers of the number of steps. 
-    the external choose may be any of the above drivers, i.e midpnt,midinf... 
-    """
-    jmax = 14
-    jmaxp = jmax + 1
-    k = 5
-    # km = k - 1
-    s = np.zeros(jmaxp)
-    h = np.zeros(jmaxp)
-
-    h[0] = 1.0
-    for j in range(jmax):
-        s[j] = choose(func, a, b, s[j], j+1)
-        if j >= k:
-            ss, dss = polint(h[j - k:j], s[j - k:j], k, 0.0)    
-            if abs(dss) <= eps * abs(ss):
-                return ss
-
-        s[j + 1] = s[j]
-        h[j + 1] = h[j] / 9.0
-    # print('too many steps in qromo')
-    return ss
