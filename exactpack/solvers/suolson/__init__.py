@@ -52,4 +52,4 @@ condition is :math:`E(\infty,t)=0`.  The initial conditions are
 
 """
 
-from .timmes import SuOlson
+from .suolson import SuOlson
