@@ -44,7 +44,7 @@ ep_tests:
     when: always
     reports:
       junit: report.xml
-      cobertura: coverage.xml
+      coverage_report: coverage.xml
 
 teststyle:
   stage: test
