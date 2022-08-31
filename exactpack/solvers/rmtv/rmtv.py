@@ -39,6 +39,9 @@ class Rmtv(ExactSolver):
     g0 = 1.0
 
     def _run(self, r, t=None):
+        # The 't' parameter is required by the ExactPAck API but is not used
+        # here. Ideally we would have some way of converting 't' to a value of
+        # 'rf'.
 
         den, tev, ener, pres, vel = rmtv(r=r,
                                          aval_in=self.aval,
