@@ -52,4 +52,4 @@ cold (:math:`T=0`) density profile is
 with :math:`G(\xi)` being a dimensionless profile function of the
 dimensionless self-similarity position variable :math:`\xi`. 
 """
-from .timmes import Rmtv
+from .rmtv import Rmtv

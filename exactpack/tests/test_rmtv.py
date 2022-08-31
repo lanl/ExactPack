@@ -5,7 +5,7 @@ import pytest
 
 import numpy
 
-from exactpack.solvers.rmtv.timmes import Rmtv
+from exactpack.solvers.rmtv import Rmtv
 
 
 class TestRmtvTimmes():
