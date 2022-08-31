@@ -6,7 +6,8 @@ This code is released under LA-CC-05-101.
 """
 
 from ...base import ExactSolver, ExactSolution
-from ._timmes import rmtv
+# from ._timmes import rmtv
+from .timmes import rmtv
 
 
 class Rmtv(ExactSolver):

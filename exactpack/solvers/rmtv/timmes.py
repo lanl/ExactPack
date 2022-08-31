@@ -132,27 +132,6 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
 
     # this section does a root find to obtain the initial conditions
     # bracket the initial zero-value of u
-    # # We might also need to use scipy.optmize.bracket here, or just skip
-    # # entirely and use 0, 0.5 in brentq below.
-    # u_0 = (amu*bval*xif**(-((2.0*bval) - 1.0 )/alpha) / beta0)**(1.0/bval)
-    # u_l = 0.0
-    # u_r = 0.5
-    # u_c = 0.5 * ( u_l + u_r )
-    #
-    # for i in range(100):
-    #     atemp = rmtvfun(u_l)
-    #     btemp = rmtvfun(u_r)
-    #     if (atemp * btemp) < 0:
-    #         break
-    #
-    #     u_l = u_l + 0.1 * (u_c - u_l)
-    #     u_r = u_r - 0.1 * (u_c - u_r)
-    # else:
-    #     raise ValueError('cannot bracket zero in 100 tries')
-    #
-    # # root bracketed, solve for the zero-value ustar
-    # ustar = brentq(rmtvfun, u_l, u_r, xtol=tol)
-    # # If this works then delete above code
     ustar = brentq(rmtvfun, 0, 0.5, xtol=tol)
     
     # form the converged value of the integral
@@ -231,7 +210,7 @@ def rmtvfun(u):
         u (float): Upper bound of integral
 
     Returns:
-        float: Foo
+        float: The integrated value.
     """
     zero = 0.0
     abserr = 1.0e-14
