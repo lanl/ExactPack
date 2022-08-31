@@ -83,7 +83,7 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
     """
     # Local parameters
     tol = 1.0e-16
-    zero = 0.0,
+    zero = 0.0
     abserr = 1.0e-14
     relerr = 1.0e-12
     
@@ -98,6 +98,7 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
     # xgeom is for spherical coordinates
     global aval
     global bval
+    global xif
     global beta0
     global xgeom
     aval = aval_in
@@ -111,6 +112,10 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
     work = np.zeros(jwork)
 
     # frequent factors
+    global alpha
+    global amu
+    global kappa
+    global sigma
     twoa = 2.0 * aval
     twob = 2.0 * bval
     alpha = (twob - twoa + 1.0)/(twob - (xgeom + 2.0)*aval +xgeom)
@@ -127,31 +132,31 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
 
     # this section does a root find to obtain the initial conditions
     # bracket the initial zero-value of u
-    # We might also need to use scipy.optmize.bracket here, or just skip
-    # entirely and use 0, 0.5 in brentq below.
-    u_0 = (amu*bval*xif**(-((2.0*bval) - 1.0 )/alpha) / beta0)**(1.0/bval)
-    u_l = 0.0
-    u_r = 0.5
-    u_c = 0.5 * ( u_l + u_r )
-
-    for i in range(100):
-        atemp = rmtvfun(u_l) 
-        btemp = rmtvfun(u_r)
-        if (atemp * btemp) < 0:
-            break
-
-        u_l = u_l + 0.1 * (u_c - u_l)
-        u_r = u_r - 0.1 * (u_c - u_r)
-    else:
-        raise ValueError('cannot bracket zero in 100 tries')
-
-    # root bracketed, solve for the zero-value ustar
-    ustar = brentq(rmtvfun, u_l, u_r, tol)
-    # If this works then delete above code
-    # ustar = brentq(rmtvfun, 0, 0.5, tol)
+    # # We might also need to use scipy.optmize.bracket here, or just skip
+    # # entirely and use 0, 0.5 in brentq below.
+    # u_0 = (amu*bval*xif**(-((2.0*bval) - 1.0 )/alpha) / beta0)**(1.0/bval)
+    # u_l = 0.0
+    # u_r = 0.5
+    # u_c = 0.5 * ( u_l + u_r )
+    #
+    # for i in range(100):
+    #     atemp = rmtvfun(u_l)
+    #     btemp = rmtvfun(u_r)
+    #     if (atemp * btemp) < 0:
+    #         break
+    #
+    #     u_l = u_l + 0.1 * (u_c - u_l)
+    #     u_r = u_r - 0.1 * (u_c - u_r)
+    # else:
+    #     raise ValueError('cannot bracket zero in 100 tries')
+    #
+    # # root bracketed, solve for the zero-value ustar
+    # ustar = brentq(rmtvfun, u_l, u_r, xtol=tol)
+    # # If this works then delete above code
+    ustar = brentq(rmtvfun, 0, 0.5, xtol=tol)
     
     # form the converged value of the integral
-    ans = quad(fun, zero, ustar, epsabs=abserr, epsrel=relerr)
+    ans = quad(fun, zero, ustar, epsabs=abserr, epsrel=relerr)[0]
     
     # equation 11 for the position to start the integration from
     xistar = xif * exp(-(beta0 * (xif**((twob - 1.0) / alpha)) * ans))
@@ -173,15 +178,15 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
         tev = 0.0
     
     # integrate from the heat front to perhaps the shock front
-     else:
+    else:
         ystart = np.array([ustar, hstar, wstar, tstar])
 
         xiwant = rpos / zeta / time**alpha
         xi_end = max(xis,xiwant)
         eta1 = log(xistar)
         eta2 = log(xi_end)
-        it = 1
-        ystart = solve_ivp(derivs, (eta1, eta2), ystart, rtol=epsr, atol=epsa)
+        soln = solve_ivp(derivs, (eta1, eta2), ystart, rtol=epsr, atol=epsa)
+        ystart = soln.y[:, -1]
         # apply equation 15 of kamm 2000 for the post-shock values if we must
         # integrate farther
         if (rpos <= rs):
@@ -199,8 +204,9 @@ def rmtv_1d(rpos, aval_in, bval_in, chi0, gamma,
             eta1 = eta2
             xi_end = max(xi_small,xiwant)
             eta2 = log(xi_end)
-            ystart = solve_ivp(derivs, (eta1, eta2), ystart,
-                               rtol=epsr, atol=epsa)
+            soln = solve_ivp(derivs, (eta1, eta2), ystart,
+                             rtol=epsr, atol=epsa)
+            ystart = soln.y[:, -1]
         # convert the integration variables to physical quantities
         # equations 5, 2 of kamm 2000
         vel = alpha * rpos * ystart[0] / time
@@ -231,7 +237,7 @@ def rmtvfun(u):
     abserr = 1.0e-14
     relerr = 1.0e-12
     smallval = 1.0e-12
-    ans = quad(fun, zero, u, epsabs=abserr, epsrel=relerr)
+    ans = quad(fun, zero, u, epsabs=abserr, epsrel=relerr)[0]
     return log(1.0 - smallval) + (beta0 *\
                (xif**(((2.0 * bval) - 1.0) / alpha)) * ans)
 
@@ -256,7 +262,7 @@ def derivs(t, y):
     alphainv = 1.0 / alpha
 
     if (abs(y[1]) <= eps16 or abs(y[3]) <= eps16):
-        print('derivs:  y(2) or y(4) <  eps16')
+        # print('derivs:  y[1] or y[3] <  eps16')
         omega = 1.0 / eps12 * np.sign(1.0, y[2]) * np.sign(1.0, beta0) \
                 * np.sign(1.0, y[1]) * np.sign(1.0, y[3])
     else:
@@ -278,6 +284,7 @@ def derivs(t, y):
     if (abs(denom) <= eps16):
         raise ValueError('denom=0 in routine derivs')
     temp = g2 - (y1m1 * g1)
+    yp = np.zeros(4)
     yp[0] = g1 - (y1m1 * temp) / denom
     yp[1] = y[1] * temp / denom
     yp[2] = g3 - (yp[0] + y[2] * yp[1] / y[1] )
