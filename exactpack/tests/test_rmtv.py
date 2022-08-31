@@ -1,14 +1,14 @@
 """Unittests for the Reinicke Meyer-ter-Vehn (RMTV) problem.
 """
 
-import unittest
+import pytest
 
 import numpy
 
 from exactpack.solvers.rmtv.timmes import Rmtv
 
 
-class TestRmtvTimmes(unittest.TestCase):
+class TestRmtvTimmes():
     r"""Regression test for :class:`exactpack.solvers.rmtv.timmes.Rmtv`.
 
     The comparisions are made at :math:`r=0.015`.
@@ -19,38 +19,35 @@ class TestRmtvTimmes(unittest.TestCase):
         sol = Rmtv()
         r = numpy.array([0.015])
         solrt = sol._run(r)   # bypass wrapper
-        self.assertAlmostEqual(solrt.density[0], 3.21988174430864)
+        numpy.testing.assert_allclose(solrt.density[0], 3.21988174430864)
 
     def test_temperature(self):
         """Rmtv problem: temperature"""
         sol = Rmtv()
         r = numpy.array([0.015])
         solrt = sol._run(r)   # bypass wrapper
-        self.assertAlmostEqual(solrt.temperature[0], 4185.37719625862)
+        numpy.testing.assert_allclose(solrt.temperature[0], 4185.37719625862)
 
-    @unittest.expectedFailure
     def test_energy(self):
         """Rmtv problem: energy"""
         sol = Rmtv()
         r = numpy.array([0.015])
         solrt = sol._run(r)   # bypass wrapper
-        self.assertAlmostEqual(solrt.energy[0], 1.674150878503448e+17)
+        numpy.testing.assert_allclose(solrt.energy[0], 1.674150878503448e+17)
 
-    @unittest.expectedFailure
     def test_pressure(self):
         """Rmtv problem: pressure"""
         sol = Rmtv()
         r = numpy.array([0.015])
         solrt = sol._run(r)   # bypass wrapper
-        self.assertAlmostEqual(solrt.pressure[0], 1.347641962727881e+17)
+        numpy.testing.assert_allclose(solrt.pressure[0], 1.347641962727881e+17)
 
-    @unittest.expectedFailure
     def test_velocity(self):
         """Rmtv problem: velocity"""
         sol = Rmtv()
         r = numpy.array([0.015])
         solrt = sol._run(r)   # bypass wrapper
-        self.assertAlmostEqual(solrt.velocity[0], 14275298.14703435)
+        numpy.testing.assert_allclose(solrt.velocity[0], 14275298.14703435)
 
 
 
