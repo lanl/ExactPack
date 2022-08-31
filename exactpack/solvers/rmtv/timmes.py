@@ -38,7 +38,7 @@ class Rmtv(ExactSolver):
     beta0 = 7.197534e7 # LA-UR-05-6865 p. 31
     g0 = 1.0
 
-    def _run(self, r):
+    def _run(self, r, t):
 
         den, tev, ener, pres, vel = rmtv(r=r,
                                          aval_in=self.aval,
