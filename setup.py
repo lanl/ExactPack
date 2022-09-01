@@ -35,10 +35,6 @@ setup(
                               sources = ['src/timmes/riemann/exact_riemann.f90'],
                               f2py_options = ['only:'] + [ 'riemann' ] + [':']
                               ),
-                    Extension(name = 'exactpack.solvers.rmtv._timmes',
-                              sources = ['src/timmes/rmtv/rmtv.f90'],
-                              f2py_options = ['only:'] + [ 'rmtv' ] + [':']
-                              ),
                     Extension(name = 'exactpack.solvers.cog._timmes',
                               sources = ['src/timmes/cog8/cog8.f90'],
                               f2py_options = ['only:'] + [ 'cog8_timmes' ] + [':']
