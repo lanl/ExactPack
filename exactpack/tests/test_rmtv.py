@@ -44,7 +44,7 @@ class TestRmtvTimmes():
             2031.5984754168355, 1786.9260801977146, 1199.957273110956,
             0.0, 0.0
         ]
-        numpy.testing.assert_allclose(self.solrt.temperature, expected, rtol=1.0e-5)
+        numpy.testing.assert_allclose(self.solrt.temperature, expected, rtol=1.0e-6)
 
     def test_energy(self):
         """Rmtv problem: energy"""
@@ -57,7 +57,7 @@ class TestRmtvTimmes():
             8.126393901667342e+16, 7.147704320790858e+16, 4.799829092443824e+16,
             0.0, 0.0
         ]
-        numpy.testing.assert_allclose(self.solrt.energy, expected, rtol=1.0e-5)
+        numpy.testing.assert_allclose(self.solrt.energy, expected, rtol=1.0e-6)
 
     def test_pressure(self):
         """Rmtv problem: pressure"""
@@ -83,7 +83,8 @@ class TestRmtvTimmes():
             22672181.24035581, 17326007.301569063, 10087816.49859422,
             0.0, 0.0
         ]
-        numpy.testing.assert_allclose(self.solrt.velocity, expected, rtol=0.02)
+        # Velocity values at low values or are much different
+        numpy.testing.assert_allclose(self.solrt.velocity[1:], expected[1:], rtol=1.0e-6)
 
 
 
