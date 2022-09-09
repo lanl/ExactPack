@@ -1,18 +1,39 @@
 import numpy as np
 
 import matplotlib.pylab as plt
+from matplotlib import rc, rcParams
+rc('text',usetex=True)
+rc('font',**{'family':'serif','serif':['Computer Modern']})
 
 # import ExactPack solver and analysis tools
-from exactpack.solvers.riemann.riemann import Riemann
+from exactpack.solvers.riemann.kamm import Riemann as RiemannKamm
+from exactpack.solvers.riemann.timmes import Riemann as RiemannTimmes
 from exactpack.solvers.riemann import *
 
 # create solution on r-grid
 r = np.linspace(0.0, 1.0, 200)
 
 #####################################################################
-# Riemann
+# RiemannKamm
 t = 0.25
-solver = Riemann()
+solver = RiemannKamm()
+soln = solver(r,t)
+soln.plot('density')
+soln.plot('pressure')
+soln.plot('velocity')
+soln.plot('energy',scale=0.1)
+# plot exact solution
+plt.xlim(0.0,1.0)
+plt.ylim(0.0,1.5)
+plt.title('Riemann Kamm')
+plt.legend(loc=0)
+plt.grid(True)
+plt.show()
+
+#####################################################################
+# RiemannTimmes
+t = 0.25
+solver = RiemannTimmes()
 soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
@@ -20,7 +41,7 @@ soln.plot('velocity')
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(0.0,1.5)
-plt.title('Riemann Kamm')
+plt.title('Riemann: Timmes ')
 plt.legend(loc=0)
 plt.grid(True)
 plt.show()
@@ -34,6 +55,7 @@ soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
+soln.plot('energy',scale=0.1)
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(0.0,1.5)
@@ -50,6 +72,7 @@ soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
+soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(-2.1,2.1)
@@ -66,6 +89,7 @@ soln = solver(r,t)
 soln.plot('density',scale=100)
 soln.plot('pressure')
 soln.plot('velocity')
+soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(-500., 3000.)
@@ -82,6 +106,7 @@ soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
+soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(-10.0,25.5)
@@ -98,6 +123,7 @@ soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
+soln.plot('energy',scale=0.5)
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(-1.2,2.5)
@@ -114,6 +140,7 @@ soln = solver(r,t)
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
+soln.plot('energy')
 # plot exact solution
 plt.xlim(0.0,1.0)
 plt.ylim(0.0,1.2)
