@@ -4,16 +4,10 @@ The Riemann Problem
 .. automodule:: exactpack.solvers.riemann
    :members:
 
-:mod:`exactpack.solvers.riemann.kamm`
--------------------------------------
+:mod:`exactpack.solvers.riemann.riemann`
+----------------------------------------
 
 .. automodule:: exactpack.solvers.riemann.kamm
-   :members:
-
-:mod:`exactpack.solvers.riemann.timmes`
----------------------------------------
-
-.. automodule:: exactpack.solvers.riemann.timmes
    :members:
 
 :mod:`exactpack.contrib.riemann_jwl.kamm`
