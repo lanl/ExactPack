@@ -7,7 +7,7 @@ The Riemann Problem
 :mod:`exactpack.solvers.riemann.riemann`
 ----------------------------------------
 
-.. automodule:: exactpack.solvers.riemann.kamm
+.. automodule:: exactpack.solvers.riemann.riemann
    :members:
 
 :mod:`exactpack.contrib.riemann_jwl.kamm`
