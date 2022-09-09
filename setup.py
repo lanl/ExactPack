@@ -31,18 +31,9 @@ setup(
                               sources = ['src/timmes/sedov/sedov3.f90'],
                               f2py_options = (['only:'] + [ 'sed_1d' ] + [':'])
                               ),
-                    Extension(name = 'exactpack.solvers.riemann._timmes',
-                              sources = ['src/timmes/riemann/exact_riemann.f90'],
-                              f2py_options = ['only:'] + [ 'riemann' ] + [':']
-                              ),
                     Extension(name = 'exactpack.solvers.cog._timmes',
                               sources = ['src/timmes/cog8/cog8.f90'],
                               f2py_options = ['only:'] + [ 'cog8_timmes' ] + [':']
-                              ),
-                    Extension(name = 'exactpack.solvers.riemann._kamm',
-                              sources = ['src/kamm/riemann/shktub.f90',
-                                         'src/kamm/riemann/param.h'],
-                              f2py_options = ['only:'] + [ 'riemann_kamm' ] + [':']
                               ),
                     Extension(name = 'exactpack.solvers.guderley._ramsey',
                               sources = ['src/ramsey/guderley/guderley_1D.f90',
