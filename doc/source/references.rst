@@ -167,8 +167,3 @@ References
 
 .. [Bdzil]
    Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
-
-.. [Toro2009]
-   Eleuterio Toro,
-   *Riemann Solvers and Numerical Methods for Fluid Dynamics*,
-   Springer-Verlag Berlin Heidelberg (2009).
