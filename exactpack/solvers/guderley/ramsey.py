@@ -163,6 +163,11 @@ def Guderley(n, gamma_d, lambda_d, B):
             integrating in increasing w (decreasing x)).  The smaller the 
             absolute value of this difference, the better the choice of B.
     """
+    global gamma
+    global lambda_
+    global sigma
+    global intno
+    global nu
     global V1
     #.... The following parameters are adjustable, but it is not recommended
     #       that they be adjusted unless error messages are returned by 
@@ -227,7 +232,7 @@ def Guderley(n, gamma_d, lambda_d, B):
         energymin[0] = min(energymin[0], e)
         energymax[0] = max(energymax[0], e)
 
-        if (iflag != 2 and iflag != 4):
+        if (iflag #= 2 and iflag #= 4):
             err_str = f'Error during B-search for B = {B}\n'
             err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
             err_str += f'relerr: {relerr:14.7e}'
@@ -269,7 +274,7 @@ def Guderley(n, gamma_d, lambda_d, B):
         #.... If the energy check goes bad, quit the integration.
         energymin[1] = min(energymin[1], e)
         energymax[1] = max(energymax[1], e)
-        if iflag != 2:
+        if iflag #= 2:
             err_str = f'Error during integration\n'
             err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
             err_str += f'relerr: {relerr:14.7e}'
@@ -319,7 +324,7 @@ def Guderley(n, gamma_d, lambda_d, B):
         y, w, iflag = deroot(f, neq, y, w, wout, relerr, abserr, iflag, Vdiff,
                              reroot, aeroot, phi)
         
-        if iflag != 2 and iflag != 7:
+        if iflag #= 2 and iflag #= 7:
             raise ValueError
 
         if iflag == 7:
@@ -337,3 +342,319 @@ def Guderley(n, gamma_d, lambda_d, B):
 #.... The phase space is calculated here and returned as output of
 #       the function Guderley.
     return y[1] - C1
+
+
+def energy(x, y, gamma, lambda_, nu, energy0):
+    """The function energy is used during numerical integrations as a
+    consistency check. It computes the difference between the adiabatic energy
+    integral given by Lazarus Eq. (2.7) and its initial value energy0. Its
+    constancy is a good check on the accuracy of the integration.
+
+    Args:
+        x (float): Independent similarity variable; space-time position
+        y (array): V, C, or R for i = 1, 2, or 3
+        lambda_ (float): Similarity exponent
+        nu (int): n - 1; space index
+        energy0 (float): Initial value of the adiabatic energy integral
+    
+    Returns:
+        float: The difference between the adiabatic energy integral evaluated at
+            a particular space-time combination of x, V,C, and R.                  
+    """
+    q = 2.0 * (lambda_ - 1.0) / (nu + 1)
+
+    if abs(x) >= 1.0e-8:
+        return (y[1] / x)**2 * (1.0 + y[0])**q * y[2]**(q - gamma + 1.0) - energy0
+    else:
+        #.... It is impossible to compute C/x = dC/dx = 0/0 at x = 0,
+        #       since the differential equations are singular there. We punt
+        #       to avoid a machine infinity or NaN.
+        return 0.0
+
+
+def f(xorw, y):
+    """This subroutine evaluates the differential equations given by Lazarus
+    Eqs. (2.8), (2.9) and the R-equation.
+
+    This subroutine (as opposed to the subroutine g) is for use with  the
+    "Guderley" function. The difference between this subroutine and "g" is the
+    inclusion of diagnostic write statements appearing in "g." Since this
+    subroutine is used to evaluate Eqs. (2.8), (2.9) and the R-equation for
+    choices of B that are incorrect (or inprecise), the corresponding diagnostic
+    statements have been commented out.
+
+    Args:
+        xorw (float): The x or w values.
+        y (array): Length-3 array of floats.
+
+    Returns:
+        array: The length-3 array of energy values.
+    """
+    V = y[0]
+    C = y[1]
+    Vp1 = V + 1.0
+    C2 = C * C
+    denom = (C2 - Vp1**2) * xorw * lambda_
+    factor = (lambda_ - 1.0) / gamma
+
+    num = np.zeros(3)
+    num[0] = ((nu + 1)*V + 2.d0*factor)*C2 - V*Vp1*(V + lambda)
+    num[1] = (1.0 + factor / Vp1) * C2 - 0.5 * nu * (gamma - 1.0) * V * Vp1 \
+            - Vp1**2 - 0.5 * (lambda_ - 1.0)*((3.0 - gamma) * V + 2.0)
+    #
+    #.... The next equation is redundant, as the density can be found
+    #       from energy conservation (2.7).  But we compute it so that we
+    #       can use (2.7) as a consistency/accuracy check.
+    #
+    num[2] = - 2.0 * factor * C2 / Vp1 + V * (V + lambda_) - (nu + 1) * V * Vp1
+    #
+    #.... The diagnostic statements have been commented out.
+    #
+    #      if (abs(denom) .le. 1.d-6) then
+    #        Near a singular point such as x = 0, dV/dx = dC/dx = 0/0.
+    #        If this message is triggered, the calculation may eventually
+    #        terminate prematurely.  The remedy is to very slightly loosen
+    #        the tolerances abserr or relerr.
+    #         write (*, 20) label(intno), xorw, denom
+    #   20    format ('*** Warning, ', a, ' =', 1p, e23.15, '  denom =',
+    #     &   e10.2)
+    #      endif
+    if intno == 2:
+    #
+    #.... Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
+    #       cancels the 1/x in df/dx, so the x's wash out.
+    #
+        denom = -denom * sigma
+
+    yp = np.zeros(3)
+    yp[0] = num[0] / denom
+    yp[1] = C * num[1] / denom
+    yp[2] = y[2] * num[2] / denom
+
+    return yp
+
+
+def g(t, y):
+    """This subroutine evaluates the differential equations given by Lazarus
+    Eqs. (2.8), (2.9) and the R-equation.
+
+    This subroutine (as opposed to the subroutine f) is for use with the "sim"
+    subroutine. The diagnostic statements have been left in here.
+    """
+    labsl = ['x', 'w']
+    intno = 1
+    V = y[0]
+    C = y[1]
+    Vp1 = V + 1.0
+    C2 = C * C
+    denom = (C2 - Vp1**2) * t * lambda_
+    factor = (lambda_ - 1.0) / gamma
+
+    num = np.zeros(3)
+    num[0] = ((nu + 1) * V + 2.0 * factor) * C2 - V * Vp1 * (V + lambda_)
+    num[1] = (1.0 + factor / Vp1) * C2 - 0.5 * nu * (gamma - 1.0) * V * Vp1 \
+             - Vp1**2 - 0.5 * (lambda_ - 1.0) * ((3.0 - gamma) * V + 2.0)
+    #
+    #.... The next equation is redundant, as the density can be gotten
+    #       from energy conservation (2.7).  But we compute it so that we
+    #       can use (2.7) as a consistency/accuracy check.
+    #
+    num[2] = - 2.0 * factor * C2 / Vp1 + V * (V + lambda_) - (nu + 1) * V * Vp1
+
+    if abs(denom) <= 1.0e-8:
+        #
+        #.... Near a singular point such as x = 0, dV/dx = dC/dx = 0/0.
+        #       If this message is triggered, the calculation may eventually
+        #       terminate prematurely.  The remedy is to very slightly loosen
+        #       the tolerances abserr or relerr.
+        #
+        print(f'*** Warning, {label[intno-1]} = {t}, denom = {denom}')
+    #	if (intno .eq. 2) then
+    #
+    #.... Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
+    #       cancels the 1/x in df/dx, so the x's wash out.
+    #
+    #	   denom = -denom*sigma
+    #	endif
+    yp = np.zeros(3)
+    yp[0] = num[0] / denom
+    yp[1] = C * num[1] / denom
+    yp[2] = y[2] * num[2] / denom
+
+    return yp
+
+
+def Vdiff(w, y, yp):
+    """This function computes the difference between V1 (value of V behind the
+    reflected shock obtained by integrating in increasing x) and y(1) (that is
+    obtained from integrating in increasing w (decreasing x)). The smaller the
+    absolute value of this difference and the corresponding C difference are,
+    the better the choice of B.
+
+    Args:
+        w (float): Transformed independent similarity variable
+        y (array): y(i) = V, C, or R for i = 1, 2, or 3
+        yp (array): RHS of Eqs. (2.8), (2.9), and the R-equation
+
+    returns:
+         float: Vdiff difference between V1 (from x) and corresponding  value
+            from integrating in w.
+    """
+    return y[0] - V1
+
+
+def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
+    """This subroutine, given the various parameters computed in other
+    parts of the driver program guderley_1D, integrates the governing ODEs up to
+    a pre-specified point (targetx, which is computed in the guderley_1D driver
+    program. It then transforms the similarity variable data at the targetx
+    point to physical data at a particular space-time point.
+
+    Lazarus Eqs. (2.5) are used to transform the similarity variables back to
+    physical variable space in this subroutine. The results will be in terms of
+    the "Lazarus Time," as opposed to "Caramana and Whalen" Time.
+    """
+    global gamma
+    global lambda_
+    global nu
+    abserr = 6.0e-14
+    relerr = 5.0e-13
+    neqn = 3
+    y = np.zeros(neqn)
+    
+    # pressure(C, R) = R*C*C/gamma
+    nu = n - 1
+    gamma = gammad
+    lambda_ = lambdad
+    targetx = targetxd
+    #
+    #.... Factors gamma + 1 and gamma - 1.
+    #
+    gp1 = gamma + 1.0
+    gm1 = gamma - 1.0
+    #
+    #.... Initializing the similarity variables at the position of the 
+    #       converging shock wave. This is the starting point of all
+    #       integrations of the governing equations.
+    #
+    y = np.zeros(3)
+    y[0] = -2.0 / gp1
+    y[1] = sqrt(2.0 * gamma * gm1) / gp1
+    y[2] = gp1 / gm1
+    t = -1.0
+    #
+    iflag = 1
+    #
+    #.... x < -1 represents the unshocked state (interior to hte converging
+    #       shock wave), where the physical variables have constant values
+    #       given by:
+    #
+    #          density = constant (specified by user)
+    #          velocity = 0 (required)
+    #          pressure = sound speed = 0 (required)
+    #
+    #       When a combination of space and time variables are specified
+    #       such that x < -1, the constant state data is returned as output.
+    #
+    if targetx < -1.0:
+        den  = rho0
+        vel  = 0.0
+        pres = 0.0
+        snd  = 0.0
+        sie  = 0.0
+    #.... If -1 < x < 0, then we are behind the converging shock wave, and
+    #       reflection has yet to occur. The integration of the governing
+    #       ODEs is initiated at the position of the converging shock
+    #       (x = -1) and carried through to whatever negative value of x
+    #       that results from the specification of the space and time 
+    #       variables.
+    #
+    elif targetx < 0.0 and targetx >= -1.0:
+        while t < targetx:
+            t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        #
+        #.... Definition of the PHYSICAL pressure variable, as a function of the
+        #       dimensionless similarity variables.
+        #
+        p = (((y[1] * r**(1.0 - lambda_)) \
+            / (targetx * (-1.0) * lambda_))**2) \
+            / (gamma * (1.0 / rho0) * (1.0 / y[2]))
+        #
+        #.... Writing of solution data.
+        #
+        den  = y[2] * rho0
+        vel  = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        pres = p
+        snd  = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        sie  = p / (gm1 * rho0 * y[2])
+    #.... If 0 < x < B (the space-time position of the reflected shock
+    #       wave), then we are upstream of the reflected shock wave. The 
+    #       integration  of the governing ODEs is again started at position
+    #       of the  convergent shock wave and integrated through x = 0 into
+    #       a portion of the phase space representing the flow ahead of the 
+    #       reflected shock wave. The integration terminates before the
+    #       position x = B is reached.
+    #
+    elif targetx > 0.0 and targetx < B:
+        while t < targetx:
+            t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        #
+        #.... Physical pressure variable.
+        #
+        p = (((y[1] * r**(1.0 - lambda_)) \
+            / (targetx * (-1.0) * lambda_))**2) \
+            / (gamma * (1.0/rho0) * (1.0 / y[2]))
+        #
+        #.... Writing of solution data.
+        #
+        den  = y[2] * rho0
+        vel  = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        pres = p
+        snd  = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        sie  = p / (gm1 * rho0 * y[2])
+    #.... If B < x < infinity, then we are behind the reflected shock wave.
+    #       The numerical integration starts at the position of the
+    #       convergent shock wave as before and is carred through x = 0
+    #       until x = B.
+    #
+    elif targetx > B:
+        while t < B:
+            t, iflag = ode(g, neqn, y, t, B, relerr, abserr)
+
+        iflag = 1
+        #
+        #.... At x = B, the general-strength Rankine-Hugoniot conditions are
+        #       applied, and we move to the other side of the reflected shock
+        #       wave (just downstream).
+        #
+        C2 = y[1]**2
+        V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
+        y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)),
+                       y[1])
+        C1 = y[1]
+        y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
+        y[0] = V1
+        #
+        #.... Numerical integration of the governing ODEs continues from x = B
+        #       (with the similarity variables taking their shocked values)
+        #       until the targetx point is reached.
+        #
+        while t < targetx:
+            t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+
+        #
+        #.... Physical pressure variable.
+        #
+        p = (((y[1] * r**(1.0 - lambda_)) \
+            / (targetx * (-1.0) * lambda_))**2) \
+            / (gamma * (1.0 / rho0) * (1.0 / y[2]))
+        #
+        #....Writing of solution data.
+        #
+        den  = y[2] * rho0
+        vel  = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        pres = p
+        snd  = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        sie  = p / (gm1 * rho0 * y[2])
+
+    return den, vel, pres, snd, sie
