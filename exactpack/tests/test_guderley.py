@@ -5,7 +5,7 @@ import unittest
 
 import numpy
 
-from exactpack.solvers.guderley.ramsey import Guderley
+from exactpack.solvers.guderley.guderley import Guderley
 
 
 class TestGuderleyRamsey(unittest.TestCase):
