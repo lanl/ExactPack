@@ -1,27 +1,26 @@
-"""
+r"""
 This program generates physical variable (i.e. density, velocity pressure, sound
 speed) solution data at a specified point in space and time for the converging
-shock wave problem first solvedby G. Guderley.
+shock wave problem first solved by G. Guderley.
 
 It follows the notation given in [Lazarus1981]_
 
-"guderley_1D" makes use of several subprograms and functions in order to
+'guderley_1D' makes use of several subprograms and functions in order to
 calculate the two nonlinear eigenvalues that appear in the problem: the
-similarity exponent "lambda" and the reflected shock position (in similarity
-variables) "B." Once these values are calculated the self-similar equations
+similarity exponent 'lambda' and the reflected shock position (in similarity
+variables) 'B.' Once these values are calculated the self-similar equations
 governing the flow are solved for the dimensionless velocity V, sound speed C,
 and density R, as a function of the similarity variable:
 
-                 t
-          x = -------- .
-                lambda
-               r
+.. math::
+
+  x = \frac{t}{r \lambda}
 
 The program  also computes the result starting from x = infinity (Lazarus,
 p. 330 ff.). The subroutine that transforms the similarity variable data is
 self-contained in the subroutine "state."
 
-This code is based on the driver code "guderley" first developed
+This code is based on the driver code 'guderley' first developed
 by J. Bolstad of LLNL.
 
 2007.08.01  S. Ramsey     Code reproduces correct results for gamma = 1.4
@@ -30,8 +29,7 @@ Code translated from Fortran to Python by J. Thrussell, 2022.09.23.
 """
 import numpy as np
 from math import sqrt
-from scipy.integrate import quad, solve_ivp
-from scipy.optimize import brentq
+
 
 def guderley_1d(t, r, ngeom, gamma, rho0):
     """Solve the Guderley problem at a given time over an array of positions.
@@ -65,13 +63,13 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #
     #.... Here, the time is converted to Lazarus time.
     #
-	tee = (t / factorC) - 1.0
+    tee = (t / factorC) - 1.0
     #
     #.... The value of the similarity exponent "lambda" is calulated using the
     #       "exp" function. See documentation appearing in "exp" for an 
     #       explanation of how this value is calculated.
     #
-	lambda_ = eexp(ngeom, gamma)
+    lambda_ = eexp(ngeom, gamma)
     #
     #.... If a position in both space and time are specified, this data can be
     #       converted into an appropriate value of the similarity variable x
@@ -93,7 +91,7 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
 
         if (Bming <= 0.0):
             raise ValuError('guderley_1D error: Bmin < 0')
-    	elif (Bmaxg >= 1.0):
+        elif (Bmaxg >= 1.0):
             raise ValueError('guderley_1D error: Bmax > 1')
 
         Bmin = ((gamma + 1.0) / (gamma - 1.0)) * Bming
@@ -104,8 +102,8 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       interpolated value of B is used as an upper bound for a more
     #       precise value of B.
     #
-    	Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
-	    tol = d1mach(4)
+        Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
+        tol = d1mach(4)
     #
     #.... Below, a more precise value of B for a given polytropic index and
     #       geometry type than is given by Lazarus can be computed by using
@@ -137,16 +135,16 @@ def Guderley(n, gamma_d, lambda_d, B):
 
     In particular, It computes the result of two numerical integrations:
         (1) The final C-value found by integrating between x = -1  and x = B
-            (namely, at the space-time position of the reflected shock).                                             
+            (namely, at the space-time position of the reflected shock).
         (2) The final C-value found by integrating between x = infinity and
-            x = B.                                                    
+            x = B.
 
     Boundary conditions are available at both x = -1 and x = infinity, but NOT
     in numerical form at x = B. Therefore, integration to x = B must be
     performed starting from both x = -1 and x = infinity, and the result
     compared.
 
-    It should be noted that the generalized Rankine-Hugonoit jump conditions
+    It should be noted that the generalized Rankine-Hugoniot jump conditions
     must be executed upon one (but not the other) of the final integration
     points, so that the comparison of C at x = B is consistent (i.e. not
     comparing the variable C evaluated on one side of the shock wave to its
@@ -157,23 +155,23 @@ def Guderley(n, gamma_d, lambda_d, B):
         gamma (float): ratio of specific heats                               
         lambda (float): similarity exponent                                   
         B (float): Estimate of the x-coordinate of the location of the reflected
-            shock.                                      
+        shock.
 
     Returns:
         float: The difference between C1 (value of C behind the reflected shock
             obtained by integrating in increasing x) and y(2) (that from
             integrating in increasing w (decreasing x)).  The smaller the 
-            absolute value of this difference, the better the choice of B.                                          
+            absolute value of this difference, the better the choice of B.
     """
     global V1
     #.... The following parameters are adjustable, but it is not recommended
     #       that they be adjusted unless error messages are returned by 
     #       the function.
     abserr = 6.0e-11
-    doublefreq 50
-    relerr 5.0e-10
-    aeroot 8.0e-16
-    reroot 8.0e-16
+    doublefreq = 50
+    relerr = 5.0e-10
+    aeroot = 8.0e-16
+    reroot = 8.0e-16
     neqn = 3
     
     # pressure(C, R) = R*C*C/gamma
@@ -184,34 +182,34 @@ def Guderley(n, gamma_d, lambda_d, B):
 
     #.... When final is false, the integration fro x = B to x = infinity
     #       is skipped.
-	final = False
-	gp1 = gamma + 1.0
-	gm1 = gamma - 1.0
+    final = False
+    gp1 = gamma + 1.0
+    gm1 = gamma - 1.0
 
     #.... y(1) = V, y(2) = C, y(3) = R
     #       The initial conditions starting at the incoming shock wave
     #       are set here, along with the parameters necessary for a call
     #       to "ode."
     y = np.zeros(neqn)
-	y[0] = -2.0 / gp1
-	y[1] = sqrt(2.0 * gamma * gm1) / gp1
-	y[2] = gp1 / gm1
-	iflag = 1
-	x = -1.0
-	xout = x
-	intno = 1
+    y[0] = -2.0 / gp1
+    y[1] = sqrt(2.0 * gamma * gm1) / gp1
+    y[2] = gp1 / gm1
+    iflag = 1
+    x = -1.0
+    xout = x
+    intno = 1
 
     #.... An energy integral is used as a consistency check during the 
     #       integration. The definition of this parameter is set by 
     #       a function defined below.
     energymax = np.zeros(2)
     energymin = np.zeros(2)
-	energy0 = energy(x, y, gamma, lambda_, nu, 0.0)
-	energymax[0] = 0.0
-	energymin[0] = 0.0
+    energy0 = energy(x, y, gamma, lambda_, nu, 0.0)
+    energymax[0] = 0.0
+    energymin[0] = 0.0
 
     #.... Slightly perturb the following if stuck on a singularity.
-	dx = 0.00125
+    dx = 0.00125
 
     #.... Now begin the integration, starting from x = -1 and continuing to 
     #       x = B. B is the x coordinate of the reflected shock. Only if the
@@ -242,22 +240,22 @@ def Guderley(n, gamma_d, lambda_d, B):
     #       continue the integration from x = B to some large x (set here
     #       at x = 10^6).
     # 
-	iflag = 1
-	C2 = y[1]**2
-	V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
-	y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)), y[1])
-	C1 = y[1]
-	y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
-	y[0] = V1
+    iflag = 1
+    C2 = y[1]**2
+    V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
+    y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)), y[1])
+    C1 = y[1]
+    y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
+    y[0] = V1
 
-	energy0 = energy(x, y, gamma, lambda_, nu, 0.0)
-	energymax(2) = 0.0
-	energymin(2) = 0.0
+    energy0 = energy(x, y, gamma, lambda_, nu, 0.0)
+    energymax[1] = 0.0
+    energymin[1] = 0.0
 
-	dx = 0.05
-	xlast = B
-	j = 0
-	while x < 1.0e6 and final:
+    dx = 0.05
+    xlast = B
+    j = 0
+    while x < 1.0e6 and final:
         j = j + 1
         jmod = np.mod(j-1, doublefreq) + 1
 
