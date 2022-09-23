@@ -167,3 +167,8 @@ References
 
 .. [Bdzil]
    Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
+
+.. [Lazarus1981]
+   Lazarus, R.B.,
+   Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
+   SIAM J. NUMER. ANAL. 18.2 (1981) 316.
