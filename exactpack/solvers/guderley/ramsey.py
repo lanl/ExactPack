@@ -29,6 +29,8 @@ Code translated from Fortran to Python by J. Thrussell, 2022.09.23.
 """
 import numpy as np
 from math import sqrt
+from scipy.optimize import brentq
+from scipy.integrate import solve_ivp
 
 
 def guderley_1d(t, r, ngeom, gamma, rho0):
@@ -111,8 +113,8 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       called "Guderley," which is defined below. 
     #
         # Possibly this can be replace with a call to brentq?
-        B = zeroin(Bmin, Bmax, Guderley, tol, ngeom, gamma, lambda_)
-        # B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(gamma, lambda_s))
+        # B = zeroin(Bmin, Bmax, Guderley, tol, ngeom, gamma, lambda_)
+        B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(gamma, lambda_))
     #
     #.... The ultimate output of the program is generated through the "state"
     #       subroutine, which computes the solution of the similarity variable
@@ -130,7 +132,7 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     return den, vel, pres, snd, sie
 
 
-def Guderley(n, gamma_d, lambda_d, B):
+def Guderley(n, gamma_d, lambda_d):
     """This function computes a difference in similarity variable phase space.
 
     In particular, It computes the result of two numerical integrations:
@@ -221,23 +223,30 @@ def Guderley(n, gamma_d, lambda_d, B):
     #       integration returns the error message below should the parameters
     #       abserr and relerr be adjusted.
     #
-    j = 0
-    while (xout < B):
-        j = j + 1
-        xout = min(-1.0 + dx * j, B)
-        # Replace this with a scipy ode solver
-        iflag, work, iwork = ode(f, neqn, y, x, xout, relerr, abserr)
-        
-        e = energy(x, y, gamma, lambda_, nu, energy0)
-        energymin[0] = min(energymin[0], e)
-        energymax[0] = max(energymax[0], e)
-
-        if (iflag #= 2 and iflag #= 4):
-            err_str = f'Error during B-search for B = {B}\n'
-            err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
-            err_str += f'relerr: {relerr:14.7e}'
-            print(err_str)
-            return 0.0
+    soln = (f, (-1.0, B), y, rtol=relerr, atol=abserr)
+    x = soln.y[:, -1]
+    e = energy(x, y, gamma, lambda_, nu, energy0)
+    energymin[0] = min(energymin[0], e)
+    energymax[0] = max(energymax[0], e)
+    
+    # j = 0
+    # while (xout < B):
+    #     j = j + 1
+    #     xout = min(-1.0 + dx * j, B)
+    #     # Replace this with a scipy ode solver
+    #     iflag, x = ode(f, neqn, y, x, xout, relerr, abserr)
+    #
+    #
+    #     e = energy(x, y, gamma, lambda_, nu, energy0)
+    #     energymin[0] = min(energymin[0], e)
+    #     energymax[0] = max(energymax[0], e)
+    #
+    #     if (iflag != 2 and iflag != 4):
+    #         err_str = f'Error during B-search for B = {B}\n'
+    #         err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
+    #         err_str += f'relerr: {relerr:14.7e}'
+    #         print(err_str)
+    #         return 0.0
 
     #
     #.... If the integration up until x = B is completed, apply the shock
@@ -257,33 +266,40 @@ def Guderley(n, gamma_d, lambda_d, B):
     energymax[1] = 0.0
     energymin[1] = 0.0
 
-    dx = 0.05
-    xlast = B
-    j = 0
-    while x < 1.0e6 and final:
-        j = j + 1
-        jmod = np.mod(j-1, doublefreq) + 1
-
-        #.... jmod goes 1, 2, ..., doublefreq
-
-        xout = xlast + dx * jmod
-        # Replace this with a scipy ode solver
-        iflag, work, iwork = ode(f, neqn, y, x, xout, relerr, abserr)
+    if final:
+        soln = (f, (1.0, 1.0e6), y, rtol=relerr, atol=abserr)
+        x = soln.y[:, -1]
         e = energy(x, y, gamma, lambda_, nu, energy0)
-
-        #.... If the energy check goes bad, quit the integration.
         energymin[1] = min(energymin[1], e)
         energymax[1] = max(energymax[1], e)
-        if iflag #= 2:
-            err_str = f'Error during integration\n'
-            err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
-            err_str += f'relerr: {relerr:14.7e}'
-            raise ValueError(err_str)
 
-        if jmod == doublefreq:
-            #.... Double the spacing of the output.
-            xlast = xout
-            dx = 2.0 * dx
+    # dx = 0.05
+    # xlast = B
+    # j = 0
+    # while x < 1.0e6 and final:
+    #     j = j + 1
+    #     jmod = np.mod(j-1, doublefreq) + 1
+    #
+    #     #.... jmod goes 1, 2, ..., doublefreq
+    #
+    #     xout = xlast + dx * jmod
+    #     # Replace this with a scipy ode solver
+    #     iflag, x = ode(f, neqn, y, x, xout, relerr, abserr)
+    #     e = energy(x, y, gamma, lambda_, nu, energy0)
+    #
+    #     #.... If the energy check goes bad, quit the integration.
+    #     energymin[1] = min(energymin[1], e)
+    #     energymax[1] = max(energymax[1], e)
+    #     if iflag != 2:
+    #         err_str = f'Error during integration\n'
+    #         err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
+    #         err_str += f'relerr: {relerr:14.7e}'
+    #         raise ValueError(err_str)
+    #
+    #     if jmod == doublefreq:
+    #         #.... Double the spacing of the output.
+    #         xlast = xout
+    #         dx = 2.0 * dx
 
     #.... Now switch variables to w = k*x^(-sigma) and integrate from
     #       w near zero to some positive w. This (redundant) integration
@@ -324,7 +340,7 @@ def Guderley(n, gamma_d, lambda_d, B):
         y, w, iflag = deroot(f, neq, y, w, wout, relerr, abserr, iflag, Vdiff,
                              reroot, aeroot, phi)
         
-        if iflag #= 2 and iflag #= 7:
+        if iflag != 2 and iflag != 7:
             raise ValueError
 
         if iflag == 7:
@@ -398,7 +414,7 @@ def f(xorw, y):
     factor = (lambda_ - 1.0) / gamma
 
     num = np.zeros(3)
-    num[0] = ((nu + 1)*V + 2.d0*factor)*C2 - V*Vp1*(V + lambda)
+    num[0] = ((nu + 1) * V + 2.0 * factor) * C2 - V * Vp1 * (V + lambda_)
     num[1] = (1.0 + factor / Vp1) * C2 - 0.5 * nu * (gamma - 1.0) * V * Vp1 \
             - Vp1**2 - 0.5 * (lambda_ - 1.0)*((3.0 - gamma) * V + 2.0)
     #
