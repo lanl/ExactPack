@@ -32,6 +32,8 @@ from math import sqrt
 from scipy.optimize import brentq
 from scipy.integrate import solve_ivp
 
+from .eexp import eexp
+
 
 def guderley_1d(t, r, ngeom, gamma, rho0):
     """Solve the Guderley problem at a given time over an array of positions.
@@ -223,7 +225,7 @@ def Guderley(n, gamma_d, lambda_d):
     #       integration returns the error message below should the parameters
     #       abserr and relerr be adjusted.
     #
-    soln = (f, (-1.0, B), y, rtol=relerr, atol=abserr)
+    soln = solve_ivp(f, (-1.0, B), y, rtol=relerr, atol=abserr)
     x = soln.y[:, -1]
     e = energy(x, y, gamma, lambda_, nu, energy0)
     energymin[0] = min(energymin[0], e)
@@ -267,7 +269,7 @@ def Guderley(n, gamma_d, lambda_d):
     energymin[1] = 0.0
 
     if final:
-        soln = (f, (1.0, 1.0e6), y, rtol=relerr, atol=abserr)
+        soln = solve_ivp(f, (1.0, 1.0e6), y, rtol=relerr, atol=abserr)
         x = soln.y[:, -1]
         e = energy(x, y, gamma, lambda_, nu, energy0)
         energymin[1] = min(energymin[1], e)
