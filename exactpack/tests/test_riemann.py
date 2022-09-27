@@ -2,10 +2,10 @@
 """
 
 import unittest
-from numpy import array, interp, diff, sqrt, abs, argmin
-from numpy.random import rand
+# from numpy import array, interp, diff, sqrt, abs, argmin
+# from numpy.random import rand
 
-import exactpack.solvers.riemann
+# import exactpack.solvers.riemann
 
 # from exactpack.solvers.riemann.riemann import SetupRiemannProblem, RiemannIGEOS, RiemannGenEOS
 #
