@@ -5,6 +5,8 @@ import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
 from numpy.random import rand
 
+from exactpack.solvers.riemann.riemann import *
+
 # from exactpack.solvers.riemann.riemann import SetupRiemannProblem, RiemannIGEOS, RiemannGenEOS
 
 # class TestRiemannSetup(unittest.TestCase):
