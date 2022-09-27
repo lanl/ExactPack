@@ -13,7 +13,6 @@ governing the flow are solved for the dimensionless velocity V, sound speed C,
 and density R, as a function of the similarity variable:
 
 .. math::
-
   x = \frac{t}{r \lambda}
 
 The program  also computes the result starting from x = infinity (Lazarus,
@@ -27,12 +26,14 @@ by J. Bolstad of LLNL.
 
 Code translated from Fortran to Python by J. Thrussell, 2022.09.23.
 """
+import sys
 import numpy as np
 from math import sqrt
 from scipy.optimize import brentq
 from scipy.integrate import solve_ivp
 
 from .eexp import eexp
+from .interp_laz import interp_laz
 
 
 def guderley_1d(t, r, ngeom, gamma, rho0):
@@ -107,16 +108,15 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       precise value of B.
     #
         Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
-        tol = d1mach(4)
+        tol = sys.float_info.epsilon
+        # tol = 1.0e-12
     #
     #.... Below, a more precise value of B for a given polytropic index and
     #       geometry type than is given by Lazarus can be computed by using
     #       the "zeroin" routine, which here finds the B-zero of a function
     #       called "Guderley," which is defined below. 
     #
-        # Possibly this can be replace with a call to brentq?
-        # B = zeroin(Bmin, Bmax, Guderley, tol, ngeom, gamma, lambda_)
-        B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(gamma, lambda_))
+        B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(ngeom, gamma, lambda_))
     #
     #.... The ultimate output of the program is generated through the "state"
     #       subroutine, which computes the solution of the similarity variable
@@ -134,7 +134,7 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     return den, vel, pres, snd, sie
 
 
-def Guderley(n, gamma_d, lambda_d):
+def Guderley(B, n, gamma_d, lambda_d):
     """This function computes a difference in similarity variable phase space.
 
     In particular, It computes the result of two numerical integrations:
@@ -156,8 +156,8 @@ def Guderley(n, gamma_d, lambda_d):
 
     Args:
         n (int): Dimensionality:  2 for cylindrical, 3 for spherical   
-        gamma (float): ratio of specific heats                               
-        lambda (float): similarity exponent                                   
+        gamma_d (float): ratio of specific heats                               
+        lambda_d (float): similarity exponent                                   
         B (float): Estimate of the x-coordinate of the location of the reflected
         shock.
 
@@ -226,7 +226,8 @@ def Guderley(n, gamma_d, lambda_d):
     #       abserr and relerr be adjusted.
     #
     soln = solve_ivp(f, (-1.0, B), y, rtol=relerr, atol=abserr)
-    x = soln.y[:, -1]
+    x = soln.t[-1]
+    y = soln.y[:, -1]
     e = energy(x, y, gamma, lambda_, nu, energy0)
     energymin[0] = min(energymin[0], e)
     energymax[0] = max(energymax[0], e)
@@ -259,7 +260,11 @@ def Guderley(n, gamma_d, lambda_d):
     iflag = 1
     C2 = y[1]**2
     V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
-    y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)), y[1])
+    # y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)), y[1])
+    
+    z = sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2))
+    y[1] = z * np.sign(y[1])
+    
     C1 = y[1]
     y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
     y[0] = V1
@@ -269,8 +274,9 @@ def Guderley(n, gamma_d, lambda_d):
     energymin[1] = 0.0
 
     if final:
-        soln = solve_ivp(f, (1.0, 1.0e6), y, rtol=relerr, atol=abserr)
-        x = soln.y[:, -1]
+        soln = solve_ivp(f, (B, 1.0e6), y, rtol=relerr, atol=abserr)
+        x = soln.t[-1]
+        y = soln.y[:, -1]
         e = energy(x, y, gamma, lambda_, nu, energy0)
         energymin[1] = min(energymin[1], e)
         energymax[1] = max(energymax[1], e)
@@ -332,6 +338,10 @@ def Guderley(n, gamma_d, lambda_d):
     wlast = w
     j = 0
     phi = np.zeros((neqn, 16))
+    
+    # This causes the solve_ivp function stop once a root is found.
+    Vdiff.terminal = True
+    
     while True:
         j = j + 1
         jmod = np.mod(j-1, doublefreq) + 1
@@ -339,17 +349,13 @@ def Guderley(n, gamma_d, lambda_d):
         #.... jmod goes 1, 2, ..., doublefreq
         wout = wlast + dw * jmod
         
-        y, w, iflag = deroot(f, neq, y, w, wout, relerr, abserr, iflag, Vdiff,
-                             reroot, aeroot, phi)
-        
-        if iflag != 2 and iflag != 7:
-            raise ValueError
-
-        if iflag == 7:
+        soln = solve_ivp(f, (w, wout), y, rtol=relerr, atol=abserr, events=Vdiff)
+        y = soln.y[:, -1]
+        if soln.status == 1:
             #.... Root found.  Let D be the number of correct digits in
             #       lambda.  Then min(D, -log_10(|y(1) - V1|) or -log_10(
             #       |y(2) - C1|)) is roughly the number of correct digits in B.
-            raise ValueError
+            break
 
         if jmod == doublefreq:
             wlast = wout
@@ -357,13 +363,13 @@ def Guderley(n, gamma_d, lambda_d):
             if dw < .0025:
                 dw = 2.0 * dw
 
-#.... The phase space is calculated here and returned as output of
-#       the function Guderley.
+    #.... The phase space is calculated here and returned as output of
+    #       the function Guderley.
     return y[1] - C1
 
 
 def energy(x, y, gamma, lambda_, nu, energy0):
-    """The function energy is used during numerical integrations as a
+    r"""The function energy is used during numerical integrations as a
     consistency check. It computes the difference between the adiabatic energy
     integral given by Lazarus Eq. (2.7) and its initial value energy0. Its
     constancy is a good check on the accuracy of the integration.
@@ -371,7 +377,7 @@ def energy(x, y, gamma, lambda_, nu, energy0):
     Args:
         x (float): Independent similarity variable; space-time position
         y (array): V, C, or R for i = 1, 2, or 3
-        lambda_ (float): Similarity exponent
+        lambda\_ (float): Similarity exponent
         nu (int): n - 1; space index
         energy0 (float): Initial value of the adiabatic energy integral
     
@@ -502,7 +508,7 @@ def g(t, y):
     return yp
 
 
-def Vdiff(w, y, yp):
+def Vdiff(w, y):
     """This function computes the difference between V1 (value of V behind the
     reflected shock obtained by integrating in increasing x) and y(1) (that is
     obtained from integrating in increasing w (decreasing x)). The smaller the
@@ -542,8 +548,8 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     
     # pressure(C, R) = R*C*C/gamma
     nu = n - 1
-    gamma = gammad
-    lambda_ = lambdad
+    gamma = gamma_d
+    lambda_ = lambda_d
     targetx = targetxd
     #
     #.... Factors gamma + 1 and gamma - 1.
@@ -647,8 +653,11 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
         #
         C2 = y[1]**2
         V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
-        y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)),
-                       y[1])
+        # y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)),
+        #                y[1])
+        z = sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2))
+        y[1] = z * np.sign(y[1])
+
         C1 = y[1]
         y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
         y[0] = V1
