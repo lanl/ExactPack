@@ -3,8 +3,8 @@
 
 import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
-# from numpy.random import rand
-import numpy.random
+from numpy.random import rand
+# import numpy.random
 
 from exactpack.solvers.riemann.riemann import *
 
