@@ -3,7 +3,7 @@
 
 import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
-# from numpy.random import rand
+from numpy.random import rand
 
 # import exactpack.solvers.riemann
 
