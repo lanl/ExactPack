@@ -10,6 +10,12 @@ implementation was done by Daniel Israel and Robert Singleton.
 
 The current development team at Los Alamos National Laboratory includes:
 
+* Jim Ferguson
+* Jasper Thrussell
+* Evan Lieberman
+
+Past contributors at Los Alamos National Laboratory include:
+
 * Scott Doebling
 * Daniel Israel
 * Robert Singleton
@@ -17,9 +23,6 @@ The current development team at Los Alamos National Laboratory includes:
 * John Walter
 * Kyle Hickmann
 * Gowri Srinivasan
-
-Past contributors at Los Alamos National Laboratory include:
-
 * Ann Kaul
 * James Kamm
 * Frank Timmes
