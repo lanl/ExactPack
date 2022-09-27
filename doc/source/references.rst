@@ -172,3 +172,8 @@ References
    Lazarus, R.B.,
    Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
    SIAM J. NUMER. ANAL. 18.2 (1981) 316.
+
+.. [Chisnell1998]
+   Chisnell, R.F.,
+   An Analytic Description of Converging Shock Waves,
+   J. Fluid Mech. 354, pp. 357-375 (1998).
