@@ -69,10 +69,10 @@ References
    *Investigation of the Reinicke & Meyer-ter-Vehn Equations: I. The Strong Conduction Case*,
    LA-UR-00-4304, Los Alamos National Laboratory (2000).
 
-.. [Kamm2005]
-   James R. Kamm,
-   *An Exact, Compressible One-Dimensional Riemann Solver for General, Convex Equations of State*,
-   LA-UR-15-21616, Los Alamos National Laboratory (2005).
+# .. [Kamm2005]
+#    James R. Kamm,
+#    *An Exact, Compressible One-Dimensional Riemann Solver for General, Convex Equations of State*,
+#    LA-UR-15-21616, Los Alamos National Laboratory (2005).
 
 .. [Kamm2008]
    James R. Kamm, Jerry S. Brock, Scott T. Brandon, David L. Cotrell,
