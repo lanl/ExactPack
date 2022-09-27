@@ -140,6 +140,7 @@ and the difference between these velocities is
    :label: math_velocity_diff_equation
 
 Assuming an array of "known" values for :math:`p`, and given :math:`\left( \rho_0, p_0, u_0 \right)`, the simultaneous solution of equations :eq:`shock_energy_condition` and :eq:`math_velocity_diff_equation` provides solutions for :math:`u` and :math:`\rho`.
+
 ..
    This is how the solid shock lines are produced in :numref:`fig_PUdiag_LeeJWL_zoomed_fig`.
 
