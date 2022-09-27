@@ -16,7 +16,7 @@ Shock waves differ from contact discontinuities in that shocks are discontinuous
 
    Diagram of the 1D Riemann shocktube (bottom), and the :math:`x-t` diagram (top) of a solution showing a rarefaction wave traveling to the left, the membrane contact discontinuity and a shock traveling to the right. The initial left and right states are colored blue. The left and right star-states adjacent the contact discontinuity are colored pink. The rarefaction fan is colored with a blue-to-pink gradient.
 
-The Figure. :numref:`fig_riemann_1d_drawing_ref` is the.
+# The Figure. :numref:`fig_riemann_1d_drawing_ref` is the.
 
 These problems exercise the 1D, planar Riemann solver of a hydrodynamics code for an inviscid, non-heat conducting fluid satisfying the conservation statements of mass, momentum and energy:
 
@@ -139,12 +139,12 @@ and the difference between these velocities is
    :label: math_velocity_diff_equation
 
 Assuming an array of "known" values for :math:`p`, and given :math:`\left( \rho_0, p_0, u_0 \right)`, the simultaneous solution of equations :eq:`shock_energy_condition` and :eq:`math_velocity_diff_equation` provides solutions for :math:`u` and :math:`\rho`.
-This is how the solid shock lines are produced in :numref:`fig_PUdiag_LeeJWL_zoomed_fig`.
+# This is how the solid shock lines are produced in :numref:`fig_PUdiag_LeeJWL_zoomed_fig`.
 
 Splicing solutions to determine the wave structure
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-In :numref:`fig_PUdiag_LeeJWL_zoomed_fig` we have zoomed in on the region where the blue and red lines cross.
+# In :numref:`fig_PUdiag_LeeJWL_zoomed_fig` we have zoomed in on the region where the blue and red lines cross.
 The solid (shock) portion of each line is a natural extension of the dashed (rarefaction) portion, so these curves can be spliced together.
 Since these curves are smooth and monotonic it is straight-forward to take the difference between their velocity values and determine where the absolute value of this difference is a minimum.
 This point defines the :math:`\left( p^{\star}, \rho^{\star}, u^{\star} \right)` state, which is the solution we've been seeking.
