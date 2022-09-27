@@ -173,6 +173,11 @@ References
    Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
    SIAM J. NUMER. ANAL. 18.2 (1981) 316.
 
+.. [Lazarus1982]
+   Lazarus, R.B, 
+   Erratum: Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
+   SIAM J. Numer Anal. 19, p. 1090 (1982)
+
 .. [Chisnell1998]
    Chisnell, R.F.,
    An Analytic Description of Converging Shock Waves,
