@@ -9,7 +9,9 @@ from exactpack.solvers.guderley.guderley import Guderley
 
 
 class TestGuderleyRamsey(unittest.TestCase):
-    """Tests for the Guderley problem :class:`exactpack.solvers.guderley.ramsey.Guderley`."""
+    """Tests for the Guderley problem 
+    :class:`exactpack.solvers.guderley.ramsey.Guderley`.
+    """
 
     def test_density(self):
         """Regression test for density."""

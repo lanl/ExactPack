@@ -74,7 +74,9 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       "exp" function. See documentation appearing in "exp" for an 
     #       explanation of how this value is calculated.
     #
+    print('Computing lambda for gamma', gamma)
     lambda_ = eexp(ngeom, gamma)
+    print('Lambda =', lambda_)
     #
     #
     #.... As is the case with lambda, the reflected shock space-time position
@@ -84,6 +86,7 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       6.5). This precision can be improved upon using the "zeroin"
     #       routine, as will be explained below.
     #
+    print('Getting Bmax, Bmin')
     Bmaxg = interp_laz(ngeom, gamma, lambda_)
     Bming = 0.34  # use this value for gamma=3.0 and rho0=1.0
 
@@ -101,21 +104,25 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       precise value of B.
     #
     Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
-    tol = sys.float_info.epsilon
-    # tol = 1.0e-12
+    print('Bmax, Bmin =', Bmax, Bmin)
+    # tol = sys.float_info.epsilon
+    tol = 1.0e-10
     #
     #.... Below, a more precise value of B for a given polytropic index and
     #       geometry type than is given by Lazarus can be computed by using
     #       the "zeroin" routine, which here finds the B-zero of a function
     #       called "Guderley," which is defined below. 
     #
+    print('Computing B')
     B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(ngeom, gamma, lambda_))
-
+    print('B-value =', B)
     #.... If a position in both space and time are specified, this data can be
     #       converted into an appropriate value of the similarity variable x
     #       defined above. This value of x is where we desire to know the values
     #       of the similarity variables. 
+    print('Computing Solution')
     for i in range(nstep):
+        # print(i)
         rpos = r[i]
         targetx = tee / (rpos**lambda_)
 
@@ -178,9 +185,9 @@ def Guderley(B, n, gamma_d, lambda_d):
     #.... The following parameters are adjustable, but it is not recommended
     #       that they be adjusted unless error messages are returned by 
     #       the function.
-    abserr = 6.0e-11
+    abserr = 6.0e-10
     doublefreq = 50
-    relerr = 5.0e-10
+    relerr = 5.0e-9
     aeroot = 8.0e-16
     reroot = 8.0e-16
     neqn = 3
@@ -345,6 +352,7 @@ def Guderley(B, n, gamma_d, lambda_d):
     Vdiff.terminal = True
     
     while True:
+        # print('j:', j)
         j = j + 1
         jmod = np.mod(j-1, doublefreq) + 1
 
@@ -543,8 +551,8 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     global gamma
     global lambda_
     global nu
-    abserr = 6.0e-14
-    relerr = 5.0e-13
+    abserr = 6.0e-12
+    relerr = 5.0e-11
     neqn = 3
     y = np.zeros(neqn)
     

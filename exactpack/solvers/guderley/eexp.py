@@ -48,8 +48,8 @@ def eexp(nnn, gamm):
     if not (1.00001 < g < 9999.0):
         raise ValueError('Invalid polytropic index.')
 
-    tol = sys.float_info.epsilon
-    # tol = 1.0e-12
+    # tol = sys.float_info.epsilon
+    tol = 1.0e-10
     
     #.... Next we set the range in which we expect alpha to lie for a given
     #	geometry and specific heat ratio. See the README file for a more
@@ -74,7 +74,9 @@ def eexp(nnn, gamm):
     #.... The "exact" value of alpha is found through the "zeroin_a" routine.
     #	We are attempting to find the value of alpha that zeros the 
     #	"Cdiff" function defined below.
+    print('Computing alpha')
     alpha = brentq(Cdiff, amin, amax, xtol=tol, args=(n, g))
+    print('alpha =', alpha)
 
     return 1.0 / alpha
 
@@ -105,8 +107,8 @@ def Cdiff(alpha, en, gamma):
         measure of the correctness of alpha.
     """
     global a
-    abserr = 1.0e-10
-    relerr = 1.0e-9
+    abserr = 1.0e-9
+    relerr = 1.0e-8
     neqn = 1
     y = np.zeros(neqn)
 
@@ -148,7 +150,7 @@ def Cdiff(alpha, en, gamma):
     tout = V0
     iflag = 1
 
-    soln = solve_ivp(fe, (t, tout), y, rtol=relerr, atol=abserr)
+    soln = solve_ivp(fe, (t, tout), y, rtol=relerr, atol=abserr, method='DOP853')
     y = soln.y[:, -1]
 
     #.... The difference function between the analytically and numerically
