@@ -76,13 +76,6 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #
     lambda_ = eexp(ngeom, gamma)
     #
-    #.... If a position in both space and time are specified, this data can be
-    #       converted into an appropriate value of the similarity variable x
-    #       defined above. This value of x is where we desire to know the values
-    #       of the similarity variables. 
-    for i in range(nstep):
-        rpos = r[i]
-        targetx = tee / (rpos**lambda_)
     #
     #.... As is the case with lambda, the reflected shock space-time position
     #       "B" is not known a priori (though it is known that B lies in
@@ -91,15 +84,15 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       6.5). This precision can be improved upon using the "zeroin"
     #       routine, as will be explained below.
     #
-        Bmaxg = interp_laz(ngeom, gamma, lambda_)
-        Bming = 0.34  # use this value for gamma=3.0 and rho0=1.0
+    Bmaxg = interp_laz(ngeom, gamma, lambda_)
+    Bming = 0.34  # use this value for gamma=3.0 and rho0=1.0
 
-        if (Bming <= 0.0):
-            raise ValuError('guderley_1D error: Bmin < 0')
-        elif (Bmaxg >= 1.0):
-            raise ValueError('guderley_1D error: Bmax > 1')
+    if (Bming <= 0.0):
+        raise ValuError('guderley_1D error: Bmin < 0')
+    elif (Bmaxg >= 1.0):
+        raise ValueError('guderley_1D error: Bmax > 1')
 
-        Bmin = ((gamma + 1.0) / (gamma - 1.0)) * Bming
+    Bmin = ((gamma + 1.0) / (gamma - 1.0)) * Bming
     #
     #.... The maximum allowable value for B (Bmax) is determined by using
     #       the function INTERP_LAZ. This function interpolates in Lazarus
@@ -107,16 +100,25 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     #       interpolated value of B is used as an upper bound for a more
     #       precise value of B.
     #
-        Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
-        tol = sys.float_info.epsilon
-        # tol = 1.0e-12
+    Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
+    tol = sys.float_info.epsilon
+    # tol = 1.0e-12
     #
     #.... Below, a more precise value of B for a given polytropic index and
     #       geometry type than is given by Lazarus can be computed by using
     #       the "zeroin" routine, which here finds the B-zero of a function
     #       called "Guderley," which is defined below. 
     #
-        B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(ngeom, gamma, lambda_))
+    B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(ngeom, gamma, lambda_))
+
+    #.... If a position in both space and time are specified, this data can be
+    #       converted into an appropriate value of the similarity variable x
+    #       defined above. This value of x is where we desire to know the values
+    #       of the similarity variables. 
+    for i in range(nstep):
+        rpos = r[i]
+        targetx = tee / (rpos**lambda_)
+
     #
     #.... The ultimate output of the program is generated through the "state"
     #       subroutine, which computes the solution of the similarity variable
@@ -465,7 +467,7 @@ def g(t, y):
     This subroutine (as opposed to the subroutine f) is for use with the "sim"
     subroutine. The diagnostic statements have been left in here.
     """
-    labsl = ['x', 'w']
+    label = ['x', 'w']
     intno = 1
     V = y[0]
     C = y[1]
@@ -485,14 +487,14 @@ def g(t, y):
     #
     num[2] = - 2.0 * factor * C2 / Vp1 + V * (V + lambda_) - (nu + 1) * V * Vp1
 
-    if abs(denom) <= 1.0e-8:
-        #
-        #.... Near a singular point such as x = 0, dV/dx = dC/dx = 0/0.
-        #       If this message is triggered, the calculation may eventually
-        #       terminate prematurely.  The remedy is to very slightly loosen
-        #       the tolerances abserr or relerr.
-        #
-        print(f'*** Warning, {label[intno-1]} = {t}, denom = {denom}')
+    # if abs(denom) <= 1.0e-8:
+    #     #
+    #     #.... Near a singular point such as x = 0, dV/dx = dC/dx = 0/0.
+    #     #       If this message is triggered, the calculation may eventually
+    #     #       terminate prematurely.  The remedy is to very slightly loosen
+    #     #       the tolerances abserr or relerr.
+    #     #
+    #     print(f'*** Warning, {label[intno-1]} = {t}, denom = {denom}')
     #	if (intno .eq. 2) then
     #
     #.... Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
@@ -594,8 +596,10 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     #       variables.
     #
     elif targetx < 0.0 and targetx >= -1.0:
-        while t < targetx:
-            t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        # while t < targetx:
+        #     t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        soln = solve_ivp(g, (t, targetx), y, rtol=relerr, atol=abserr)
+        y = soln.y[:, -1]
         #
         #.... Definition of the PHYSICAL pressure variable, as a function of the
         #       dimensionless similarity variables.
@@ -620,8 +624,10 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     #       position x = B is reached.
     #
     elif targetx > 0.0 and targetx < B:
-        while t < targetx:
-            t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        # while t < targetx:
+        #     t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        soln = solve_ivp(g, (t, targetx), y, rtol=relerr, atol=abserr)
+        y = soln.y[:, -1]
         #
         #.... Physical pressure variable.
         #
@@ -642,9 +648,10 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     #       until x = B.
     #
     elif targetx > B:
-        while t < B:
-            t, iflag = ode(g, neqn, y, t, B, relerr, abserr)
-
+        # while t < B:
+        #     t, iflag = ode(g, neqn, y, t, B, relerr, abserr)
+        soln  = solve_ivp(g, (t, B), y, rtol=relerr, atol=abserr)
+        y = soln.y[:, -1]
         iflag = 1
         #
         #.... At x = B, the general-strength Rankine-Hugoniot conditions are

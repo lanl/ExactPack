@@ -32,8 +32,6 @@ from scipy.integrate import solve_ivp, quad
 def eexp(nnn, gamm):
     global g
     global n
-    # global warn
-    # global iflag
     
     #.... Here we read in (or set) the space index (n) and specific heat 
     #	ratio (g) from the namelist file.
@@ -50,8 +48,8 @@ def eexp(nnn, gamm):
     if not (1.00001 < g < 9999.0):
         raise ValueError('Invalid polytropic index.')
 
-    # tol = sys.float_info.epsilon
-    tol = 1.0e-12
+    tol = sys.float_info.epsilon
+    # tol = 1.0e-12
     
     #.... Next we set the range in which we expect alpha to lie for a given
     #	geometry and specific heat ratio. See the README file for a more
@@ -67,7 +65,7 @@ def eexp(nnn, gamm):
                 + g * (-6.0 + (2.0 + g) * n)) \
                 / (4.0 + g * (-8.0 + n * (4.0 + g * n))) + 0.000001
 
-    amax = 1.1 * a0
+    amax = 1.05 * a0
 
     if amax >= 1.0:
         err_str = 'Maximum alpha exceeds unity. Adjust "amax" premultiplier'
@@ -76,14 +74,7 @@ def eexp(nnn, gamm):
     #.... The "exact" value of alpha is found through the "zeroin_a" routine.
     #	We are attempting to find the value of alpha that zeros the 
     #	"Cdiff" function defined below.
-    print('amin:', amin)
-    print('amax:', amax)
-    print('Cdiff min:', Cdiff(amin, n, g))
-    print('Cdiff max:', Cdiff(amax, n, g))
-    assert False
     alpha = brentq(Cdiff, amin, amax, xtol=tol, args=(n, g))
-    print(alpha)
-    exit
 
     return 1.0 / alpha
 
@@ -157,18 +148,8 @@ def Cdiff(alpha, en, gamma):
     tout = V0
     iflag = 1
 
-    # while t > tout:
-    #     call ode(fe, neqn, y, t, tout, relerr, abserr,
-    #     &       iflag, work, iwork)
-    print('y:', y)
-    print('t:', t)
-    print('tout:', tout)
-    print('fe min:', fe(tout, y))
-    print('fe max:', fe(t, y))
-    # while t > tout:
-    #     t =
-
-    soln = solve_ivp(fe, (tout, t), y, rtol=relerr, atol=abserr)
+    soln = solve_ivp(fe, (t, tout), y, rtol=relerr, atol=abserr)
+    y = soln.y[:, -1]
 
     #.... The difference function between the analytically and numerically
     #	obtained values of the coordinate C0 is returned by the function.
