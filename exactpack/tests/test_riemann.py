@@ -5,9 +5,9 @@ import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
 
 # can't do this
-# from numpy.random import rand
+from numpy.random import rand
 # must do this! this really shouldn't be the case
-import numpy.random
+# import numpy.random
 
 from exactpack.solvers.riemann.riemann import *
 
