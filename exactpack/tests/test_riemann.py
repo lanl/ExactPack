@@ -5,57 +5,56 @@ import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
 # from numpy.random import rand
 
-# import exactpack.solvers.riemann
+# from exactpack.solvers.riemann.riemann import SetupRiemannProblem, RiemannIGEOS, RiemannGenEOS
+from exactpack.solvers.riemann.riemann import *
 
-from exactpack.solvers.riemann.riemann import SetupRiemannProblem, RiemannIGEOS, RiemannGenEOS
-#
-# class TestRiemannSetup(unittest.TestCase):
-#     """Tests problem setup of :class:`exactpack.solvers.riemann.riemann`.
-# 
-#        These tests confirm proper assignment of variables, including default
-#        values.
-#     """
-# 
-#     def test_defaults(self):
-#         """Test that default values are set accurately and problem is initialized corretly.
-#         """
-# 
-#         # here are the defaults
-#         xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
-#         rl, ul, pl, gl = 1.0,   0.0, 1.0, 1.4
-#         rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
-#         A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-#         problem = 'igeos'
-#         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
-# 
-#         soln = SetupRiemannProblem(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-#                                    rl=rl, ul=ul, pl=pl, gl=gl,
-#                                    rr=rr, ur=ur, pr=pr, gr=gr)
-# 
-#         self.assertEqual(soln.xmin, xmin)
-#         self.assertEqual(soln.xd0,  xd0)
-#         self.assertEqual(soln.xmax, xmax)
-#         self.assertEqual(soln.t, t)
-#         self.assertEqual(soln.rl, rl)
-#         self.assertEqual(soln.ul, ul)
-#         self.assertEqual(soln.pl, pl)
-#         self.assertEqual(soln.gl, gl)
-#         self.assertEqual(soln.rr, rr)
-#         self.assertEqual(soln.ur, ur)
-#         self.assertEqual(soln.pr, pr)
-#         self.assertEqual(soln.gr, gr)
-#         self.assertEqual(soln.A,  A)
-#         self.assertEqual(soln.B,  B)
-#         self.assertEqual(soln.R1, R1)
-#         self.assertEqual(soln.R2, R2)
-#         self.assertEqual(soln.r0, r0)
-#         self.assertEqual(soln.e0, e0)
-#         self.assertEqual(soln.problem, problem)
-#         self.assertEqual(soln.num_int_pts, num_int_pts)
-#         self.assertEqual(soln.num_x_pts, num_x_pts)
-#         self.assertEqual(soln.int_tol, int_tol)
-# 
-# 
+class TestRiemannSetup(unittest.TestCase):
+    """Tests problem setup of :class:`exactpack.solvers.riemann.riemann`.
+
+       These tests confirm proper assignment of variables, including default
+       values.
+    """
+
+    def test_defaults(self):
+        """Test that default values are set accurately and problem is initialized corretly.
+        """
+
+        # here are the defaults
+        xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
+        rl, ul, pl, gl = 1.0,   0.0, 1.0, 1.4
+        rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
+        A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        problem = 'igeos'
+        num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+        soln = SetupRiemannProblem(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                                   rl=rl, ul=ul, pl=pl, gl=gl,
+                                   rr=rr, ur=ur, pr=pr, gr=gr)
+
+        self.assertEqual(soln.xmin, xmin)
+        self.assertEqual(soln.xd0,  xd0)
+        self.assertEqual(soln.xmax, xmax)
+        self.assertEqual(soln.t, t)
+        self.assertEqual(soln.rl, rl)
+        self.assertEqual(soln.ul, ul)
+        self.assertEqual(soln.pl, pl)
+        self.assertEqual(soln.gl, gl)
+        self.assertEqual(soln.rr, rr)
+        self.assertEqual(soln.ur, ur)
+        self.assertEqual(soln.pr, pr)
+        self.assertEqual(soln.gr, gr)
+        self.assertEqual(soln.A,  A)
+        self.assertEqual(soln.B,  B)
+        self.assertEqual(soln.R1, R1)
+        self.assertEqual(soln.R2, R2)
+        self.assertEqual(soln.r0, r0)
+        self.assertEqual(soln.e0, e0)
+        self.assertEqual(soln.problem, problem)
+        self.assertEqual(soln.num_int_pts, num_int_pts)
+        self.assertEqual(soln.num_x_pts, num_x_pts)
+        self.assertEqual(soln.int_tol, int_tol)
+
+
 # # Determines density, pressure, and velocity values in a rarefaction zone.
 # # Copied from exactpack.solvers.riemann.utils.
 # def rho_p_u_rarefaction(p, r, u, g, x, xd0, t, self):
