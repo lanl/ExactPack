@@ -3,8 +3,11 @@
 
 import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
-from numpy.random import rand
-# import numpy.random
+
+# can't do this
+# from numpy.random import rand
+# must do this! this really shouldn't be the case
+import numpy.random
 
 from exactpack.solvers.riemann.riemann import *
 
@@ -30,6 +33,8 @@ class TestRiemannSetup(unittest.TestCase):
         soln = SetupRiemannProblem(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
                                    rl=rl, ul=ul, pl=pl, gl=gl,
                                    rr=rr, ur=ur, pr=pr, gr=gr)
+
+        numpy.random.rand()
 
         self.assertEqual(soln.xmin, xmin)
         self.assertEqual(soln.xd0,  xd0)
@@ -128,7 +133,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+# #         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, Xregs[0]])[0] * numpy.random.rand() + xmin
 # 
 #         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
 #         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
@@ -137,6 +143,7 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
 #         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
+#         x = diff(Xregs[:2])[0] * numpy.random.rand() + Xregs[0]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 #         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
@@ -147,7 +154,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
+# #         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
+#         x = diff(Xregs[1:3])[0] * numpy.random.rand() + Xregs[1]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 #         p, u, r = pstar, ustar, rstar1
@@ -158,7 +166,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
+# #         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
+#         x = diff(Xregs[2:])[0] * numpy.random.rand() + Xregs[2]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 #         r = rstar2
@@ -169,7 +178,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
+# #         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
+#         x = diff([Xregs[3], xmax])[0] * numpy.random.rand() + Xregs[3]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 # 
@@ -234,7 +244,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+# #         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, Xregs[0]])[0] * numpy.random.rand() + xmin
 # 
 #         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
 #         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
@@ -242,7 +253,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
+# #         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
+#         x = diff(Xregs[:2])[0] * numpy.random.rand() + Xregs[0]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 #         p, u, r = pstar, ustar, rstar1
@@ -253,7 +265,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
+# #         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
+#         x = diff(Xregs[1:3])[0] * numpy.random.rand() + Xregs[1]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 #         r = rstar2
@@ -264,7 +277,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
+# #         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
+#         x = diff(Xregs[2:])[0] * numpy.random.rand() + Xregs[2]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 #         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
@@ -275,7 +289,8 @@ class TestRiemannSetup(unittest.TestCase):
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
+# #         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
+#         x = diff([Xregs[3], xmax])[0] * numpy.random.rand() + Xregs[3]
 #         _argmin = argmin(abs(soln.x - x))
 #         x = soln.x[_argmin]
 # 
