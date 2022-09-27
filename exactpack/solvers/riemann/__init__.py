@@ -149,6 +149,7 @@ Splicing solutions to determine the wave structure
 
 ..
    In :numref:`fig_PUdiag_LeeJWL_zoomed_fig` we have zoomed in on the region where the blue and red lines cross.
+
 The solid (shock) portion of each line is a natural extension of the dashed (rarefaction) portion, so these curves can be spliced together.
 Since these curves are smooth and monotonic it is straight-forward to take the difference between their velocity values and determine where the absolute value of this difference is a minimum.
 This point defines the :math:`\left( p^{\star}, \rho^{\star}, u^{\star} \right)` state, which is the solution we've been seeking.
