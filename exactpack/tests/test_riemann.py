@@ -1,5 +1,5 @@
-r''' Tests the analytic and semi-analytic implementations of the Riemann solver. The analytic implementation is for the ideal-gas equation-of-state (EOS), while allowing that the adiabatic index, :math:`\gamma`, may be different for the left and right initial states. The semi-analytic implementation is for a general EOS, and integrates the two ordinary differential equations representing characteristic curves. Tests are also included to ensure that the Riemann problems are setup correctly.
-'''
+r""" Tests the analytic and semi-analytic implementations of the Riemann solver. The analytic implementation is for the ideal-gas equation-of-state (EOS), while allowing that the adiabatic index, :math:`\gamma`, may be different for the left and right initial states. The semi-analytic implementation is for a general EOS, and integrates the two ordinary differential equations representing characteristic curves. Tests are also included to ensure that the Riemann problems are setup correctly.
+"""
 
 import unittest
 from numpy import array, interp, diff, sqrt, abs, argmin
