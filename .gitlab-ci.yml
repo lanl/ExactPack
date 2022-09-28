@@ -38,7 +38,7 @@ before_script:
 ep_tests:
   stage: test
   script:
-    - pytest --junitxml=report.xml --cov=exactpack exactpack/tests/
+    - pytest --junitxml=report.xml --cov=exactpack.solvers exactpack/tests/
     - coverage xml
   coverage: /(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
   artifacts:
