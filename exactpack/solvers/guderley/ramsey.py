@@ -86,10 +86,10 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     for i in range(nstep):
         rpos = r[i]
         targetx = tee / (rpos**lambda_)
-    # The ultimate output of the program is generated through the "state"
-    # subroutine, which computes the solution of the similarity variable
-    # equations at the target value of x and then transforms this
-    # solution back to physical variable space.
+        # The ultimate output of the program is generated through the "state"
+        # subroutine, which computes the solution of the similarity variable
+        # equations at the target value of x and then transforms this
+        # solution back to physical variable space.
         deni, veli, presi, sndi, siei = state(rpos, rho0, ngeom, gamma,
                                               lambda_, B, targetx)
         den[i] = deni
@@ -269,7 +269,6 @@ def Guderley(B, n, gamma_d, lambda_d):
     while True:
         j = j + 1
         jmod = np.mod(j-1, doublefreq) + 1
-
         # jmod goes 1, 2, ..., doublefreq
         wout = wlast + dw * jmod
 
@@ -357,7 +356,6 @@ def f(xorw, y):
     num[2] = - 2.0 * factor * C2 / Vp1 + V * (V + lambda_) - (nu + 1) * V * Vp1
     # Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
     # cancels the 1/x in df/dx, so the x's wash out.
-    #
     if intno == 2:
         denom = -denom * sigma
 
