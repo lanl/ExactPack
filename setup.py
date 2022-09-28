@@ -24,7 +24,6 @@ setup(
     author_email = '',
     license = read('LICENSE.txt'),
     packages = find_packages(),
-#   install_requires = [ 'importlib', 'numpy', 'vtk', 'scipy', 'matplotlib', 'sphinx'],
     ext_modules = [ Extension(name = 'exactpack.solvers.noh._timmes',
                               sources = ['src/timmes/noh/noh.f90'] ),
                     Extension(name = 'exactpack.solvers.sedov._timmes',
@@ -43,18 +42,6 @@ setup(
                               sources = ['src/kamm/riemann/shktub.f90',
                                          'src/kamm/riemann/param.h'],
                               f2py_options = ['only:'] + [ 'riemann_kamm' ] + [':']
-                              ),
-                    Extension(name = 'exactpack.solvers.guderley._ramsey',
-                              sources = ['src/ramsey/guderley/guderley_1D.f90',
-                                         'src/ramsey/guderley/d1mach.f90',
-                                         'src/ramsey/guderley/deroot.f90',
-                                         'src/ramsey/guderley/exp.f90',
-                                         'src/ramsey/guderley/interp_laz.f90',
-                                         'src/ramsey/guderley/ode.f90',
-                                         'src/ramsey/guderley/zeroin_a.f90',
-                                         'src/ramsey/guderley/zeroin.f90'],
-                              f2py_options = (['only:'] + [ 'guderley_1d' ] +
-                                              [':'])
                               ),
                     Extension(name = 'exactpack.contrib.riemann_jwl._kamm',
                               sources = ['src/kamm/riemann_jwl/riemjwl.f90',
