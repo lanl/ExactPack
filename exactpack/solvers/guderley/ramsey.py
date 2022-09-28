@@ -175,7 +175,6 @@ def Guderley(B, n, gamma_d, lambda_d):
     abserr = 6.0e-10
     doublefreq = 50
     relerr = 5.0e-9
-    neqn = 3
     # pressure(C, R) = R*C*C/gamma
     # nu = n - 1; it is 1 for cylindrical symmetry and 2 for spherical
     nu = n - 1
@@ -190,7 +189,7 @@ def Guderley(B, n, gamma_d, lambda_d):
     # The initial conditions starting at the incoming shock wave
     # are set here, along with the parameters necessary for a call
     # to "ode."
-    y = np.zeros(neqn)
+    y = np.zeros(3)
     y[0] = -2.0 / gp1
     y[1] = sqrt(2.0 * gamma * gm1) / gp1
     y[2] = gp1 / gm1
@@ -433,8 +432,6 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     global nu
     abserr = 6.0e-12
     relerr = 5.0e-11
-    neqn = 3
-    y = np.zeros(neqn)
 
     nu = n - 1
     gamma = gamma_d
