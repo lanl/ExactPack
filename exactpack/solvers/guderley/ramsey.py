@@ -26,7 +26,6 @@ by J. Bolstad of LLNL.
 
 Code translated from Fortran to Python by J. Thrussell, 2022.09.23.
 """
-import sys
 import numpy as np
 from math import sqrt
 from scipy.optimize import brentq
@@ -61,77 +60,36 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
     snd = np.zeros(nstep)
     sie = np.zeros(nstep)
     factorC = 0.750024322
-
-    #.... The input time is a Caramana/Whalen time, defined by:
+    # The input time is a Caramana/Whalen time, defined by:
     #
-    #       t_C = 0.750024322*(t_L + 1)
+    # t_C = 0.750024322*(t_L + 1)
     #
-    #.... Here, the time is converted to Lazarus time.
-    #
+    # Here, the time is converted to Lazarus time.
     tee = (t / factorC) - 1.0
+    # The value of the similarity exponent "lambda" is calulated using the
+    # "exp" function. See documentation appearing in "exp" for an
+    # explanation of how this value is calculated.
     #
-    #.... The value of the similarity exponent "lambda" is calulated using the
-    #       "exp" function. See documentation appearing in "exp" for an 
-    #       explanation of how this value is calculated.
-    #
-    print('Computing lambda for gamma', gamma)
     lambda_ = eexp(ngeom, gamma)
-    print('Lambda =', lambda_)
+    # As is the case with lambda, the reflected shock space-time position
+    # "B" is not known a priori (though it is known that B lies in
+    # the range (0 < B < 1)). Lazarus was the first to determine the
+    # value of B to 6 significant figures (appearing in Tables 6.4 and
+    # 6.5). This precision can be improved upon using the "zeroin"
+    # routine, as will be explained below.
+    B = get_shock_position(ngeom, gamma, lambda_)
     #
-    #
-    #.... As is the case with lambda, the reflected shock space-time position
-    #       "B" is not known a priori (though it is known that B lies in
-    #       the range (0 < B < 1)). Lazarus was the first to determine the
-    #       value of B to 6 significant figures (appearing in Tables 6.4 and
-    #       6.5). This precision can be improved upon using the "zeroin"
-    #       routine, as will be explained below.
-    #
-    print('Getting Bmax, Bmin')
-    Bmaxg = interp_laz(ngeom, gamma, lambda_)
-    Bming = 0.34  # use this value for gamma=3.0 and rho0=1.0
-
-    if (Bming <= 0.0):
-        raise ValuError('guderley_1D error: Bmin < 0')
-    elif (Bmaxg >= 1.0):
-        raise ValueError('guderley_1D error: Bmax > 1')
-
-    Bmin = ((gamma + 1.0) / (gamma - 1.0)) * Bming
-    #
-    #.... The maximum allowable value for B (Bmax) is determined by using
-    #       the function INTERP_LAZ. This function interpolates in Lazarus
-    #       Tables 6.4 and 6.5 for general polytropic index for B. This
-    #       interpolated value of B is used as an upper bound for a more
-    #       precise value of B.
-    #
-    Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
-    print('Bmax, Bmin =', Bmax, Bmin)
-    # tol = sys.float_info.epsilon
-    tol = 1.0e-10
-    #
-    #.... Below, a more precise value of B for a given polytropic index and
-    #       geometry type than is given by Lazarus can be computed by using
-    #       the "zeroin" routine, which here finds the B-zero of a function
-    #       called "Guderley," which is defined below. 
-    #
-    print('Computing B')
-    B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(ngeom, gamma, lambda_))
-    print('B-value =', B)
-    #.... If a position in both space and time are specified, this data can be
-    #       converted into an appropriate value of the similarity variable x
-    #       defined above. This value of x is where we desire to know the values
-    #       of the similarity variables. 
-    print('Computing Solution')
+    # If a position in both space and time are specified, this data can be
+    # converted into an appropriate value of the similarity variable x
+    # defined above. This value of x is where we desire to know the values
+    # of the similarity variables.
     for i in range(nstep):
-        # print(i)
         rpos = r[i]
         targetx = tee / (rpos**lambda_)
-
-    #
-    #.... The ultimate output of the program is generated through the "state"
-    #       subroutine, which computes the solution of the similarity variable
-    #       equations at the target value of x and then transforms this
-    #       solution back to physical variable space.
-    #
+    # The ultimate output of the program is generated through the "state"
+    # subroutine, which computes the solution of the similarity variable
+    # equations at the target value of x and then transforms this
+    # solution back to physical variable space.
         deni, veli, presi, sndi, siei = state(rpos, rho0, ngeom, gamma,
                                               lambda_, B, targetx)
         den[i] = deni
@@ -141,6 +99,35 @@ def guderley_1d(t, r, ngeom, gamma, rho0):
         sie[i] = siei
 
     return den, vel, pres, snd, sie
+
+
+def get_shock_position(ngeom, gamma, lambda_):
+    """Get the shock position B as th root root of the GUderley function.
+    """
+    Bmaxg = interp_laz(ngeom, gamma, lambda_)
+    Bming = 0.34  # use this value for gamma=3.0 and rho0=1.0
+
+    if (Bming <= 0.0):
+        raise ValueError('guderley_1D error: Bmin < 0')
+    elif (Bmaxg >= 1.0):
+        raise ValueError('guderley_1D error: Bmax > 1')
+
+    Bmin = ((gamma + 1.0) / (gamma - 1.0)) * Bming
+    # The maximum allowable value for B (Bmax) is determined by using
+    # the function INTERP_LAZ. This function interpolates in Lazarus
+    # Tables 6.4 and 6.5 for general polytropic index for B. This
+    # interpolated value of B is used as an upper bound for a more
+    # precise value of B.
+    Bmax = ((gamma + 1.0) / (gamma - 1.0)) * Bmaxg + 0.001
+    # tol = sys.float_info.epsilon
+    tol = 1.0e-10
+    # Below, a more precise value of B for a given polytropic index and
+    # geometry type than is given by Lazarus can be computed by using
+    # the "zeroin" routine, which here finds the B-zero of a function
+    # called "Guderley," which is defined below.
+    B = brentq(Guderley, Bmin, Bmax, xtol=tol, args=(ngeom, gamma, lambda_))
+
+    return B
 
 
 def Guderley(B, n, gamma_d, lambda_d):
@@ -164,16 +151,16 @@ def Guderley(B, n, gamma_d, lambda_d):
     value on the other side of the shock wave).
 
     Args:
-        n (int): Dimensionality:  2 for cylindrical, 3 for spherical   
-        gamma_d (float): ratio of specific heats                               
-        lambda_d (float): similarity exponent                                   
+        n (int): Dimensionality:  2 for cylindrical, 3 for spherical
+        gamma_d (float): ratio of specific heats
+        lambda_d (float): similarity exponent
         B (float): Estimate of the x-coordinate of the location of the reflected
         shock.
 
     Returns:
         float: The difference between C1 (value of C behind the reflected shock
             obtained by integrating in increasing x) and y(2) (that from
-            integrating in increasing w (decreasing x)).  The smaller the 
+            integrating in increasing w (decreasing x)).  The smaller the
             absolute value of this difference, the better the choice of B.
     """
     global gamma
@@ -182,98 +169,61 @@ def Guderley(B, n, gamma_d, lambda_d):
     global intno
     global nu
     global V1
-    #.... The following parameters are adjustable, but it is not recommended
-    #       that they be adjusted unless error messages are returned by 
-    #       the function.
+    # The following parameters are adjustable, but it is not recommended
+    # that they be adjusted unless error messages are returned by
+    # the function.
     abserr = 6.0e-10
     doublefreq = 50
     relerr = 5.0e-9
-    aeroot = 8.0e-16
-    reroot = 8.0e-16
     neqn = 3
-    
     # pressure(C, R) = R*C*C/gamma
-    #.... nu = n - 1; it is 1 for cylindrical symmetry and 2 for spherical
+    # nu = n - 1; it is 1 for cylindrical symmetry and 2 for spherical
     nu = n - 1
     gamma = gamma_d
     lambda_ = lambda_d
-
-    #.... When final is false, the integration fro x = B to x = infinity
-    #       is skipped.
+    # When final is false, the integration fro x = B to x = infinity
+    # is skipped.
     final = False
     gp1 = gamma + 1.0
     gm1 = gamma - 1.0
-
-    #.... y(1) = V, y(2) = C, y(3) = R
-    #       The initial conditions starting at the incoming shock wave
-    #       are set here, along with the parameters necessary for a call
-    #       to "ode."
+    # y(1) = V, y(2) = C, y(3) = R
+    # The initial conditions starting at the incoming shock wave
+    # are set here, along with the parameters necessary for a call
+    # to "ode."
     y = np.zeros(neqn)
     y[0] = -2.0 / gp1
     y[1] = sqrt(2.0 * gamma * gm1) / gp1
     y[2] = gp1 / gm1
-    iflag = 1
     x = -1.0
-    xout = x
     intno = 1
-
-    #.... An energy integral is used as a consistency check during the 
-    #       integration. The definition of this parameter is set by 
-    #       a function defined below.
+    # An energy integral is used as a consistency check during the
+    # integration. The definition of this parameter is set by
+    # a function defined below.
     energymax = np.zeros(2)
     energymin = np.zeros(2)
     energy0 = energy(x, y, gamma, lambda_, nu, 0.0)
     energymax[0] = 0.0
     energymin[0] = 0.0
-
-    #.... Slightly perturb the following if stuck on a singularity.
-    dx = 0.00125
-
-    #.... Now begin the integration, starting from x = -1 and continuing to 
-    #       x = B. B is the x coordinate of the reflected shock. Only if the
-    #       integration returns the error message below should the parameters
-    #       abserr and relerr be adjusted.
-    #
+    # Now begin the integration, starting from x = -1 and continuing to
+    # x = B. B is the x coordinate of the reflected shock. Only if the
+    # integration returns the error message below should the parameters
+    # abserr and relerr be adjusted.
     soln = solve_ivp(f, (-1.0, B), y, rtol=relerr, atol=abserr)
     x = soln.t[-1]
     y = soln.y[:, -1]
     e = energy(x, y, gamma, lambda_, nu, energy0)
     energymin[0] = min(energymin[0], e)
     energymax[0] = max(energymax[0], e)
-    
-    # j = 0
-    # while (xout < B):
-    #     j = j + 1
-    #     xout = min(-1.0 + dx * j, B)
-    #     # Replace this with a scipy ode solver
-    #     iflag, x = ode(f, neqn, y, x, xout, relerr, abserr)
-    #
-    #
-    #     e = energy(x, y, gamma, lambda_, nu, energy0)
-    #     energymin[0] = min(energymin[0], e)
-    #     energymax[0] = max(energymax[0], e)
-    #
-    #     if (iflag != 2 and iflag != 4):
-    #         err_str = f'Error during B-search for B = {B}\n'
-    #         err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
-    #         err_str += f'relerr: {relerr:14.7e}'
-    #         print(err_str)
-    #         return 0.0
-
-    #
-    #.... If the integration up until x = B is completed, apply the shock
-    #       jump conditiosn given by Lazarus Eq. (2.6); afterwards
-    #       continue the integration from x = B to some large x (set here
-    #       at x = 10^6).
-    # 
-    iflag = 1
+    # If the integration up until x = B is completed, apply the shock
+    # jump conditiosn given by Lazarus Eq. (2.6); afterwards
+    # continue the integration from x = B to some large x (set here
+    # at x = 10^6).
     C2 = y[1]**2
     V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
-    # y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)), y[1])
-    
+
     z = sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2))
     y[1] = z * np.sign(y[1])
-    
+
     C1 = y[1]
     y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
     y[0] = V1
@@ -289,92 +239,57 @@ def Guderley(B, n, gamma_d, lambda_d):
         e = energy(x, y, gamma, lambda_, nu, energy0)
         energymin[1] = min(energymin[1], e)
         energymax[1] = max(energymax[1], e)
-
-    # dx = 0.05
-    # xlast = B
-    # j = 0
-    # while x < 1.0e6 and final:
-    #     j = j + 1
-    #     jmod = np.mod(j-1, doublefreq) + 1
-    #
-    #     #.... jmod goes 1, 2, ..., doublefreq
-    #
-    #     xout = xlast + dx * jmod
-    #     # Replace this with a scipy ode solver
-    #     iflag, x = ode(f, neqn, y, x, xout, relerr, abserr)
-    #     e = energy(x, y, gamma, lambda_, nu, energy0)
-    #
-    #     #.... If the energy check goes bad, quit the integration.
-    #     energymin[1] = min(energymin[1], e)
-    #     energymax[1] = max(energymax[1], e)
-    #     if iflag != 2:
-    #         err_str = f'Error during integration\n'
-    #         err_str += f'iflag: {iflag:3}, abserr: {abserr:14.7e}, '
-    #         err_str += f'relerr: {relerr:14.7e}'
-    #         raise ValueError(err_str)
-    #
-    #     if jmod == doublefreq:
-    #         #.... Double the spacing of the output.
-    #         xlast = xout
-    #         dx = 2.0 * dx
-
-    #.... Now switch variables to w = k*x^(-sigma) and integrate from
-    #       w near zero to some positive w. This (redundant) integration
-    #       is necessary to determine the parameter B to more than the
-    #       six digits given by Lazarus (through the procedure described
-    #       in the function description space.
-    iflag = 1
+    # Now switch variables to w = k*x^(-sigma) and integrate from
+    # w near zero to some positive w. This (redundant) integration
+    # is necessary to determine the parameter B to more than the
+    # six digits given by Lazarus (through the procedure described
+    # in the function description space.
     nuz = (lambda_ - 1.0) / gamma
     V0 = - 2.0 * nuz / (nu + 1)
     sigma = (1.0 + nuz / (1.0 + V0)) / lambda_
     w = 1.0e-10
-
-    #.... Initial w is chosen as follows:
-    #       The first neglected term is the asymptotic expansion for
-    #       V = y(1) is w*w*V2, and in C = y(2) is w*c1, which are
-    #       O(w*w) less than the first terms.  Thus the neglected terms
-    #       are O(10^(-18)), less than the O(10^(-16)) machine precision.
+    # Initial w is chosen as follows:
+    # The first neglected term is the asymptotic expansion for
+    # V = y(1) is w*w*V2, and in C = y(2) is w*c1, which are
+    # O(w*w) less than the first terms.  Thus the neglected terms
+    # are O(10^(-18)), less than the O(10^(-16)) machine precision.
     y[0] = V0
     y[1] = -1.0 / w
     intno = 2
-    neq = 2
-
-    #.... We integrate only 2 differential equations for V and C.
-    #       Trying to integrate the R equation requires knowing k, which
-    #       we are trying to determine.  Thus no energy check is possible
-    #       here.  But it is not needed since no singularities arise.
+    # We integrate only 2 differential equations for V and C.
+    # Trying to integrate the R equation requires knowing k, which
+    # we are trying to determine.  Thus no energy check is possible
+    # here.  But it is not needed since no singularities arise.
     dw = w
     wlast = w
     j = 0
-    phi = np.zeros((neqn, 16))
-    
     # This causes the solve_ivp function stop once a root is found.
     Vdiff.terminal = True
-    
+
     while True:
-        # print('j:', j)
         j = j + 1
         jmod = np.mod(j-1, doublefreq) + 1
 
-        #.... jmod goes 1, 2, ..., doublefreq
+        # jmod goes 1, 2, ..., doublefreq
         wout = wlast + dw * jmod
-        
-        soln = solve_ivp(f, (w, wout), y, rtol=relerr, atol=abserr, events=Vdiff)
+
+        soln = solve_ivp(f, (w, wout), y, rtol=relerr, atol=abserr,
+                         events=Vdiff)
         y = soln.y[:, -1]
         if soln.status == 1:
-            #.... Root found.  Let D be the number of correct digits in
-            #       lambda.  Then min(D, -log_10(|y(1) - V1|) or -log_10(
-            #       |y(2) - C1|)) is roughly the number of correct digits in B.
+            # Root found.  Let D be the number of correct digits in
+            # lambda.  Then min(D, -log_10(|y(1) - V1|) or -log_10(
+            # |y(2) - C1|)) is roughly the number of correct digits in B.
             break
 
         if jmod == doublefreq:
             wlast = wout
-            #.... double the spacing of the output
+            # double the spacing of the output
             if dw < .0025:
                 dw = 2.0 * dw
 
-    #.... The phase space is calculated here and returned as output of
-    #       the function Guderley.
+    # The phase space is calculated here and returned as output of
+    # the function Guderley.
     return y[1] - C1
 
 
@@ -390,19 +305,20 @@ def energy(x, y, gamma, lambda_, nu, energy0):
         lambda\_ (float): Similarity exponent
         nu (int): n - 1; space index
         energy0 (float): Initial value of the adiabatic energy integral
-    
+
     Returns:
         float: The difference between the adiabatic energy integral evaluated at
-            a particular space-time combination of x, V,C, and R.                  
+            a particular space-time combination of x, V,C, and R.
     """
     q = 2.0 * (lambda_ - 1.0) / (nu + 1)
 
     if abs(x) >= 1.0e-8:
-        return (y[1] / x)**2 * (1.0 + y[0])**q * y[2]**(q - gamma + 1.0) - energy0
+        return (y[1] / x)**2 * (1.0 + y[0])**q * y[2]**(q - gamma + 1.0) \
+            - energy0
     else:
-        #.... It is impossible to compute C/x = dC/dx = 0/0 at x = 0,
-        #       since the differential equations are singular there. We punt
-        #       to avoid a machine infinity or NaN.
+        # It is impossible to compute C/x = dC/dx = 0/0 at x = 0,
+        # since the differential equations are singular there. We punt
+        # to avoid a machine infinity or NaN.
         return 0.0
 
 
@@ -434,30 +350,15 @@ def f(xorw, y):
     num = np.zeros(3)
     num[0] = ((nu + 1) * V + 2.0 * factor) * C2 - V * Vp1 * (V + lambda_)
     num[1] = (1.0 + factor / Vp1) * C2 - 0.5 * nu * (gamma - 1.0) * V * Vp1 \
-            - Vp1**2 - 0.5 * (lambda_ - 1.0)*((3.0 - gamma) * V + 2.0)
-    #
-    #.... The next equation is redundant, as the density can be found
-    #       from energy conservation (2.7).  But we compute it so that we
-    #       can use (2.7) as a consistency/accuracy check.
-    #
+        - Vp1**2 - 0.5 * (lambda_ - 1.0)*((3.0 - gamma) * V + 2.0)
+    # The next equation is redundant, as the density can be found
+    # from energy conservation (2.7).  But we compute it so that we
+    # can use (2.7) as a consistency/accuracy check.
     num[2] = - 2.0 * factor * C2 / Vp1 + V * (V + lambda_) - (nu + 1) * V * Vp1
+    # Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
+    # cancels the 1/x in df/dx, so the x's wash out.
     #
-    #.... The diagnostic statements have been commented out.
-    #
-    #      if (abs(denom) .le. 1.d-6) then
-    #        Near a singular point such as x = 0, dV/dx = dC/dx = 0/0.
-    #        If this message is triggered, the calculation may eventually
-    #        terminate prematurely.  The remedy is to very slightly loosen
-    #        the tolerances abserr or relerr.
-    #         write (*, 20) label(intno), xorw, denom
-    #   20    format ('*** Warning, ', a, ' =', 1p, e23.15, '  denom =',
-    #     &   e10.2)
-    #      endif
     if intno == 2:
-    #
-    #.... Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
-    #       cancels the 1/x in df/dx, so the x's wash out.
-    #
         denom = -denom * sigma
 
     yp = np.zeros(3)
@@ -475,8 +376,6 @@ def g(t, y):
     This subroutine (as opposed to the subroutine f) is for use with the "sim"
     subroutine. The diagnostic statements have been left in here.
     """
-    label = ['x', 'w']
-    intno = 1
     V = y[0]
     C = y[1]
     Vp1 = V + 1.0
@@ -487,29 +386,12 @@ def g(t, y):
     num = np.zeros(3)
     num[0] = ((nu + 1) * V + 2.0 * factor) * C2 - V * Vp1 * (V + lambda_)
     num[1] = (1.0 + factor / Vp1) * C2 - 0.5 * nu * (gamma - 1.0) * V * Vp1 \
-             - Vp1**2 - 0.5 * (lambda_ - 1.0) * ((3.0 - gamma) * V + 2.0)
-    #
-    #.... The next equation is redundant, as the density can be gotten
-    #       from energy conservation (2.7).  But we compute it so that we
-    #       can use (2.7) as a consistency/accuracy check.
-    #
+        - Vp1**2 - 0.5 * (lambda_ - 1.0) * ((3.0 - gamma) * V + 2.0)
+    # The next equation is redundant, as the density can be gotten
+    # from energy conservation (2.7).  But we compute it so that we
+    # can use (2.7) as a consistency/accuracy check.
     num[2] = - 2.0 * factor * C2 / Vp1 + V * (V + lambda_) - (nu + 1) * V * Vp1
 
-    # if abs(denom) <= 1.0e-8:
-    #     #
-    #     #.... Near a singular point such as x = 0, dV/dx = dC/dx = 0/0.
-    #     #       If this message is triggered, the calculation may eventually
-    #     #       terminate prematurely.  The remedy is to very slightly loosen
-    #     #       the tolerances abserr or relerr.
-    #     #
-    #     print(f'*** Warning, {label[intno-1]} = {t}, denom = {denom}')
-    #	if (intno .eq. 2) then
-    #
-    #.... Here df/dw = df/dx / dw/dx with dw/dx = -sigma*w/x.  The 1/x
-    #       cancels the 1/x in df/dx, so the x's wash out.
-    #
-    #	   denom = -denom*sigma
-    #	endif
     yp = np.zeros(3)
     yp[0] = num[0] / denom
     yp[1] = C * num[1] / denom
@@ -555,148 +437,110 @@ def state(r, rho0, n, gamma_d, lambda_d, B, targetxd):
     relerr = 5.0e-11
     neqn = 3
     y = np.zeros(neqn)
-    
-    # pressure(C, R) = R*C*C/gamma
+
     nu = n - 1
     gamma = gamma_d
     lambda_ = lambda_d
     targetx = targetxd
-    #
-    #.... Factors gamma + 1 and gamma - 1.
-    #
+    # Factors gamma + 1 and gamma - 1.
     gp1 = gamma + 1.0
     gm1 = gamma - 1.0
-    #
-    #.... Initializing the similarity variables at the position of the 
-    #       converging shock wave. This is the starting point of all
-    #       integrations of the governing equations.
-    #
+    # Initializing the similarity variables at the position of the
+    # converging shock wave. This is the starting point of all
+    # integrations of the governing equations.
     y = np.zeros(3)
     y[0] = -2.0 / gp1
     y[1] = sqrt(2.0 * gamma * gm1) / gp1
     y[2] = gp1 / gm1
     t = -1.0
+
+    # x < -1 represents the unshocked state (interior to hte converging
+    # shock wave), where the physical variables have constant values
+    # given by:
     #
-    iflag = 1
+    #    density = constant (specified by user)
+    #    velocity = 0 (required)
+    #    pressure = sound speed = 0 (required)
     #
-    #.... x < -1 represents the unshocked state (interior to hte converging
-    #       shock wave), where the physical variables have constant values
-    #       given by:
-    #
-    #          density = constant (specified by user)
-    #          velocity = 0 (required)
-    #          pressure = sound speed = 0 (required)
-    #
-    #       When a combination of space and time variables are specified
-    #       such that x < -1, the constant state data is returned as output.
-    #
+    # When a combination of space and time variables are specified
+    # such that x < -1, the constant state data is returned as output.
     if targetx < -1.0:
-        den  = rho0
-        vel  = 0.0
+        den = rho0
+        vel = 0.0
         pres = 0.0
-        snd  = 0.0
-        sie  = 0.0
-    #.... If -1 < x < 0, then we are behind the converging shock wave, and
-    #       reflection has yet to occur. The integration of the governing
-    #       ODEs is initiated at the position of the converging shock
-    #       (x = -1) and carried through to whatever negative value of x
-    #       that results from the specification of the space and time 
-    #       variables.
-    #
-    elif targetx < 0.0 and targetx >= -1.0:
-        # while t < targetx:
-        #     t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        snd = 0.0
+        sie = 0.0
+    # If -1 < x < 0, then we are behind the converging shock wave, and
+    # reflection has yet to occur. The integration of the governing
+    # ODEs is initiated at the position of the converging shock
+    # (x = -1) and carried through to whatever negative value of x
+    # that results from the specification of the space and time
+    # variables.
+    elif -1.0 <= targetx < 0.0:
         soln = solve_ivp(g, (t, targetx), y, rtol=relerr, atol=abserr)
         y = soln.y[:, -1]
-        #
-        #.... Definition of the PHYSICAL pressure variable, as a function of the
-        #       dimensionless similarity variables.
-        #
-        p = (((y[1] * r**(1.0 - lambda_)) \
-            / (targetx * (-1.0) * lambda_))**2) \
+        # Definition of the PHYSICAL pressure variable, as a function of the
+        # dimensionless similarity variables.
+        p = (((y[1] * r**(1.0 - lambda_))
+             / (targetx * (-1.0) * lambda_))**2) \
             / (gamma * (1.0 / rho0) * (1.0 / y[2]))
-        #
-        #.... Writing of solution data.
-        #
-        den  = y[2] * rho0
-        vel  = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        # Writing of solution data.
+        den = y[2] * rho0
+        vel = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
         pres = p
-        snd  = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
-        sie  = p / (gm1 * rho0 * y[2])
-    #.... If 0 < x < B (the space-time position of the reflected shock
-    #       wave), then we are upstream of the reflected shock wave. The 
-    #       integration  of the governing ODEs is again started at position
-    #       of the  convergent shock wave and integrated through x = 0 into
-    #       a portion of the phase space representing the flow ahead of the 
-    #       reflected shock wave. The integration terminates before the
-    #       position x = B is reached.
-    #
-    elif targetx > 0.0 and targetx < B:
-        # while t < targetx:
-        #     t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
+        snd = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        sie = p / (gm1 * rho0 * y[2])
+    # If 0 < x < B (the space-time position of the reflected shock
+    # wave), then we are upstream of the reflected shock wave. The
+    # integration  of the governing ODEs is again started at position
+    # of the  convergent shock wave and integrated through x = 0 into
+    # a portion of the phase space representing the flow ahead of the
+    # reflected shock wave. The integration terminates before the
+    # position x = B is reached.
+    elif 0.0 <= targetx < B:
         soln = solve_ivp(g, (t, targetx), y, rtol=relerr, atol=abserr)
         y = soln.y[:, -1]
-        #
-        #.... Physical pressure variable.
-        #
-        p = (((y[1] * r**(1.0 - lambda_)) \
-            / (targetx * (-1.0) * lambda_))**2) \
+        # Physical pressure variable.
+        p = (((y[1] * r**(1.0 - lambda_))
+             / (targetx * (-1.0) * lambda_))**2) \
             / (gamma * (1.0/rho0) * (1.0 / y[2]))
-        #
-        #.... Writing of solution data.
-        #
-        den  = y[2] * rho0
-        vel  = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        # Writing of solution data.
+        den = y[2] * rho0
+        vel = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
         pres = p
-        snd  = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
-        sie  = p / (gm1 * rho0 * y[2])
-    #.... If B < x < infinity, then we are behind the reflected shock wave.
-    #       The numerical integration starts at the position of the
-    #       convergent shock wave as before and is carred through x = 0
-    #       until x = B.
-    #
-    elif targetx > B:
-        # while t < B:
-        #     t, iflag = ode(g, neqn, y, t, B, relerr, abserr)
-        soln  = solve_ivp(g, (t, B), y, rtol=relerr, atol=abserr)
+        snd = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        sie = p / (gm1 * rho0 * y[2])
+    # If B < x < infinity, then we are behind the reflected shock wave.
+    # The numerical integration starts at the position of the
+    # convergent shock wave as before and is carred through x = 0
+    # until x = B.
+    elif targetx >= B:
+        soln = solve_ivp(g, (t, B), y, rtol=relerr, atol=abserr)
         y = soln.y[:, -1]
-        iflag = 1
-        #
-        #.... At x = B, the general-strength Rankine-Hugoniot conditions are
-        #       applied, and we move to the other side of the reflected shock
-        #       wave (just downstream).
-        #
+        # At x = B, the general-strength Rankine-Hugoniot conditions are
+        # applied, and we move to the other side of the reflected shock
+        # wave (just downstream).
         C2 = y[1]**2
         V1 = gm1 * (1.0 + y[0]) / gp1 + 2.0 * C2 / (gp1 * (1.0 + y[0])) - 1.0
-        # y[1] = np.sign(sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2)),
-        #                y[1])
         z = sqrt(C2 + 0.5 * gm1 * ((1.0 + y[0])**2 - (1.0 + V1)**2))
         y[1] = z * np.sign(y[1])
 
-        C1 = y[1]
         y[2] = y[2] * (1.0 + y[0]) / (1.0 + V1)
         y[0] = V1
-        #
-        #.... Numerical integration of the governing ODEs continues from x = B
-        #       (with the similarity variables taking their shocked values)
-        #       until the targetx point is reached.
-        #
-        while t < targetx:
-            t, iflag = ode(g, neqn, y, t, targetx, relerr, abserr)
-
-        #
-        #.... Physical pressure variable.
-        #
-        p = (((y[1] * r**(1.0 - lambda_)) \
-            / (targetx * (-1.0) * lambda_))**2) \
+        # Numerical integration of the governing ODEs continues from x = B
+        # (with the similarity variables taking their shocked values)
+        # until the targetx point is reached.
+        soln = solve_ivp(g, (B, targetx), y, rtol=relerr, atol=abserr)
+        y = soln.y[:, -1]
+        # Physical pressure variable.
+        p = (((y[1] * r**(1.0 - lambda_))
+             / (targetx * (-1.0) * lambda_))**2) \
             / (gamma * (1.0 / rho0) * (1.0 / y[2]))
-        #
-        #....Writing of solution data.
-        #
-        den  = y[2] * rho0
-        vel  = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        # Writing of solution data.
+        den = y[2] * rho0
+        vel = (y[0] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
         pres = p
-        snd  = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
-        sie  = p / (gm1 * rho0 * y[2])
+        snd = (y[1] * r**(1.0 - lambda_)) / (targetx * (-1.0) * lambda_)
+        sie = p / (gm1 * rho0 * y[2])
 
     return den, vel, pres, snd, sie
