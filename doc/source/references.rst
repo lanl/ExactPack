@@ -10,6 +10,14 @@
 References
 ==========
 
+.. [Bdzil]
+   Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
+
+.. [Chisnell1998]
+   Chisnell, R.F.,
+   An Analytic Description of Converging Shock Waves,
+   J. Fluid Mech. 354, pp. 357-375 (1998).
+
 .. [Coggeshall1991]
    S. V. Coggeshall,
    *Analytic solutions of hydrodynamics equations*,
@@ -35,6 +43,10 @@ References
    *Level 1 V. & V. Test Problem 10: Escape of High Explosive Products*,
    UCRL-ID-150418, Lawrence Livermore National Laboratory (2002).
 
+.. [Ferguson2017]
+   J. Ferguson, J. Morel and R. Lowrie
+   High Energy Density Physics, accepted for publication.
+
 .. [Fickett1974]
    W. Fickett and C. Rivard,
    *Test Problems for Hydrocodes*,
@@ -58,6 +70,21 @@ References
    Scott D. Ramsey, James R. Kamm, and John H. Bolstad,
    *The Guderley problem revisited*,
    International Journal of Computational Fluid Dynamics **26** (2012) 79.
+
+.. [Guess1957]
+   H. Sen and A. Guess,
+   *Radiation effects in shock-wave structure*
+   Physical Review **108** (1957) 560.
+
+.. [Heaslet1963]
+   Heaslet and Baldwin,
+   M. Heaslet and B. Baldwin,
+   *Predictions of the structure of radiation-resisted shock waves*,
+   Physics of Fluids **6** (1963) 781.
+
+.. [Hutchens2009]   
+   G J Hutchens, *A Generalized Set of Heat Conduction Test Problems*,
+   LA-UR-09-01692, Los Alamos National Laboratory (2009).   
 
 .. [Kamm2000]
    James R. Kamm,
@@ -96,19 +123,51 @@ References
    *HE Burn Table Verification Problems*,
    LA-UR-11-03096, Los Alamos National Laboratory (2011).
 
+.. [Kidder1974]
+   R.E. Kidder,
+   *Laser-Driven Compression of Hollow Shells: Power requirements and
+   Stability Limitations*,
+   Nucl. Fusion **14** (1974) 53.
+
+.. [Kidder1976]
+   R.E. Kidder,
+   *Energy gain of laser-compressed pellets: a simple model calculation*,
+   Nucl. Fusion **16** (1976) 33.
+
 .. [Kirkpatrick2004]
    R. Kirkpatrick, C. Wingate, and J.R. Kamm,
    *HE Burn Test Problem*,
    X-3-19U (2004).
 
+.. [Lazarus1981]
+   Lazarus, R.B.,
+   Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
+   SIAM J. NUMER. ANAL. 18.2 (1981) 316.
+
+.. [Lazarus1982]
+   Lazarus, R.B, 
+   Erratum: Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
+   SIAM J. Numer Anal. 19, p. 1090 (1982)
+
+.. [Lieberman2019] 
+   Evan J. Lieberman, Xiaodong Liu, Nathaniel R. Morgan, Darby J. Luscher, and Donald E. Burton,
+   *A higher-order Lagrangian discontinuous Galerkin hydrodynamic method for solid dynamics*,
+   CMAME **353** (2019) 467-490.
+
+.. [Lowrie2007]
+   R. Lowrie and R. Rauenzahn,
+   *Radiative shock solutions in the equilibrium diffusion limit*
+   Shock Waves **18** (2007) 445.
+
+.. [Lowrie2008]
+   R. Lowrie and J. Edwards,
+   *Radiative shock solutions with grey nonequilibrium diffusion*
+   Shock Waves **18** (2008) 129.
+
 .. [Noh1987]
    W. F. Noh, *Errors for Calculations of Strong Shocks Using an
    Artificial Viscosity and an Artificial Heat Flux*,
    JCP **72** (1987) 78-120.
-
-.. [Hutchens2009]   
-   G J Hutchens, *A Generalized Set of Heat Conduction Test Problems*,
-   LA-UR-09-01692, Los Alamos National Laboratory (2009).   
    
 .. [Reinicke1991] P. Reinicke and J. Meyer-ter-Vehn,
    *The point explosion with heat conduction*,
@@ -128,65 +187,6 @@ References
    Francis X. Timmes, Galen Gisler, and George M. Hrbek,
    *Automated Analyses of the Tri-Lab Verification Test Suite on Uniform and Adaptive Grids for Code Project A*,
    LA-UR-05-6865, Los Alamos National Laboratory (2005).
-
-.. [Guess1957]
-   H. Sen and A. Guess,
-   *Radiation effects in shock-wave structure*
-   Physical Review **108** (1957) 560.
-
-.. [Heaslet1963]
-   Heaslet and Baldwin,
-   M. Heaslet and B. Baldwin,
-   *Predictions of the structure of radiation-resisted shock waves*,
-   Physics of Fluids **6** (1963) 781.
-
-.. [Lowrie2007]
-   R. Lowrie and R. Rauenzahn,
-   *Radiative shock solutions in the equilibrium diffusion limit*
-   Shock Waves **18** (2007) 445.
-
-.. [Lowrie2008]
-   R. Lowrie and J. Edwards,
-   *Radiative shock solutions with grey nonequilibrium diffusion*
-   Shock Waves **18** (2008) 129.
-
-.. [Ferguson2017]
-   J. Ferguson, J. Morel and R. Lowrie
-   High Energy Density Physics, accepted for publication.
-
-.. [Kidder1974]
-   R.E. Kidder,
-   *Laser-Driven Compression of Hollow Shells: Power requirements and
-   Stability Limitations*,
-   Nucl. Fusion **14** (1974) 53.
-
-.. [Kidder1976]
-   R.E. Kidder,
-   *Energy gain of laser-compressed pellets: a simple model calculation*,
-   Nucl. Fusion **16** (1976) 33.
-
-.. [Bdzil]
-   Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
-
-.. [Lazarus1981]
-   Lazarus, R.B.,
-   Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
-   SIAM J. NUMER. ANAL. 18.2 (1981) 316.
-
-.. [Lazarus1982]
-   Lazarus, R.B, 
-   Erratum: Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
-   SIAM J. Numer Anal. 19, p. 1090 (1982)
-
-.. [Chisnell1998]
-   Chisnell, R.F.,
-   An Analytic Description of Converging Shock Waves,
-   J. Fluid Mech. 354, pp. 357-375 (1998).
-
-.. [Lieberman2019] 
-   Evan J. Lieberman, Xiaodong Liu, Nathaniel R. Morgan, Darby J. Luscher, and Donald E. Burton,
-   *A higher-order Lagrangian discontinuous Galerkin hydrodynamic method for solid dynamics*,
-   CMAME **353** (2019) 467-490.
 
 .. [Udaykumar2003] 
    H.S. Udaykumar, L. Tran, D.M. Belk, and K.J. Vanden,
