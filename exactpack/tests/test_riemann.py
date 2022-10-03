@@ -1,4 +1,5 @@
 """Unittests for the 1D Riemann solvers.
+:'a
 """
 
 import unittest
@@ -70,8 +71,6 @@ def rho_p_u_rarefaction(p, r, u, g, x, xd0, t, self):
 
 class Test_Riemann1(unittest.TestCase):
     """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem.
-
-    These tests confirm proper assignment of the standard Riemann problems.
     """
 
     # Riemann Problem 1
@@ -120,18 +119,6 @@ class Test_Riemann1(unittest.TestCase):
         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 
-    def test_riem1ig_region_boundaries(self):
-        # Test that spatial region boundaries are computed correctly.
-        # Xregs = Vregs * t + xd0
-        self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
-        self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
-        self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
-        self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
-        self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
-        self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
-        self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
-        self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
-
     def test_riem1gen_star_states(self):
         # Test that star state values are computed correctly.
         self.assertAlmostEqual(self.pstar,        self.soln_gen.px,  places=6)
@@ -144,6 +131,18 @@ class Test_Riemann1(unittest.TestCase):
         self.assertAlmostEqual(self.estar2,       self.soln_gen.ex2, places=5)
         self.assertAlmostEqual(self.astar1,       self.soln_gen.ax1, places=6)
         self.assertAlmostEqual(self.astar2,       self.soln_gen.ax2, places=6)
+
+    def test_riem1ig_region_boundaries(self):
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+        self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+        self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+        self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+        self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+        self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+        self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+        self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 
     def test_riem1gen_region_boundaries(self):
         # Test that spatial region boundaries are computed correctly.
@@ -181,7 +180,7 @@ class Test_Riemann1(unittest.TestCase):
         self.assertAlmostEqual(self.ul, ul, places=12)
         self.assertAlmostEqual(self.pl, pl, places=12)
 
-    def test_riemig_state1(self):
+    def test_riem1ig_state1(self):
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
 #         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
@@ -301,341 +300,350 @@ class Test_Riemann1(unittest.TestCase):
         self.assertAlmostEqual(self.ur, u_soln, places=12)
         self.assertAlmostEqual(self.pr, p_soln, places=12)
 
-# class TestIGEOSRiemannSolver(unittest.TestCase):
+class Test_Riemann1_reversed(unittest.TestCase):
+    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem, with left and right states reversed.
+    """
+
+    # Riemann Problem 1 reversed
+    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
+    rl, ul, pl, gl = 0.125, 0.0, 0.1, 1.4
+    rr, ur, pr, gr = 1.0,   0.0, 1.0, 1.4
+    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    problem = 'igeos'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+    soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                           rl=rl, ul=ul, pl=pl, gl=gl,
+                           rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_ig.driver()
+
+    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                             rl=rl, ul=ul, pl=pl, gl=gl,
+                             rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_gen.driver()
+#     xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
+
+    # Test that star state values are computed correctly.
+    pstar =  0.30313017805042364
+    ustar =  -0.9274526200482547
+    rstar1 = 0.26557371170518734
+    rstar2 = 0.42631942817827095
+    estar1 = 2.853540887990146
+    estar2 = 1.7776000694229792
+    astar1 = 1.26411348275164
+    astar2 = 0.9977254326100283
+
+    # Test that spatial region boundaries are computed correctly.
+    # Xregs = Vregs * t + xd0
+    Xregs = array([0.06196106699260839, 0.26813684498793633,
+                   0.5175682031404434,  0.7958039891549809])
+    Vregs = array([-1.7521557320295664, -0.9274526200482547,
+                    0.07027281256177365, 1.1832159566199232])
+
+    def test_riem1revig_star_states(self):
+        # Test that star state values are computed correctly.
+        self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+        self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+        self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+        self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+        self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+        self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+        self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+        self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
+
+    def test_riem1revgen_star_states(self):
+        # Test that star state values are computed correctly.
+        self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=6)
+        self.assertAlmostEqual(self.soln_gen.ux1, self.soln_gen.ux2, places=10)
+        self.assertAlmostEqual(self.ustar, self.soln_gen.ux1, places=6)
+        self.assertAlmostEqual(self.ustar, self.soln_gen.ux2, places=6)
+        self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=6)
+        self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=6)
+        self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=5)
+        self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=6)
+        self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=6)
+        self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=6)
+
+    def test_riem1revig_region_boundaries(self):
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+
+        self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+        self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+        self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+        self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+        self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+        self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+        self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+        self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
+
+    def test_riem1revgen_region_boundaries(self):
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+
+        self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=6)
+        self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=6)
+        self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=6)
+        self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+        self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=5)
+        self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=6)
+        self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=6)
+        self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
+
+    def test_riem1revig_state0(self):
+        # Test that any point in (xmin,Xregs[0]) returns left state values.
+#         x = diff([self.xmin, self.Xregs[0]])[0] * rand() + self.xmin
+        x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        self.assertAlmostEqual(self.rl, rl, places=12)
+        self.assertAlmostEqual(self.ul, ul, places=12)
+        self.assertAlmostEqual(self.pl, pl, places=12)
+
+    def test_riem1revgen_state0(self):
+        # Test that any point in (xmin,Xregs[0]) returns left state values.
+#         x = diff([self.xmin, self.Xregs[0]])[0] * rand() + self.xmin
+        x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(self.rl, rl, places=12)
+        self.assertAlmostEqual(self.ul, ul, places=12)
+        self.assertAlmostEqual(self.pl, pl, places=12)
+
+    def test_riem1revig_state1(self):
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar1
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        self.assertAlmostEqual(r, rl, places=12)
+        self.assertAlmostEqual(u, ul, places=12)
+        self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riem1revgen_state1(self):
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar1
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, rl, places=6)
+        self.assertAlmostEqual(u, ul, places=6)
+        self.assertAlmostEqual(p, pl, places=6)
+
+    def test_riem1revig_state2(self):
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar2
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        self.assertAlmostEqual(r, rl, places=12)
+        self.assertAlmostEqual(u, ul, places=12)
+        self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riem1revgen_state2(self):
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar2
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, rl, places=6)
+        self.assertAlmostEqual(u, ul, places=6)
+        self.assertAlmostEqual(p, pl, places=6)
+
+    def test_riem1revig_state3(self):
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+                                      self.xd0, self.t, self.soln_ig)
+
+        r_soln = interp(x, self.soln_ig.x, self.soln_ig.r)
+        u_soln = interp(x, self.soln_ig.x, self.soln_ig.u)
+        p_soln = interp(x, self.soln_ig.x, self.soln_ig.p)
+        self.assertAlmostEqual(r, r_soln, places=12)
+        self.assertAlmostEqual(u, u_soln, places=12)
+        self.assertAlmostEqual(p, p_soln, places=12)
+
+    def test_riem1revgen_state3(self):
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+                                      self.xd0, self.t, self.soln_gen)
+
+        r_soln = interp(x, self.soln_gen.x, self.soln_gen.r)
+        u_soln = interp(x, self.soln_gen.x, self.soln_gen.u)
+        p_soln = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, r_soln, places=8)
+        self.assertAlmostEqual(u, u_soln, places=8)
+        self.assertAlmostEqual(p, p_soln, places=8)
+
+    def test_riem1revig_state4(self):
+        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
+#         x = diff([self.Xregs[3], self.xmax])[0] * rand() + self.Xregs[3]
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+
+        r_soln = interp(x, self.soln_ig.x, self.soln_ig.r)
+        u_soln = interp(x, self.soln_ig.x, self.soln_ig.u)
+        p_soln = interp(x, self.soln_ig.x, self.soln_ig.p)
+        self.assertAlmostEqual(self.rr, r_soln, places=12)
+        self.assertAlmostEqual(self.ur, u_soln, places=12)
+        self.assertAlmostEqual(self.pr, p_soln, places=12)
+
+    def test_riem1revgen_state4(self):
+        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
+#         x = diff([self.Xregs[3], self.xmax])[0] * rand() + self.Xregs[3]
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+
+        r_soln = interp(x, self.soln_gen.x, self.soln_gen.r)
+        u_soln = interp(x, self.soln_gen.x, self.soln_gen.u)
+        p_soln = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(self.rr, r_soln, places=12)
+        self.assertAlmostEqual(self.ur, u_soln, places=12)
+        self.assertAlmostEqual(self.pr, p_soln, places=12)
+
+
+class Test_Riemann1_modified(unittest.TestCase):
+    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem, modified to have different left and right values for gamma, is correct.
+    """
+
+    # Riemann Problem 1 modified
+    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.2
+    rl, ul, pl, gl = 1.0,   0.0, 2.0, 2.0
+    rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
+    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    problem = 'igeos'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+ 
+    self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                                rl=rl, ul=ul, pl=pl, gl=gl,
+                                rr=rr, ur=ur, pr=pr, gr=gr)
+    self.soln_ig.driver()
+
+    self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                                 rl=rl, ul=ul, pl=pl, gl=gl,
+                                 rr=rr, ur=ur, pr=pr, gr=gr)
+    self.soln_gen.driver()
+
+    # Test that star state values are computed correctly.
+    pstar  = 0.4303319371967973
+    ustar  = 1.2757096812803406
+    rstar1 = 0.46385985879185393
+    rstar2 = 0.3253795605032907
+    estar1 = 0.9277197175837077
+    estar2 = 3.3063842157999144
+    astar1 = 1.3621451593598295
+    astar2 = 1.3607259683154251
+
+    # Test that spatial region boundaries are computed correctly.
+    # Xregs = Vregs * t + xd0
+    Xregs = array([0.09999999999999998, 0.4827129043841022,
+                   0.7551419362560681,  0.9143035890305202])
+    Vregs = array([-2.0, -0.08643547807948893,
+                    1.2757096812803406, 2.0715179451526007])
+
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
-#     """Tests ideal-gas EOS (IGEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann`.
-# 
-#     These tests confirm proper assignment of the standard Riemann problems.
-#     """
-# 
-#     def test_riemann1(self):
-#         """Test that the first Riemann problem is solved correctly.
-#         """
-# 
-#         # Riemann Problem 1
-#         xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
-#         rl, ul, pl, gl = 1.0,   0.0, 1.0, 1.4
-#         rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
-#         A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-#         problem = 'igeos'
-#         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
-# 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-#                             rl=rl, ul=ul, pl=pl, gl=gl,
-#                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
-# 
-# 
-#         # Test that star state values are computed correctly.
-#         pstar =  0.30313017805042364
-#         ustar =  0.9274526200494746
-#         rstar1 = 0.42631942817827095
-#         rstar2 = 0.26557371170518734
-#         estar1 = 1.7776000694229792
-#         estar2 = 2.853540887990146
-#         astar1 = 0.9977254326100283
-#         astar2 = 1.26411348275164
-# 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
-# 
-#         # Test that spatial region boundaries are computed correctly.
-#         # Xregs = Vregs * t + xd0
-#         Xregs = array([0.2041960108450192, 0.4824317968598616,
-#                        0.7318631550123686, 0.9380389330073916])
-#         Vregs = array([-1.1832159566199232, -0.07027281256055373,
-#                         0.9274526200494746, 1.7521557320295664])
-# 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-# #         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
-#         x = diff([xmin, Xregs[0]])[0] * numpy.random.rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         x = diff(Xregs[:2])[0] * numpy.random.rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-# #         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         x = diff(Xregs[1:3])[0] * numpy.random.rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-# #         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         x = diff(Xregs[2:])[0] * numpy.random.rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-# #         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         x = diff([Xregs[3], xmax])[0] * numpy.random.rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-# 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#     def test_riemann1_reversed(self):
-#         """Test that the first Riemann problem, with left and right states reversed, is solved correctly.
-#         """
-# 
-#         # Riemann Problem 1 reversed
-#         xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
-#         rl, ul, pl, gl = 0.125, 0.0, 0.1, 1.4
-#         rr, ur, pr, gr = 1.0,   0.0, 1.0, 1.4
-#         A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-#         problem = 'igeos'
-#         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
-# 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-#                             rl=rl, ul=ul, pl=pl, gl=gl,
-#                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
-# 
-#         # Test that star state values are computed correctly.
-#         pstar =  0.30313017805042364
-#         ustar =  -0.9274526200482547
-#         rstar1 = 0.26557371170518734
-#         rstar2 = 0.42631942817827095
-#         estar1 = 2.853540887990146
-#         estar2 = 1.7776000694229792
-#         astar1 = 1.26411348275164
-#         astar2 = 0.9977254326100283
-# 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
-# 
-# 
-#         # Test that spatial region boundaries are computed correctly.
-#         # Xregs = Vregs * t + xd0
-#         Xregs = array([0.06196106699260839, 0.26813684498793633,
-#                        0.5175682031404434,  0.7958039891549809])
-#         Vregs = array([-1.7521557320295664, -0.9274526200482547,
-#                         0.07027281256177365, 1.1832159566199232])
-# 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
-# 
-# 
-#         # Test than any point in (xmin,Xregs[0]) returns left state values.
-# #         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
-#         x = diff([xmin, Xregs[0]])[0] * numpy.random.rand() + xmin
-# 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-# #         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         x = diff(Xregs[:2])[0] * numpy.random.rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-# #         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         x = diff(Xregs[1:3])[0] * numpy.random.rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-# #         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         x = diff(Xregs[2:])[0] * numpy.random.rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-# #         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         x = diff([Xregs[3], xmax])[0] * numpy.random.rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-# 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#     def test_riemann1_modified(self):
-#         """Test that the first Riemann problem, modified to have different left and right values for gamma, is solved correctly.
-#         """
-# 
-#         # Riemann Problem 1 modified
-#         xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.2
-#         rl, ul, pl, gl = 1.0,   0.0, 2.0, 2.0
-#         rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
-#         A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-#         problem = 'igeos'
-#         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
-# 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-#                             rl=rl, ul=ul, pl=pl, gl=gl,
-#                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
-# 
-# 
-#         # Test that star state values are computed correctly.
-#         pstar  = 0.4303319371967973
-#         ustar  = 1.2757096812803406
-#         rstar1 = 0.46385985879185393
-#         rstar2 = 0.3253795605032907
-#         estar1 = 0.9277197175837077
-#         estar2 = 3.3063842157999144
-#         astar1 = 1.3621451593598295
-#         astar2 = 1.3607259683154251
-# 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
-# 
-#         # Test that spatial region boundaries are computed correctly.
-#         # Xregs = Vregs * t + xd0
-#         Xregs = array([0.09999999999999998, 0.4827129043841022,
-#                        0.7551419362560681,  0.9143035890305202])
-#         Vregs = array([-2.0, -0.08643547807948893,
-#                         1.2757096812803406, 2.0715179451526007])
-# 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
-# 
-# 
-#         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
-# 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann1_modified_reversed(self):
@@ -650,11 +658,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -667,14 +675,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 =  1.3607259683154251
 #         astar2 =  1.3621451593598295
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -683,64 +691,64 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-2.0715179451526007, -1.2757096812790123,
 #                         0.0864354780808172,  2.0])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann2(self):
@@ -755,11 +763,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -772,14 +780,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.3483314773336128
 #         astar2 = 0.3483314773336128
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -790,73 +798,73 @@ class Test_Riemann1(unittest.TestCase):
 #                         1.0587708487719283e-10, 0.3483314774394899,
 #                         2.748331477354788])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=7)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=7)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=7)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=7)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=7)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=7)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:4])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:4])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[3:])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[3:])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[4], xmax])[0] * rand() + Xregs[4]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[4], xmax])[0] * rand() + self.Xregs[4]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann2_reversed(self):
@@ -871,11 +879,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -888,14 +896,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.3483314773336128
 #         astar2 = 0.3483314773336128
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -906,74 +914,74 @@ class Test_Riemann1(unittest.TestCase):
 #                         1.0587708487719283e-10, 0.3483314774394899,
 #                         2.748331477354788])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:4])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:4])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[3:])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[3:])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=9)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=9)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=9)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=9)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=9)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=9)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[4], xmax])[0] * rand() + Xregs[4]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[4], xmax])[0] * rand() + self.Xregs[4]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann3(self):
@@ -988,11 +996,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1005,14 +1013,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 33.4970835899948
 #         astar2 = 10.370896528742378
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1021,63 +1029,63 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-57.01402386773941, -33.49708220127174,
 #                        1.388723067208275e-06, 3.920086966903227])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann3_reversed(self):
@@ -1092,11 +1100,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1109,14 +1117,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 =  10.370896528742378
 #         astar2 =  33.4970835899948
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1124,66 +1132,65 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.601964986415261, 0.884168286412873])
 #         Vregs = array([-3.920086966903227, -1.388723045891993e-06,
 #                        33.49708220127175, 57.01402386773941])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_ig)
+# 
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann4(self):
@@ -1198,11 +1205,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1215,14 +1222,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.9366510318452999
 #         astar2 = 1.936651092005313
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1230,54 +1237,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.6096479906523622])
 #         Vregs = array([-2.7472820701116656, -0.8106310956659113,
 #                        0.10964799065236219])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann4_reversed(self):
@@ -1292,11 +1298,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1309,14 +1315,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.936651092005313
 #         astar2 = 1.9366510318452999
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1324,54 +1330,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        3.2472820701116656])
 #         Vregs = array([-0.10964799065236219, 0.8106310956662885,
 #                         2.7472820701116656,])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann5(self):
@@ -1386,11 +1391,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1403,14 +1408,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.2921965406899478
 #         astar2 = 1.1557757221091187
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1418,54 +1423,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.7636520250049744])
 #         Vregs = array([-1.0415900782359429, -0.02786404500006001,
 #                        0.8788400833499148])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann5_reversed(self):
@@ -1480,11 +1484,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1497,14 +1501,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.1557757221091187
 #         astar2 = 1.2921965406899478
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1512,54 +1516,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.8124770234707828])
 #         Vregs = array([-0.8788400833499148, 0.027864045000743076,
 #                        1.0415900782359429])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann6(self):
@@ -1574,11 +1577,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1591,14 +1594,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.1780053716292146
 #         astar2 = 0.34732390520736506
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1606,67 +1609,66 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.5329919425561781, 0.6106559323834297])
 #         Vregs = array([-0.33333333333333337, 0.28797851348314163,
 #                        0.4659838851123562, 0.6213118647668594])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_ig)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+# 
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #     def test_riemann6_reversed(self):
@@ -1681,11 +1683,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_ig.driver()
+#         xmin, xmax = self.soln_ig.xmin, self.soln_ig.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1698,14 +1700,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.34732390520736506
 #         astar2 = 0.1780053716292146
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_ig.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_ig.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_ig.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_ig.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_ig.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_ig.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_ig.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_ig.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1713,67 +1715,66 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.5560107432332753, 0.8666666666666667])
 #         Vregs = array([-0.6213118647668594, -0.46598388516266387,
 #                        -0.2879785135334493, 0.33333333333333337])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_ig.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_ig.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_ig.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_ig.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_ig.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_ig.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_ig.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_ig.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_ig)
+# 
+#         self.assertAlmostEqual(r, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_ig.x - x))
+#         x = self.soln_ig.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_ig.x, self.soln_ig.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_ig.x, self.soln_ig.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_ig.x, self.soln_ig.p), places=12)
 # 
 # 
 # class TestGenEOSRiemannSolver(unittest.TestCase):
@@ -1795,11 +1796,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                              rl=rl, ul=ul, pl=pl, gl=gl,
 #                              rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         soln_gen.driver()
+#         xmin, xmax = soln_gen.xmin, soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -1812,16 +1813,16 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.9977254326100283
 #         astar2 = 1.26411348275164
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=6)
-#         self.assertAlmostEqual(soln.ux1, soln.ux2, places=10)
-#         self.assertAlmostEqual(ustar, soln.ux1, places=6)
-#         self.assertAlmostEqual(ustar, soln.ux2, places=6)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=6)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=6)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=6)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=5)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=6)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=6)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=6)
+#         self.assertAlmostEqual(self.soln_gen.ux1, self.soln_gen.ux2, places=10)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux1, places=6)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux2, places=6)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=6)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=6)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=6)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=5)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=6)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=6)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1830,65 +1831,65 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-1.1832159566199232, -0.07027281256055373,
 #                         0.9274526200494746, 1.7521557320295664])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=6)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=6)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=6)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=6)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=6)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=5)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=6)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=6)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=6)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=6)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=6)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=5)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=8)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=8)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=8)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=8)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=8)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=8)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=6)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=6)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=6)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=6)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann1_reversed(self):
@@ -1903,11 +1904,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                              rl=rl, ul=ul, pl=pl, gl=gl,
 #                              rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 #         # Test that star state values are computed correctly.
 #         pstar =  0.30313017805042364
@@ -1919,16 +1920,16 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.26411348275164
 #         astar2 = 0.9977254326100283
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=6)
-#         self.assertAlmostEqual(soln.ux1, soln.ux2, places=10)
-#         self.assertAlmostEqual(ustar, soln.ux1, places=6)
-#         self.assertAlmostEqual(ustar, soln.ux2, places=6)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=6)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=6)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=5)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=6)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=6)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=6)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=6)
+#         self.assertAlmostEqual(self.soln_gen.ux1, self.soln_gen.ux2, places=10)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux1, places=6)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux2, places=6)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=6)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=6)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=5)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=6)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=6)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=6)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -1937,65 +1938,65 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-1.7521557320295664, -0.9274526200482547,
 #                         0.07027281256177365, 1.1832159566199232])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=6)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=6)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=6)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=5)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=6)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=6)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=6)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=6)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=6)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=5)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=6)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=6)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=7)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=7)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=7)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=7)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=6)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=6)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=8)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=9)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=8)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=8)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=9)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=8)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann1_modified(self):
@@ -2010,11 +2011,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                              rl=rl, ul=ul, pl=pl, gl=gl,
 #                              rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2027,16 +2028,16 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.3621451593598295
 #         astar2 = 1.3607259683154251
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=6)
-#         self.assertAlmostEqual(soln.ux1, soln.ux2, places=10)
-#         self.assertAlmostEqual(ustar, soln.ux1, places=6)
-#         self.assertAlmostEqual(ustar, soln.ux2, places=6)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=6)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=6)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=6)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=5)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=6)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=6)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=6)
+#         self.assertAlmostEqual(self.soln_gen.ux1, self.soln_gen.ux2, places=10)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux1, places=6)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux2, places=6)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=6)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=6)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=6)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=5)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=6)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=6)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2045,66 +2046,66 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-2.0, -0.08643547807948893,
 #                         1.2757096812803406, 2.0715179451526007])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=7)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=7)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=7)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=6)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=6)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=6)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=7)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=7)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=7)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=6)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=6)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=6)
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=8)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=8)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=8)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=8)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=8)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=8)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=6)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=6)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=6)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=6)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann1_modified_reversed(self):
@@ -2119,11 +2120,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                              rl=rl, ul=ul, pl=pl, gl=gl,
 #                              rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2136,16 +2137,16 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 =  1.3607259683154251
 #         astar2 =  1.3621451593598295
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=6)
-#         self.assertAlmostEqual(soln.ux1, soln.ux2, places=11)
-#         self.assertAlmostEqual(ustar, soln.ux1, places=6)
-#         self.assertAlmostEqual(ustar, soln.ux2, places=6)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=7)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=7)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=5)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=6)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=6)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=7)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=6)
+#         self.assertAlmostEqual(self.soln_gen.ux1, self.soln_gen.ux2, places=11)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux1, places=6)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux2, places=6)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=7)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=7)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=5)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=6)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=6)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=7)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2154,64 +2155,64 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-2.0715179451526007, -1.2757096812790123,
 #                         0.0864354780808172,  2.0])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=7)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=7)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=7)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=6)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=6)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=6)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=7)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=7)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=7)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=6)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=6)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=6)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=7)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=7)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=7)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=6)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=6)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=7)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=6)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=6)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=8)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=10)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=8)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=8)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=10)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=8)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann2(self):
@@ -2226,11 +2227,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2243,14 +2244,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.3483314773336128
 #         astar2 = 0.3483314773336128
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2261,73 +2262,73 @@ class Test_Riemann1(unittest.TestCase):
 #                         1.0587708487719283e-10, 0.3483314774394899,
 #                         2.748331477354788])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=7)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=7)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=7)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=7)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=7)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=7)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:4])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:4])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[3:])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[3:])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[4], xmax])[0] * rand() + Xregs[4]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[4], xmax])[0] * rand() + self.Xregs[4]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann2_reversed(self):
@@ -2342,11 +2343,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2359,14 +2360,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.3483314773336128
 #         astar2 = 0.3483314773336128
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2377,74 +2378,74 @@ class Test_Riemann1(unittest.TestCase):
 #                         1.0587708487719283e-10, 0.3483314774394899,
 #                         2.748331477354788])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:4])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:4])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff(Xregs[3:])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[3:])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=9)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=9)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=9)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=9)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=9)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=9)
 # 
 # 
 #         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-#         x = diff([Xregs[4], xmax])[0] * rand() + Xregs[4]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[4], xmax])[0] * rand() + self.Xregs[4]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann3(self):
@@ -2459,11 +2460,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2476,14 +2477,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 33.4970835899948
 #         astar2 = 10.370896528742378
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2492,63 +2493,63 @@ class Test_Riemann1(unittest.TestCase):
 #         Vregs = array([-57.01402386773941, -33.49708220127174,
 #                        1.388723067208275e-06, 3.920086966903227])
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann3_reversed(self):
@@ -2563,11 +2564,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2580,14 +2581,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 =  10.370896528742378
 #         astar2 =  33.4970835899948
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2595,66 +2596,65 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.601964986415261, 0.884168286412873])
 #         Vregs = array([-3.920086966903227, -1.388723045891993e-06,
 #                        33.49708220127175, 57.01402386773941])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_gen)
+# 
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann4(self):
@@ -2669,11 +2669,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2686,14 +2686,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.9366510318452999
 #         astar2 = 1.936651092005313
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2701,54 +2701,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.6096479906523622])
 #         Vregs = array([-2.7472820701116656, -0.8106310956659113,
 #                        0.10964799065236219])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann4_reversed(self):
@@ -2763,11 +2762,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2780,14 +2779,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.936651092005313
 #         astar2 = 1.9366510318452999
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2795,54 +2794,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        3.2472820701116656])
 #         Vregs = array([-0.10964799065236219, 0.8106310956662885,
 #                         2.7472820701116656,])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann5(self):
@@ -2857,11 +2855,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2874,14 +2872,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.2921965406899478
 #         astar2 = 1.1557757221091187
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2889,54 +2887,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.7636520250049744])
 #         Vregs = array([-1.0415900782359429, -0.02786404500006001,
 #                        0.8788400833499148])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann5_reversed(self):
@@ -2951,11 +2948,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -2968,14 +2965,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 1.1557757221091187
 #         astar2 = 1.2921965406899478
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -2983,54 +2980,53 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.8124770234707828])
 #         Vregs = array([-0.8788400833499148, 0.027864045000743076,
 #                        1.0415900782359429])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
-#         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[2], xmax])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         # Test that any point in (self.Xregs[2],xmax) returns correct values.
+#         x = diff([self.Xregs[2], xmax])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann6(self):
@@ -3045,11 +3041,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -3062,14 +3058,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.1780053716292146
 #         astar2 = 0.34732390520736506
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -3077,67 +3073,66 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.5329919425561781, 0.6106559323834297])
 #         Vregs = array([-0.33333333333333337, 0.28797851348314163,
 #                        0.4659838851123562, 0.6213118647668594])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, soln)
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pl, rl, ul, gl, x, xd0, t, self.soln_gen)
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
+# 
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #     def test_riemann6_reversed(self):
@@ -3152,11 +3147,11 @@ class Test_Riemann1(unittest.TestCase):
 #         problem = 'igeos'
 #         num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
 # 
-#         soln = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+#         self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
 #                             rl=rl, ul=ul, pl=pl, gl=gl,
 #                             rr=rr, ur=ur, pr=pr, gr=gr)
-#         soln.driver()
-#         xmin, xmax = soln.xmin, soln.xmax
+#         self.soln_gen.driver()
+#         xmin, xmax = self.soln_gen.xmin, self.soln_gen.xmax
 # 
 # 
 #         # Test that star state values are computed correctly.
@@ -3169,14 +3164,14 @@ class Test_Riemann1(unittest.TestCase):
 #         astar1 = 0.34732390520736506
 #         astar2 = 0.1780053716292146
 # 
-#         self.assertAlmostEqual(pstar, soln.px, places=12)
-#         self.assertAlmostEqual(ustar, soln.ux, places=12)
-#         self.assertAlmostEqual(rstar1, soln.rx1, places=12)
-#         self.assertAlmostEqual(rstar2, soln.rx2, places=12)
-#         self.assertAlmostEqual(estar1, soln.ex1, places=12)
-#         self.assertAlmostEqual(estar2, soln.ex2, places=12)
-#         self.assertAlmostEqual(astar1, soln.ax1, places=12)
-#         self.assertAlmostEqual(astar2, soln.ax2, places=12)
+#         self.assertAlmostEqual(self.pstar, self.soln_gen.px, places=12)
+#         self.assertAlmostEqual(self.ustar, self.soln_gen.ux, places=12)
+#         self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+#         self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+#         self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+#         self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+#         self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+#         self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
 # 
 #         # Test that spatial region boundaries are computed correctly.
 #         # Xregs = Vregs * t + xd0
@@ -3184,64 +3179,63 @@ class Test_Riemann1(unittest.TestCase):
 #                        0.5560107432332753, 0.8666666666666667])
 #         Vregs = array([-0.6213118647668594, -0.46598388516266387,
 #                        -0.2879785135334493, 0.33333333333333337])
-#         print('soln.Xregs = ', soln.Xregs)
 # 
-#         self.assertAlmostEqual(Xregs[0], soln.Xregs[0], places=12)
-#         self.assertAlmostEqual(Xregs[1], soln.Xregs[1], places=12)
-#         self.assertAlmostEqual(Xregs[2], soln.Xregs[2], places=12)
-#         self.assertAlmostEqual(Xregs[3], soln.Xregs[3], places=12)
-#         self.assertAlmostEqual(Vregs[0], soln.Vregs[0], places=12)
-#         self.assertAlmostEqual(Vregs[1], soln.Vregs[1], places=12)
-#         self.assertAlmostEqual(Vregs[2], soln.Vregs[2], places=12)
-#         self.assertAlmostEqual(Vregs[3], soln.Vregs[3], places=12)
+#         self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+#         self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+#         self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+#         self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+#         self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+#         self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+#         self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+#         self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
 # 
 # 
 #         # Test than any point in (xmin,Xregs[0]) returns left state values.
-#         x = diff([xmin, Xregs[0]])[0] * rand() + xmin
+#         x = diff([xmin, self.Xregs[0]])[0] * rand() + xmin
 # 
-#         self.assertAlmostEqual(rl, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ul, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pl, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rl, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ul, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pl, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-#         x = diff(Xregs[:2])[0] * rand() + Xregs[0]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         p, u, r = pstar, ustar, rstar1
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar1
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
-# 
-# 
-#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[1:3])[0] * rand() + Xregs[1]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r = rstar2
-# 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-#         x = diff(Xregs[2:])[0] * rand() + Xregs[2]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
-#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, soln)
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         p, u, r = self.pstar, self.ustar, self.rstar2
 # 
-#         self.assertAlmostEqual(r, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(u, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(p, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
+# 
+# 
+#         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(pr, rr, ur, gr, x, xd0, t, self.soln_gen)
+# 
+#         self.assertAlmostEqual(r, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(u, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(p, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
 # 
 # 
 #         # Test that any point in (Xregs[2],xmax) returns correct values.
-#         x = diff([Xregs[3], xmax])[0] * rand() + Xregs[3]
-#         _argmin = argmin(abs(soln.x - x))
-#         x = soln.x[_argmin]
+#         x = diff([self.Xregs[3], xmax])[0] * rand() + self.Xregs[3]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
 # 
-#         self.assertAlmostEqual(rr, interp(x, soln.x, soln.r), places=12)
-#         self.assertAlmostEqual(ur, interp(x, soln.x, soln.u), places=12)
-#         self.assertAlmostEqual(pr, interp(x, soln.x, soln.p), places=12)
+#         self.assertAlmostEqual(rr, interp(x, self.soln_gen.x, self.soln_gen.r), places=12)
+#         self.assertAlmostEqual(ur, interp(x, self.soln_gen.x, self.soln_gen.u), places=12)
+#         self.assertAlmostEqual(pr, interp(x, self.soln_gen.x, self.soln_gen.p), places=12)
