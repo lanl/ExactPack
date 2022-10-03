@@ -547,15 +547,15 @@ class Test_Riemann1_modified(unittest.TestCase):
     problem = 'igeos'
     num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
  
-    self.soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-                                rl=rl, ul=ul, pl=pl, gl=gl,
-                                rr=rr, ur=ur, pr=pr, gr=gr)
-    self.soln_ig.driver()
+    soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                           rl=rl, ul=ul, pl=pl, gl=gl,
+                           rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_ig.driver()
 
-    self.soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-                                 rl=rl, ul=ul, pl=pl, gl=gl,
-                                 rr=rr, ur=ur, pr=pr, gr=gr)
-    self.soln_gen.driver()
+    soln_gen = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                            rl=rl, ul=ul, pl=pl, gl=gl,
+                            rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_gen.driver()
 
     # Test that star state values are computed correctly.
     pstar  = 0.4303319371967973
