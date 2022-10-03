@@ -182,3 +182,13 @@ References
    Chisnell, R.F.,
    An Analytic Description of Converging Shock Waves,
    J. Fluid Mech. 354, pp. 357-375 (1998).
+
+.. [Lieberman2019] 
+   Evan J. Lieberman, Xiaodong Liu, Nathaniel R. Morgan, Darby J. Luscher, and Donald E. Burton,
+   *A higher-order Lagrangian discontinuous Galerkin hydrodynamic method for solid dynamics*,
+   CMAME **353** (2019) 467-490.
+
+.. [Udaykumar2003] 
+   H.S. Udaykumar, L. Tran, D.M. Belk, and K.J. Vanden,
+   *An Eulerian method for computation of multimaterial impact with ENO shock-capturing and sharp interfaces*,
+   JCP **186** (2003) 136-177.
