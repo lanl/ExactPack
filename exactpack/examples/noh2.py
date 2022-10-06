@@ -1,9 +1,7 @@
 import numpy as np
-import matplotlib.pylab as plt
-
-from matplotlib import rc, rcParams
-rc('text',usetex=True)
-rc('font',**{'family':'serif','serif':['Computer Modern']})
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
 
 from exactpack.solvers.noh2 import Noh2, PlanarNoh2, CylindricalNoh2, SphericalNoh2
 from exactpack.solvers.noh2.noh2_cog import Noh2Cog
@@ -14,6 +12,7 @@ r = np.linspace(0.0, rmax, 10)
 t1 = 0.6
 
 #####################################################################
+fig = plt.figure(figsize=(10, 7))
 plt.subplot(211)
 solver = Noh2()
 soln1 = solver(r,t1)
@@ -41,12 +40,14 @@ plt.ylim(-50, 100)
 plt.xlim(0, rmax)
 plt.grid(True)
 plt.legend(loc=0)
+plt.tight_layout()
 plt.show()
 
 #####################################################################
 solver = SphericalNoh2()
 soln = solver(r,t1)
 
+fig = plt.figure(figsize=(10, 7))
 plt.title('Spherical Noh2')
 soln.plot('density')
 soln.plot('pressure')
@@ -56,6 +57,7 @@ plt.ylim(-50, 80)
 plt.xlim(0, rmax)
 plt.grid(True)
 plt.legend(loc=0)
+plt.tight_layout()
 plt.show()
 
 
@@ -63,6 +65,7 @@ plt.show()
 solver = CylindricalNoh2()
 soln = solver(r,t1)
 
+fig = plt.figure(figsize=(10, 7))
 plt.title('Cylindrical Noh2')
 soln.plot('density')
 soln.plot('pressure')
@@ -72,12 +75,14 @@ plt.ylim(-50, 20)
 plt.xlim(0, rmax)
 plt.grid(True)
 plt.legend(loc=0)
+plt.tight_layout()
 plt.show()
 
 #####################################################################
 solver = PlanarNoh2()
 soln = solver(r,t1)
 
+fig = plt.figure(figsize=(10, 7))
 plt.title('Planar Noh2')
 soln.plot('density')
 soln.plot('pressure')
@@ -87,4 +92,7 @@ plt.ylim(-50, 10)
 plt.xlim(0, rmax)
 plt.grid(True)
 plt.legend(loc=0)
+plt.tight_layout()
 plt.show()
+
+plt.close()
