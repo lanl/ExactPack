@@ -45,7 +45,8 @@ References
 
 .. [Ferguson2017]
    J. Ferguson, J. Morel and R. Lowrie
-   High Energy Density Physics, accepted for publication.
+   *The equilibrium-diffusion limit for radiation hydrodynamics*,
+   Journal of Quantitative Spectroscopy and Radiative Transfer, 202 (2017) 176-186
 
 .. [Fickett1974]
    W. Fickett and C. Rivard,
