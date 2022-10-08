@@ -3224,3 +3224,273 @@ class Test_Riemann6_reversed(unittest.TestCase):
 #         self.assertAlmostEqual(self.rr, rl, places=12)
 #         self.assertAlmostEqual(self.ur, ul, places=12)
 #         self.assertAlmostEqual(self.pr, pl, places=12)
+
+
+class Test_RiemannJWL_Shyue(unittest.TestCase):
+    """Tests generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on Shyue's JWL Riemann problem. See Shyue's 2001 JCP paper, Fluid Mixture Algorithm for Compressible Multicomponent flow with Mie Gruneisen Equation of State.
+    """
+
+    # Shyue's JWL Riemann Problem
+    xmin, xd0, xmax, t = 0.0, 50.0, 100.0, 12.0
+    rl, ul, pl, gl = 1.7, 0., 10.0, 1.25
+    rr, ur, pr, gr = 1.0, 0.,  0.5, 1.25
+    A, B, R1, R2, r0, e0  = 8.545, 0.205, 4.6, 1.35, 1.84, 0.0
+    problem = 'JWL'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                             rl=rl, ul=ul, pl=pl, gl=gl,
+                             rr=rr, ur=ur, pr=pr, gr=gr,
+                             A=A, B=B, R1=R1, R2=R2, r0=r0, e0=e0,
+                             problem='JWL')
+    soln_gen.driver()
+
+    # Test that star state values are computed correctly.
+    pstar  = 4.409360935472674
+    ustar1 = 1.6945593277042843
+    ustar2 = 1.6945593277033082
+    rstar1 = 0.8882712086127579
+    rstar2 = 3.7668623157768932
+    estar1 = 19.798338129896145
+    estar2 = 3.7296576856663672
+    astar1 = 2.4963291337873743
+    astar2 = 1.2954310985969357
+
+    # Test that spatial region boundaries are computed correctly.
+    # Xregs = Vregs * t + xd0
+    Xregs = array([17.17071528464863, 40.37876232700292,
+                   70.33471193245141, 77.68408853918551])
+    Vregs = array([-2.7357737262792807, -0.80176980608309,
+                    1.6945593277042843, 2.3070073782654594])
+
+    def test_riemShyuegen_star_states(self):
+        # Test that star state values are computed correctly.
+        self.assertAlmostEqual(self.pstar,  self.soln_gen.px,  places=12)
+        self.assertAlmostEqual(self.ustar1, self.soln_gen.ux1, places=12)
+        self.assertAlmostEqual(self.ustar2, self.soln_gen.ux2, places=12)
+        self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+        self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+        self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+        self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+        self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+        self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
+
+    def test_riemShyuegen_region_boundaries(self):
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+        self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+        self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+        self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+        self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+        self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+        self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+        self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
+
+    def test_riemShyuegen_state0(self):
+        # Test than any point in (xmin,Xregs[0]) returns left state values.
+#         x = diff([self.xmin, self.Xregs[0]])[0] * rand() + self.xmin
+        x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(self.rl, rl, places=12)
+        self.assertAlmostEqual(self.ul, ul, places=12)
+        self.assertAlmostEqual(self.pl, pl, places=12)
+
+#     def test_riemShyuegen_state1(self):
+#         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+# #         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+#         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+#                                       self.xd0, self.t, self.soln_gen)
+# 
+#         rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+#         ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+#         pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+#         self.assertAlmostEqual(r, rl, places=12)
+#         self.assertAlmostEqual(u, ul, places=12)
+#         self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riemShyuegen_state2(self):
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar1, self.rstar1
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, rl, places=12)
+        self.assertAlmostEqual(u, ul, places=12)
+        self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riemShyuegen_state3(self):
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+#         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+#                                       self.xd0, self.t, self.soln_gen)
+        p, u, r = self.pstar, self.ustar2, self.rstar2
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, rl, places=12)
+        self.assertAlmostEqual(u, ul, places=12)
+        self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riemShyuegen_state4(self):
+        # Test that any point in (Xregs[3],xmax) returns correct values.
+#         x = diff([self.Xregs[3], self.xmax])[0] * rand() + self.Xregs[3]
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(self.rr, rl, places=12)
+        self.assertAlmostEqual(self.ur, ul, places=12)
+        self.assertAlmostEqual(self.pr, pl, places=12)
+
+
+class Test_RiemannJWL_Lee(unittest.TestCase):
+    """Tests generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on Lee's JWL Riemann problem. See Lee's 2013 JCP paper, Adaptive Osher type scheme for the Euler Equations With Highly Nonlinear Equations of State.
+    """
+
+    # Lee's JWL Riemann Problem
+    xmin, xd0, xmax, t = 0.0, 50.0, 100.0, 20.0
+    rl, ul, pl, gl = 0.9525, 0., 1.0, 1.8938
+    rr, ur, pr, gr = 3.81,   0., 2.0, 1.8938
+    A, B, R1, R2, r0, e0  = 632.1, -0.04472, 11.3, 1.13, 1.905, 0.0
+    problem = 'JWL'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                             rl=rl, ul=ul, pl=pl, gl=gl,
+                             rr=rr, ur=ur, pr=pr, gr=gr,
+                             A=A, B=B, R1=R1, R2=R2, r0=r0, e0=e0,
+                             problem='JWL')
+    soln_gen.driver()
+
+    # Test that star state values are computed correctly.
+    pstar  = 1.1906972944417038
+    ustar1 = -0.13281939826625017
+    ustar2 = -0.1328193982662211
+    rstar1 = 1.0445383101056884
+    rstar2 = 3.5165512209201375
+    estar1 = 1.2812058376690656
+    estar2 = 0.008405040874636158
+    astar1 = 1.469701835538411
+    astar2 = 1.525557446779137
+
+    # Test that spatial region boundaries are computed correctly.
+    # Xregs = Vregs * t + xd0
+    Xregs = array([19.852754491950297, 47.343612034675,
+                   77.85476097025833, 85.80228712253455])
+    Vregs = array([-1.5073622754024851, -0.13281939826625017,
+                    1.392738048512916, 1.7901143561267274])
+
+    def test_riemLeegen_star_states(self):
+        # Test that star state values are computed correctly.
+        self.assertAlmostEqual(self.pstar,  self.soln_gen.px,  places=12)
+        self.assertAlmostEqual(self.ustar1, self.soln_gen.ux1, places=12)
+        self.assertAlmostEqual(self.ustar2, self.soln_gen.ux2, places=12)
+        self.assertAlmostEqual(self.rstar1, self.soln_gen.rx1, places=12)
+        self.assertAlmostEqual(self.rstar2, self.soln_gen.rx2, places=12)
+        self.assertAlmostEqual(self.estar1, self.soln_gen.ex1, places=12)
+        self.assertAlmostEqual(self.estar2, self.soln_gen.ex2, places=12)
+        self.assertAlmostEqual(self.astar1, self.soln_gen.ax1, places=12)
+        self.assertAlmostEqual(self.astar2, self.soln_gen.ax2, places=12)
+
+    def test_riemLeegen_region_boundaries(self):
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        self.assertAlmostEqual(self.Xregs[0], self.soln_gen.Xregs[0], places=12)
+        self.assertAlmostEqual(self.Xregs[1], self.soln_gen.Xregs[1], places=12)
+        self.assertAlmostEqual(self.Xregs[2], self.soln_gen.Xregs[2], places=12)
+        self.assertAlmostEqual(self.Xregs[3], self.soln_gen.Xregs[3], places=12)
+        self.assertAlmostEqual(self.Vregs[0], self.soln_gen.Vregs[0], places=12)
+        self.assertAlmostEqual(self.Vregs[1], self.soln_gen.Vregs[1], places=12)
+        self.assertAlmostEqual(self.Vregs[2], self.soln_gen.Vregs[2], places=12)
+        self.assertAlmostEqual(self.Vregs[3], self.soln_gen.Vregs[3], places=12)
+
+    def test_riemLeegen_state0(self):
+        # Test than any point in (xmin,Xregs[0]) returns left state values.
+#         x = diff([self.xmin, self.Xregs[0]])[0] * rand() + self.xmin
+        x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(self.rl, rl, places=12)
+        self.assertAlmostEqual(self.ul, ul, places=12)
+        self.assertAlmostEqual(self.pl, pl, places=12)
+
+    def test_riemLeegen_state1(self):
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+#         x = diff(self.Xregs[:2])[0] * rand() + self.Xregs[0]
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar1, self.rstar1
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, rl, places=12)
+        self.assertAlmostEqual(u, ul, places=12)
+        self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riemLeegen_state2(self):
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+#         x = diff(self.Xregs[1:3])[0] * rand() + self.Xregs[1]
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar2, self.rstar2
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(r, rl, places=12)
+        self.assertAlmostEqual(u, ul, places=12)
+        self.assertAlmostEqual(p, pl, places=12)
+
+#     def test_riemLeegen_state3(self):
+#         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+# #         x = diff(self.Xregs[2:])[0] * rand() + self.Xregs[2]
+#         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+#         _argmin = argmin(abs(self.soln_gen.x - x))
+#         x = self.soln_gen.x[_argmin]
+#         r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+#                                       self.xd0, self.t, self.soln_gen)
+# 
+#         rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+#         ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+#         pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+#         self.assertAlmostEqual(r, rl, places=12)
+#         self.assertAlmostEqual(u, ul, places=12)
+#         self.assertAlmostEqual(p, pl, places=12)
+
+    def test_riemLeegen_state4(self):
+        # Test that any point in (Xregs[3],xmax) returns correct values.
+#         x = diff([self.Xregs[3], self.xmax])[0] * rand() + self.Xregs[3]
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        self.assertAlmostEqual(self.rr, rl, places=12)
+        self.assertAlmostEqual(self.ur, ul, places=12)
+        self.assertAlmostEqual(self.pr, pl, places=12)
