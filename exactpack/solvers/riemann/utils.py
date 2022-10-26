@@ -108,7 +108,8 @@ def r_int_call(init_vals, fparams, pmin, self):
 # Shock state match conditions.
 def match_shocks(pmax, p, r, u, g, self):
   sgn = -1 if ((p == self.pl) and (r == self.rl) and (u == self.ul)) else 1
-  shock_array = linspace(p, pmax, self.num_int_pts + 2)[1:]
+  shock_array = linspace(p, pmax, self.num_int_pts + 2)
+  shock_array[0] = (shock_array[1] - shock_array[0]) * 1.e-8 + shock_array[0]
   rxs, rx0, rxf = [], (1. + self.int_tol) * r, (g + 1.) / (g - 1.) * r
   for px in shock_array:
     try:
