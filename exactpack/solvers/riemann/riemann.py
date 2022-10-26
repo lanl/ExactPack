@@ -1,4 +1,4 @@
-r"""A pure Python, analytic Riemann solver based on the 2013 paper by LorClavijo, et. al. [LoraClavijo2013]_, and reports by Jim Kamm [Kamm2014, Kamm2015]_.
+r"""A pure Python, analytic Riemann solver based on the 2013 paper by LoraClavijo, et. al. [LoraClavijo2013]_, and reports by Jim Kamm [Kamm2014, Kamm2015]_.
 """
 
 from scipy.optimize import bisect
