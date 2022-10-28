@@ -11,196 +11,312 @@ These same 10 are also defined below and run as part of this example script.
 
 # import standard python packages
 from matplotlib import pyplot as plt
-from matplotlib import rc, gridspec
-from importlib import reload
+from matplotlib import rc
+
+from numpy import linspace
 
 # import ExactPack solvers
-from exactpack.solvers.riemann.riemann import RiemannIGEOS, RiemannGenEOS
+from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver
 
-# pyplot default settings
-# rc('font', **{'family': 'serif', 'serif': ['Computer Modern'], 'size': 16})
-# rc('grid', c='0.5', ls='-', lw=0.5)
+xvec = linspace(0., 1., int(1e5))
+t_final = 0.25
 
 # Define the 10 Riemann problems 
 # The Sod shocktube problem solved using the ideal gas EOS (IGEOS) solver.
-riem1_ig = RiemannIGEOS(rl=1.0,   ul=0., pl=1.0, gl=1.4, xmin=0., xd0=0.5,
-                        rr=0.125, ur=0., pr=0.1, gr=1.4, xmax=1., t=0.25)
-riem1_ig.driver()
+riem1_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
+                             rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
+                             xmin=0.,  xd0=0.5, xmax=1., t=0.25)
+
+riem1_ig_result = riem1_ig_soln(xvec, t_final)
+
 
 # The Sod shocktube problem solved using the generalized EOS (GenEOS) solver.
-riem1_gen = RiemannGenEOS(rl=1.0,   ul=0., pl=1.0, gl=1.4, xmin=0., xd0=0.5,
-                          rr=0.125, ur=0., pr=0.1, gr=1.4, xmax=1., t=0.25)
-riem1_gen.driver()
+riem1_gen_soln = GenEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
+                               rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
+                               xmin=0.,  xd0=0.5, xmax=1., t=0.25)
+
+riem1_gen_result = riem1_gen_soln(xvec, t_final)
+
 
 # The Sod shocktube flipping the left & right states, using the IGEOS solver.
 # This problem is probably more relevant for checking that the analytic solution
-# and/or semi-analytic integrator works correctly.
-riem1Rev_ig = RiemannIGEOS(rr=1.0,   ur=0., pr=1.0, gr=1.4, xmin=0., xd0=0.5,
-                           rl=0.125, ul=0., pl=0.1, gl=1.4, xmax=1., t=0.25)
-riem1Rev_ig.driver()
+# works correctly.
+riem1Rev_ig_soln = IGEOS_Solver(rr=1.0,   ur=0.,   pr=1.0,  gr=1.4,
+                                rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                                xmin=0.,  xd0=0.5, xmax=1., t=0.25)
+
+riem1Rev_ig_result = riem1Rev_ig_soln(xvec, t_final)
+
 
 # The Sod shocktube flipping the left & right states, using the GenEOS solver.
-# This problem is probably more relevant for checking that the analytic solution
-# and/or semi-analytic integrator works correctly.
-riem1Rev_gen = RiemannGenEOS(rr=1.0,  ur=0.,pr=1.0, gr=1.4, xmin=0., xd0=0.5,
-                             rl=0.125,ul=0.,pl=0.1, gl=1.4, xmax=1., t=0.25)
-riem1Rev_gen.driver()
+# This problem is probably more relevant for checking that the semi-analytic
+# integrator works correctly.
+riem1Rev_gen_soln = GenEOS_Solver(rr=1.0,   ur=0.,   pr=1.0,  gr=1.4,
+                                  rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                                  xmin=0.,  xd0=0.5, xmax=1., t=0.25)
 
+riem1Rev_gen_result = riem1Rev_gen_soln(xvec, t_final)
+
+
+t_final = 0.2
 # The Sod shocktube with different gammas for the left & right states, using the
 # IGEOS solver.
-riem1Mod_ig = RiemannIGEOS(rl=1.0,   ul=0., pl=2.0, gl=2.0, xmin=0., xd0=0.5,
-                           rr=0.125, ur=0., pr=0.1, gr=1.4, xmax=1., t=0.2)
-riem1Mod_ig.driver()
+riem1Mod_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=2.0,  gl=2.0,
+                                rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
+                                xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+
+riem1Mod_ig_result = riem1Mod_ig_soln(xvec, t_final)
+
 
 # The Sod shocktube with different gammas for the left & right states, using the
 # GenEOS solver.
-riem1Mod_gen = RiemannGenEOS(rl=1.0,   ul=0., pl=2.0, gl=2.0, xmin=0., xd0=0.5,
-                             rr=0.125, ur=0., pr=0.1, gr=1.4, xmax=1., t=0.2)
-riem1Mod_gen.driver()
+riem1Mod_gen_soln = GenEOS_Solver(rl=1.0,    ul=0.,  pl=2.0,  gl=2.0,
+                                  rr=0.125,  ur=0.,  pr=0.1,  gr=1.4,
+                                  xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+
+riem1Mod_gen_result = riem1Mod_gen_soln(xvec, t_final)
+
 
 # The reversed Sod shocktube with different gammas for the left & right states,
 # using the IGEOS solver.
-riem1ModRev_ig = RiemannIGEOS(rr=1.0,   ur=0., pr=2.0, gr=2.0, xmin=0., xd0=0.5,
-                              rl=0.125, ul=0., pl=0.1, gl=1.4, xmax=1., t=0.2)
-riem1ModRev_ig.driver()
+riem1ModRev_ig_soln = IGEOS_Solver(rr=1.0,   ur=0.,   pr=2.0,  gr=2.0,
+                                   rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                                   xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+
+riem1ModRev_ig_result = riem1ModRev_ig_soln(xvec, t_final)
+
 
 # The reversed Sod shocktube with different gammas for the left & right states,
 # using the GenEOS solver.
-riem1ModRev_gen = RiemannGenEOS(rr=1.0,  ur=0.,pr=2.0, gr=2.0, xmin=0., xd0=0.5,
-                                rl=0.125,ul=0.,pl=0.1, gl=1.4, xmax=1., t=0.2)
-riem1ModRev_gen.driver()
+riem1ModRev_gen_soln=GenEOS_Solver(rr=1.0,   ur=0.,   pr=2.0,  gr=2.0,
+                                   rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                                   xmin=0.,  xd0=0.5, xmax=1., t=0.2)
 
+riem1ModRev_gen_result = riem1ModRev_gen_soln(xvec, t_final)
+
+
+t_final = 0.15
 # The Einfeldt problem solved using the IGEOS solver.
-riem2_ig = RiemannIGEOS(rl=1., ul=-2.0, pl=0.4, gl=1.4, xmin=0., xd0=0.5,
-                        rr=1., ur= 2.0, pr=0.4, gr=1.4, xmax=1., t=0.15)
-riem2_ig.driver()
+riem2_ig_soln = IGEOS_Solver(rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
+                             rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
+                             xmin=0., xd0=0.5, xmax=1., t=0.15)
+
+riem2_ig_result = riem2_ig_soln(xvec, t_final)
+
 
 # The reverse Einfeldt problem solved using the IGEOS solver.
-riem2Rev_ig = RiemannIGEOS(rr=1., ur= 2.0, pr=0.4, gr=1.4, xmin=0., xd0=0.5,
-                           rl=1., ul=-2.0, pl=0.4, gl=1.4, xmax=1., t=0.15)
-riem2Rev_ig.driver()
+riem2Rev_ig_soln = IGEOS_Solver(rr=1.,   ur=2.0,  pr=0.4,  gr=1.4,
+                                rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
+                                xmin=0., xd0=0.5, xmax=1., t=0.15)
+
+riem2Rev_ig_result = riem2Rev_ig_soln(xvec, t_final)
+
 
 # The Einfeldt problem solved using the GenEOS solver.
-riem2_gen = RiemannGenEOS(rl=1., ul=-2.0, pl=0.4, gl=1.4, xmin=0., xd0=0.5,
-                          rr=1., ur= 2.0, pr=0.4, gr=1.4, xmax=1., t=0.15)
-riem2_gen.driver()
+riem2_gen_soln = GenEOS_Solver(rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
+                               rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
+                               xmin=0., xd0=0.5, xmax=1., t=0.15)
+
+riem2_gen_result = riem2_gen_soln(xvec, t_final)
+
 
 # The reverse Einfeldt problem solved using the GenEOS solver.
-riem2Rev_gen = RiemannGenEOS(rr=1., ur= 2.0, pr=0.4, gr=1.4, xmin=0., xd0=0.5,
-                             rl=1., ul=-2.0, pl=0.4, gl=1.4, xmax=1., t=0.15)
-riem2Rev_gen.driver()
+riem2Rev_gen_soln = GenEOS_Solver(rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
+                                  rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
+                                  xmin=0., xd0=0.5, xmax=1., t=0.15)
 
+riem2Rev_gen_result = riem2Rev_gen_soln(xvec, t_final)
+
+
+t_final = 0.012
 # The Stationary Contact problem solved using the IGEOS solver.
-riem3_ig = RiemannIGEOS(rl=1.,ul=-19.59745,pl=1000.0,  gl=1.4, xmin=0., xd0=0.8,
-                        rr=1.,ur=-19.59745,pr=   0.01, gr=1.4, xmax=1., t=0.012)
-riem3_ig.driver()
+riem3_ig_soln=IGEOS_Solver(rl=1.,   ul=-19.59745, pl=1000.0,  gl=1.4,
+                           rr=1.,   ur=-19.59745, pr=   0.01, gr=1.4,
+                           xmin=0., xd0=0.8,      xmax=1.,    t=0.012)
+
+riem3_ig_result = riem3_ig_soln(xvec, t_final)
+
 
 # The reverse Stationary Contact problem solved using the IGEOS solver.
-riem3Rev_ig = RiemannIGEOS(rr=1.,ur=19.59745,pr=1000.0,  gr=1.4, xmin=0., xd0=0.2,
-                           rl=1.,ul=19.59745,pl=   0.01, gl=1.4, xmax=1., t=0.012)
-riem3Rev_ig.driver()
+riem3Rev_ig_soln=IGEOS_Solver(rr=1.,   ur=19.59745, pr=1000.0,  gr=1.4,
+                              rl=1.,   ul=19.59745, pl=   0.01, gl=1.4,
+                              xmin=0., xd0=0.2,     xmax=1.,    t=0.012)
+
+riem3Rev_ig_result = riem3Rev_ig_soln(xvec, t_final)
+
 
 # The Stationary Contact problem solved using the GenEOS solver.
-riem3_gen = RiemannGenEOS(rl=1.,ul=-19.59745,pl=1000.0, gl=1.4,xmin=0., xd0=0.8,
-                          rr=1.,ur=-19.59745,pr=   0.01,gr=1.4,xmax=1., t=0.012)
-riem3_gen.driver()
+riem3_gen_soln = GenEOS_Solver(rl=1.,   ul=-19.59745, pl=1000.0,  gl=1.4,
+                               rr=1.,   ur=-19.59745, pr=   0.01, gr=1.4,
+                               xmin=0., xd0=0.8,      xmax=1.,    t=0.012)
+
+riem3_gen_result = riem3_gen_soln(xvec, t_final)
+
 
 # The reverse Stationary Contact problem solved using the GenEOS solver.
-riem3Rev_gen = RiemannGenEOS(rr=1.,ur=19.59745,pr=1000.0,gr=1.4,xmin=0.,xd0=0.2,
-                             rl=1.,ul=19.59745,pl=  0.01,gl=1.4,xmax=1.,t=0.012)
-riem3Rev_gen.driver()
+riem3Rev_gen_soln = GenEOS_Solver(rr=1.,   ur=19.59745, pr=1000.0, gr=1.4,
+                                  rl=1.,   ul=19.59745, pl=  0.01, gl=1.4,
+                                  xmin=0., xd0=0.2,     xmax=1.,   t=0.012)
 
+riem3Rev_gen_result = riem3Rev_gen_soln(xvec, t_final)
+
+
+t_final = 1.
 # The Slow Shock problem solved using the IGEOS solver.
-riem4_ig = RiemannIGEOS(rl=3.857143,ul=-0.810631,pl=31./3.,gl=1.4, xmin=0.,xd0=0.5,
-                        rr=1.,      ur=-3.44,    pr=1.,    gr=1.4, xmax=1., t=1.)
-riem4_ig.driver()
+riem4_ig_soln = IGEOS_Solver(rl=3.857143, ul=-0.810631, pl=31./3., gl=1.4,
+                             rr=1.,       ur=-3.44,     pr=1.,     gr=1.4,
+                             xmin=0.,     xd0=0.5,      xmax=1.,   t=1.)
+
+riem4_ig_result = riem4_ig_soln(xvec, t_final)
+
 
 # The reverse Slow Shock problem solved using the IGEOS solver.
-riem4Rev_ig = RiemannIGEOS(rr=3.857143,ur=0.810631,pr=31./3.,gr=1.4, xmin=0.,xd0=0.5,
-                           rl=1.,      ul=3.44,    pl=1.,    gl=1.4, xmax=1., t=1.)
-riem4Rev_ig.driver()
+riem4Rev_ig_soln = IGEOS_Solver(rr=3.857143, ur=0.810631, pr=31./3., gr=1.4,
+                                rl=1.,       ul=3.44,     pl=1.,     gl=1.4,
+                                xmin=0.,     xd0=0.5,     xmax=1.,   t=1.)
+
+riem4Rev_ig_result = riem4Rev_ig_soln(xvec, t_final)
+
 
 # The Slow Shock problem solved using the GenEOS solver.
-riem4_gen = RiemannGenEOS(rl=3.857143,ul=-0.810631,pl=31./3.,gl=1.4,xmin=0.,xd0=0.5,
-                           rr=1.,      ur=-3.44,    pr=1.,    gr=1.4,xmax=1., t=1.)
-riem4_gen.driver()
+riem4_gen_soln = GenEOS_Solver(rl=3.857143, ul=-0.810631, pl=31./3., gl=1.4,
+                               rr=1.,       ur=-3.44,     pr=1.,     gr=1.4,
+                               xmin=0.,     xd0=0.5,      xmax=1.,   t=1.)
+
+riem4_gen_result = riem4_gen_soln(xvec, t_final)
+
 
 # The reverse Slow Shock problem solved using the GenEOS solver.
-riem4Rev_gen = RiemannGenEOS(rr=3.857143,ur=0.810631,pr=31./3.,gr=1.4,xmin=0.,xd0=0.5,
-                             rl=1.,      ul=3.44,    pl=1.,    gl=1.4, xmax=1., t=1.)
-riem4Rev_gen.driver()
+riem4Rev_gen_soln = GenEOS_Solver(rr=3.857143, ur=0.810631, pr=31./3., gr=1.4,
+                                  rl=1.,       ul=3.44,     pl=1.,     gl=1.4,
+                                  xmin=0.,     xd0=0.5,     xmax=1.,   t=1.)
 
+riem4Rev_gen_result = riem4Rev_gen_soln(xvec, t_final)
+
+
+t_final = 0.3
 # The Shock Contact Shock problem solved using the IGEOS solver.
-riem5_ig = RiemannIGEOS(rl=1.0,  ul= 0.5, pl=1., gl=1.4, xmin=0., xd0=0.5,
-                        rr=1.25, ur=-0.5, pr=1., gr=1.4, xmax=1., t=0.3)
-riem5_ig.driver()
+riem5_ig_soln = IGEOS_Solver(rl=1.0,  ul= 0.5, pl=1.,   gl=1.4,
+                             rr=1.25, ur=-0.5, pr=1.,   gr=1.4,
+                             xmin=0., xd0=0.5, xmax=1., t=0.3)
+
+riem5_ig_result = riem5_ig_soln(xvec, t_final)
+
 
 # The reversed Shock Contact Shock problem solved using the IGEOS solver.
-riem5Rev_ig = RiemannIGEOS(rr=1.0,  ur=-0.5, pr=1., gr=1.4, xmin=0., xd0=0.5,
-                           rl=1.25, ul= 0.5, pl=1., gl=1.4, xmax=1., t=0.3)
-riem5Rev_ig.driver()
+riem5Rev_ig_soln = IGEOS_Solver(rr=1.0,  ur=-0.5, pr=1.,   gr=1.4,
+                                rl=1.25, ul= 0.5, pl=1.,   gl=1.4,
+                                xmin=0., xd0=0.5, xmax=1., t=0.3)
+
+riem5Rev_ig_result = riem5Rev_ig_soln(xvec, t_final)
+
 
 # The Shock Contact Shock problem solved using the GenEOS solver.
-riem5_gen = RiemannGenEOS(rl=1.0,  ul= 0.5, pl=1., gl=1.4, xmin=0., xd0=0.5,
-                          rr=1.25, ur=-0.5, pr=1., gr=1.4, xmax=1., t=0.3)
-riem5_gen.driver()
+riem5_gen_soln = GenEOS_Solver(rl=1.0,  ul= 0.5, pl=1.,   gl=1.4,
+                               rr=1.25, ur=-0.5, pr=1.,   gr=1.4,
+                               xmin=0., xd0=0.5, xmax=1., t=0.3)
+
+riem5_gen_result = riem5_gen_soln(xvec, t_final)
+
 
 # The reversed Shock Contact Shock problem solved using the GenEOS solver.
-riem5Rev_gen = RiemannGenEOS(rr=1.0, ur=-0.5, pr=1., gr=1.4, xmin=0., xd0=0.5,
-                             rl=1.25,ul= 0.5, pl=1., gl=1.4, xmax=1., t=0.3)
-riem5Rev_gen.driver()
+riem5Rev_gen_soln = GenEOS_Solver(rr=1.0,  ur=-0.5, pr=1.,   gr=1.4,
+                                  rl=1.25, ul= 0.5, pl=1.,   gl=1.4,
+                                  xmin=0., xd0=0.5, xmax=1., t=0.3)
 
+riem5Rev_gen_result = riem5Rev_gen_soln(xvec, t_final)
+
+
+t_final = 0.5
 # The LeBlanc problem solved using the IGEOS solver.
-riem6_ig = RiemannIGEOS(rl=1.0, ul=0.,pl=1./15.,    gl=5./3., xmin=0.,xd0=0.3,
-                        rr=0.01,ur=0.,pr=2./(3.e10),gr=5./3., xmax=1., t=0.5)
-riem6_ig.driver()
+riem6_ig_soln = IGEOS_Solver(rl=1.0,  ul=0.,   pl=1./15.,     gl=5./3.,
+                             rr=0.01, ur=0.,   pr=2./(3.e10), gr=5./3.,
+                             xmin=0., xd0=0.3, xmax=1.,       t=0.5)
+
+riem6_ig_result = riem6_ig_soln(xvec, t_final)
+
 
 # The reversed LeBlanc problem solved using the IGEOS solver.
-riem6Rev_ig = RiemannIGEOS(rr=1.0, ur=0.,pr=1./15.,    gr=5./3., xmin=0.,xd0=0.7,
-                           rl=0.01,ul=0.,pl=2./(3.e10),gl=5./3., xmax=1., t=0.5)
-riem6Rev_ig.driver()
+riem6Rev_ig_soln = IGEOS_Solver(rr=1.0,  ur=0.,   pr=1./15.,     gr=5./3.,
+                                rl=0.01, ul=0.,   pl=2./(3.e10), gl=5./3.,
+                                xmin=0., xd0=0.7, xmax=1.,       t=0.5)
+
+riem6Rev_ig_result = riem6Rev_ig_soln(xvec, t_final)
+
 
 # The LeBlanc problem solved using the GenEOS solver.
-riem6_gen =RiemannGenEOS(rl=1.0, ul=0.,pl=2./3.*1.e-1, gl=5./3.,xmin=0.,xd0=0.3,
-                         rr=0.01,ur=0.,pr=2./3.*1.e-10,gr=5./3.,xmax=1., t=0.5)
-riem6_gen.driver()
+riem6_gen_soln = GenEOS_Solver(rl=1.0,  ul=0.,   pl=1./15.,     gl=5./3.,
+                               rr=0.01, ur=0.,   pr=2./(3.e10), gr=5./3.,
+                               xmin=0., xd0=0.3, xmax=1.,       t=0.5)
+ 
+riem6_gen_result = riem6_gen_soln(xvec, t_final)
+
 
 # The reversed LeBlanc problem solved using the GenEOS solver.
-riem6Rev_gen = RiemannGenEOS(rr=1.0,ur=0.,pr=1./15.,   gr=5./3.,xmin=0.,xd0=0.7,
-                             rl=0.01,ul=0.,pl=2./(3.e10),gl=5./3.,xmax=1.,t=0.5)
-riem6Rev_gen.driver()
+riem6Rev_gen_soln = GenEOS_Solver(rr=1.0,  ur=0.,   pr=1./15.,      gr=5./3.,
+                                  rl=0.01, ul=0.,   pl=2./(3.e10) , gl=5./3.,
+                                  xmin=0., xd0=0.7, xmax=1.,        t=0.5)
 
+riem6Rev_gen_result = riem6Rev_gen_soln(xvec, t_final)
+
+
+t_final = 20.
+xvec = linspace(0., 100., int(1e5))
 # The Lee JWL shocktube problem solved using the GenEOS solver.
-riem_Lee = RiemannGenEOS(rl=0.9525, ul=0., pl=1., gl=1.8938, xmin=0., xd0=50.,
-                         rr=3.81,   ur=0., pr=2., gr=1.8938, xmax=100., t=20.,
-                         A=632.1, B=-0.04472, R1=11.3, R2=1.13, r0=1.905, e0=0.,
-                         problem='JWL')
-riem_Lee.driver()
+riem_Lee_soln = GenEOS_Solver(rl=0.9525, ul=0.,   pl=1.,     gl=1.8938,
+                              rr=3.81,   ur=0.,   pr=2.,     gr=1.8938,
+                              xmin=0.,   xd0=50., xmax=100., t=20.,
+                              A=632.1,   B=-0.04472,
+                              R1=11.3,   R2=1.13,
+                              r0=1.905,  e0=0.,
+                              problem='JWL')
+
+riem_Lee_result = riem_Lee_soln(xvec, t_final)
+
 
 # The Lee JWL shocktube problem reversed solved using the GenEOS solver.
-riem_LeeRev = RiemannGenEOS(rr=0.9525,ur=0., pr=1., gr=1.8938, xmin=0., xd0=50.,
-                            rl=3.81,  ul=0., pl=2., gl=1.8938, xmax=100., t=20.,
-                            A=632.1,B=-0.04472,R1=11.3,R2=1.13, r0=1.905, e0=0.,
-                            problem='JWL')
-riem_LeeRev.driver()
+riem_LeeRev_soln = GenEOS_Solver(rr=0.9525, ur=0.,   pr=1.,     gr=1.8938,
+                                 rl=3.81,   ul=0.,   pl=2.,     gl=1.8938,
+                                 xmin=0.,   xd0=50., xmax=100., t=20.,
+                                 A=632.1,   B=-0.04472,
+                                 R1=11.3,   R2=1.13,
+                                 r0=1.905,  e0=0.,
+                                 problem='JWL')
 
+riem_LeeRev_result = riem_LeeRev_soln(xvec, t_final)
+
+
+t_final = 12.
 # The Shyue JWL shocktube problem solved using the GenEOS solver.
-riem_Shyue = RiemannGenEOS(rl=1.7, ul=0., pl=10.0, gl=1.25, xmin=0.,   xd0=50.,
-                           rr=1.0, ur=0., pr= 0.5, gr=1.25, xmax=100., t=12.,
-                           A=8.545, B=0.205, R1=4.6, R2=1.35, r0=1.84, e0=0.,
-                           problem='JWL')
-riem_Shyue.driver()
+riem_Shyue_soln = GenEOS_Solver(rl=1.7,  ul=0.,   pl=10.0,   gl=1.25,
+                                rr=1.0,  ur=0.,   pr= 0.5,   gr=1.25,
+                                xmin=0., xd0=50., xmax=100., t=12.,
+                                A=8.545, B=0.205,
+                                R1=4.6,  R2=1.35,
+                                r0=1.84, e0=0.,
+                                problem='JWL')
+
+riem_Shyue_result = riem_Shyue_soln(xvec, t_final)
+
 
 # The Shyue JWL shocktube problem reversed solved using the GenEOS solver.
-riem_ShyueRev = RiemannGenEOS(rr=1.7,ur=0.,pr=10.0, gr=1.25, xmin=0.,   xd0=50.,
-                              rl=1.0,ul=0.,pl= 0.5, gl=1.25, xmax=100., t=12.,
-                              A=8.545, B=0.205, R1=4.6, R2=1.35, r0=1.84, e0=0.,
-                              problem='JWL')
-riem_ShyueRev.driver()
+riem_ShyueRev_soln = GenEOS_Solver(rr=1.7,  ur=0.,   pr=10.0,   gr=1.25,
+                                   rl=1.0,  ul=0.,   pl= 0.5,   gl=1.25,
+                                   xmin=0., xd0=50., xmax=100., t=12.,
+                                   A=8.545, B=0.205,
+                                   R1=4.6,  R2=1.35,
+                                   r0=1.84, e0=0.,
+                                   problem='JWL')
+
+riem_ShyueRev_result = riem_ShyueRev_soln(xvec, t_final)
+
 
 fig = plt.figure(figsize=(10,7))
-x1_ig, u1_ig, p1_ig, r1_ig, e1_ig = riem1_ig.x, riem1_ig.u, riem1_ig.p, riem1_ig.r, riem1_ig.e
-# plt.subplot(gs[0,0])
+x1_ig = riem1_ig_result['position']
+u1_ig = riem1_ig_result['velocity']
+p1_ig = riem1_ig_result['pressure']
+r1_ig = riem1_ig_result['density']
+e1_ig = riem1_ig_result['sie']
 plt.plot(x1_ig, u1_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1_ig, p1_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1_ig, r1_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -217,8 +333,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1_gen, u1_gen, p1_gen, r1_gen, e1_gen = riem1_gen.x, riem1_gen.u, riem1_gen.p, riem1_gen.r, riem1_gen.e
-# plt.subplot(gs[0,0])
+x1_gen = riem1_gen_result['position']
+u1_gen = riem1_gen_result['velocity']
+p1_gen = riem1_gen_result['pressure']
+r1_gen = riem1_gen_result['density']
+e1_gen = riem1_gen_result['sie']
 plt.plot(x1_gen, u1_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1_gen, p1_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1_gen, r1_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -235,8 +354,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1Rev_ig, u1Rev_ig, p1Rev_ig, r1Rev_ig, e1Rev_ig = riem1Rev_ig.x, riem1Rev_ig.u, riem1Rev_ig.p, riem1Rev_ig.r, riem1Rev_ig.e
-# plt.subplot(gs[0,1])
+x1Rev_ig = riem1Rev_ig_result['position']
+u1Rev_ig = riem1Rev_ig_result['velocity']
+p1Rev_ig = riem1Rev_ig_result['pressure']
+r1Rev_ig = riem1Rev_ig_result['density']
+e1Rev_ig = riem1Rev_ig_result['sie']
 plt.plot(x1Rev_ig, u1Rev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1Rev_ig, p1Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1Rev_ig, r1Rev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -253,8 +375,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1Rev_gen, u1Rev_gen, p1Rev_gen, r1Rev_gen, e1Rev_gen = riem1Rev_gen.x, riem1Rev_gen.u, riem1Rev_gen.p, riem1Rev_gen.r, riem1Rev_gen.e
-# plt.subplot(gs[0,1])
+x1Rev_gen = riem1Rev_gen_result['position']
+u1Rev_gen = riem1Rev_gen_result['velocity']
+p1Rev_gen = riem1Rev_gen_result['pressure']
+r1Rev_gen = riem1Rev_gen_result['density']
+e1Rev_gen = riem1Rev_gen_result['sie']
 plt.plot(x1Rev_gen, u1Rev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1Rev_gen, p1Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1Rev_gen, r1Rev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -271,8 +396,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1Mod_ig, u1Mod_ig, p1Mod_ig, r1Mod_ig, e1Mod_ig = riem1Mod_ig.x, riem1Mod_ig.u, riem1Mod_ig.p, riem1Mod_ig.r, riem1Mod_ig.e
-# plt.subplot(gs[1,0])
+x1Mod_ig = riem1Mod_ig_result['position']
+u1Mod_ig = riem1Mod_ig_result['velocity']
+p1Mod_ig = riem1Mod_ig_result['pressure']
+r1Mod_ig = riem1Mod_ig_result['density']
+e1Mod_ig = riem1Mod_ig_result['sie']
 plt.plot(x1Mod_ig, u1Mod_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1Mod_ig, p1Mod_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1Mod_ig, r1Mod_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -289,8 +417,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1Mod_gen, u1Mod_gen, p1Mod_gen, r1Mod_gen, e1Mod_gen = riem1Mod_gen.x, riem1Mod_gen.u, riem1Mod_gen.p, riem1Mod_gen.r, riem1Mod_gen.e
-# plt.subplot(gs[1,0])
+x1Mod_gen = riem1Mod_gen_result['position']
+u1Mod_gen = riem1Mod_gen_result['velocity']
+p1Mod_gen = riem1Mod_gen_result['pressure']
+r1Mod_gen = riem1Mod_gen_result['density']
+e1Mod_gen = riem1Mod_gen_result['sie']
 plt.plot(x1Mod_gen, u1Mod_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1Mod_gen, p1Mod_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1Mod_gen, r1Mod_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -307,8 +438,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1ModRev_ig, u1ModRev_ig, p1ModRev_ig, r1ModRev_ig, e1ModRev_ig = riem1ModRev_ig.x, riem1ModRev_ig.u, riem1ModRev_ig.p, riem1ModRev_ig.r, riem1ModRev_ig.e
-# plt.subplot(gs[1,0])
+x1ModRev_ig = riem1ModRev_ig_result['position']
+u1ModRev_ig = riem1ModRev_ig_result['velocity']
+p1ModRev_ig = riem1ModRev_ig_result['pressure']
+r1ModRev_ig = riem1ModRev_ig_result['density']
+e1ModRev_ig = riem1ModRev_ig_result['sie']
 plt.plot(x1ModRev_ig, u1ModRev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1ModRev_ig, p1ModRev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1ModRev_ig, r1ModRev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -325,8 +459,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x1ModRev_gen, u1ModRev_gen, p1ModRev_gen, r1ModRev_gen, e1ModRev_gen = riem1ModRev_gen.x, riem1ModRev_gen.u, riem1ModRev_gen.p, riem1ModRev_gen.r, riem1ModRev_gen.e
-# plt.subplot(gs[1,0])
+x1ModRev_gen = riem1ModRev_gen_result['position']
+u1ModRev_gen = riem1ModRev_gen_result['velocity']
+p1ModRev_gen = riem1ModRev_gen_result['pressure']
+r1ModRev_gen = riem1ModRev_gen_result['density']
+e1ModRev_gen = riem1ModRev_gen_result['sie']
 plt.plot(x1ModRev_gen, u1ModRev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x1ModRev_gen, p1ModRev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x1ModRev_gen, r1ModRev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -343,8 +480,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x2_ig, u2_ig, p2_ig, r2_ig, e2_ig = riem2_ig.x, riem2_ig.u, riem2_ig.p, riem2_ig.r, riem2_ig.e
-# plt.subplot(gs[1,1])
+x2_ig = riem2_ig_result['position']
+u2_ig = riem2_ig_result['velocity']
+p2_ig = riem2_ig_result['pressure']
+r2_ig = riem2_ig_result['density']
+e2_ig = riem2_ig_result['sie']
 plt.plot(x2_ig, u2_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x2_ig, p2_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x2_ig, r2_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -361,8 +501,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x2_gen, u2_gen, p2_gen, r2_gen, e2_gen = riem2_gen.x, riem2_gen.u, riem2_gen.p, riem2_gen.r, riem2_gen.e
-# plt.subplot(gs[1,1])
+x2_gen = riem2_gen_result['position']
+u2_gen = riem2_gen_result['velocity']
+p2_gen = riem2_gen_result['pressure']
+r2_gen = riem2_gen_result['density']
+e2_gen = riem2_gen_result['sie']
 plt.plot(x2_gen, u2_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x2_gen, p2_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x2_gen, r2_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -379,8 +522,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x2Rev_ig, u2Rev_ig, p2Rev_ig, r2Rev_ig, e2Rev_ig = riem2Rev_ig.x, riem2Rev_ig.u, riem2Rev_ig.p, riem2Rev_ig.r, riem2Rev_ig.e
-# plt.subplot(gs[1,1])
+x2Rev_ig = riem2Rev_ig_result['position']
+u2Rev_ig = riem2Rev_ig_result['velocity']
+p2Rev_ig = riem2Rev_ig_result['pressure']
+r2Rev_ig = riem2Rev_ig_result['density']
+e2Rev_ig = riem2Rev_ig_result['sie']
 plt.plot(x2Rev_ig, u2Rev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x2Rev_ig, p2Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x2Rev_ig, r2Rev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -397,8 +543,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x2Rev_gen, u2Rev_gen, p2Rev_gen, r2Rev_gen, e2Rev_gen = riem2Rev_gen.x, riem2Rev_gen.u, riem2Rev_gen.p, riem2Rev_gen.r, riem2Rev_gen.e
-# plt.subplot(gs[1,1])
+x2Rev_gen = riem2Rev_gen_result['position']
+u2Rev_gen = riem2Rev_gen_result['velocity']
+p2Rev_gen = riem2Rev_gen_result['pressure']
+r2Rev_gen = riem2Rev_gen_result['density']
+e2Rev_gen = riem2Rev_gen_result['sie']
 plt.plot(x2Rev_gen, u2Rev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x2Rev_gen, p2Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x2Rev_gen, r2Rev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -415,8 +564,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x3_ig, u3_ig, p3_ig, r3_ig, e3_ig = riem3_ig.x, riem3_ig.u, riem3_ig.p, riem3_ig.r, riem3_ig.e
-# plt.subplot(gs[2,0])
+x3_ig = riem3_ig_result['position']
+u3_ig = riem3_ig_result['velocity']
+p3_ig = riem3_ig_result['pressure']
+r3_ig = riem3_ig_result['density']
+e3_ig = riem3_ig_result['sie']
 plt.plot(x3_ig, u3_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x3_ig, p3_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x3_ig, r3_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -433,8 +585,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x3_gen, u3_gen, p3_gen, r3_gen, e3_gen = riem3_gen.x, riem3_gen.u, riem3_gen.p, riem3_gen.r, riem3_gen.e
-# plt.subplot(gs[2,0])
+x3_gen = riem3_gen_result['position']
+u3_gen = riem3_gen_result['velocity']
+p3_gen = riem3_gen_result['pressure']
+r3_gen = riem3_gen_result['density']
+e3_gen = riem3_gen_result['sie']
 plt.plot(x3_gen, u3_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x3_gen, p3_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x3_gen, r3_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -451,8 +606,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x3Rev_ig, u3Rev_ig, p3Rev_ig, r3Rev_ig, e3Rev_ig = riem3Rev_ig.x, riem3Rev_ig.u, riem3Rev_ig.p, riem3Rev_ig.r, riem3Rev_ig.e
-# plt.subplot(gs[2,0])
+x3Rev_ig = riem3Rev_ig_result['position']
+u3Rev_ig = riem3Rev_ig_result['velocity']
+p3Rev_ig = riem3Rev_ig_result['pressure']
+r3Rev_ig = riem3Rev_ig_result['density']
+e3Rev_ig = riem3Rev_ig_result['sie']
 plt.plot(x3Rev_ig, u3Rev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x3Rev_ig, p3Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x3Rev_ig, r3Rev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -469,8 +627,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x3Rev_gen, u3Rev_gen, p3Rev_gen, r3Rev_gen, e3Rev_gen = riem3Rev_gen.x, riem3Rev_gen.u, riem3Rev_gen.p, riem3Rev_gen.r, riem3Rev_gen.e
-# plt.subplot(gs[2,0])
+x3Rev_gen = riem3Rev_gen_result['position']
+u3Rev_gen = riem3Rev_gen_result['velocity']
+p3Rev_gen = riem3Rev_gen_result['pressure']
+r3Rev_gen = riem3Rev_gen_result['density']
+e3Rev_gen = riem3Rev_gen_result['sie']
 plt.plot(x3Rev_gen, u3Rev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x3Rev_gen, p3Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x3Rev_gen, r3Rev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -487,8 +648,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x4_ig, u4_ig, p4_ig, r4_ig, e4_ig = riem4_ig.x, riem4_ig.u, riem4_ig.p, riem4_ig.r, riem4_ig.e
-# plt.subplot(gs[2,1])
+x4_ig = riem4_ig_result['position']
+u4_ig = riem4_ig_result['velocity']
+p4_ig = riem4_ig_result['pressure']
+r4_ig = riem4_ig_result['density']
+e4_ig = riem4_ig_result['sie']
 plt.plot(x4_ig, u4_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x4_ig, p4_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x4_ig, r4_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -505,8 +669,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x4_gen, u4_gen, p4_gen, r4_gen, e4_gen = riem4_gen.x, riem4_gen.u, riem4_gen.p, riem4_gen.r, riem4_gen.e
-# plt.subplot(gs[2,1])
+x4_gen = riem4_gen_result['position']
+u4_gen = riem4_gen_result['velocity']
+p4_gen = riem4_gen_result['pressure']
+r4_gen = riem4_gen_result['density']
+e4_gen = riem4_gen_result['sie']
 plt.plot(x4_gen, u4_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x4_gen, p4_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x4_gen, r4_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -523,8 +690,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x4Rev_ig, u4Rev_ig, p4Rev_ig, r4Rev_ig, e4Rev_ig = riem4Rev_ig.x, riem4Rev_ig.u, riem4Rev_ig.p, riem4Rev_ig.r, riem4Rev_ig.e
-# plt.subplot(gs[2,1])
+x4Rev_ig = riem4Rev_ig_result['position']
+u4Rev_ig = riem4Rev_ig_result['velocity']
+p4Rev_ig = riem4Rev_ig_result['pressure']
+r4Rev_ig = riem4Rev_ig_result['density']
+e4Rev_ig = riem4Rev_ig_result['sie']
 plt.plot(x4Rev_ig, u4Rev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x4Rev_ig, p4Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x4Rev_ig, r4Rev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -541,8 +711,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x4Rev_gen, u4Rev_gen, p4Rev_gen, r4Rev_gen, e4Rev_gen = riem4Rev_gen.x, riem4Rev_gen.u, riem4Rev_gen.p, riem4Rev_gen.r, riem4Rev_gen.e
-# plt.subplot(gs[2,1])
+x4Rev_gen = riem4Rev_gen_result['position']
+u4Rev_gen = riem4Rev_gen_result['velocity']
+p4Rev_gen = riem4Rev_gen_result['pressure']
+r4Rev_gen = riem4Rev_gen_result['density']
+e4Rev_gen = riem4Rev_gen_result['sie']
 plt.plot(x4Rev_gen, u4Rev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x4Rev_gen, p4Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x4Rev_gen, r4Rev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -559,8 +732,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x5_ig, u5_ig, p5_ig, r5_ig, e5_ig = riem5_ig.x, riem5_ig.u, riem5_ig.p, riem5_ig.r, riem5_ig.e
-# plt.subplot(gs[3,0])
+x5_ig = riem5_ig_result['position']
+u5_ig = riem5_ig_result['velocity']
+p5_ig = riem5_ig_result['pressure']
+r5_ig = riem5_ig_result['density']
+e5_ig = riem5_ig_result['sie']
 plt.plot(x5_ig, u5_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x5_ig, p5_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x5_ig, r5_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -577,8 +753,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x5_gen, u5_gen, p5_gen, r5_gen, e5_gen = riem5_gen.x, riem5_gen.u, riem5_gen.p, riem5_gen.r, riem5_gen.e
-# plt.subplot(gs[3,0])
+x5_gen = riem5_gen_result['position']
+u5_gen = riem5_gen_result['velocity']
+p5_gen = riem5_gen_result['pressure']
+r5_gen = riem5_gen_result['density']
+e5_gen = riem5_gen_result['sie']
 plt.plot(x5_gen, u5_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x5_gen, p5_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x5_gen, r5_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -595,8 +774,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x5Rev_ig, u5Rev_ig, p5Rev_ig, r5Rev_ig, e5Rev_ig = riem5Rev_ig.x, riem5Rev_ig.u, riem5Rev_ig.p, riem5Rev_ig.r, riem5Rev_ig.e
-# plt.subplot(gs[3,0])
+x5Rev_ig = riem5Rev_ig_result['position']
+u5Rev_ig = riem5Rev_ig_result['velocity']
+p5Rev_ig = riem5Rev_ig_result['pressure']
+r5Rev_ig = riem5Rev_ig_result['density']
+e5Rev_ig = riem5Rev_ig_result['sie']
 plt.plot(x5Rev_ig, u5Rev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x5Rev_ig, p5Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x5Rev_ig, r5Rev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -613,8 +795,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x5Rev_gen, u5Rev_gen, p5Rev_gen, r5Rev_gen, e5Rev_gen = riem5Rev_gen.x, riem5Rev_gen.u, riem5Rev_gen.p, riem5Rev_gen.r, riem5Rev_gen.e
-# plt.subplot(gs[3,0])
+x5Rev_gen = riem5Rev_gen_result['position']
+u5Rev_gen = riem5Rev_gen_result['velocity']
+p5Rev_gen = riem5Rev_gen_result['pressure']
+r5Rev_gen = riem5Rev_gen_result['density']
+e5Rev_gen = riem5Rev_gen_result['sie']
 plt.plot(x5Rev_gen, u5Rev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x5Rev_gen, p5Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x5Rev_gen, r5Rev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -631,8 +816,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x6_ig, u6_ig, p6_ig, r6_ig, e6_ig = riem6_ig.x, riem6_ig.u, riem6_ig.p, riem6_ig.r, riem6_ig.e
-# plt.subplot(gs[3,1])
+x6_ig = riem6_ig_result['position']
+u6_ig = riem6_ig_result['velocity']
+p6_ig = riem6_ig_result['pressure']
+r6_ig = riem6_ig_result['density']
+e6_ig = riem6_ig_result['sie']
 plt.plot(x6_ig, u6_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x6_ig, p6_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x6_ig, r6_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -649,8 +837,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x6_gen, u6_gen, p6_gen, r6_gen, e6_gen = riem6_gen.x, riem6_gen.u, riem6_gen.p, riem6_gen.r, riem6_gen.e
-# plt.subplot(gs[3,1])
+x6_gen = riem6_gen_result['position']
+u6_gen = riem6_gen_result['velocity']
+p6_gen = riem6_gen_result['pressure']
+r6_gen = riem6_gen_result['density']
+e6_gen = riem6_gen_result['sie']
 plt.plot(x6_gen, u6_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x6_gen, p6_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x6_gen, r6_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -667,8 +858,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x6Rev_ig, u6Rev_ig, p6Rev_ig, r6Rev_ig, e6Rev_ig = riem6Rev_ig.x, riem6Rev_ig.u, riem6Rev_ig.p, riem6Rev_ig.r, riem6Rev_ig.e
-# plt.subplot(gs[3,1])
+x6Rev_ig = riem6Rev_ig_result['position']
+u6Rev_ig = riem6Rev_ig_result['velocity']
+p6Rev_ig = riem6Rev_ig_result['pressure']
+r6Rev_ig = riem6Rev_ig_result['density']
+e6Rev_ig = riem6Rev_ig_result['sie']
 plt.plot(x6Rev_ig, u6Rev_ig, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x6Rev_ig, p6Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x6Rev_ig, r6Rev_ig, 'b', label=r'Density [$g/cm^3$]')
@@ -685,8 +879,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x6Rev_gen, u6Rev_gen, p6Rev_gen, r6Rev_gen, e6Rev_gen = riem6Rev_gen.x, riem6Rev_gen.u, riem6Rev_gen.p, riem6Rev_gen.r, riem6Rev_gen.e
-# plt.subplot(gs[3,1])
+x6Rev_gen = riem6Rev_gen_result['position']
+u6Rev_gen = riem6Rev_gen_result['velocity']
+p6Rev_gen = riem6Rev_gen_result['pressure']
+r6Rev_gen = riem6Rev_gen_result['density']
+e6Rev_gen = riem6Rev_gen_result['sie']
 plt.plot(x6Rev_gen, u6Rev_gen, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x6Rev_gen, p6Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x6Rev_gen, r6Rev_gen, 'b', label=r'Density [$g/cm^3$]')
@@ -703,8 +900,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x_Lee, u_Lee, p_Lee, r_Lee, e_Lee = riem_Lee.x, riem_Lee.u, riem_Lee.p, riem_Lee.r, riem_Lee.e
-# plt.subplot(gs[4,0])
+x_Lee = riem_Lee_result['position']
+u_Lee = riem_Lee_result['velocity']
+p_Lee = riem_Lee_result['pressure']
+r_Lee = riem_Lee_result['density']
+e_Lee = riem_Lee_result['sie']
 plt.plot(x_Lee, u_Lee, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x_Lee, p_Lee, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x_Lee, r_Lee, 'b', label=r'Density [$g/cm^3$]')
@@ -720,8 +920,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x_LeeRev, u_LeeRev, p_LeeRev, r_LeeRev, e_LeeRev = riem_LeeRev.x, riem_LeeRev.u, riem_LeeRev.p, riem_LeeRev.r, riem_LeeRev.e
-# plt.subplot(gs[4,0])
+x_LeeRev = riem_LeeRev_result['position']
+u_LeeRev = riem_LeeRev_result['velocity']
+p_LeeRev = riem_LeeRev_result['pressure']
+r_LeeRev = riem_LeeRev_result['density']
+e_LeeRev = riem_LeeRev_result['sie']
 plt.plot(x_LeeRev, u_LeeRev, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x_LeeRev, p_LeeRev, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x_LeeRev, r_LeeRev, 'b', label=r'Density [$g/cm^3$]')
@@ -737,8 +940,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x_Shyue, u_Shyue, p_Shyue, r_Shyue, e_Shyue = riem_Shyue.x, riem_Shyue.u, riem_Shyue.p, riem_Shyue.r, riem_Shyue.e
-# plt.subplot(gs[4,1])
+x_Shyue = riem_Shyue_result['position']
+u_Shyue = riem_Shyue_result['velocity']
+p_Shyue = riem_Shyue_result['pressure']
+r_Shyue = riem_Shyue_result['density']
+e_Shyue = riem_Shyue_result['sie']
 plt.plot(x_Shyue, u_Shyue, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x_Shyue, p_Shyue, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x_Shyue, r_Shyue, 'b', label=r'Density [$g/cm^3$]')
@@ -754,8 +960,11 @@ plt.show()
 
 
 fig = plt.figure(figsize=(10,7))
-x_ShyueRev, u_ShyueRev, p_ShyueRev, r_ShyueRev, e_ShyueRev = riem_ShyueRev.x, riem_ShyueRev.u, riem_ShyueRev.p, riem_ShyueRev.r, riem_ShyueRev.e
-# plt.subplot(gs[4,1])
+x_ShyueRev = riem_ShyueRev_result['position']
+u_ShyueRev = riem_ShyueRev_result['velocity']
+p_ShyueRev = riem_ShyueRev_result['pressure']
+r_ShyueRev = riem_ShyueRev_result['density']
+e_ShyueRev = riem_ShyueRev_result['sie']
 plt.plot(x_ShyueRev, u_ShyueRev, 'r', label=r'Velocity [$cm/s$]')
 plt.plot(x_ShyueRev, p_ShyueRev, 'g', label=r'Pressure [$dyn/cm^2$]')
 plt.plot(x_ShyueRev, r_ShyueRev, 'b', label=r'Density [$g/cm^3$]')

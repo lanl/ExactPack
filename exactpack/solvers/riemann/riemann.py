@@ -6,6 +6,16 @@ from numpy import linspace, array, sqrt, interp, append, where, argmin
 
 from exactpack.solvers.riemann.utils import *
 
+# TOC:
+# SetupRiemannProbklem(object):
+#   def __init__(self, various variables)
+#
+# RiemannIGEOS(SetupRiemannProblem)
+#   def driver(self)
+#
+# RiemannGenEOS(SetupRiemannProblem)
+#   def driver(self)
+
 class SetupRiemannProblem(object):
   """ Defines: \\
       1) the 6 classical Riemann problems for an ideal-gas EOS, as well as 1 reversed shocktube problem, and 1 modified Sod shocktube problem; and \\
@@ -15,14 +25,50 @@ class SetupRiemannProblem(object):
                rl=1., ul=0., pl=1., gl=1.4, rr=0.125, ur=0., pr=0.1, gr=1.4,
                A=0., B=0., R1=0., R2=0., r0=0., e0=0., problem='igeos',
                num_int_pts=10001, num_x_pts = 10001, int_tol=1.e-12):
-      self.problem = problem
+#: At t=0, the left-most x-position.
+      self.xmin = xmin
+#: At t=0, the location of the membrane separating the left and right states.
+      self.xd0 = xd0
+#: At t=0, the right-most x-position.
+      self.xmax = xmax
+#: The end-time.
+      self.t = t
+#: The left-state initial pressure.
+      self.pl = pl
+#: The left-state initial density.
+      self.rl = rl
+#: The left-state initial velocity.
+      self.ul = ul
+#: The left-state adiabatic index.
+      self.gl = gl
+#: The right-state initial pressure.
+      self.pr = pr
+#: The right-state initial density.
+      self.rr = rr
+#: The right-state initial velocity.
+      self.ur = ur
+#: The right-state adiabatic index.
+      self.gr = gr
+#: For a JWL EOS, the variable A.
+      self.A = A
+#: For a JWL EOS, the variable B.
+      self.B = B
+#: For a JWL EOS, the variable R1.
+      self.R1 = R1
+#: For a JWL EOS, the variable R2.
+      self.R2 = R2
+#: For a JWL EOS, the variable r0.
+      self.r0 = r0
+#: For a JWL EOS, the variable e0.
+      self.e0 = e0
+#: The number of points in the spatial array.
       self.num_x_pts = num_x_pts
+#: The number of integration points across a rarefaction state.
       self.num_int_pts = num_int_pts
+#: The integration tolerance for integrating across a rarefaction.
       self.int_tol = int_tol
-      self.xmin, self.xd0, self.xmax, self.t = xmin, xd0, xmax, t
-      self.pl, self.rl, self.ul, self.gl = pl, rl, ul, gl
-      self.pr, self.rr, self.ur, self.gr = pr, rr, ur, gr
-      self.A, self.B, self.R1, self.R2, self.r0, self.e0 = A, B, R1, R2, r0, e0
+#: Flag/switch for defining mathematical function calls when integrating across rarefaction states. Default is 'igeos'; 'JWL' is currently an option.
+      self.problem = problem
 
       self.al = sound_speed(pl, rl, gl, self)
       self.ar = sound_speed(pr, rr, gr, self)
@@ -348,3 +394,5 @@ class RiemannGenEOS(SetupRiemannProblem):
       self.soln_type = soln_type
       self.Vregs, self.Xregs = Vregs, Xregs
       self.xmin, self.xmax, self.x = xmin, xmax, x
+
+
