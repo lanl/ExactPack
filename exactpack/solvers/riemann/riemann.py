@@ -1,5 +1,5 @@
-r"""A pure Python, analytic Riemann solver based on the 2013 paper by LoraClavijo, et. al. [LoraClavijo2013]_, and reports by Jim Kamm [Kamm2014, Kamm2015]_.
-"""
+# r"""A pure Python, analytic Riemann solver based on the 2013 paper by LoraClavijo, et. al. [LoraClavijo2013]_, and reports by Jim Kamm [Kamm2014, Kamm2015]_.
+# """
 
 from scipy.optimize import bisect
 from numpy import linspace, array, sqrt, interp, append, where, argmin
@@ -17,10 +17,11 @@ from exactpack.solvers.riemann.utils import *
 #   def driver(self)
 
 class SetupRiemannProblem(object):
-  """ Defines: \\
-      1) the 6 classical Riemann problems for an ideal-gas EOS, as well as 1 reversed shocktube problem, and 1 modified Sod shocktube problem; and \\
-      2) the Lee and Shyue JWL EOS shocktube problems using the general EOS solver.
-  """
+  r"""Sets up a 1D Riemann problem with separate left- and right-states. This
+      is for either an ideal-gas EOS or a generalized EOS like JWL. Also
+      initializes the number of integration points across a potential
+      rarefaction region, and the number of array points across the 1D region.
+   """
   def __init__(self,xmin=0., xd0=0.5, xmax=1., t=0.25,
                rl=1., ul=0., pl=1., gl=1.4, rr=0.125, ur=0., pr=0.1, gr=1.4,
                A=0., B=0., R1=0., R2=0., r0=0., e0=0., problem='igeos',
@@ -77,9 +78,14 @@ class SetupRiemannProblem(object):
 
 
 class RiemannIGEOS(SetupRiemannProblem):
-  '''
-  '''
-  def driver(self, x_user):
+    r"""Computes the analytic solution to the Riemann problem for an ideal-gas
+        EOS. See [LoraClavijo2013]_ for the solution description. The problem
+        default values are for the Sod shocktube, which is also Riemann problem
+        #1.
+
+        Default values are :math:`xmin=0, xd0=0.5, xmax=1, t=0.25, \rho_l=1, u_l=0, p_l=1, \gamma_l=1.4, \rho_r=0.125, u_r=0, p_r=0.1, \gamma_r=1.4`.
+    """
+    def driver(self, x_user):
       pl, rl, ul, gl = self.pl, self.rl, self.ul, self.gl
       pr, rr, ur, gr = self.pr, self.rr, self.ur, self.gr
       xmin, xd0, xmax, t = self.xmin, self.xd0, self.xmax, self.t

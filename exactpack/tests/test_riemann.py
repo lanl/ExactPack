@@ -82,7 +82,7 @@ class Test_Riemann1():
     soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
                            rl=rl, ul=ul, pl=pl, gl=gl,
                            rr=rr, ur=ur, pr=pr, gr=gr)
-    soln_ig.driver()
+    soln_ig.driver([xmin, xd0, xmax], t)
 
     soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
                             rl=rl, ul=ul, pl=pl, gl=gl,
