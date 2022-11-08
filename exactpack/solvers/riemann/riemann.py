@@ -7,7 +7,7 @@ from numpy import linspace, array, sqrt, interp, append, where, argmin
 from exactpack.solvers.riemann.utils import *
 
 # TOC:
-# SetupRiemannProbklem(object):
+# SetupRiemannProblem(object):
 #   def __init__(self, various variables)
 #
 # RiemannIGEOS(SetupRiemannProblem)
@@ -79,7 +79,7 @@ class SetupRiemannProblem(object):
 class RiemannIGEOS(SetupRiemannProblem):
   '''
   '''
-  def driver(self):
+  def driver(self, x_user):
       pl, rl, ul, gl = self.pl, self.rl, self.ul, self.gl
       pr, rr, ur, gr = self.pr, self.rr, self.ur, self.gr
       xmin, xd0, xmax, t = self.xmin, self.xd0, self.xmax, self.t
@@ -152,6 +152,8 @@ class RiemannIGEOS(SetupRiemannProblem):
       xmin, xmax = min(xmin, 1.1 * min(Xregs)), max(xmax, 1.1 * max(Xregs))
       x = linspace(xmin, xmax, self.num_x_pts)
       x = append(x, Xregs)
+# jmferguson 221103: added x_user
+      x = append(x, x_user)
       x.sort()
       vals = pl+0.* x, rl+0.*x, ul+0.*x, el+0.*x
 
