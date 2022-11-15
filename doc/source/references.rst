@@ -167,3 +167,23 @@ References
 
 .. [Bdzil]
    Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
+
+.. [Shyue2001]
+   K. Shyue,
+   *A Fluid-Mixture Type Algorithm for Compressible Multicomponent Flow with Mie-Gruneisen Equation of State*,
+   Journal of Computational Physics **171** (2001) 678.
+
+.. [Lee2013]
+   B.J. Lee, E. Toro, C. Castro and N. Nikiforakis,
+   *Adaptive Osher-type scheme for the Euler equations with highly nonlinear equations of state*,
+   Journal of Computational Physics, **246** (2013) 165.
+
+.. [GottliebGroth1988]
+   J.J. Gottlieb and C.P.T. Groth,
+   *Assessment of Riemann Solvers for Unsteady One-Dimensional Inviscid Flows for Perfect Gases*,
+   Journal of Computational Physics, **78** (1988) 437.
+
+.. [LoraClavijo2013]
+   F. LoraClavijo, J. Cruz-Perez, F. Guzman and J. Gonzalez,
+   *Exact solution of the 1D riemann problem in Newtonian and relativistic hydrodynamics*,
+   Revista Mexicana de Fisica E, **59** (2013) 28.

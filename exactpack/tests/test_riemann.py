@@ -68,7 +68,7 @@ def rho_p_u_rarefaction(p, r, u, g, x, xd0, t, self):
 
 
 class Test_Riemann1():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem (Sod).
     """
 
     # Riemann Problem 1
@@ -82,7 +82,7 @@ class Test_Riemann1():
     soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
                            rl=rl, ul=ul, pl=pl, gl=gl,
                            rr=rr, ur=ur, pr=pr, gr=gr)
-    soln_ig.driver([xmin, xd0, xmax], t)
+    soln_ig.driver()
 
     soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
                             rl=rl, ul=ul, pl=pl, gl=gl,
@@ -107,6 +107,8 @@ class Test_Riemann1():
                     0.9274526200494746, 1.7521557320295664])
 
     def test_riem1ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -118,6 +120,8 @@ class Test_Riemann1():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem1gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-6)
         assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-10)
@@ -131,6 +135,8 @@ class Test_Riemann1():
         assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-6)
 
     def test_riem1ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -143,7 +149,9 @@ class Test_Riemann1():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem1gen_region_boundaries(self):
-        # Test that spatial region boundaries are computed correctly.
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
+        # Test that velocity and spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
         assert self.Xregs[1] == approx(self.soln_gen.Xregs[1], abs=1.e-6)
@@ -155,7 +163,9 @@ class Test_Riemann1():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-5)
 
     def test_riem1ig_state0(self):
-        # Test than any point in (xmin,Xregs[0]) returns left state values.
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
+        # Test that any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] *numpy.random.rand() + self.xmin
 
         rl = interp(x, self.soln_ig.x, self.soln_ig.r)
@@ -166,6 +176,8 @@ class Test_Riemann1():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem1gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] *numpy.random.rand() + self.xmin
 
@@ -177,6 +189,8 @@ class Test_Riemann1():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem1ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -192,6 +206,8 @@ class Test_Riemann1():
         assert p == approx(p_soln, abs=1.e-12)
 
     def test_riem1gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -207,6 +223,8 @@ class Test_Riemann1():
         assert p == approx(p_soln, abs=1.e-8)
 
     def test_riem1ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any po2nt in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -221,6 +239,8 @@ class Test_Riemann1():
         assert p == approx(p_soln, abs=1.e-12)
 
     def test_riem1gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -235,6 +255,8 @@ class Test_Riemann1():
         assert p == approx(p_soln, abs=1.e-6)
 
     def test_riem1ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -249,6 +271,8 @@ class Test_Riemann1():
         assert p == approx(p_soln, abs=1.e-12)
 
     def test_riem1gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -263,6 +287,8 @@ class Test_Riemann1():
         assert p == approx(p_soln, abs=1.e-6)
 
     def test_riem1ig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x= diff([self.Xregs[3], self.xmax])[0]*numpy.random.rand()+self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -276,6 +302,8 @@ class Test_Riemann1():
         assert self.pr == approx(p_soln, abs=1.e-12)
 
     def test_riem1gen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -289,7 +317,7 @@ class Test_Riemann1():
         assert self.pr == approx(p_soln, abs=1.e-12)
 
 class Test_Riemann1_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem, with left and right states reversed.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem (Sod), with left and right states reversed.
     """
 
     # Riemann Problem 1 reversed
@@ -328,6 +356,8 @@ class Test_Riemann1_reversed():
                     0.07027281256177365, 1.1832159566199232])
 
     def test_riem1revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -339,6 +369,8 @@ class Test_Riemann1_reversed():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem1revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-6)
         assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-10)
@@ -352,6 +384,8 @@ class Test_Riemann1_reversed():
         assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-6)
 
     def test_riem1revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
 
@@ -365,6 +399,8 @@ class Test_Riemann1_reversed():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem1revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
 
@@ -378,6 +414,8 @@ class Test_Riemann1_reversed():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
 
     def test_riem1revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test that any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -389,6 +427,8 @@ class Test_Riemann1_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem1revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test that any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -400,6 +440,8 @@ class Test_Riemann1_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem1revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -414,6 +456,8 @@ class Test_Riemann1_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem1revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -428,6 +472,8 @@ class Test_Riemann1_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem1revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -442,6 +488,8 @@ class Test_Riemann1_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem1revgen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -456,6 +504,8 @@ class Test_Riemann1_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem1revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -471,6 +521,8 @@ class Test_Riemann1_reversed():
         assert p == approx(p_soln, abs=1.e-12)
 
     def test_riem1revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -486,6 +538,8 @@ class Test_Riemann1_reversed():
         assert p == approx(p_soln, abs=1.e-8)
 
     def test_riem1revig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -499,6 +553,8 @@ class Test_Riemann1_reversed():
         assert self.pr == approx(p_soln, abs=1.e-12)
 
     def test_riem1revgen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -512,453 +568,8 @@ class Test_Riemann1_reversed():
         assert self.pr == approx(p_soln, abs=1.e-12)
 
 
-class Test_Riemann1_modified():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem, modified to have different left and right values for gamma, is correct.
-    """
-
-    # Riemann Problem 1 modified
-    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.2
-    rl, ul, pl, gl = 1.0,   0.0, 2.0, 2.0
-    rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
-    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-    problem = 'igeos'
-    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
- 
-    soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-                           rl=rl, ul=ul, pl=pl, gl=gl,
-                           rr=rr, ur=ur, pr=pr, gr=gr)
-    soln_ig.driver()
-
-    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-                             rl=rl, ul=ul, pl=pl, gl=gl,
-                             rr=rr, ur=ur, pr=pr, gr=gr)
-    soln_gen.driver()
-
-    # Test that star state values are computed correctly.
-    pstar  = 0.4303319371967973
-    ustar  = 1.2757096812803406
-    rstar1 = 0.46385985879185393
-    rstar2 = 0.3253795605032907
-    estar1 = 0.9277197175837077
-    estar2 = 3.3063842157999144
-    astar1 = 1.3621451593598295
-    astar2 = 1.3607259683154251
-
-    # Test that spatial region boundaries are computed correctly.
-    # Xregs = Vregs * t + xd0
-    Xregs = array([0.09999999999999998, 0.4827129043841022,
-                   0.7551419362560681,  0.9143035890305202])
-    Vregs = array([-2.0, -0.08643547807948893,
-                    1.2757096812803406, 2.0715179451526007])
-
-    def test_riem1modig_star_states(self):
-        # Test that star state values are computed correctly.
-        assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
-        assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
-        assert self.rstar1 == approx(self.soln_ig.rx1, abs=1.e-12)
-        assert self.rstar2 == approx(self.soln_ig.rx2, abs=1.e-12)
-        assert self.estar1 == approx(self.soln_ig.ex1, abs=1.e-12)
-        assert self.estar2 == approx(self.soln_ig.ex2, abs=1.e-12)
-        assert self.astar1 == approx(self.soln_ig.ax1, abs=1.e-12)
-        assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
-
-    def test_riem1modgen_star_states(self):
-        # Test that star state values are computed correctly.
-        assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-6)
-        assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-10)
-        assert self.ustar        == approx(self.soln_gen.ux1, abs=1.e-6)
-        assert self.ustar        == approx(self.soln_gen.ux2, abs=1.e-6)
-        assert self.rstar1       == approx(self.soln_gen.rx1, abs=1.e-6)
-        assert self.rstar2       == approx(self.soln_gen.rx2, abs=1.e-6)
-        assert self.estar1       == approx(self.soln_gen.ex1, abs=1.e-6)
-        assert self.estar2       == approx(self.soln_gen.ex2, abs=1.e-5)
-        assert self.astar1       == approx(self.soln_gen.ax1, abs=1.e-6)
-        assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-6)
-
-    def test_riem1modig_region_boundaries(self):
-        # Test that spatial region boundaries are computed correctly.
-        # Xregs = Vregs * t + xd0
-        assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
-        assert self.Xregs[1] == approx(self.soln_ig.Xregs[1], abs=1.e-12)
-        assert self.Xregs[2] == approx(self.soln_ig.Xregs[2], abs=1.e-12)
-        assert self.Xregs[3] == approx(self.soln_ig.Xregs[3], abs=1.e-12)
-        assert self.Vregs[0] == approx(self.soln_ig.Vregs[0], abs=1.e-12)
-        assert self.Vregs[1] == approx(self.soln_ig.Vregs[1], abs=1.e-12)
-        assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
-        assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
-
-    def test_riem1modig_region_boundaries(self):
-        # Test that spatial region boundaries are computed correctly.
-        # Xregs = Vregs * t + xd0
-        assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
-        assert self.Xregs[1] == approx(self.soln_gen.Xregs[1], abs=1.e-7)
-        assert self.Xregs[2] == approx(self.soln_gen.Xregs[2], abs=1.e-7)
-        assert self.Xregs[3] == approx(self.soln_gen.Xregs[3], abs=1.e-7)
-        assert self.Vregs[0] == approx(self.soln_gen.Vregs[0], abs=1.e-12)
-        assert self.Vregs[1] == approx(self.soln_gen.Vregs[1], abs=1.e-5)
-        assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-6)
-        assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-6)
-
-    def test_riem1modig_state0(self):
-        # Test than any point in (xmin,Xregs[0]) returns left state values.
-        x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert self.rl == approx(rl, abs=1.e-12)
-        assert self.ul == approx(ul, abs=1.e-12)
-        assert self.pl == approx(pl, abs=1.e-12)
-
-    def test_riem1modgen_state0(self):
-        # Test than any point in (xmin,Xregs[0]) returns left state values.
-        x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert self.rl == approx(rl, abs=1.e-12)
-        assert self.ul == approx(ul, abs=1.e-12)
-        assert self.pl == approx(pl, abs=1.e-12)
-
-    def test_riem1modig_state1(self):
-        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-        r, p, u = rho_p_u_rarefaction(self.pl, self.rl, self.ul, self.gl, x,
-                                      self.xd0, self.t, self.soln_ig)
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert r == approx(rl, abs=1.e-12)
-        assert u == approx(ul, abs=1.e-12)
-        assert p == approx(pl, abs=1.e-12)
-
-    def test_riem1modgen_state1(self):
-        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-        r, p, u = rho_p_u_rarefaction(self.pl, self.rl, self.ul, self.gl, x,
-                                      self.xd0, self.t, self.soln_gen)
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert r == approx(rl, abs=1.e-8)
-        assert u == approx(ul, abs=1.e-8)
-        assert p == approx(pl, abs=1.e-7)
-
-    def test_riem1modig_state2(self):
-        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar1
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert r == approx(rl, abs=1.e-12)
-        assert u == approx(ul, abs=1.e-12)
-        assert p == approx(pl, abs=1.e-12)
-
-    def test_riem1modgen_state2(self):
-        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar1
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert r == approx(rl, abs=1.e-6)
-        assert u == approx(ul, abs=1.e-6)
-        assert p == approx(pl, abs=1.e-6)
-
-    def test_riem1modig_state3(self):
-        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar2
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert r == approx(rl, abs=1.e-12)
-        assert u == approx(ul, abs=1.e-12)
-        assert p == approx(pl, abs=1.e-12)
-
-    def test_riem1modgen_state3(self):
-        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar2
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert r == approx(rl, abs=1.e-6)
-        assert u == approx(ul, abs=1.e-6)
-        assert p == approx(pl, abs=1.e-6)
-
-    def test_riem1modig_state4(self):
-        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert self.rr == approx(rl, abs=1.e-12)
-        assert self.ur == approx(ul, abs=1.e-12)
-        assert self.pr == approx(pl, abs=1.e-12)
-
-    def test_riem1modgen_state4(self):
-        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert self.rr == approx(rl, abs=1.e-12)
-        assert self.ur == approx(ul, abs=1.e-12)
-        assert self.pr == approx(pl, abs=1.e-12)
-
-
-class Test_Riemann1_modified_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the first Riemann problem, modified to have different left and right values for gamma, with left and right states reversed, is correct.
-    """
-
-    # Riemann Problem 1 modified, reversed
-    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.2
-    rl, ul, pl, gl = 0.125, 0.0, 0.1, 1.4
-    rr, ur, pr, gr = 1.0,   0.0, 2.0, 2.0
-    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-    problem = 'igeos'
-    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
-
-    soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-                           rl=rl, ul=ul, pl=pl, gl=gl,
-                           rr=rr, ur=ur, pr=pr, gr=gr)
-    soln_ig.driver()
-
-    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
-                             rl=rl, ul=ul, pl=pl, gl=gl,
-                             rr=rr, ur=ur, pr=pr, gr=gr)
-    soln_gen.driver()
-
-    # Test that star state values are computed correctly.
-    pstar  =  0.4303319371967973
-    ustar  = -1.2757096812790123
-    rstar1 =  0.3253795605032907
-    rstar2 =  0.46385985879185393
-    estar1 =  3.3063842157999144
-    estar2 =  0.9277197175837077
-    astar1 =  1.3607259683154251
-    astar2 =  1.3621451593598295
-
-    # Test that spatial region boundaries are computed correctly.
-    # Xregs = Vregs * t + xd0
-    Xregs = array([0.08569641096947983, 0.24485806374419755,
-                   0.5172870956161635,  0.9])
-    Vregs = array([-2.0715179451526007, -1.2757096812790123,
-                    0.0864354780808172,  2.0])
-
-    def test_riem1modrevig_star_states(self):
-        # Test that star state values are computed correctly.
-        assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
-        assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
-        assert self.rstar1 == approx(self.soln_ig.rx1, abs=1.e-12)
-        assert self.rstar2 == approx(self.soln_ig.rx2, abs=1.e-12)
-        assert self.estar1 == approx(self.soln_ig.ex1, abs=1.e-12)
-        assert self.estar2 == approx(self.soln_ig.ex2, abs=1.e-12)
-        assert self.astar1 == approx(self.soln_ig.ax1, abs=1.e-12)
-        assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
-
-    def test_riem1modrevgen_star_states(self):
-        # Test that star state values are computed correctly.
-        assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-6)
-        assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-11)
-        assert self.ustar        == approx(self.soln_gen.ux1, abs=1.e-6)
-        assert self.ustar        == approx(self.soln_gen.ux2, abs=1.e-6)
-        assert self.rstar1       == approx(self.soln_gen.rx1, abs=1.e-7)
-        assert self.rstar2       == approx(self.soln_gen.rx2, abs=1.e-7)
-        assert self.estar1       == approx(self.soln_gen.ex1, abs=1.e-5)
-        assert self.estar2       == approx(self.soln_gen.ex2, abs=1.e-6)
-        assert self.astar1       == approx(self.soln_gen.ax1, abs=1.e-6)
-        assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-7)
-
-    def test_riem1modrevig_region_boundaries(self):
-        # Test that spatial region boundaries are computed correctly.
-        # Xregs = Vregs * t + xd0
-        assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
-        assert self.Xregs[1] == approx(self.soln_ig.Xregs[1], abs=1.e-12)
-        assert self.Xregs[2] == approx(self.soln_ig.Xregs[2], abs=1.e-12)
-        assert self.Xregs[3] == approx(self.soln_ig.Xregs[3], abs=1.e-12)
-        assert self.Vregs[0] == approx(self.soln_ig.Vregs[0], abs=1.e-12)
-        assert self.Vregs[1] == approx(self.soln_ig.Vregs[1], abs=1.e-12)
-        assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
-        assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
-
-    def test_riem1modrevgen_region_boundaries(self):
-        # Test that spatial region boundaries are computed correctly.
-        # Xregs = Vregs * t + xd0
-        assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-6)
-        assert self.Xregs[1] == approx(self.soln_gen.Xregs[1], abs=1.e-7)
-        assert self.Xregs[2] == approx(self.soln_gen.Xregs[2], abs=1.e-7)
-        assert self.Xregs[3] == approx(self.soln_gen.Xregs[3], abs=1.e-12)
-        assert self.Vregs[0] == approx(self.soln_gen.Vregs[0], abs=1.e-6)
-        assert self.Vregs[1] == approx(self.soln_gen.Vregs[1], abs=1.e-6)
-        assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-5)
-        assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
-
-    def test_riem1modrevig_state0(self):
-        # Test than any point in (xmin,Xregs[0]) returns left state values.
-        x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert rl == approx(self.soln_ig.rl, abs=1.e-12)
-        assert ul == approx(self.soln_ig.ul, abs=1.e-12)
-        assert pl == approx(self.soln_ig.pl, abs=1.e-12)
-
-    def test_riem1modrevgen_state0(self):
-        # Test than any point in (xmin,Xregs[0]) returns left state values.
-        x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert rl == approx(self.soln_gen.rl, abs=1.e-12)
-        assert ul == approx(self.soln_gen.ul, abs=1.e-12)
-        assert pl == approx(self.soln_gen.pl, abs=1.e-12)
-
-    def test_riem1modrevig_state1(self):
-        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar1
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert r == approx(rl, abs=1.e-12)
-        assert u == approx(ul, abs=1.e-12)
-        assert p == approx(pl, abs=1.e-12)
-
-    def test_riem1modrevgen_state1(self):
-        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
-        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar1
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert r == approx(rl, abs=1.e-7)
-        assert u == approx(ul, abs=1.e-6)
-        assert p == approx(pl, abs=1.e-6)
-
-    def test_riem1modrevig_state2(self):
-        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar2
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert r == approx(rl, abs=1.e-12)
-        assert u == approx(ul, abs=1.e-12)
-        assert p == approx(pl, abs=1.e-12)
-
-    def test_riem1modrevgen_state2(self):
-        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
-        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-        p, u, r = self.pstar, self.ustar, self.rstar2
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert r == approx(rl, abs=1.e-7)
-        assert u == approx(ul, abs=1.e-6)
-        assert p == approx(pl, abs=1.e-6)
-
-    def test_riem1modrevig_state3(self):
-        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-        r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
-                                      self.xd0, self.t, self.soln_ig)
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert r == approx(rl, abs=1.e-12)
-        assert u == approx(ul, abs=1.e-12)
-        assert p == approx(pl, abs=1.e-12)
-
-    def test_riem1modrevgen_state3(self):
-        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
-        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-        r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
-                                      self.xd0, self.t, self.soln_gen)
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert r == approx(rl, abs=1.e-8)
-        assert u == approx(ul, abs=1.e-9)
-        assert p == approx(pl, abs=1.e-7)
-
-    def test_riem1modrevig_state4(self):
-        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
-        _argmin = argmin(abs(self.soln_ig.x - x))
-        x = self.soln_ig.x[_argmin]
-
-        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
-        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
-        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
-        assert self.rr == approx(rl, abs=1.e-12)
-        assert self.ur == approx(ul, abs=1.e-12)
-        assert self.pr == approx(pl, abs=1.e-12)
-
-    def test_riem1modrevgen_state4(self):
-        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
-        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
-        _argmin = argmin(abs(self.soln_gen.x - x))
-        x = self.soln_gen.x[_argmin]
-
-        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
-        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
-        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
-        assert self.rr == approx(rl, abs=1.e-12)
-        assert self.ur == approx(ul, abs=1.e-12)
-        assert self.pr == approx(pl, abs=1.e-12)
-
-
-# This still needs to be fixed.
 class Test_Riemann2():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the second Riemann problem are correct.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the second Riemann problem (Einfeldt) are correct.
     """
 
     # Riemann Problem 2
@@ -999,6 +610,8 @@ class Test_Riemann2():
                     2.748331477354788])
 
     def test_riem2ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -1010,6 +623,8 @@ class Test_Riemann2():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem2gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-5)
         assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-5)
@@ -1023,6 +638,8 @@ class Test_Riemann2():
         assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-5)
 
     def test_riem2ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -1035,6 +652,8 @@ class Test_Riemann2():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem2gen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-5)
@@ -1047,6 +666,8 @@ class Test_Riemann2():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-5)
 
     def test_riem2ig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1058,6 +679,8 @@ class Test_Riemann2():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem2gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1069,6 +692,8 @@ class Test_Riemann2():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem2ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1083,6 +708,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-7)
 
     def test_riem2gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1097,6 +724,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1111,6 +740,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1125,6 +756,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:4])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1139,6 +772,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:4])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1153,6 +788,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2ig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff(self.Xregs[3:])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1168,6 +805,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2gen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff(self.Xregs[3:])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1183,6 +822,8 @@ class Test_Riemann2():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2ig_state5(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 5 gives the correct state values.
+        """
         # Test that any point in (Xregs[4],xmax) returns correct values.
         x = diff([self.Xregs[4], self.xmax])[0] * numpy.random.rand() + self.Xregs[4]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1196,6 +837,8 @@ class Test_Riemann2():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem2gen_state5(self):
+        """Using the general EOS solver, test that a random point in region 5 gives the correct state values.
+        """
         # Test that any point in (Xregs[4],xmax) returns correct values.
         x = diff([self.Xregs[4], self.xmax])[0] * numpy.random.rand() + self.Xregs[4]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1210,7 +853,7 @@ class Test_Riemann2():
 
 
 class Test_Riemann2_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the second Riemann problem are, with left and right states reversed, are correct.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the second Riemann problem (Einfeldt) are, with left and right states reversed, are correct.
     """
 
     # Riemann Problem 2 reversed
@@ -1252,6 +895,8 @@ class Test_Riemann2_reversed():
                     2.748331477354788])
 
     def test_riem2revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -1263,8 +908,9 @@ class Test_Riemann2_reversed():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem2revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
-# This test won't pass.
         assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-4)
         assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-9)
         assert self.ustar        == approx(self.soln_gen.ux1, abs=1.e-9)
@@ -1277,6 +923,8 @@ class Test_Riemann2_reversed():
         assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-5)
 
     def test_riem2revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -1289,6 +937,8 @@ class Test_Riemann2_reversed():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem2revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
@@ -1301,6 +951,8 @@ class Test_Riemann2_reversed():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-4)
 
     def test_riem2revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1312,6 +964,8 @@ class Test_Riemann2_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem2revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1323,6 +977,8 @@ class Test_Riemann2_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem2revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1338,6 +994,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1353,6 +1011,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1367,6 +1027,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2revgen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1381,6 +1043,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:4])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1395,6 +1059,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:4])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1409,6 +1075,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2revig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff(self.Xregs[3:])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1424,6 +1092,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem2revgen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
         x = diff(self.Xregs[3:])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1439,6 +1109,8 @@ class Test_Riemann2_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem2revig_state5(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 5 gives the correct state values.
+        """
         # Test that any point in (Xregs[4],xmax) returns correct values.
         x = diff([self.Xregs[4], self.xmax])[0] * numpy.random.rand() + self.Xregs[4]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1452,6 +1124,8 @@ class Test_Riemann2_reversed():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem2revgen_state5(self):
+        """Using the general EOS solver, test that a random point in region 5 gives the correct state values.
+        """
         # Test that any point in (Xregs[4],xmax) returns correct values.
         x = diff([self.Xregs[4], self.xmax])[0] * numpy.random.rand() + self.Xregs[4]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1466,7 +1140,7 @@ class Test_Riemann2_reversed():
 
 
 class Test_Riemann3():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the third Riemann problem.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the third Riemann problem (stationary contact).
     """
 
     # Riemann Problem 3
@@ -1505,6 +1179,8 @@ class Test_Riemann3():
                    1.388723067208275e-06, 3.920086966903227])
 
     def test_riem3ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -1516,6 +1192,8 @@ class Test_Riemann3():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem3gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-5)
         assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-12)
@@ -1529,6 +1207,8 @@ class Test_Riemann3():
         assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-6)
 
     def test_riem3ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -1541,6 +1221,8 @@ class Test_Riemann3():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem3gen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
@@ -1553,6 +1235,8 @@ class Test_Riemann3():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-6)
 
     def test_riem3ig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1564,6 +1248,8 @@ class Test_Riemann3():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem3gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1575,6 +1261,8 @@ class Test_Riemann3():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem3ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1590,6 +1278,8 @@ class Test_Riemann3():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1605,6 +1295,8 @@ class Test_Riemann3():
         assert p == approx(pl, abs=1.e-5)
 
     def test_riem3ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1619,6 +1311,8 @@ class Test_Riemann3():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1633,6 +1327,8 @@ class Test_Riemann3():
         assert p == approx(pl, abs=1.e-5)
 
     def test_riem3ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1647,6 +1343,8 @@ class Test_Riemann3():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1661,6 +1359,8 @@ class Test_Riemann3():
         assert p == approx(pl, abs=1.e-5)
 
     def test_riem3ig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1674,6 +1374,8 @@ class Test_Riemann3():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem3gen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1688,7 +1390,7 @@ class Test_Riemann3():
 
 
 class Test_Riemann3_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the third Riemann problem, with left and right states reversed.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the third Riemann problem (stationary contact), with left and right states reversed.
     """
 
     # Riemann Problem 3 reversed
@@ -1728,6 +1430,8 @@ class Test_Riemann3_reversed():
                    33.49708220127175, 57.01402386773941])
 
     def test_riem3revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -1739,6 +1443,8 @@ class Test_Riemann3_reversed():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem3revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-5)
         assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-12)
@@ -1752,6 +1458,8 @@ class Test_Riemann3_reversed():
         assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-6)
 
     def test_riem3revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -1764,6 +1472,8 @@ class Test_Riemann3_reversed():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem3revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-8)
@@ -1776,6 +1486,8 @@ class Test_Riemann3_reversed():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
 
     def test_riem3revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1787,6 +1499,8 @@ class Test_Riemann3_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem3revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -1798,6 +1512,8 @@ class Test_Riemann3_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem3revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1812,6 +1528,8 @@ class Test_Riemann3_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1826,6 +1544,8 @@ class Test_Riemann3_reversed():
         assert p == approx(pl, abs=1.e-5)
 
     def test_riem3revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1840,6 +1560,8 @@ class Test_Riemann3_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3revig_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1854,6 +1576,8 @@ class Test_Riemann3_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1869,6 +1593,8 @@ class Test_Riemann3_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem3revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1884,6 +1610,8 @@ class Test_Riemann3_reversed():
         assert p == approx(pl, abs=1.e-5)
 
     def test_riem3revig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x=diff([self.Xregs[3], self.xmax])[0] *numpy.random.rand()+self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -1897,6 +1625,8 @@ class Test_Riemann3_reversed():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem3revgen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x=diff([self.Xregs[3], self.xmax])[0] *numpy.random.rand()+self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -1911,7 +1641,7 @@ class Test_Riemann3_reversed():
 
 
 class Test_Riemann4():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fourth Riemann problem.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fourth Riemann problem (slow shock).
     """
 
     # Riemann Problem 4
@@ -1953,6 +1683,8 @@ class Test_Riemann4():
                    0.10964799065236219])
 
     def test_riem4ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -1963,8 +1695,9 @@ class Test_Riemann4():
         assert self.astar1 == approx(self.soln_ig.ax1, abs=1.e-12)
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
-# S O M E T H I N G   I S   W R O N G   W I T H   C O M P A R I S O N   O F T H I S   P R O B L E M
     def test_riem4gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-6)
         assert self.ustar1 == approx(self.soln_gen.ux1, abs=1.e-2)
@@ -1977,6 +1710,8 @@ class Test_Riemann4():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-6)
 
     def test_riem4ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
         assert self.Xregs[1] == approx(self.soln_ig.Xregs[1], abs=1.e-12)
         assert self.Xregs[2] == approx(self.soln_ig.Xregs[2], abs=1.e-12)
@@ -1985,6 +1720,8 @@ class Test_Riemann4():
         assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
 
     def test_riem4gen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-3)
         assert self.Xregs[1] == approx(self.soln_gen.Xregs[1], abs=1.e-7)
         assert self.Xregs[2] == approx(self.soln_gen.Xregs[2], abs=1.e-6)
@@ -1993,6 +1730,8 @@ class Test_Riemann4():
         assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-6)
 
     def test_riem4ig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
 
@@ -2004,6 +1743,8 @@ class Test_Riemann4():
         assert self.pl == approx(pl, abs=1.e-5)
 
     def test_riem4gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
 
@@ -2015,6 +1756,8 @@ class Test_Riemann4():
         assert self.pl == approx(pl, abs=1.e-5)
 
     def test_riem4ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2029,6 +1772,8 @@ class Test_Riemann4():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem4gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2043,6 +1788,8 @@ class Test_Riemann4():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem4ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2057,6 +1804,8 @@ class Test_Riemann4():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem4gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2071,6 +1820,8 @@ class Test_Riemann4():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem4ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2084,6 +1835,8 @@ class Test_Riemann4():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem4gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2098,7 +1851,7 @@ class Test_Riemann4():
 
 
 class Test_Riemann4_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fourth Riemann problem, with left and right states reversed.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fourth Riemann problem (slow shock), with left and right states reversed.
     """
 
     # Riemann Problem 4
@@ -2137,6 +1890,8 @@ class Test_Riemann4_reversed():
                     2.7472820701116656,])
 
     def test_riem4revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -2148,6 +1903,8 @@ class Test_Riemann4_reversed():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem4revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-6)
         assert self.ustar  == approx(self.soln_gen.ux1, abs=1.e-7)
@@ -2160,6 +1917,8 @@ class Test_Riemann4_reversed():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-7)
 
     def test_riem4revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -2170,6 +1929,8 @@ class Test_Riemann4_reversed():
         assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
 
     def test_riem4revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-6)
@@ -2180,6 +1941,8 @@ class Test_Riemann4_reversed():
         assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-3)
 
     def test_riem4revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2191,6 +1954,8 @@ class Test_Riemann4_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem4revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2202,6 +1967,8 @@ class Test_Riemann4_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem4revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2216,6 +1983,8 @@ class Test_Riemann4_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem4revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2230,6 +1999,8 @@ class Test_Riemann4_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem4revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2244,6 +2015,8 @@ class Test_Riemann4_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem4revgen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2258,6 +2031,8 @@ class Test_Riemann4_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem4revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2271,6 +2046,8 @@ class Test_Riemann4_reversed():
         assert self.pr == approx(pl, abs=1.e-5)
 
     def test_riem4revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2285,7 +2062,7 @@ class Test_Riemann4_reversed():
 
 
 class Test_Riemann5():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fifth Riemann problem.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fifth Riemann problem (shock contact shock).
     """
 
     # Riemann Problem 5
@@ -2325,6 +2102,8 @@ class Test_Riemann5():
                    0.8788400833499148])
 
     def test_riem5ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -2336,6 +2115,8 @@ class Test_Riemann5():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem5gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-7)
         assert self.ustar  == approx(self.soln_gen.ux1,  abs=1.e-12)
@@ -2348,6 +2129,8 @@ class Test_Riemann5():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-7)
 
     def test_riem5ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -2358,6 +2141,8 @@ class Test_Riemann5():
         assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
 
     def test_riem5gen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-7)
@@ -2368,6 +2153,8 @@ class Test_Riemann5():
         assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-7)
 
     def test_riem5ig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2379,6 +2166,8 @@ class Test_Riemann5():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem5gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2390,6 +2179,8 @@ class Test_Riemann5():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem5ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2404,6 +2195,8 @@ class Test_Riemann5():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem5gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2418,6 +2211,8 @@ class Test_Riemann5():
         assert p == approx(pl, abs=1.e-7)
 
     def test_riem5ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2432,6 +2227,8 @@ class Test_Riemann5():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem5gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2446,6 +2243,8 @@ class Test_Riemann5():
         assert p == approx(pl, abs=1.e-7)
 
     def test_riem5ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2459,6 +2258,8 @@ class Test_Riemann5():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem5gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2473,7 +2274,7 @@ class Test_Riemann5():
 
 
 class Test_Riemann5_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fifth Riemann problem, with left and right states reversed.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the fifth Riemann problem (shock contact shock), with left and right states reversed.
     """
 
     # Riemann Problem 5 reversed
@@ -2513,6 +2314,8 @@ class Test_Riemann5_reversed():
                    1.0415900782359429])
 
     def test_riem5revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -2524,6 +2327,8 @@ class Test_Riemann5_reversed():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem5revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-7)
         assert self.ustar  == approx(self.soln_gen.ux1, abs=1.e-12)
@@ -2536,6 +2341,8 @@ class Test_Riemann5_reversed():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-7)
 
     def test_riem5revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -2546,6 +2353,8 @@ class Test_Riemann5_reversed():
         assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
 
     def test_riem5revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-7)
@@ -2556,6 +2365,8 @@ class Test_Riemann5_reversed():
         assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-7)
 
     def test_riem5revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2567,6 +2378,8 @@ class Test_Riemann5_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem5revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2578,6 +2391,8 @@ class Test_Riemann5_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem5revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2592,6 +2407,8 @@ class Test_Riemann5_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem5revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2606,6 +2423,8 @@ class Test_Riemann5_reversed():
         assert p == approx(pl, abs=1.e-7)
 
     def test_riem5revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2620,6 +2439,8 @@ class Test_Riemann5_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem5revgen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2634,6 +2455,8 @@ class Test_Riemann5_reversed():
         assert p == approx(pl, abs=1.e-7)
 
     def test_riem5revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2647,6 +2470,8 @@ class Test_Riemann5_reversed():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem5revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],xmax) returns correct values.
         x = diff([self.Xregs[2], self.xmax])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2661,7 +2486,7 @@ class Test_Riemann5_reversed():
 
 
 class Test_Riemann6():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the sixth Riemann problem.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the sixth Riemann problem (LeBlanc).
     """
 
     # Riemann Problem 6
@@ -2701,6 +2526,8 @@ class Test_Riemann6():
                    0.4659838851123562, 0.6213118647668594])
 
     def test_riem6ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -2712,6 +2539,8 @@ class Test_Riemann6():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem6gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-6)
         assert self.ustar  == approx(self.soln_gen.ux1, abs=1.e-5)
@@ -2724,6 +2553,8 @@ class Test_Riemann6():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-5)
 
     def test_riem6ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -2736,6 +2567,8 @@ class Test_Riemann6():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem6gen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
@@ -2748,6 +2581,8 @@ class Test_Riemann6():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-4)
 
     def test_riem6ig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2759,6 +2594,8 @@ class Test_Riemann6():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem6gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2770,6 +2607,8 @@ class Test_Riemann6():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem6ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2785,6 +2624,8 @@ class Test_Riemann6():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem6gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2800,6 +2641,8 @@ class Test_Riemann6():
         assert p == approx(pl, abs=1.e-8)
 
     def test_riem6ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2814,6 +2657,8 @@ class Test_Riemann6():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem6gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2828,6 +2673,8 @@ class Test_Riemann6():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem6ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2842,6 +2689,8 @@ class Test_Riemann6():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem6gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2856,6 +2705,8 @@ class Test_Riemann6():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem6ig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -2869,6 +2720,8 @@ class Test_Riemann6():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem6gen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -2883,7 +2736,7 @@ class Test_Riemann6():
 
 
 class Test_Riemann6_reversed():
-    """Tests ideal-gas EOS (IGEOS) and generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the sixth Riemann problem, with the left and right states reversed.
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the sixth Riemann problem (LeBlanc), with the left and right states reversed.
     """
 
     # Riemann Problem 6 reversed
@@ -2923,6 +2776,8 @@ class Test_Riemann6_reversed():
                    -0.2879785135334493, 0.33333333333333337])
 
     def test_riem6revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
         assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
@@ -2934,6 +2789,8 @@ class Test_Riemann6_reversed():
         assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
 
     def test_riem6revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-6)
         assert self.ustar  == approx(self.soln_gen.ux1, abs=1.e-5)
@@ -2946,6 +2803,8 @@ class Test_Riemann6_reversed():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-5)
 
     def test_riem6revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
@@ -2958,6 +2817,8 @@ class Test_Riemann6_reversed():
         assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
 
     def test_riem6revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-5)
@@ -2970,6 +2831,8 @@ class Test_Riemann6_reversed():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
 
     def test_riem6revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2981,6 +2844,8 @@ class Test_Riemann6_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem6revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
 
@@ -2992,6 +2857,8 @@ class Test_Riemann6_reversed():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riem6revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -3006,6 +2873,8 @@ class Test_Riemann6_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem6revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3020,6 +2889,8 @@ class Test_Riemann6_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem6revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -3034,6 +2905,8 @@ class Test_Riemann6_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem6revgen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3048,6 +2921,8 @@ class Test_Riemann6_reversed():
         assert p == approx(pl, abs=1.e-6)
 
     def test_riem6revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -3063,6 +2938,8 @@ class Test_Riemann6_reversed():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riem6revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3078,6 +2955,8 @@ class Test_Riemann6_reversed():
         assert p == approx(pl, abs=1.e-8)
 
     def test_riem6revig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_ig.x - x))
@@ -3091,6 +2970,8 @@ class Test_Riemann6_reversed():
         assert self.pr == approx(pl, abs=1.e-12)
 
     def test_riem6revgen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3104,8 +2985,508 @@ class Test_Riemann6_reversed():
         assert self.pr == approx(pl, abs=1.e-12)
 
 
+class Test_Riemann7():
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the seventh Riemann problem (modified Sod).
+    """
+
+    # Riemann Problem 7
+    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.2
+    rl, ul, pl, gl = 1.0,   0.0, 2.0, 2.0
+    rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
+    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    problem = 'igeos'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+ 
+    soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                           rl=rl, ul=ul, pl=pl, gl=gl,
+                           rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_ig.driver()
+
+    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                             rl=rl, ul=ul, pl=pl, gl=gl,
+                             rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_gen.driver()
+
+    # Test that star state values are computed correctly.
+    pstar  = 0.4303319371967973
+    ustar  = 1.2757096812803406
+    rstar1 = 0.46385985879185393
+    rstar2 = 0.3253795605032907
+    estar1 = 0.9277197175837077
+    estar2 = 3.3063842157999144
+    astar1 = 1.3621451593598295
+    astar2 = 1.3607259683154251
+
+    # Test that spatial region boundaries are computed correctly.
+    # Xregs = Vregs * t + xd0
+    Xregs = array([0.09999999999999998, 0.4827129043841022,
+                   0.7551419362560681,  0.9143035890305202])
+    Vregs = array([-2.0, -0.08643547807948893,
+                    1.2757096812803406, 2.0715179451526007])
+
+    def test_riem7ig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
+        # Test that star state values are computed correctly.
+        assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
+        assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
+        assert self.rstar1 == approx(self.soln_ig.rx1, abs=1.e-12)
+        assert self.rstar2 == approx(self.soln_ig.rx2, abs=1.e-12)
+        assert self.estar1 == approx(self.soln_ig.ex1, abs=1.e-12)
+        assert self.estar2 == approx(self.soln_ig.ex2, abs=1.e-12)
+        assert self.astar1 == approx(self.soln_ig.ax1, abs=1.e-12)
+        assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
+
+    def test_riem7gen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
+        # Test that star state values are computed correctly.
+        assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-6)
+        assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-10)
+        assert self.ustar        == approx(self.soln_gen.ux1, abs=1.e-6)
+        assert self.ustar        == approx(self.soln_gen.ux2, abs=1.e-6)
+        assert self.rstar1       == approx(self.soln_gen.rx1, abs=1.e-6)
+        assert self.rstar2       == approx(self.soln_gen.rx2, abs=1.e-6)
+        assert self.estar1       == approx(self.soln_gen.ex1, abs=1.e-6)
+        assert self.estar2       == approx(self.soln_gen.ex2, abs=1.e-5)
+        assert self.astar1       == approx(self.soln_gen.ax1, abs=1.e-6)
+        assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-6)
+
+    def test_riem7ig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
+        assert self.Xregs[1] == approx(self.soln_ig.Xregs[1], abs=1.e-12)
+        assert self.Xregs[2] == approx(self.soln_ig.Xregs[2], abs=1.e-12)
+        assert self.Xregs[3] == approx(self.soln_ig.Xregs[3], abs=1.e-12)
+        assert self.Vregs[0] == approx(self.soln_ig.Vregs[0], abs=1.e-12)
+        assert self.Vregs[1] == approx(self.soln_ig.Vregs[1], abs=1.e-12)
+        assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
+        assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
+
+    def test_riem7ig_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
+        assert self.Xregs[1] == approx(self.soln_gen.Xregs[1], abs=1.e-7)
+        assert self.Xregs[2] == approx(self.soln_gen.Xregs[2], abs=1.e-7)
+        assert self.Xregs[3] == approx(self.soln_gen.Xregs[3], abs=1.e-7)
+        assert self.Vregs[0] == approx(self.soln_gen.Vregs[0], abs=1.e-12)
+        assert self.Vregs[1] == approx(self.soln_gen.Vregs[1], abs=1.e-5)
+        assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-6)
+        assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-6)
+
+    def test_riem7ig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
+        # Test than any point in (xmin,Xregs[0]) returns left state values.
+        x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert self.rl == approx(rl, abs=1.e-12)
+        assert self.ul == approx(ul, abs=1.e-12)
+        assert self.pl == approx(pl, abs=1.e-12)
+
+    def test_riem7gen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
+        # Test than any point in (xmin,Xregs[0]) returns left state values.
+        x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert self.rl == approx(rl, abs=1.e-12)
+        assert self.ul == approx(ul, abs=1.e-12)
+        assert self.pl == approx(pl, abs=1.e-12)
+
+    def test_riem7ig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        r, p, u = rho_p_u_rarefaction(self.pl, self.rl, self.ul, self.gl, x,
+                                      self.xd0, self.t, self.soln_ig)
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert r == approx(rl, abs=1.e-12)
+        assert u == approx(ul, abs=1.e-12)
+        assert p == approx(pl, abs=1.e-12)
+
+    def test_riem7gen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        r, p, u = rho_p_u_rarefaction(self.pl, self.rl, self.ul, self.gl, x,
+                                      self.xd0, self.t, self.soln_gen)
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert r == approx(rl, abs=1.e-8)
+        assert u == approx(ul, abs=1.e-8)
+        assert p == approx(pl, abs=1.e-7)
+
+    def test_riem7ig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar1
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert r == approx(rl, abs=1.e-12)
+        assert u == approx(ul, abs=1.e-12)
+        assert p == approx(pl, abs=1.e-12)
+
+    def test_riem7gen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar1
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert r == approx(rl, abs=1.e-6)
+        assert u == approx(ul, abs=1.e-6)
+        assert p == approx(pl, abs=1.e-6)
+
+    def test_riem7ig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar2
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert r == approx(rl, abs=1.e-12)
+        assert u == approx(ul, abs=1.e-12)
+        assert p == approx(pl, abs=1.e-12)
+
+    def test_riem7gen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar2
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert r == approx(rl, abs=1.e-6)
+        assert u == approx(ul, abs=1.e-6)
+        assert p == approx(pl, abs=1.e-6)
+
+    def test_riem7ig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
+        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert self.rr == approx(rl, abs=1.e-12)
+        assert self.ur == approx(ul, abs=1.e-12)
+        assert self.pr == approx(pl, abs=1.e-12)
+
+    def test_riem7gen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
+        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert self.rr == approx(rl, abs=1.e-12)
+        assert self.ur == approx(ul, abs=1.e-12)
+        assert self.pr == approx(pl, abs=1.e-12)
+
+
+class Test_Riemann7_reversed():
+    """Tests ideal-gas EOS (IGEOS) and general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on the seventh Riemann problem (modified Sod), modified to have different left and right values for gamma, with left and right states reversed, is correct.
+    """
+
+    # Riemann Problem 1 modified, reversed
+    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.2
+    rl, ul, pl, gl = 0.125, 0.0, 0.1, 1.4
+    rr, ur, pr, gr = 1.0,   0.0, 2.0, 2.0
+    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    problem = 'igeos'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+    soln_ig = RiemannIGEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                           rl=rl, ul=ul, pl=pl, gl=gl,
+                           rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_ig.driver()
+
+    soln_gen = RiemannGenEOS(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                             rl=rl, ul=ul, pl=pl, gl=gl,
+                             rr=rr, ur=ur, pr=pr, gr=gr)
+    soln_gen.driver()
+
+    # Test that star state values are computed correctly.
+    pstar  =  0.4303319371967973
+    ustar  = -1.2757096812790123
+    rstar1 =  0.3253795605032907
+    rstar2 =  0.46385985879185393
+    estar1 =  3.3063842157999144
+    estar2 =  0.9277197175837077
+    astar1 =  1.3607259683154251
+    astar2 =  1.3621451593598295
+
+    # Test that spatial region boundaries are computed correctly.
+    # Xregs = Vregs * t + xd0
+    Xregs = array([0.08569641096947983, 0.24485806374419755,
+                   0.5172870956161635,  0.9])
+    Vregs = array([-2.0715179451526007, -1.2757096812790123,
+                    0.0864354780808172,  2.0])
+
+    def test_riem7revig_star_states(self):
+        """Using the ideal-gas EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
+        # Test that star state values are computed correctly.
+        assert self.pstar  == approx(self.soln_ig.px,  abs=1.e-12)
+        assert self.ustar  == approx(self.soln_ig.ux,  abs=1.e-12)
+        assert self.rstar1 == approx(self.soln_ig.rx1, abs=1.e-12)
+        assert self.rstar2 == approx(self.soln_ig.rx2, abs=1.e-12)
+        assert self.estar1 == approx(self.soln_ig.ex1, abs=1.e-12)
+        assert self.estar2 == approx(self.soln_ig.ex2, abs=1.e-12)
+        assert self.astar1 == approx(self.soln_ig.ax1, abs=1.e-12)
+        assert self.astar2 == approx(self.soln_ig.ax2, abs=1.e-12)
+
+    def test_riem7revgen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
+        # Test that star state values are computed correctly.
+        assert self.pstar        == approx(self.soln_gen.px,  abs=1.e-6)
+        assert self.soln_gen.ux1 == approx(self.soln_gen.ux2, abs=1.e-11)
+        assert self.ustar        == approx(self.soln_gen.ux1, abs=1.e-6)
+        assert self.ustar        == approx(self.soln_gen.ux2, abs=1.e-6)
+        assert self.rstar1       == approx(self.soln_gen.rx1, abs=1.e-7)
+        assert self.rstar2       == approx(self.soln_gen.rx2, abs=1.e-7)
+        assert self.estar1       == approx(self.soln_gen.ex1, abs=1.e-5)
+        assert self.estar2       == approx(self.soln_gen.ex2, abs=1.e-6)
+        assert self.astar1       == approx(self.soln_gen.ax1, abs=1.e-6)
+        assert self.astar2       == approx(self.soln_gen.ax2, abs=1.e-7)
+
+    def test_riem7revig_region_boundaries(self):
+        """Using the ideal-gas EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        assert self.Xregs[0] == approx(self.soln_ig.Xregs[0], abs=1.e-12)
+        assert self.Xregs[1] == approx(self.soln_ig.Xregs[1], abs=1.e-12)
+        assert self.Xregs[2] == approx(self.soln_ig.Xregs[2], abs=1.e-12)
+        assert self.Xregs[3] == approx(self.soln_ig.Xregs[3], abs=1.e-12)
+        assert self.Vregs[0] == approx(self.soln_ig.Vregs[0], abs=1.e-12)
+        assert self.Vregs[1] == approx(self.soln_ig.Vregs[1], abs=1.e-12)
+        assert self.Vregs[2] == approx(self.soln_ig.Vregs[2], abs=1.e-12)
+        assert self.Vregs[3] == approx(self.soln_ig.Vregs[3], abs=1.e-12)
+
+    def test_riem7revgen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
+        # Test that spatial region boundaries are computed correctly.
+        # Xregs = Vregs * t + xd0
+        assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-6)
+        assert self.Xregs[1] == approx(self.soln_gen.Xregs[1], abs=1.e-7)
+        assert self.Xregs[2] == approx(self.soln_gen.Xregs[2], abs=1.e-7)
+        assert self.Xregs[3] == approx(self.soln_gen.Xregs[3], abs=1.e-12)
+        assert self.Vregs[0] == approx(self.soln_gen.Vregs[0], abs=1.e-6)
+        assert self.Vregs[1] == approx(self.soln_gen.Vregs[1], abs=1.e-6)
+        assert self.Vregs[2] == approx(self.soln_gen.Vregs[2], abs=1.e-5)
+        assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
+
+    def test_riem7revig_state0(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 0 gives the correct state values.
+        """
+        # Test than any point in (xmin,Xregs[0]) returns left state values.
+        x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert rl == approx(self.soln_ig.rl, abs=1.e-12)
+        assert ul == approx(self.soln_ig.ul, abs=1.e-12)
+        assert pl == approx(self.soln_ig.pl, abs=1.e-12)
+
+    def test_riem7revgen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
+        # Test than any point in (xmin,Xregs[0]) returns left state values.
+        x=diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() + self.xmin
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert rl == approx(self.soln_gen.rl, abs=1.e-12)
+        assert ul == approx(self.soln_gen.ul, abs=1.e-12)
+        assert pl == approx(self.soln_gen.pl, abs=1.e-12)
+
+    def test_riem7revig_state1(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 1 gives the correct state values.
+        """
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar1
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert r == approx(rl, abs=1.e-12)
+        assert u == approx(ul, abs=1.e-12)
+        assert p == approx(pl, abs=1.e-12)
+
+    def test_riem7revgen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
+        # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
+        x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar1
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert r == approx(rl, abs=1.e-7)
+        assert u == approx(ul, abs=1.e-6)
+        assert p == approx(pl, abs=1.e-6)
+
+    def test_riem7revig_state2(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 2 gives the correct state values.
+        """
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar2
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert r == approx(rl, abs=1.e-12)
+        assert u == approx(ul, abs=1.e-12)
+        assert p == approx(pl, abs=1.e-12)
+
+    def test_riem7revgen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
+        # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
+        x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        p, u, r = self.pstar, self.ustar, self.rstar2
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert r == approx(rl, abs=1.e-7)
+        assert u == approx(ul, abs=1.e-6)
+        assert p == approx(pl, abs=1.e-6)
+
+    def test_riem7revig_state3(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 3 gives the correct state values.
+        """
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+        r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+                                      self.xd0, self.t, self.soln_ig)
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert r == approx(rl, abs=1.e-12)
+        assert u == approx(ul, abs=1.e-12)
+        assert p == approx(pl, abs=1.e-12)
+
+    def test_riem7revgen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
+        # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
+        x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+        r, p, u = rho_p_u_rarefaction(self.pr, self.rr, self.ur, self.gr, x,
+                                      self.xd0, self.t, self.soln_gen)
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert r == approx(rl, abs=1.e-8)
+        assert u == approx(ul, abs=1.e-9)
+        assert p == approx(pl, abs=1.e-7)
+
+    def test_riem7revig_state4(self):
+        """Using the ideal-gas EOS solver, test that a random point in region 4 gives the correct state values.
+        """
+        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_ig.x - x))
+        x = self.soln_ig.x[_argmin]
+
+        rl = interp(x, self.soln_ig.x, self.soln_ig.r)
+        ul = interp(x, self.soln_ig.x, self.soln_ig.u)
+        pl = interp(x, self.soln_ig.x, self.soln_ig.p)
+        assert self.rr == approx(rl, abs=1.e-12)
+        assert self.ur == approx(ul, abs=1.e-12)
+        assert self.pr == approx(pl, abs=1.e-12)
+
+    def test_riem7revgen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
+        # Test that any point in (Xregs[3],Xregs[4]) returns correct values.
+        x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
+        _argmin = argmin(abs(self.soln_gen.x - x))
+        x = self.soln_gen.x[_argmin]
+
+        rl = interp(x, self.soln_gen.x, self.soln_gen.r)
+        ul = interp(x, self.soln_gen.x, self.soln_gen.u)
+        pl = interp(x, self.soln_gen.x, self.soln_gen.p)
+        assert self.rr == approx(rl, abs=1.e-12)
+        assert self.ur == approx(ul, abs=1.e-12)
+        assert self.pr == approx(pl, abs=1.e-12)
+
+
 class Test_RiemannJWL_Shyue():
-    """Tests generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on Shyue's JWL Riemann problem. See Shyue's 2001 JCP paper, Fluid Mixture Algorithm for Compressible Multicomponent flow with Mie Gruneisen Equation of State.
+    """Tests general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on Shyue's JWL Riemann problem [Shyue2001]_.
     """
 
     # Shyue's JWL Riemann Problem
@@ -3142,6 +3523,8 @@ class Test_RiemannJWL_Shyue():
                     1.6945593277042843, 2.3070073782654594])
 
     def test_riemShyuegen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-12)
         assert self.ustar1 == approx(self.soln_gen.ux1, abs=1.e-12)
@@ -3154,6 +3537,8 @@ class Test_RiemannJWL_Shyue():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-12)
 
     def test_riemShyuegen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
@@ -3166,6 +3551,8 @@ class Test_RiemannJWL_Shyue():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
 
     def test_riemShyuegen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
 
@@ -3177,6 +3564,8 @@ class Test_RiemannJWL_Shyue():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riemShyuegen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3191,6 +3580,8 @@ class Test_RiemannJWL_Shyue():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riemShyuegen_state3(self):
+        """Using the general EOS solver, test that a random point in region 3 gives the correct state values.
+        """
         # Test that any point in (Xregs[2],Xregs[3]) returns correct values.
         x = diff(self.Xregs[2:])[0] * numpy.random.rand() + self.Xregs[2]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3205,6 +3596,8 @@ class Test_RiemannJWL_Shyue():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riemShyuegen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3219,7 +3612,7 @@ class Test_RiemannJWL_Shyue():
 
 
 class Test_RiemannJWL_Lee():
-    """Tests generalized EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on Lee's JWL Riemann problem. See Lee's 2013 JCP paper, Adaptive Osher type scheme for the Euler Equations With Highly Nonlinear Equations of State.
+    """Tests general EOS (GenEOS) solutions produced by :class:`exactpack.solvers.riemann.riemann` on Lee's JWL Riemann problem [Lee2013]_.
     """
 
     # Lee's JWL Riemann Problem
@@ -3256,6 +3649,8 @@ class Test_RiemannJWL_Lee():
                     1.392738048512916, 1.7901143561267274])
 
     def test_riemLeegen_star_states(self):
+        """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
+        """
         # Test that star state values are computed correctly.
         assert self.pstar  == approx(self.soln_gen.px,  abs=1.e-12)
         assert self.ustar1 == approx(self.soln_gen.ux1, abs=1.e-12)
@@ -3268,6 +3663,8 @@ class Test_RiemannJWL_Lee():
         assert self.astar2 == approx(self.soln_gen.ax2, abs=1.e-12)
 
     def test_riemLeegen_region_boundaries(self):
+        """Using the general EOS solver, test that velocities separating boundaries are computed correctly, and that spatial boundaries from these are computed correctly.
+        """
         # Test that spatial region boundaries are computed correctly.
         # Xregs = Vregs * t + xd0
         assert self.Xregs[0] == approx(self.soln_gen.Xregs[0], abs=1.e-12)
@@ -3280,6 +3677,8 @@ class Test_RiemannJWL_Lee():
         assert self.Vregs[3] == approx(self.soln_gen.Vregs[3], abs=1.e-12)
 
     def test_riemLeegen_state0(self):
+        """Using the general EOS solver, test that a random point in region 0 gives the correct state values.
+        """
         # Test than any point in (xmin,Xregs[0]) returns left state values.
         x = diff([self.xmin, self.Xregs[0]])[0] * numpy.random.rand() +self.xmin
 
@@ -3291,6 +3690,8 @@ class Test_RiemannJWL_Lee():
         assert self.pl == approx(pl, abs=1.e-12)
 
     def test_riemLeegen_state1(self):
+        """Using the general EOS solver, test that a random point in region 1 gives the correct state values.
+        """
         # Test that any point in (Xregs[0],Xregs[1]) returns correct values.
         x = diff(self.Xregs[:2])[0] * numpy.random.rand() + self.Xregs[0]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3305,6 +3706,8 @@ class Test_RiemannJWL_Lee():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riemLeegen_state2(self):
+        """Using the general EOS solver, test that a random point in region 2 gives the correct state values.
+        """
         # Test that any point in (Xregs[1],Xregs[2]) returns correct values.
         x = diff(self.Xregs[1:3])[0] * numpy.random.rand() + self.Xregs[1]
         _argmin = argmin(abs(self.soln_gen.x - x))
@@ -3319,6 +3722,8 @@ class Test_RiemannJWL_Lee():
         assert p == approx(pl, abs=1.e-12)
 
     def test_riemLeegen_state4(self):
+        """Using the general EOS solver, test that a random point in region 4 gives the correct state values.
+        """
         # Test that any point in (Xregs[3],xmax) returns correct values.
         x = diff([self.Xregs[3], self.xmax])[0] * numpy.random.rand() + self.Xregs[3]
         _argmin = argmin(abs(self.soln_gen.x - x))

@@ -1,5 +1,5 @@
-Radshock Problems
-=================
+The Radshock Problems
+=====================
 
 .. automodule:: exactpack.solvers.radshocks
    :members:

@@ -72,37 +72,6 @@ class IGEOS_Solver(ExactSolver):
         """
         super(IGEOS_Solver, self).__init__(**kwargs)
 
-        # instantiate the IGEOS solver, and 'drive' the solver (below)
-#         prob = riemann.RiemannIGEOS(
-#                xmin = self.xmin,
-#                xd0 = self.xd0,
-#                xmax = self.xmax,
-#                t = self.t,
-#                rl = self.rl,
-#                ul = self.ul,
-#                pl = self.pl,
-#                gl = self.gl,
-#                rr = self.rr,
-#                ur = self.ur,
-#                pr = self.pr,
-#                gr = self.gr,
-#                A = self.A,
-#                B = self.B,
-#                R1 = self.R1,
-#                R2 = self.R2,
-#                r0 = self.r0,
-#                e0 = self.e0,
-#                problem = self.problem,
-#                num_int_pts = self.num_int_pts,
-#                num_x_pts = self.num_x_pts,
-#                int_tol = self.int_tol)
-#         prob.driver()
-# 
-#         self.x = prob.x
-#         self.p = prob.p
-#         self.r = prob.r
-#         self.u = prob.u
-#         self.e = prob.e
 
     def _run(self, x, t):
         self.t = t
@@ -110,8 +79,6 @@ class IGEOS_Solver(ExactSolver):
                xmin = self.xmin,
                xd0 = self.xd0,
                xmax = self.xmax,
-# jmferguson 221103: let this t be the t_final given by the user
-#                t = self.t,
                t = t,
                rl = self.rl,
                ul = self.ul,
@@ -139,8 +106,6 @@ class IGEOS_Solver(ExactSolver):
         self.u = prob.u
         self.e = prob.e
 
-# jmferguson 221103
-# turn these interps into a filter for these numpy arrays
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
         velocity = interp(x, self.x, self.u)
@@ -220,12 +185,15 @@ class GenEOS_Solver(ExactSolver):
         """
         super(GenEOS_Solver, self).__init__(**kwargs)
 
+
+    def _run(self, x, t):
+        self.t = t
         # instantiate the GenEOS solver, and 'drive' the solver (below)
         prob = riemann.RiemannGenEOS(
                xmin = self.xmin,
                xd0 = self.xd0,
                xmax = self.xmax,
-               t = self.t,
+               t = t,
                rl = self.rl,
                ul = self.ul,
                pl = self.pl,
@@ -252,7 +220,6 @@ class GenEOS_Solver(ExactSolver):
         self.u = prob.u
         self.e = prob.e
 
-    def _run(self, x, t):
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
         velocity = interp(x, self.x, self.u)

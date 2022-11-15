@@ -1,8 +1,10 @@
-# r"""A pure Python, analytic Riemann solver based on the 2013 paper by LoraClavijo, et. al. [LoraClavijo2013]_, and reports by Jim Kamm [Kamm2014, Kamm2015]_.
-# """
+r"""A pure Python, analytic Riemann solver based on the 2013 paper by LoraClavijo, et. al. [LoraClavijo2013]_, and reports by Jim Kamm [Kamm2014, Kamm2015]_.
+"""
 
 from scipy.optimize import bisect
 from numpy import linspace, array, sqrt, interp, append, where, argmin
+
+from exactpack.base import ExactSolver, ExactSolution
 
 from exactpack.solvers.riemann.utils import *
 
@@ -17,64 +19,67 @@ from exactpack.solvers.riemann.utils import *
 #   def driver(self)
 
 class SetupRiemannProblem(object):
-  r"""Sets up a 1D Riemann problem with separate left- and right-states. This
-      is for either an ideal-gas EOS or a generalized EOS like JWL. Also
-      initializes the number of integration points across a potential
-      rarefaction region, and the number of array points across the 1D region.
-   """
-  def __init__(self,xmin=0., xd0=0.5, xmax=1., t=0.25,
-               rl=1., ul=0., pl=1., gl=1.4, rr=0.125, ur=0., pr=0.1, gr=1.4,
-               A=0., B=0., R1=0., R2=0., r0=0., e0=0., problem='igeos',
-               num_int_pts=10001, num_x_pts = 10001, int_tol=1.e-12):
-#: At t=0, the left-most x-position.
-      self.xmin = xmin
-#: At t=0, the location of the membrane separating the left and right states.
-      self.xd0 = xd0
-#: At t=0, the right-most x-position.
-      self.xmax = xmax
-#: The end-time.
-      self.t = t
-#: The left-state initial pressure.
-      self.pl = pl
-#: The left-state initial density.
-      self.rl = rl
-#: The left-state initial velocity.
-      self.ul = ul
-#: The left-state adiabatic index.
-      self.gl = gl
-#: The right-state initial pressure.
-      self.pr = pr
-#: The right-state initial density.
-      self.rr = rr
-#: The right-state initial velocity.
-      self.ur = ur
-#: The right-state adiabatic index.
-      self.gr = gr
-#: For a JWL EOS, the variable A.
-      self.A = A
-#: For a JWL EOS, the variable B.
-      self.B = B
-#: For a JWL EOS, the variable R1.
-      self.R1 = R1
-#: For a JWL EOS, the variable R2.
-      self.R2 = R2
-#: For a JWL EOS, the variable r0.
-      self.r0 = r0
-#: For a JWL EOS, the variable e0.
-      self.e0 = e0
-#: The number of points in the spatial array.
-      self.num_x_pts = num_x_pts
-#: The number of integration points across a rarefaction state.
-      self.num_int_pts = num_int_pts
-#: The integration tolerance for integrating across a rarefaction.
-      self.int_tol = int_tol
-#: Flag/switch for defining mathematical function calls when integrating across rarefaction states. Default is 'igeos'; 'JWL' is currently an option.
-      self.problem = problem
+    r"""Sets up a 1D Riemann problem with separate left- and right-states. This
+        is for either an ideal-gas EOS or a generalized EOS like JWL. Also
+        initializes the number of integration points across a potential
+        rarefaction region, and the number of array points across the 1D region.
+     """
+    def __init__(self,xmin=0., xd0=0.5, xmax=1., t=0.25,
+                 rl=1., ul=0., pl=1., gl=1.4, rr=0.125, ur=0., pr=0.1, gr=1.4,
+                 A=0., B=0., R1=0., R2=0., r0=0., e0=0., problem='igeos',
+                 num_int_pts=10001, num_x_pts = 10001, int_tol=1.e-12):
 
-      self.al = sound_speed(pl, rl, gl, self)
-      self.ar = sound_speed(pr, rr, gr, self)
-      self.el, self.er = sie(pl, rl, gl, self), sie(pr, rr, gr, self)
-      self.pmax = 10. * max(pl, pr)
+#: At t=0, the left-most x-position.
+        self.xmin = xmin
+#: At t=0, the location of the membrane separating the left and right states.
+        self.xd0 = xd0
+#: At t=0, the right-most x-position.
+        self.xmax = xmax
+#: The end-time.
+        self.t = t
+#: The left-state initial pressure.
+        self.pl = pl
+#: The left-state initial density.
+        self.rl = rl
+#: The left-state initial velocity.
+        self.ul = ul
+#: The left-state adiabatic index.
+        self.gl = gl
+#: The right-state initial pressure.
+        self.pr = pr
+#: The right-state initial density.
+        self.rr = rr
+#: The right-state initial velocity.
+        self.ur = ur
+#: The right-state adiabatic index.
+        self.gr = gr
+#: For a JWL EOS, the variable A.
+        self.A = A
+#: For a JWL EOS, the variable B.
+        self.B = B
+#: For a JWL EOS, the variable R1.
+        self.R1 = R1
+#: For a JWL EOS, the variable R2.
+        self.R2 = R2
+#: For a JWL EOS, the variable r0.
+        self.r0 = r0
+#: For a JWL EOS, the variable e0.
+        self.e0 = e0
+#: The number of points in the spatial array.
+        self.num_x_pts = num_x_pts
+#: The number of integration points across a rarefaction state.
+        self.num_int_pts = num_int_pts
+#: The integration tolerance for integrating across a rarefaction.
+        self.int_tol = int_tol
+#: Flag/switch for defining mathematical function calls when integrating across rarefaction states. Default is 'igeos'; 'JWL' is currently an option.
+        self.problem = problem
+
+        pl, rl, gl = self.pl, self.rl, self.gl
+        pr, rr, gr = self.pr, self.rr, self.gr
+        self.al = sound_speed(pl, rl, gl, self)
+        self.ar = sound_speed(pr, rr, gr, self)
+        self.el, self.er = sie(pl, rl, gl, self), sie(pr, rr, gr, self)
+        self.pmax = 10. * max(pl, pr)
 
 
 class RiemannIGEOS(SetupRiemannProblem):
@@ -85,7 +90,7 @@ class RiemannIGEOS(SetupRiemannProblem):
 
         Default values are :math:`xmin=0, xd0=0.5, xmax=1, t=0.25, \rho_l=1, u_l=0, p_l=1, \gamma_l=1.4, \rho_r=0.125, u_r=0, p_r=0.1, \gamma_r=1.4`.
     """
-    def driver(self, x_user):
+    def driver(self, x_user=0):
       pl, rl, ul, gl = self.pl, self.rl, self.ul, self.gl
       pr, rr, ur, gr = self.pr, self.rr, self.ur, self.gr
       xmin, xd0, xmax, t = self.xmin, self.xd0, self.xmax, self.t
@@ -158,7 +163,6 @@ class RiemannIGEOS(SetupRiemannProblem):
       xmin, xmax = min(xmin, 1.1 * min(Xregs)), max(xmax, 1.1 * max(Xregs))
       x = linspace(xmin, xmax, self.num_x_pts)
       x = append(x, Xregs)
-# jmferguson 221103: added x_user
       x = append(x, x_user)
       x.sort()
       vals = pl+0.* x, rl+0.*x, ul+0.*x, el+0.*x
@@ -215,12 +219,17 @@ class RiemannIGEOS(SetupRiemannProblem):
       self.uNCSplow = u_NCS(self.plow, self)
       self.uRCNplow = u_RCN(self.plow, self)
       self.uaps, self.uRCVRps = u_a(self.ps, self), u_RCVR(self.ps, self)
-      
+
 
 class RiemannGenEOS(SetupRiemannProblem):
-  '''
-  '''
-  def driver(self):
+  r"""Computes the analytic solution to the Riemann problem for an ideal-gas
+        EOS. See [LoraClavijo2013]_ for the solution description. The problem
+        default values are for the Sod shocktube, which is also Riemann problem
+        #1.
+
+        Default values are :math:`xmin=0, xd0=0.5, xmax=1, t=0.25, \rho_l=1, u_l=0, p_l=1, \gamma_l=1.4, \rho_r=0.125, u_r=0, p_r=0.1, \gamma_r=1.4`.
+  """
+  def driver(self, x_user=0):
       xmin, xd0, xmax, t = self.xmin, self.xd0, self.xmax, self.t
       pl, rl, ul, gl = self.pl, self.rl, self.ul, self.gl
       pr, rr, ur, gr = self.pr, self.rr, self.ur, self.gr
@@ -309,6 +318,7 @@ class RiemannGenEOS(SetupRiemannProblem):
       xmin, xmax = min(xmin, 1.1 * min(Xregs)), max(xmax, 1.1 * max(Xregs))
       x = linspace(xmin, xmax, self.num_x_pts)
       x = append(x, Xregs)
+      x = append(x, x_user)
       x.sort()
       
       def reg_state_geos(xl, xr, xe, regvals, exactvals):
