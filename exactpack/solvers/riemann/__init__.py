@@ -167,7 +167,7 @@ In this section we present 7 problem statements for the ideal-gas EOS, and two p
 The JWL EOS is of the Mie-Gruneisen form and typically used for high-explosive modeling.
 
 Seven ideal-gas EOS problem statements
-++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++
 
 We define seven standard Riemann problems in the table below.
 The first six all use the same :math:`\gamma` for both the left and right states, while the seventh uses different gammas.
@@ -199,7 +199,7 @@ These seven problems, and their reversed states provide the basis of for most of
 +-------------------------------------+------------------------------------------+
 
 Two JWL EOS problem statements
-++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++
 
 We define two standard Riemann problems in the table below.
 In addition to defining values for density, velocity and pressure for the left- and right-states, we also have to define parameters for the JWL EOS.
