@@ -5,10 +5,11 @@ import unittest
 import pytest
 import warnings
 from pytest import approx
-from numpy import array, interp, diff, sqrt, abs, argmin
+from numpy import array, interp, diff, sqrt, abs, argmin, linspace
 
 import numpy.random
 
+from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver
 from exactpack.solvers.riemann.riemann import *
 
 warnings.simplefilter('ignore', RuntimeWarning)
@@ -3739,3 +3740,107 @@ class Test_RiemannJWL_Lee():
         assert self.rr == approx(rl, abs=1.e-12)
         assert self.ur == approx(ul, abs=1.e-12)
         assert self.pr == approx(pl, abs=1.e-12)
+
+
+class TestRiemannIGSEOSSolver():
+    """Regression test of the Ideal Gas solver wrapper."""
+    # Riemann Problem 1
+    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
+    rl, ul, pl, gl = 1.0,   0.0, 1.0, 1.4
+    rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
+    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    problem = 'igeos'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+    solver_ig = IGEOS_Solver(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                             rl=rl, ul=ul, pl=pl, gl=gl,
+                             rr=rr, ur=ur, pr=pr, gr=gr)
+    x = linspace(0.3, 0.7, 11)
+    t = 0.25
+    soln = solver_ig(x, t)
+
+    def test_position(self):
+        assert len(self.soln['position']) == 11
+        expected = [0.3 , 0.34, 0.38, 0.42, 0.46, 0.5,
+                    0.54, 0.58, 0.62, 0.66, 0.7]
+        assert self.soln['position'] == approx(expected)
+
+    def test_pressure(self):
+        assert len(self.soln['pressure']) == 11
+        expected = [0.67811609, 0.57279963, 0.481826  , 0.40352901, 0.33640109,
+                    0.30313018, 0.30313018, 0.30313018, 0.30313018, 0.30313018,
+                    0.30313018]
+        assert self.soln['pressure'] == approx(expected)
+
+    def test_density(self):
+        assert len(self.soln['density']) == 11
+        expected = [0.75770978, 0.67165277, 0.59359881, 0.52297626, 0.45924136,
+                    0.42631943, 0.42631943, 0.42631943, 0.42631943, 0.42631943,
+                    0.42631943]
+        assert self.soln['density'] == approx(expected)
+
+    def test_velocity(self):
+        assert len(self.soln['velocity']) == 11
+        expected = [0.31934663, 0.45267996, 0.5860133 , 0.71934663, 0.85267996,
+                    0.92745262, 0.92745262, 0.92745262, 0.92745262, 0.92745262,
+                    0.92745262]
+        assert self.soln['velocity'] == approx(expected)
+
+    def test_sie(self):
+        assert len(self.soln['sie']) == 11
+        expected = [2.23738728, 2.13205268, 2.02925777, 1.92900253, 1.83128698,
+                    1.77760007, 1.77760007, 1.77760007, 1.77760007, 1.77760007,
+                    1.77760007]
+        assert self.soln['sie'] == approx(expected)
+
+
+class TestRiemannGenEOSSolver():
+    """Regression test of the Gen EOS solver wrapper."""
+    # Riemann Problem 1
+    xmin, xd0, xmax, t = 0.0, 0.5, 1.0, 0.25
+    rl, ul, pl, gl = 1.0,   0.0, 1.0, 1.4
+    rr, ur, pr, gr = 0.125, 0.0, 0.1, 1.4
+    A, B, R1, R2, r0, e0  = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+    problem = 'geneos'
+    num_x_pts, num_int_pts, int_tol = 10001, 10001, 1.e-12
+
+    solver_ig = GenEOS_Solver(xmin=xmin, xd0=xd0, xmax=xmax, t=t,
+                              rl=rl, ul=ul, pl=pl, gl=gl,
+                              rr=rr, ur=ur, pr=pr, gr=gr)
+    x = linspace(0.3, 0.7, 11)
+    t = 0.25
+    soln = solver_ig(x, t)
+
+    def test_position(self):
+        assert len(self.soln['position']) == 11
+        expected = [0.3 , 0.34, 0.38, 0.42, 0.46, 0.5,
+                    0.54, 0.58, 0.62, 0.66, 0.7]
+        assert self.soln['position'] == approx(expected)
+
+    def test_pressure(self):
+        assert len(self.soln['pressure']) == 11
+        expected = [0.67811609, 0.57279963, 0.481826  , 0.40352901, 0.33640109,
+                    0.30313018, 0.30313018, 0.30313018, 0.30313018, 0.30313018,
+                    0.30313018]
+        assert self.soln['pressure'] == approx(expected)
+
+    def test_density(self):
+        assert len(self.soln['density']) == 11
+        expected = [0.75770978, 0.67165277, 0.59359881, 0.52297626, 0.45924136,
+                    0.42631943, 0.42631943, 0.42631943, 0.42631943, 0.42631943,
+                    0.42631943]
+        assert self.soln['density'] == approx(expected)
+
+    def test_velocity(self):
+        assert len(self.soln['velocity']) == 11
+        expected = [0.31934663, 0.45267996, 0.5860133 , 0.71934663, 0.85267996,
+                    0.92745262, 0.92745262, 0.92745262, 0.92745262, 0.92745262,
+                    0.92745262]
+        assert self.soln['velocity'] == approx(expected)
+
+    def test_sie(self):
+        assert len(self.soln['sie']) == 11
+        expected = [2.23738728, 2.13205268, 2.02925777, 1.92900253, 1.83128698,
+                    1.77760007, 1.77760007, 1.77760007, 1.77760007, 1.77760007,
+                    1.77760007]
+        assert self.soln['sie'] == approx(expected)
