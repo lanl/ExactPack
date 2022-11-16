@@ -6,11 +6,11 @@ from exactpack.solvers.radshocks.nED_radshocks import ED_Solver
 from exactpack.solvers.radshocks.nED_radshocks import nED_Solver
 from exactpack.solvers.radshocks.nED_radshocks import Sn_Solver
 from exactpack.solvers.radshocks.nED_radshocks import ie_Solver
-import matplotlib.pyplot
-import numpy
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
 
-matplotlib.pyplot.rc('font', family='serif', size=12)
-matplotlib.pyplot.rc('text', usetex = 'True')
+import numpy as np
 
 #  Initialize the solution objects.
 #  Four solvers are shown below: ED_Solver, nED_Solver, Sn_Solver, ie_Solver.
@@ -32,7 +32,7 @@ xmax = 10.0
 t = 5.0
 NP = 1e5
 
-xvec = numpy.linspace(xmin, xmax, int(NP))
+xvec = np.linspace(xmin, xmax, int(NP))
 
 #  Evaluate the solutions.
 
@@ -68,15 +68,15 @@ Te_ie = ie_result['temperature_elec']
 # Define simple parameters to make the radiative-shock plots look nicer.
 
 Tf = Tm_ED[-1]
-Tm_max = numpy.max(Tm_nED)
+Tm_max = np.max(Tm_nED)
 delta_T = (Tm_max - Tm_nED[0]) / 100.
-arg_EHS = numpy.argmin(numpy.abs(x_nED))
-arg_x0 = numpy.argmin(numpy.abs(Tm_nED[:arg_EHS] - (Tm_nED[0] + delta_T / 10.)))
+arg_EHS = np.argmin(np.abs(x_nED))
+arg_x0 = np.argmin(np.abs(Tm_nED[:arg_EHS] - (Tm_nED[0] + delta_T / 10.)))
 if (Tm_max > Tf):
     T_end = Tf + delta_T / 10.
 else:
     T_end = Tf - delta_T / 10.
-arg_x1 = numpy.argmin(numpy.abs(Tm_nED[arg_EHS:] - T_end)) + arg_EHS
+arg_x1 = np.argmin(np.abs(Tm_nED[arg_EHS:] - T_end)) + arg_EHS
 x0 = 1.1 * x_nED[arg_x0]
 x1 = x_nED[arg_x1]
 x1 = max(-x0 / 10., x1)
@@ -85,61 +85,66 @@ y1 = Tm_max + delta_T
 
 # Plot the four radiative-shock solutions.
 
-fig = matplotlib.pyplot.figure()
+fig = plt.figure(figsize=(10, 7))
 ax1 = fig.add_subplot(231)
 ax1.plot(x_ED, Tm_ED)
-matplotlib.pyplot.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
-matplotlib.pyplot.yticks([100, 119], ['100', '119'])
-matplotlib.pyplot.xlim((x0, x1))
-matplotlib.pyplot.ylim((y0, y1))
-matplotlib.pyplot.title(r'ED\_Solver')
+plt.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
+plt.yticks([100, 119], ['100', '119'])
+plt.xlim((x0, x1))
+plt.ylim((y0, y1))
+plt.title('ED_Solver')
+plt.grid(True)
 ax2 = fig.add_subplot(232)
 ax2.plot(x_nED, Tm_nED)
 ax2.plot(x_nED, Tr_nED)
-matplotlib.pyplot.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
-matplotlib.pyplot.yticks([100, 119], ['100', '119'])
-matplotlib.pyplot.xlim((x0, x1))
-matplotlib.pyplot.ylim((y0, y1))
-matplotlib.pyplot.title(r'nED\_Solver')
+plt.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
+plt.yticks([100, 119], ['100', '119'])
+plt.xlim((x0, x1))
+plt.ylim((y0, y1))
+plt.title('nED_Solver')
+plt.grid(True)
 ax3 = fig.add_subplot(233)
 ax3.plot(x_AP, Tm_AP)
 ax3.plot(x_AP, Tr_AP, '--')
-matplotlib.pyplot.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
-matplotlib.pyplot.yticks([100, 119], ['100', '119'])
-matplotlib.pyplot.xlim((x0, x1))
-matplotlib.pyplot.ylim((y0, y1))
-matplotlib.pyplot.title(r'nED\_Solver ($\epsilon = 0.1$)')
+plt.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
+plt.yticks([100, 119], ['100', '119'])
+plt.xlim((x0, x1))
+plt.ylim((y0, y1))
+plt.title('nED_Solver ($\epsilon = 0.1$)')
+plt.grid(True)
 ax4 = fig.add_subplot(234)
 ax4.plot(x_Sn, Tm_Sn)
 ax4.plot(x_Sn, Tr_Sn)
-matplotlib.pyplot.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
-matplotlib.pyplot.yticks([100, 119], ['100', '119'])
-matplotlib.pyplot.xlim((x0, x1))
-matplotlib.pyplot.ylim((y0, y1))
+plt.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
+plt.yticks([100, 119], ['100', '119'])
+plt.xlim((x0, x1))
+plt.ylim((y0, y1))
 ax5 = ax4.twinx()
 ax5.plot(x_Sn, VEF_Sn)
-matplotlib.pyplot.title(r'Sn\_Solver')
+plt.title('Sn_Solver')
+plt.grid(True)
 ax6 = fig.add_subplot(235)
 ax6.plot(x_FLD1, Tm_FLD1)
 ax6.plot(x_FLD1, Tr_FLD1)
-matplotlib.pyplot.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
-matplotlib.pyplot.yticks([100, 119], ['100', '119'])
-matplotlib.pyplot.xlim((x0, x1))
-matplotlib.pyplot.ylim((y0, y1))
-matplotlib.pyplot.title(r'FLD1\_Solver')
+plt.xticks([-0.01, 0., 0.004], ['-0.01', '0.', '0.005'])
+plt.yticks([100, 119], ['100', '119'])
+plt.xlim((x0, x1))
+plt.ylim((y0, y1))
+plt.title('FLD1_Solver')
+plt.grid(True)
 
 # Define simple parameters to make the ion-electron plots look nicer.
 
 Tf = Ti_ie[-1]
-Ti_max = numpy.max(Ti_ie)
+Ti_max = np.max(Ti_ie)
 delta_T = (Ti_max - Ti_ie[0]) / 100.
-arg_EHS = numpy.argmin(numpy.abs(x_ie))
-arg_x0 = numpy.argmin(numpy.abs(Ti_ie[:arg_EHS] - (Ti_ie[0] + delta_T / 10.)))
+arg_EHS = np.argmin(np.abs(x_ie))
+arg_x0 = np.argmin(np.abs(Ti_ie[:arg_EHS] - (Ti_ie[0] + delta_T / 10.)))
 if (Ti_max > Tf):
     T_end = Tf + delta_T / 10.
 else:
     T_end = Tf - delta_T / 10.
-arg_x1 = numpy.argmin(numpy.abs(Ti_ie[arg_EHS:] - T_end)) + arg_EHS
+arg_x1 = np.argmin(np.abs(Ti_ie[arg_EHS:] - T_end)) + arg_EHS
 x0 = 1.1 * x_ie[arg_x0]
 x1 = x_ie[arg_x1]
 x1 = max(-x0 / 10., x1)
@@ -153,9 +158,17 @@ ax7 = fig.add_subplot(236)
 ax7.plot(x_ie, Ti_ie)
 ax7.plot(x_ie, Tm_ie)
 ax7.plot(x_ie, Te_ie)
-matplotlib.pyplot.xticks([-9, 0., 5], ['-9.', '0.', '5.'])
-matplotlib.pyplot.yticks([100, 146], ['100', '146'])
-matplotlib.pyplot.xlim((x0, x1))
-matplotlib.pyplot.ylim((y0, y1))
-matplotlib.pyplot.title(r'ie\_Solver')
-matplotlib.pyplot.show()
+# plt.xticks([-9, 0., 5], ['0.', '1.', '3.'])
+# plt.yticks([100, 146], ['100', '140'])
+# plt.xlim((x0, x1))
+# plt.ylim((y0, y1))
+plt.xlim((x1-0.001, x1+0.001))
+# plt.ylim((y0, y1))
+plt.title('ie_Solver')
+plt.grid(True)
+plt.tight_layout()
+
+print('x0, x1, y0, y1:', x0, x1, y0, y1)
+plt.show()
+
+plt.close()

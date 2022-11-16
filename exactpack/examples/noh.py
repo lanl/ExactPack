@@ -1,8 +1,7 @@
 import numpy as np
-import matplotlib.pylab as plt
-from matplotlib import rc, rcParams
-#rc('text',usetex=True)
-rc('font',**{'family':'serif','serif':['Computer Modern']})
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
 
 # import ExactPack solver and analysis tools
 from exactpack.solvers.noh.noh1 import Noh
@@ -20,6 +19,7 @@ t = 0.6
 solver = Noh()
 soln = solver(r,t)
 # plot exact solution
+fig = plt.figure(figsize=(10, 7))
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity',scale=10)
@@ -29,6 +29,7 @@ plt.title('ExactPack solver class Noh')
 plt.ylim(-15,70)
 plt.legend(loc=1)
 plt.grid(True)
+plt.tight_layout()
 plt.show()
 
 #####################################################################
@@ -36,6 +37,7 @@ plt.show()
 solver = NohTimmes(geometry=3, gamma=5.0/3.0)
 soln = solver(r,t)
 # plot exact solution
+fig = plt.figure(figsize=(10, 7))
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity',scale=10)
@@ -45,6 +47,7 @@ plt.title('ExactPack solver class Noh for Timmes')
 plt.ylim(-15,70)
 plt.legend(loc=1)
 plt.grid(True)
+plt.tight_layout()
 plt.show()
 
 #####################################################################
@@ -52,6 +55,7 @@ plt.show()
 solver = SphericalNoh()
 soln = solver(r,t)
 # plot exact solution
+fig = plt.figure(figsize=(10, 7))
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity',scale=10)
@@ -61,6 +65,7 @@ plt.title('ExactPack solver class SphericalNoh')
 plt.ylim(-15,70)
 plt.legend(loc=1)
 plt.grid(True)
+plt.tight_layout()
 plt.show()
 
 #####################################################################
@@ -68,6 +73,7 @@ plt.show()
 solver = CylindricalNoh()
 soln = solver(r,t)
 # plot exact solution
+fig = plt.figure(figsize=(10, 7))
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
@@ -77,6 +83,7 @@ plt.title('ExactPack solver class CylindricalNoh')
 plt.ylim(-2,18)
 plt.legend(loc=1)
 plt.grid(True)
+plt.tight_layout()
 plt.show()
 
 
@@ -85,6 +92,7 @@ plt.show()
 solver = PlanarNoh()
 soln = solver(r,t)
 # plot exact solution
+fig = plt.figure(figsize=(10, 7))
 soln.plot('density')
 soln.plot('pressure')
 soln.plot('velocity')
@@ -94,8 +102,7 @@ plt.title('ExactPack solver class PlanarNoh')
 plt.ylim(-1.4,5)
 plt.legend(loc=1)
 plt.grid(True)
+plt.tight_layout()
 plt.show()
 
-
-
-
+plt.close()

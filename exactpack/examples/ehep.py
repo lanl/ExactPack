@@ -5,9 +5,10 @@
 
 from exactpack.solvers.ehep import EscapeOfHEProducts
 import matplotlib.pyplot as plt
-import numpy as np
+from matplotlib import rc
+rc('font', size=14)
 
-plt.rc('font', family='serif', size=12)
+import numpy as np
 
 #  Initialize the solution object
 
@@ -26,7 +27,7 @@ xvec = np.linspace(0, xmax, NP)
 result = solution._run(xvec, t)
 
 #  Plot the solution vs time
-
+fig = plt.figure(figsize=(10, 7))
 plt.subplot(2, 2, 1)
 plt.plot(xvec, result['density'], 'k')
 plt.ylabel(r'density [$\rm{g/cm^3}$]')
@@ -50,3 +51,5 @@ plt.suptitle('EHEP results at t={}$\mu\sec$'.format(t))
 plt.tight_layout()
 
 plt.show()
+
+plt.close()

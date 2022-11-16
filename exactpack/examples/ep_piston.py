@@ -5,6 +5,9 @@
 
 from exactpack.solvers.ep_piston import EPpiston
 import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
+
 import numpy as np
 
 #Call the analytic solution solver for each kind of elastic model using the same parameters
@@ -66,6 +69,7 @@ result_Hypo = solution_Hypo._run(xvec, xmax, t)
 wv_elx=solution_Ifin.wv_el*t
 wv_plx=solution_Ifin.wv_pl*t
 #Plot the pressure from each solution for the whole problem size
+fig = plt.figure(figsize=(10, 7))
 plt.subplot(1, 2, 1)
 plt.plot(xvec, result_Ifin['pressure'], 'r')
 plt.plot(xvec, result_Fin['pressure'], 'b')
@@ -96,4 +100,7 @@ plt.xlim(wv_plx,wv_elx)
 #plt.xlim(1.29,1.31)
 plt.ylim(solution_Ifin.p_y-1e-4,solution_Ifin.p_y+1e-4)
 #plt.ylim(0.0036,0.0037)
+plt.tight_layout()
 plt.show()
+
+plt.close()
