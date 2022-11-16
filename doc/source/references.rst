@@ -63,6 +63,11 @@ References
    *Noh's constant-velocity shock problem revisited*,
    Shock Waves **7** (1997) 255.
 
+.. [GottliebGroth1988]
+   J.J. Gottlieb and C.P.T. Groth,
+   *Assessment of Riemann Solvers for Unsteady One-Dimensional Inviscid Flows for Perfect Gases*,
+   Journal of Computational Physics, **78** (1988) 437.
+
 .. [Guderley1942]
   G. Guderley,
   Luftahrtforschung **19** (1942) 302.
@@ -150,10 +155,20 @@ References
    Erratum: Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
    SIAM J. Numer Anal. 19, p. 1090 (1982)
 
+.. [Lee2013]
+   B.J. Lee, E. Toro, C. Castro and N. Nikiforakis,
+   *Adaptive Osher-type scheme for the Euler equations with highly nonlinear equations of state*,
+   Journal of Computational Physics, **246** (2013) 165.
+
 .. [Lieberman2019] 
    Evan J. Lieberman, Xiaodong Liu, Nathaniel R. Morgan, Darby J. Luscher, and Donald E. Burton,
    *A higher-order Lagrangian discontinuous Galerkin hydrodynamic method for solid dynamics*,
    CMAME **353** (2019) 467-490.
+
+.. [LoraClavijo2013]
+   F. LoraClavijo, J. Cruz-Perez, F. Guzman and J. Gonzalez,
+   *Exact solution of the 1D riemann problem in Newtonian and relativistic hydrodynamics*,
+   Revista Mexicana de Fisica E, **59** (2013) 28.
 
 .. [Lowrie2007]
    R. Lowrie and R. Rauenzahn,
@@ -164,6 +179,11 @@ References
    R. Lowrie and J. Edwards,
    *Radiative shock solutions with grey nonequilibrium diffusion*
    Shock Waves **18** (2008) 129.
+
+.. [MenikoffPlohr1989]
+   R. Menikoff and B. Plohr,
+   *The Riemann problem for fluid flow of real materials*,
+   Reviews of Modern Physics, **61**, (1989) 1.
 
 .. [Noh1987]
    W. F. Noh, *Errors for Calculations of Strong Shocks Using an
@@ -178,7 +198,12 @@ References
    L.I. Sedov,
    *Similarity and Dimensional Methods in Mechanics*,
    Academic Press, New York, NY, p. 147 ff. (1959).   
-   
+
+.. [Shyue2001]
+   K. Shyue,
+   *A Fluid-Mixture Type Algorithm for Compressible Multicomponent Flow with Mie-Gruneisen Equation of State*,
+   Journal of Computational Physics **171** (2001) 678.
+
 .. [Su1996]
    Bingjing Su and Gordon L. Olson,
    Benchmark Results for the Non-equilibrium Marshak Diffusion Problem,
@@ -188,65 +213,6 @@ References
    Francis X. Timmes, Galen Gisler, and George M. Hrbek,
    *Automated Analyses of the Tri-Lab Verification Test Suite on Uniform and Adaptive Grids for Code Project A*,
    LA-UR-05-6865, Los Alamos National Laboratory (2005).
-
-.. [Heaslet1963]
-   Heaslet and Baldwin,
-   M. Heaslet and B. Baldwin,
-   *Predictions of the structure of radiation-resisted shock waves*,
-   Physics of Fluids **6** (1963) 781.
-
-.. [Lowrie2007]
-   R. Lowrie and R. Rauenzahn,
-   *Radiative shock solutions in the equilibrium diffusion limit*
-   Shock Waves **18** (2007) 445.
-
-.. [Lowrie2008]
-   R. Lowrie and J. Edwards,
-   *Radiative shock solutions with grey nonequilibrium diffusion*
-   Shock Waves **18** (2008) 129.
-
-.. [Ferguson2017]
-   J. Ferguson, J. Morel and R. Lowrie
-   High Energy Density Physics, accepted for publication.
-
-.. [Kidder1974]
-   R.E. Kidder,
-   *Laser-Driven Compression of Hollow Shells: Power requirements and
-   Stability Limitations*,
-   Nucl. Fusion **14** (1974) 53.
-
-.. [Kidder1976]
-   R.E. Kidder,
-   *Energy gain of laser-compressed pellets: a simple model calculation*,
-   Nucl. Fusion **16** (1976) 33.
-
-.. [Bdzil]
-   Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
-
-.. [Shyue2001]
-   K. Shyue,
-   *A Fluid-Mixture Type Algorithm for Compressible Multicomponent Flow with Mie-Gruneisen Equation of State*,
-   Journal of Computational Physics **171** (2001) 678.
-
-.. [Lee2013]
-   B.J. Lee, E. Toro, C. Castro and N. Nikiforakis,
-   *Adaptive Osher-type scheme for the Euler equations with highly nonlinear equations of state*,
-   Journal of Computational Physics, **246** (2013) 165.
-
-.. [GottliebGroth1988]
-   J.J. Gottlieb and C.P.T. Groth,
-   *Assessment of Riemann Solvers for Unsteady One-Dimensional Inviscid Flows for Perfect Gases*,
-   Journal of Computational Physics, **78** (1988) 437.
-
-.. [LoraClavijo2013]
-   F. LoraClavijo, J. Cruz-Perez, F. Guzman and J. Gonzalez,
-   *Exact solution of the 1D riemann problem in Newtonian and relativistic hydrodynamics*,
-   Revista Mexicana de Fisica E, **59** (2013) 28.
-
-.. [MenikoffPlohr1989]
-   R. Menikoff and B. Plohr,
-   *The Riemann problem for fluid flow of real materials*,
-   Reviews of Modern Physics, **61**, (1989) 1.
 
 .. [Udaykumar2003] 
    H.S. Udaykumar, L. Tran, D.M. Belk, and K.J. Vanden,
