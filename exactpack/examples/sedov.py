@@ -9,6 +9,7 @@ Uses Doebling and (if available) Timmes Sedov solvers.
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
+rc('font', size=14)
 
 # import ExactPack solvers
 from exactpack.solvers.sedov.doebling import Sedov as SedovDoebling
@@ -20,8 +21,8 @@ except ImportError:
     timmes_import = False
 
 # pyplot default settings
-rc('font', **{'family': 'serif', 'serif': ['Computer Modern'], 'size': 16})
-rc('grid', c='0.5', ls='-', lw=0.5)
+# rc('font', **{'family': 'serif', 'serif': ['Computer Modern'], 'size': 16})
+# rc('grid', c='0.5', ls='-', lw=0.5)
 
 # set domain variables for plots
 npts = 2001
@@ -44,7 +45,7 @@ solver_doebling_sph = SedovDoebling(geometry=3, eblast=0.851072,
                                     gamma=1.4, omega=0.)
 solution_doebling_sph = solver_doebling_sph(r=rvec, t=t)
 
-fig = plt.figure(figsize=(10, 10))
+fig = plt.figure(figsize=(10, 7))
 plt.suptitle('''Sedov solutions for $\gamma=1.4$, standard cases, Doebling solver.
     Compare to Fig. 8 from Kamm & Timmes 2007''')
 
@@ -57,7 +58,7 @@ plt.ylim(0.0, 6.5)
 plt.xlabel('Position (cm)')
 plt.ylabel('Density (g/cc)')
 plt.grid(True)
-L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=3,
+L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.4), ncol=3,
                fancybox=True, shadow=True)
 L.get_texts()[0].set_text('planar')
 L.get_texts()[1].set_text('cylindrical')
@@ -83,7 +84,7 @@ plt.ylim(1.e-2, 1.e5)
 plt.xlabel('Position (cm)')
 plt.ylabel('Specific internal energy (erg/g)')
 plt.grid(True)
-plt.gca().set_yscale('log', nonposy='clip')
+plt.gca().set_yscale('log', nonpositive='clip')
 plt.gca().legend().set_visible(False)
 
 plt.subplot(224)
@@ -98,9 +99,9 @@ plt.grid(True)
 plt.gca().legend().set_visible(False)
 
 plt.tight_layout()
-fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+fig.subplots_adjust(top=0.8)  # Makes room for suptitle
 #plt.savefig('fig08doebling.pdf')
-
+plt.show()
 
 if timmes_import:
     
@@ -120,7 +121,7 @@ if timmes_import:
                                         gamma=1.4)
     solution_timmes_sph = solver_timmes_sph(r=rvec, t=t)
     
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=(10, 7))
     plt.suptitle('''Sedov solutions for $\gamma=1.4$, standard cases, Timmes solver.
         Compare to Fig. 8 from Kamm & Timmes 2007''')
     
@@ -133,7 +134,7 @@ if timmes_import:
     plt.xlabel('Position (cm)')
     plt.ylabel('Density (g/cc)')
     plt.grid(True)
-    L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=3,
+    L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.4), ncol=3,
                    fancybox=True, shadow=True)
     L.get_texts()[0].set_text('planar')
     L.get_texts()[1].set_text('cylindrical')
@@ -159,7 +160,7 @@ if timmes_import:
     plt.xlabel('Position (cm)')
     plt.ylabel('Specific internal energy (erg/g)')
     plt.grid(True)
-    plt.gca().set_yscale('log', nonposy='clip')
+    plt.gca().set_yscale('log', nonpositive='clip')
     plt.gca().legend().set_visible(False)
     
     plt.subplot(224)
@@ -174,8 +175,9 @@ if timmes_import:
     plt.gca().legend().set_visible(False)
     
     plt.tight_layout()
-    fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+    fig.subplots_adjust(top=0.8)  # Makes room for suptitle
     #plt.savefig('fig08timmes.pdf')
+    plt.show()
 
 #
 # Figure 9: Singular test cases
@@ -189,7 +191,7 @@ solver_doebling_sph = SedovDoebling(geometry=3, eblast=4.90875,
                                     gamma=1.4, omega=2.33333)
 solution_doebling_sph = solver_doebling_sph(r=rvec, t=t)
 
-fig = plt.figure(figsize=(10, 10))
+fig = plt.figure(figsize=(10, 7))
 plt.suptitle('''Sedov solutions for $\gamma=1.4$, singular cases, Doebling solver.
     Compare to Fig. 9 from Kamm & Timmes 2007''')
 
@@ -201,7 +203,7 @@ plt.ylim(0.0, 12.0)
 plt.xlabel('Position (cm)')
 plt.ylabel('Density (g/cc)')
 plt.grid(True)
-L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=2,
+L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.4), ncol=2,
                fancybox=True, shadow=True)
 L.get_texts()[0].set_text('cylindrical')
 L.get_texts()[1].set_text('spherical')
@@ -224,7 +226,7 @@ plt.ylim(1.e-5, 1.e0)
 plt.xlabel('Position (cm)')
 plt.ylabel('Specific internal energy (erg/g)')
 plt.grid(True)
-plt.gca().set_yscale('log', nonposy='clip')
+plt.gca().set_yscale('log', nonpositive='clip')
 plt.gca().legend().set_visible(False)
 
 plt.subplot(224)
@@ -238,8 +240,9 @@ plt.grid(True)
 plt.gca().legend().set_visible(False)
 
 plt.tight_layout()
-fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+fig.subplots_adjust(top=0.8)  # Makes room for suptitle
 #plt.savefig('fig09.pdf')
+plt.show()
 
 #
 # Figure 10: Vacuum test cases
@@ -253,7 +256,7 @@ solver_doebling_sph = SedovDoebling(geometry=3, eblast=5.45670,
                                     gamma=1.4, omega=2.4)
 solution_doebling_sph = solver_doebling_sph(r=rvec, t=t)
 
-fig = plt.figure(figsize=(10, 10))
+fig = plt.figure(figsize=(10, 7))
 plt.suptitle('''Sedov solutions for $\gamma=1.4$, vacuum cases, Doebling solver
     Compare to Fig. 10 from Kamm & Timmes 2007''')
 
@@ -265,7 +268,7 @@ plt.ylim(0.0, 20.0)
 plt.xlabel('Position (cm)')
 plt.ylabel('Density (g/cc)')
 plt.grid(True)
-L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.25), ncol=2,
+L = plt.legend(loc='upper left', bbox_to_anchor=(0.25, 1.4), ncol=2,
                fancybox=True, shadow=True)
 L.get_texts()[0].set_text('cylindrical')
 L.get_texts()[1].set_text('spherical')
@@ -288,7 +291,7 @@ plt.ylim(1.e-5, 1.e0)
 plt.xlabel('Position (cm)')
 plt.ylabel('Specific internal energy (erg/g)')
 plt.grid(True)
-plt.gca().set_yscale('log', nonposy='clip')
+plt.gca().set_yscale('log', nonpositive='clip')
 plt.gca().legend().set_visible(False)
 
 plt.subplot(224)
@@ -302,7 +305,9 @@ plt.grid(True)
 plt.gca().legend().set_visible(False)
 
 plt.tight_layout()
-fig.subplots_adjust(top=0.85)  # Makes room for suptitle
+fig.subplots_adjust(top=0.8)  # Makes room for suptitle
 #plt.savefig('fig10.pdf')
 
 plt.show()
+
+plt.close()

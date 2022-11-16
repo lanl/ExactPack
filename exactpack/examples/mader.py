@@ -1,8 +1,7 @@
 import numpy as np
-import matplotlib.pylab as plt
-from matplotlib import rc, rcParams
-#rc('text',usetex=True)
-rc('font',**{'family':'serif','serif':['Computer Modern']})
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
 
 # import ExactPack solver and analysis tools
 from exactpack.solvers.mader.timmes import Mader
@@ -16,6 +15,7 @@ t = 5.e-6
 solver = Mader()
 soln = solver(r,t)
 
+fig = plt.figure(figsize=(10, 7))
 soln.plot('density')
 soln.plot('pressure', scale=1.e-11)
 soln.plot('velocity',scale=1.e-5)  # looks wrong
@@ -25,3 +25,5 @@ plt.ylim(0, 3)
 plt.legend(loc=1)
 plt.grid(True)
 plt.show()
+plt.tight_layout()
+plt.close()

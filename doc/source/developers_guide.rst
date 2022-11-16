@@ -437,7 +437,7 @@ adding a :class:`numpy.distutils.core.Extension` object to the
 ``ext_modules`` list of the ``setup`` class:
 
 .. literalinclude:: ../../setup.py
-   :start-after: requires
+   :start-after: packages =
    :end-before: sedov
 
 where ``name`` is the name that will be used for the compiled package.  On
