@@ -188,7 +188,7 @@ References
    *Exact solution of the 1D riemann problem in Newtonian and relativistic hydrodynamics*,
    Revista Mexicana de Fisica E, **59** (2013) 28.
 
-.. [MenkioffPlohr1989]
+.. [MenikoffPlohr1989]
    R. Menikoff and B. Plohr,
    *The Riemann problem for fluid flow of real materials*,
    Reviews of Modern Physics, **61**, (1989) 1.
