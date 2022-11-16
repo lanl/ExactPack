@@ -189,11 +189,6 @@ References
    *Automated Analyses of the Tri-Lab Verification Test Suite on Uniform and Adaptive Grids for Code Project A*,
    LA-UR-05-6865, Los Alamos National Laboratory (2005).
 
-.. [Guess1957]
-   H. Sen and A. Guess,
-   *Radiation effects in shock-wave structure*
-   Physical Review **108** (1957) 560.
-
 .. [Heaslet1963]
    Heaslet and Baldwin,
    M. Heaslet and B. Baldwin,
