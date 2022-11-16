@@ -18,6 +18,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+latex/
 lib/
 lib64/
 parts/
