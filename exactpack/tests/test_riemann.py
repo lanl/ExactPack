@@ -3,12 +3,15 @@
 
 import unittest
 import pytest
+import warnings
 from pytest import approx
 from numpy import array, interp, diff, sqrt, abs, argmin
 
 import numpy.random
 
 from exactpack.solvers.riemann.riemann import *
+
+warnings.simplefilter('ignore', category=RuntimeWarning)
 
 class TestRiemannSetup():
     """Tests problem setup of :class:`exactpack.solvers.riemann.riemann`.
@@ -18,7 +21,7 @@ class TestRiemannSetup():
     """
 
     def test_defaults(self):
-        """Test that default values are set accurately and problem is initialized corretly.
+        """Test that default values are set accurately and problem is initialized correctly.
         """
 
         # here are the defaults
