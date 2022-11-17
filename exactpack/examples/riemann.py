@@ -1,4 +1,4 @@
-# '''Example demonstrating Riemann solvers for both ideal-gas EOS and generalized EOS in the form of JWL.
+# Example demonstrating Riemann solvers for both ideal-gas EOS and generalized EOS in the form of JWL.
 # For the ideal-gas EOS, reproduces plots from Kamm, et. als., 2014 LA-UR-14-20418 "Standardized Definitions for Code Verification Test Problems".
 # There are a standard set of six Riemann problems for an ideal-gas EOS.
 # These are defined this 2014 report.
@@ -7,7 +7,6 @@
 # One of the ideal-gas EOS problems is for left & right states with different values of the adiabatic index, :math:`\gamma`.
 # This makes for a total of 10 Riemann problems defined in these two documents.
 # These same 10 are also defined below and run as part of this example script.
-# '''
 
 # import standard python packages
 from matplotlib import pyplot as plt
