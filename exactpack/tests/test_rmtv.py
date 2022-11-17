@@ -1,4 +1,4 @@
-"""Unittests for the Reinicke Meyer-ter-Vehn (RMTV) problem.
+"""Unit tests for the Reinicke Meyer-ter-Vehn (RMTV) problem.
 
 The expected data for these tests has been generated using the old Fortran
 implementation of the solver by Timmes.

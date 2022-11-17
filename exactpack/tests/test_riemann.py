@@ -1,7 +1,6 @@
-"""Unittests for the 1D Riemann solvers.
+"""Unit tests for the 1D Riemann solvers.
 """
 
-import unittest
 import pytest
 import warnings
 from pytest import approx

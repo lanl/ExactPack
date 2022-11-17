@@ -23,9 +23,6 @@ install to a user specific location by using the ``--user`` flag.  All
 the other standard setup options should also be available (run
 ``pip install --help`` for more information).
 
-The setup script also installs the command-line scripts
-described below.
-
 .. _quickstart-library:
 
 Using ExactPack as a Python Library

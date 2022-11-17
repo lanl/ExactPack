@@ -3,14 +3,14 @@
 #
 #
 
-import unittest
+import pytest
 
 import numpy as np
 
 from exactpack.solvers.ep_piston import EPpiston
 
 
-class TestEPpistonAssignments(unittest.TestCase):
+class TestEPpistonAssignments():
     """Tests :class:`exactpack.solvers.EPpiston`.
 
     These tests confirm proper assignment of variables, including default
@@ -31,14 +31,14 @@ class TestEPpistonAssignments(unittest.TestCase):
 
         solution = EPpiston()
 
-        self.assertEqual(solution.gamma, gamma)
-        self.assertEqual(solution.c0, c0)
-        self.assertEqual(solution.s0, s0)
-        self.assertEqual(solution.G, G)
-        self.assertEqual(solution.Y, Y)
-        self.assertEqual(solution.rho0, rho0)
-        self.assertEqual(solution.up, up)
-        self.assertEqual(solution.model, model)
+        assert solution.gamma == gamma
+        assert solution.c0 == c0
+        assert solution.s0 == s0
+        assert solution.G == G
+        assert solution.Y == Y
+        assert solution.rho0 == rho0
+        assert solution.up == up
+        assert solution.model == model
 
     def test_assignment(self):
         # tests proper assignment of parameters
@@ -59,40 +59,41 @@ class TestEPpistonAssignments(unittest.TestCase):
         solution = EPpiston(gamma=gamma, c0=c0, s0=s0, G=G, Y=Y,
                                       rho0=rho0, up=up, model=model)
 
-        self.assertEqual(solution.gamma, gamma)
-        self.assertEqual(solution.c0, c0)
-        self.assertEqual(solution.s0, s0)
-        self.assertEqual(solution.G, G)
-        self.assertEqual(solution.Y, Y)
-        self.assertEqual(solution.rho0, rho0)
-        self.assertEqual(solution.up, up)
-        self.assertEqual(solution.model, model)
+        assert solution.gamma == gamma
+        assert solution.c0 == c0
+        assert solution.s0 == s0
+        assert solution.G == G
+        assert solution.Y == Y
+        assert solution.rho0 == rho0
+        assert solution.up == up
+        assert solution.model == model
 
     #
     # Confirm that illegal parameter values raise an error
     #
 
     def test_illegal_value_G(self):
-        self.assertRaises(ValueError, EPpiston,
-                          G=-1.0)
+        with pytest.raises(ValueError):
+            EPpiston(G=-1.0)
         
     def test_illegal_value_Y(self):
-        self.assertRaises(ValueError, EPpiston,
-                          Y=-1.0)
+        with pytest.raises(ValueError):
+            EPpiston(Y=-1.0)
 
     def test_illegal_value_rho0(self):
-        self.assertRaises(ValueError, EPpiston,
-                          rho0=-1.0)
+        with pytest.raises(ValueError):
+            EPpiston(rho0=-1.0)
 
     def test_illegal_value_up(self):
-        self.assertRaises(ValueError, EPpiston,
-                          up=-1.0)
+        with pytest.raises(ValueError):
+            EPpiston(up=-1.0)
 
     def test_illegal_value_model(self):
-        self.assertRaises(ValueError, EPpiston,
-                          model='Hypoelastic')
+        with pytest.raises(ValueError):
+            EPpiston(model='Hypoelastic')
 
-class TestEPpistonSolution(unittest.TestCase):
+
+class TestEPpistonSolution():
     """Tests :class:`exactpack.solvers.EPpiston`.
 
     These tests confirm proper solution values for specific inputs
@@ -103,9 +104,9 @@ class TestEPpistonSolution(unittest.TestCase):
         Y = 0.0026
         rho0 = 2.79
 
-        self.assertEqual(EPpiston().rho_hypoYield(G,Y,rho0),2.8027106842157106)
-        self.assertEqual(EPpiston().rho_hyperIfinYield(G,Y,rho0),2.802739726027397)
-        self.assertEqual(EPpiston().rho_hyperFinYield(G,Y,rho0),2.802749184157357)
+        assert EPpiston().rho_hypoYield(G,Y,rho0) == 2.8027106842157106
+        assert EPpiston().rho_hyperIfinYield(G,Y,rho0) == 2.802739726027397
+        assert EPpiston().rho_hyperFinYield(G,Y,rho0) == 2.802749184157357
 
     def test_Gruneisen(self):
         gamma = 2.
@@ -115,7 +116,7 @@ class TestEPpistonSolution(unittest.TestCase):
         rho = 2.802739726027397
         e = 4.3893303503475645e-06
 
-        self.assertEqual(EPpiston().Gruneisen(rho0,gamma,c0,s0,rho,e),0.003655008604753384)
+        assert EPpiston().Gruneisen(rho0,gamma,c0,s0,rho,e) == 0.003655008604753384
 
     def test_residual(self):
         
@@ -130,4 +131,4 @@ class TestEPpistonSolution(unittest.TestCase):
         self.vel_y = 0.0029628804735755254
         self.sdev_y = -0.0017333333333333333
 
-        self.assertTrue(EPpiston().Plastic_Residual(0.5505600903624002)<1.e-12)
+        assert EPpiston().Plastic_Residual(0.5505600903624002) < 1.e-12

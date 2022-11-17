@@ -1,4 +1,4 @@
-"""Unittests for the Guderley solver.
+"""Unit tests for the Guderley solver.
 """
 
 import pytest

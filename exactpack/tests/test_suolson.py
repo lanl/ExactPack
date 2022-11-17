@@ -1,4 +1,4 @@
-"""Unittests for the Su-Olson solver.
+"""Unit tests for the Su-Olson solver.
 """
 
 import pytest
