@@ -4,7 +4,6 @@ from matplotlib import rc
 rc('font', size=14)
 
 from exactpack.solvers.heat import Rod1D
-from exactpack.solvers.heat import PlanarSandwichDawes
 from exactpack.solvers.heat import PlanarSandwich
 from exactpack.solvers.heat import Rectangle
 
@@ -216,28 +215,6 @@ t4 = 0.600
 t1 = 0.1
 t2 = 0.01
 t3 = 0.001
-
-# Dawes' fortran implementation
-solver = PlanarSandwichDawes(Nsum=20000, TB=1, TT=0)
-soln0 = solver(y, t0)
-soln4 = solver(y, t4)
-soln1 = solver(y, t1)
-soln2 = solver(y, t2)
-soln3 = solver(y, t3)
-fig = plt.figure(figsize=(10, 7))
-soln0.plot('temperature', label=r'$t=1.0$')
-soln4.plot('temperature', label=r'$t=0.600$')
-soln1.plot('temperature', label=r'$t=0.1$')
-soln2.plot('temperature', label=r'$t=0.01$')
-soln3.plot('temperature', label=r'$t=0.001$')
-plt.title('PlanarSandwichDawes')
-plt.ylim(0, 1.1)
-plt.xlim(0, L)
-plt.legend(loc=0)
-plt.grid(True)
-plt.tight_layout()
-# plt.savefig('plandar_sandwich_dawes.pdf')
-plt.show()
 
 # Python implementation in 1D
 solver = PlanarSandwich(Nsum=20000, TB=1, TT=0)

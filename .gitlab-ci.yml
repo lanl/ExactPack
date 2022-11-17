@@ -1,5 +1,4 @@
 # image: registry.gitlab.com/truchas/ci-images:tpl-mpich-centos7-1.2.0
-# image: gcc:9.3.0
 # image: continuumio/anaconda3
 image: python:latest
 
@@ -19,17 +18,18 @@ cache:
     - venv/
 
 before_script:
-  - apt-get update
-  - apt-get install -y gcc
-  - apt-get install -y gfortran
-  - gcc --version
+  - python -V  # Print out python version for debugging
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -U setuptools
   - pip install -U numpy
   - pip install -U scipy
   - pip install -U sphinx
   - pip install -U matplotlib
   - pip install -U pytest
   - pip install -U pytest-cov
-  - python setup.py develop --user
+  - pip install ./
   # artifacts:
   #   paths:
   #     - exactpack

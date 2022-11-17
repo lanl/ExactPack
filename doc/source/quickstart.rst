@@ -15,13 +15,13 @@ setup script::
 
     tar xzf ExactPack-1.0.tar.gz
     cd ExactPack-1.0
-    python setup.py install
+    pip install ./
 
 This will install to the system Python library directories.  If you
 do not have write permission for these directories, you can usually
 install to a user specific location by using the ``--user`` flag.  All
 the other standard setup options should also be available (run
-``python setup.py --help`` for more information).
+``pip install --help`` for more information).
 
 The setup script also installs the command-line scripts
 described below.
@@ -52,10 +52,8 @@ solution, with a specific-heat ratio of 1.4, and then plots it::
    soln.plot_all()
 
 Note that there may be several solvers for a particular problem.  For example,
-by default :mod:`exactpack.solvers.noh` loads a pure Python implementation,
-:mod:`exactpack.solvers.noh.noh1`.  If you want the Fortran implementation by
-Frank Timmes, you need to explicitly import
-:mod:`exactpack.solvers.noh.timmes`.
+by default :mod:`exactpack.solvers.noh2` loads a pure Python implementation,
+:mod:`exactpack.solvers.noh2.noh2`.  If you want a version of the Noh solver based on the :mod:`exactpack.solvers.cog.cog1` solver then you need to explicitly import :mod:`exactpack.solvers.noh2.noh2_cog.Noh2Cog`.
      
 For documentation on specific solvers, including information on what
 parameters they accept and what solution methods are employed, see the

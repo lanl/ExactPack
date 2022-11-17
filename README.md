@@ -1,11 +1,7 @@
 # ExactPack: An Open-Source Software Package for Code Verification
 
 ExactPack (LA-CC-14-047) is an open-source software package that has been
-developed for the verification & validation community. The package has two
-major capabilities:
-
-1. The generation of exact solutions for common benchmark problems in computational physics.
-2. The analysis of computational physics code output to assess accuracy and convergence rates.
+developed for the verification & validation community. The package is capable of the generation of exact solutions for common benchmark problems in computational physics.
 
 ExactPack is designed to be an open project, readily expandable to include new test problems for new physical models. At present, it contains the following modules and solutions (see reference list and documentation for details on these test problems):
 
@@ -31,32 +27,28 @@ ExactPack is designed to be an open project, readily expandable to include new t
   * Su-Olson problem
 * Solid mechanics
   * Blake problem
+  * Elastic-Plastic Piston problem
 * Heat Conduction
   * Planar sandwich
   * Cylindrical sandwich
 
-The analysis capabilities of ExactPack include the import of data from computational physics codes, calculation of error norms between exact solutions and numerical results, and the calculation of spatial convergence rates. These tools follow the standards defined by the American Society of Mechanical Engineers (ASME).
-
 Installation
 ------------
 
-The repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using `python setup.py install`. The following dependencies are required:
+The repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using `pip install ./`. The following dependencies are required:
 
 ### Dependencies
 
 Python dependencies:
 * Python 3.6
 * setuptools
-* numpy (version 1.12.0 is known to be broken)
+* numpy
 * sphinx
 * matplotlib
 * scipy
+* pytest
 
-Other dependencies:
-* C compiler
-* Fortran compiler (must support quad-precision arithmetic, i.e. REAL*16)
-
-The built-in test suite may be run in a similar way: `python setup.py test`.
+The built-in test suite may be run by using: `pytest`.
 
 The online documentation may be compiled via Sphinx by moving to the doc directory within the Exactpack repository and using the command `make html`. This creates a build directory. The root file for this online documentation is located in `$EXACTPACK_ROOT/doc/build/html/index.html`, which may be opened in a web browser.
 
@@ -113,6 +105,9 @@ D. F. Aldridge, *Elastic Wave Radiation from a Pressurized Spherical Cavity*, Sa
 F. G. Blake, *Spherical Wave Propagation in Solid Media*, The Journal of the Acoustical Society of America **24**, no. 2, p. 211 (1952).
 
 G. J. Hutchens, *An Analysis of the Blake Problem*, Los Alamos report, LA-UR-05-8737 (2005).
+
+#### Elastic-Plastic Piston Problem
+Evan J. Lieberman, Xiaodong Liu, Nathaniel R. Morgan, Darby J. Luscher, and Donald E. Burton, *A higher-order Lagrangian discontinuous Galerkin hydrodynamic method for solid dynamics*, CMAME **353** (2019) 467-490.
 
 #### Detonation Shock Dynamics Problems
 J.B. Bdzil, R. J. Henninger, and J. W. Walter, *Test Problems for DSD2D*, LA-14277 (2006).

@@ -6,7 +6,6 @@ import numpy as np
 import unittest
 
 from exactpack.solvers.heat import Rod1D
-from exactpack.solvers.heat import PlanarSandwichDawes
 from exactpack.solvers.heat import PlanarSandwich
 from exactpack.solvers.heat import PlanarSandwichHot
 from exactpack.solvers.heat import PlanarSandwichHalf
@@ -384,12 +383,6 @@ class TestHeatPlanarSandwich(unittest.TestCase):
         t = 0.1
         L = 2.0
         y = [0.1, 0.5, 0.7, 1.5]
-        #
-        temp_dawes = [8.23063274e-01, 2.63552477e-01, 1.17524868e-01, 7.96207473e-04]
-        solver = PlanarSandwichDawes(Nsum=20000, TB=1.0, TT=0.0)
-        soln = solver(y, t)
-        for n in range(len(temp_dawes)):
-            self.assertAlmostEqual(soln.temperature[n], temp_dawes[n])
         #
         temp_1d = [8.23063274e-01, 2.63552477e-01, 1.17524868e-01, 7.96207473e-04]
         solver = PlanarSandwich(Nsum=20000, TB=1.0, TT=0.0)

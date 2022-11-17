@@ -13,7 +13,7 @@ governing the flow are solved for the dimensionless velocity V, sound speed C,
 and density R, as a function of the similarity variable:
 
 .. math::
-  x = \frac{t}{r \lambda}
+  x = \frac{t}{r^\lambda}
 
 The program  also computes the result starting from x = infinity (Lazarus,
 p. 330 ff.). The subroutine that transforms the similarity variable data is
