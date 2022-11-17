@@ -425,7 +425,7 @@ class Test_CollectRemainingFlowValues():
           """Test the value of c2.
           """
 
-          assert self.solver.c2 == approx(59019.99187480064, abs=1.e-12)
+          assert self.solver.c2 == approx(59019.99187480064, abs=1.e-10)
 
 
       def test_rho2(self):
@@ -453,4 +453,4 @@ class Test_CollectRemainingFlowValues():
           """Test the value of u2_streaming.
           """
 
-          assert self.solver.u2_streaming == approx(37469.73809207216, abs=1.e-12)
+          assert self.solver.u2_streaming == approx(37469.73809207216, abs=1.e-10)
