@@ -14,10 +14,10 @@ Available Solvers
 Importing :mod:`exactpack` loads some base code and utility functions,
 but no actual solvers.  Individual solvers should be imported as
 needed.  A solver sub-package is given by the name of the problem in
-lower case, preceded by its path. So the default Noh problem solver is
+lower case, preceded by its path. So the default Noh2 problem solver is
 imported using [#]_::
 
-    import exactpack.solvers.noh
+    import exactpack.solvers.noh2
 
 If there are multiple solvers available for a given problem, they will
 be in sub-sub-packages.  The base package will load a default choice
@@ -25,10 +25,10 @@ of the solver, which is the solver recommended for general use by the
 maintainers of ExactPack.
 
 For example, the default Noh solver is really
-:mod:`exactpack.solvers.noh.noh1`, and this is what you get if you import
-:mod:`exactpack.solvers.noh`.  If you want an interface to the Fortran
-implementation of Frank Timmes, then you can explicitly import
-:mod:`exactpack.solvers.noh.timmes`.
+:mod:`exactpack.solvers.noh2.noh2`, and this is what you get if you import
+:mod:`exactpack.solvers.noh2`.  If you want an interface to the solver which is
+implemented in terms of the Coggeshall solver then you can explicitly import
+:mod:`exactpack.solvers.noh2.noh2_cog`.
 
 The solver itself is a Python class.  Multiple solver variants may be
 available within a given package, but these will all use the same
@@ -111,9 +111,6 @@ the solution at time :math:`t=0.6` in the interval :math:`x\in[0,1]`:
 (The :func:`numpy.linspace` function is a convenient way to generate
 an evenly spaced set of points.  It has three arguments: the start point,
 the stop point, and an optional number of points to use.)
-
-.. [#] Be careful not to use integer division to represent rationals;
-   in Python ``5/3`` is ``1``.
 
 A Note on Dimensions
 ^^^^^^^^^^^^^^^^^^^^

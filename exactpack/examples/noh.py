@@ -5,7 +5,6 @@ rc('font', size=14)
 
 # import ExactPack solver and analysis tools
 from exactpack.solvers.noh.noh1 import Noh
-from exactpack.solvers.noh.timmes import Noh as NohTimmes
 from exactpack.solvers.noh import SphericalNoh, CylindricalNoh, PlanarNoh
 
 # construct spatial grid and choose time
@@ -26,24 +25,6 @@ soln.plot('velocity',scale=10)
 soln.plot('sie',scale=10)
 plt.xlim(0.0,rmax)
 plt.title('ExactPack solver class Noh')
-plt.ylim(-15,70)
-plt.legend(loc=1)
-plt.grid(True)
-plt.tight_layout()
-plt.show()
-
-#####################################################################
-# solver object
-solver = NohTimmes(geometry=3, gamma=5.0/3.0)
-soln = solver(r,t)
-# plot exact solution
-fig = plt.figure(figsize=(10, 7))
-soln.plot('density')
-soln.plot('pressure')
-soln.plot('velocity',scale=10)
-soln.plot('sie',scale=10)
-plt.xlim(0.0,rmax)
-plt.title('ExactPack solver class Noh for Timmes')
 plt.ylim(-15,70)
 plt.legend(loc=1)
 plt.grid(True)

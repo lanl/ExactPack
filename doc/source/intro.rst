@@ -7,7 +7,7 @@ capacity, such as the Noh and Sedov problems.
 ExactPack is a python package that integrates many of these exact
 solution codes into a common API (application program interface). ExactPack
 consists of python driver scripts that access a library of exact
-solutions written in Fortran or Python. The spatial profiles of the
+solutions written in Python. The spatial profiles of the
 relevant physical quantities, such as the density, fluid velocity, sound
 speed, or internal energy, are returned at a time specified by the
 user.  We have documented the physics
