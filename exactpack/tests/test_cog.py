@@ -1,9 +1,9 @@
-"""Unittests for the Cog solvers.
+"""Unit tests for the Cog solvers.
 """
-
-import unittest
+import pytest
 
 import numpy as np
+from numpy.lib.recfunctions import stack_arrays
 
 from exactpack.solvers.cog.cog1 import Cog1
 from exactpack.solvers.cog.cog2 import Cog2
@@ -28,7 +28,7 @@ from exactpack.solvers.cog.cog21 import Cog21
 
 
 # cog1 ##########################
-class TestCog1(unittest.TestCase):
+class TestCog1():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog1`."""
 
     def test_cog1(self):
@@ -73,33 +73,26 @@ class TestCog1(unittest.TestCase):
             2.14788185e+02, 2.14788185e+02, 2.14788185e+02, 2.14788185e+02,
             1.40000000e+02, 1.40000000e+02, 1.40000000e+02, 1.40000000e+02
         ]).reshape(npts, npts)
-
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=4)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**6,  gold_pressure[ri, ti]/10**6, places=7)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=5)
+        
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog1(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog1, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog1(geometry=-1)
 
 
 # cog2 ##########################
-class TestCog2(unittest.TestCase):
+class TestCog2():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog2.Cog2`."""
 
     def test_cog2(self):
@@ -145,32 +138,25 @@ class TestCog2(unittest.TestCase):
             1.83105469e+01, 1.14440918e+00, 3.73684630e-01, 1.83105469e-01
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=6)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**3,  gold_pressure[ri, ti]/10**3, places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog2(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog2, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog2(geometry=-1)
 
 
 # cog3 ##########################
-class TestCog3(unittest.TestCase):
+class TestCog3():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog3.Cog3`."""
 
     def test_cog3(self):
@@ -218,32 +204,25 @@ class TestCog3(unittest.TestCase):
             -1.72800000e+01, -1.72800000e+01, -1.72800000e+01, -1.72800000e+01
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog3(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog3, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog3(geometry=-1)
 
 
 # cog4 ##########################
-class TestCog4(unittest.TestCase):
+class TestCog4():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog4.Cog4`."""
 
     def test_cog4(self):
@@ -290,32 +269,25 @@ class TestCog4(unittest.TestCase):
             -1.88928571e+00, -1.88928571e+00, -1.88928571e+00, -1.88928571e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog4(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog4, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog4(geometry=-1)
 
 
 # cog5 ##########################
-class TestCog5(unittest.TestCase):
+class TestCog5():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog5.Cog5`."""
 
     def test_cog5(self):
@@ -361,32 +333,25 @@ class TestCog5(unittest.TestCase):
             -4.60000000e+00, -4.60000000e+00, -4.60000000e+00, -4.60000000e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog5(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog5, geometry=1)
+        with pytest.raises(ValueError):
+            Cog5(geometry=1)
 
 
 # cog6 ##########################
-class TestCog6(unittest.TestCase):
+class TestCog6():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog6.Cog6`."""
 
     def test_cog6(self):
@@ -432,32 +397,25 @@ class TestCog6(unittest.TestCase):
             3.03877181e-01, 3.72353608e-01, 6.36746703e-01, 2.31481481e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog6(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog6, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog6(geometry=-1)
 
 
 # cog7 ##########################
-class TestCog7(unittest.TestCase):
+class TestCog7():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog7.Cog7`."""
 
     def test_cog7(self):
@@ -503,32 +461,26 @@ class TestCog7(unittest.TestCase):
             2.87994877e-01, 3.54117650e-01, 6.10481778e-01, 2.25163915e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=7)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog7(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog7, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog7(geometry=-1)
+
 
 
 # cog8 ##########################
-class TestCog8(unittest.TestCase):
+class TestCog8():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog8.Cog8`."""
 
     def test_cog8(self):
@@ -575,33 +527,25 @@ class TestCog8(unittest.TestCase):
             1.02989916e+03, 3.09748617e+02, 1.90711289e+02, 1.40000000e+02
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
-            # specific_internal_energy
-            scaled = 10**5
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri]/scaled,  gold_specific_internal_energy[ri, ti]/scaled, places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog8(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog8, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog8(geometry=-1)
 
 
 # cog9 ##########################
-class TestCog9(unittest.TestCase):
+class TestCog9():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog9.Cog9`."""
 
     def test_cog9(self):
@@ -647,33 +591,25 @@ class TestCog9(unittest.TestCase):
             -1.67410714e+01, -1.04631696e+00, -3.41654519e-01, -1.67410714e-01
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            scale = 10**6
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/scale,  gold_density[ri, ti]/scale, places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog9(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog9, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog9(geometry=-1)
 
 
 # cog10 ##########################
-class TestCog10(unittest.TestCase):
+class TestCog10():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog10.Cog10`."""
 
     def test_cog10(self):
@@ -719,32 +655,25 @@ class TestCog10(unittest.TestCase):
             1.40000000e+02, 1.40000000e+02, 1.40000000e+02, 1.40000000e+02
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri]/10**11,  gold_velocity[ri, ti]/10**11, places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=7)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog10(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog10, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog10(geometry=-1)
 
 
 # cog11 ##########################
-class TestCog11(unittest.TestCase):
+class TestCog11():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog11.Cog11`."""
 
     def test_cog11(self):
@@ -790,32 +719,25 @@ class TestCog11(unittest.TestCase):
             1.40000000e+04, 8.75000000e+02, 2.85714286e+02, 1.40000000e+02
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**5,  gold_pressure[ri, ti]/10**5, places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri]/10**6,  gold_specific_internal_energy[ri, ti]/10**6, places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog11(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog11, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog11(geometry=-1)
 
 
 # cog12 ##########################
-class TestCog12(unittest.TestCase):
+class TestCog12():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog12.Cog12`."""
 
     def test_cog12(self):
@@ -861,32 +783,25 @@ class TestCog12(unittest.TestCase):
             -1.88928571e+00, -1.88928571e+00, -1.88928571e+00, -1.88928571e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
-
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
+            
     def test_geometry_error_cog12(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog12, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog12(geometry=-1)
 
 
 # cog13 ##########################
-class TestCog13(unittest.TestCase):
+class TestCog13():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog13.Cog13`."""
 
     def test_cog13(self):
@@ -932,32 +847,25 @@ class TestCog13(unittest.TestCase):
             1.46337219e-01, 2.32295855e-01, 2.79933029e-01, 3.15273980e-01
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog13(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog13, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog13(geometry=-1)
 
 
 # cog14 ##########################
-class TestCog14(unittest.TestCase):
+class TestCog14():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog14.Cog14`."""
 
     def test_cog14(self):
@@ -1003,32 +911,25 @@ class TestCog14(unittest.TestCase):
             3.36925486e-01, 3.36925486e-01, 3.36925486e-01, 3.36925486e-01
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog14(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog14, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog14(geometry=-1)
 
 
 # cog16 ##########################
-class TestCog16(unittest.TestCase):
+class TestCog16():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog16.Cog16`."""
 
     def test_cog16(self):
@@ -1074,32 +975,25 @@ class TestCog16(unittest.TestCase):
             1.98375000e+01, 1.98375000e+01, 1.98375000e+01, 1.98375000e+01
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/10**21,  gold_density[ri, ti]/10**21, places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri, ti]/10**20, places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog16(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog16, geometry=1)
+        with pytest.raises(ValueError):
+            Cog16(geometry=1)
 
 
 # cog17 ##########################
-class TestCog17(unittest.TestCase):
+class TestCog17():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog17.Cog17`."""
 
     def test_cog17(self):
@@ -1145,32 +1039,25 @@ class TestCog17(unittest.TestCase):
             -2.10000000e+02, -1.31250000e+01, -4.28571429e+00, -2.10000000e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/10**21,  gold_density[ri, ti]/10**21, places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**20,  gold_pressure[ri, ti]/10**20, places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        # np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        # np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog17(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog17, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog17(geometry=-1)
 
 
 # cog18 ##########################
-class TestCog18(unittest.TestCase):
+class TestCog18():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog18.Cog18`."""
 
     def test_cog18(self):
@@ -1216,32 +1103,25 @@ class TestCog18(unittest.TestCase):
             -2.77830566e-01, -3.40437585e-01, -5.82168414e-01, -2.11640212e+00
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri]/10**5,  gold_density[ri, ti]/10**5, places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri]/10**10,  gold_temperature[ri, ti]/10**10, places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri]/10**4,  gold_pressure[ri, ti]/10**4, places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        # np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog18(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog18, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog18(geometry=-1)
 
 
 # cog19 ##########################
-class TestCog19(unittest.TestCase):
+class TestCog19():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog19.Cog19`."""
 
     def test_cog19(self):
@@ -1288,32 +1168,25 @@ class TestCog19(unittest.TestCase):
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog19(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog19, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog19(geometry=-1)
 
 
 # cog20 ##########################
-class TestCog20(unittest.TestCase):
+class TestCog20():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog20.Cog20`."""
 
     def test_cog20(self):
@@ -1360,32 +1233,25 @@ class TestCog20(unittest.TestCase):
             0.00000000e+00, 0.0000000000e+00, 0.00000000000e+00, 0.00000000000e+00,
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density, rtol=2.0e-7)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature, rtol=2.0e-7)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
 
     def test_geometry_error_cog20(self):
         """Tests geometry flag."""
-        self.assertRaises(ValueError, Cog20, geometry=-1)
+        with pytest.raises(ValueError):
+            Cog20(geometry=-1)
 
 
 # cog21 ##########################
-class TestCog21(unittest.TestCase):
+class TestCog21():
     """Test for the Coggeshall problem :class:`exactpack.solvers.cog.cog21.Cog21`."""
 
     def test_cog21(self):
@@ -1432,21 +1298,18 @@ class TestCog21(unittest.TestCase):
             0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
         ]).reshape(npts, npts)
 
-        for ti in range(npts):
-            ts = t[ti]
-            solrt = sol(r, ts)
-            # density
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.density[ri],  gold_density[ri, ti], places=5)
-            # velocity
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.velocity[ri],  gold_velocity[ri, ti], places=7)
-            # temperature
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.temperature[ri],  gold_temperature[ri, ti], places=6)
-            # pressure
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.pressure[ri],  gold_pressure[ri, ti], places=6)
-            # specific_internal_energy
-            for ri in range(npts):
-                self.assertAlmostEqual(solrt.specific_internal_energy[ri],  gold_specific_internal_energy[ri, ti], places=6)
+        solrt = stack_arrays([sol(r, ts) for ts in t],
+                             asrecarray=True, usemask=False)
+        solrt = solrt.reshape(4, 4).transpose()
+        
+        np.testing.assert_allclose(solrt.density, gold_density)
+        np.testing.assert_allclose(solrt.velocity, gold_velocity)
+        np.testing.assert_allclose(solrt.temperature, gold_temperature)
+        np.testing.assert_allclose(solrt.pressure, gold_pressure)
+        np.testing.assert_allclose(solrt.specific_internal_energy,
+                           gold_specific_internal_energy)
+
+    def test_geometry_error_cog21(self):
+        """Tests geometry flag."""
+        with pytest.raises(ValueError):
+            Cog21(geometry=-1)

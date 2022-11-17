@@ -68,12 +68,12 @@ requirements have been met.
     including the choices of any default values.  (See the notes 
     in :ref:`doc-params` for the correct format to do this.)
 
-* Unittests for the solver are provided.
+* Unit tests for the solver are provided.
 
-  * Unittests should be documented to indicate what they do and why
+  * Unit tests should be documented to indicate what they do and why
     these tests are selected.
 
-  * At a minimum, unittests should demonstrate that the solver
+  * At a minimum, unit tests should demonstrate that the solver
     reproduces the correct results in limiting cases and
     well established, previously published, data.
 
@@ -374,7 +374,7 @@ testing framework.
 Tests for solvers are found in the ``tests`` directory, with file
 names ``test_<solver>.py``.  For examples of testing, see the files in
 that directory.  The tests are built using the standard Python
-:mod:`unittest` framework.
+:mod:`pytest` framework.
 
 A complete description of all the unit tests for ExactPack, as well as
 a discussion of the testing strategy, can be found in :ref:`Testing`.

@@ -100,7 +100,7 @@ class Blake(ExactSolver):
                           75.0e9)
     elas_prm_dflts = dict(zip(elas_prm_names, elas_prm_dflt_vals))
 
-    # Separate copy accessed by unittest code.
+    # Separate copy accessed by unit test code.
     elas_param_values = {}
 
     # Default snapshot time.

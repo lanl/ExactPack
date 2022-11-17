@@ -5,7 +5,9 @@ from sphinx.setup_command import BuildDoc
 from exactpack import __version__
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    f_path = os.path.join(os.path.dirname(__file__), fname)
+    with open(f_path) as fd:
+        return fd.read()
 
 setup(
     name = "ExactPack",
@@ -23,6 +25,5 @@ setup(
     license = read('LICENSE.txt'),
     packages = find_packages(),
     cmdclass = { 'build_sphinx' : BuildDoc },
-    test_suite = "exactpack.tests",
     )
 
