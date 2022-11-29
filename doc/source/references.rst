@@ -24,9 +24,9 @@ References
    Phys. Fluids A **3** (1991) 757.
 
 .. [Dawes2015]
-  A Dawes, 
-  *3D Multi-Material Polyhedral Methods for Diffusion*, 
-  MultiMat Conference, Warzberg, Germany (2015).    
+   A Dawes, 
+   *3D Multi-Material Polyhedral Methods for Diffusion*, 
+   MultiMat Conference, Warzberg, Germany (2015).    
    
 .. [Dawes2016]
    A. Dawes, C. Malone, M. Shashkov,
@@ -69,8 +69,8 @@ References
    Journal of Computational Physics, **78** (1988) 437.
 
 .. [Guderley1942]
-  G. Guderley,
-  Luftahrtforschung **19** (1942) 302.
+   G. Guderley,
+   Luftahrtforschung **19** (1942) 302.
 
 .. [Guderley2012]
    Scott D. Ramsey, James R. Kamm, and John H. Bolstad,
@@ -218,3 +218,18 @@ References
    H.S. Udaykumar, L. Tran, D.M. Belk, and K.J. Vanden,
    *An Eulerian method for computation of multimaterial impact with ENO shock-capturing and sharp interfaces*,
    JCP **186** (2003) 136-177.
+
+.. [BenDor2007]
+   G. Ben-Dor,
+   *Shock Wave Reflection Phenomena*,
+   Springer, Berlin, 2007.
+
+.. [Chapman2000]
+   C. J. Chapman,
+   *High Speed Flow*,
+   Cambridge University Press, United Kingdom, 2000.
+
+.. [Anderson2020]
+   J. D. Anderson,
+   *Modern Compressible Flow with Historical Perspective*,
+   McGraw-Hill, United Kingdom, 2020.
