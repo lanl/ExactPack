@@ -39,7 +39,7 @@ class TestNoh1():
     def test_preshock_energy(self):
         """Noh problem: Pre-shock internal energy"""
 
-        np.testing.assert_array_equal(self.soln.sie[1], 0.0)
+        np.testing.assert_array_equal(self.soln.specific_internal_energy[1], 0.0)
 
     def test_preshock_velocity(self):
         """Noh problem: Pre-shock velocity"""
@@ -59,7 +59,7 @@ class TestNoh1():
     def test_postshock_energy(self):
         """Noh problem: Post-shock internal energy"""
 
-        np.testing.assert_array_equal(self.soln.sie[0], 0.5)
+        np.testing.assert_array_equal(self.soln.specific_internal_energy[0], 0.5)
 
     def test_postshock_velocity(self):
         """Noh problem: Post-shock velocity"""

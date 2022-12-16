@@ -116,7 +116,7 @@ class IGEOS_Solver(ExactSolver):
                                     'pressure',
                                     'density',
                                     'velocity',
-                                    'sie'])
+                                    'specific_internal_energy'])
 
 
 class GenEOS_Solver(ExactSolver):
@@ -230,4 +230,4 @@ class GenEOS_Solver(ExactSolver):
                                     'pressure',
                                     'density',
                                     'velocity',
-                                    'sie'])
+                                    'specific_internal_energy'])

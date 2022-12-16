@@ -1,6 +1,17 @@
 Release Notes for ExactPack
 ===========================
 
+Version 1.7.0 (Dec 2022)
+------------------------
+
+* Convert all code the be compatible with Python 3
+* Removed all Fortran Code. Extant Fortran solvers have been converted to Python where necessary
+* Removed all code associated with the GUI, CLI and verification analysis
+* Added solver for the Radshocks problem
+* Added general solver for the Riemann problems
+* Added solver the Elastic-Plastic Piston problem
+* Switched all tests to using Pytest
+
 Version 1.6.0 (Aug 2017)
 -------------------------
 

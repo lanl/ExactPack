@@ -3786,11 +3786,11 @@ class TestRiemannIGSEOSSolver():
         assert self.soln['velocity'] == approx(expected)
 
     def test_sie(self):
-        assert len(self.soln['sie']) == 11
+        assert len(self.soln['specific_internal_energy']) == 11
         expected = [2.23738728, 2.13205268, 2.02925777, 1.92900253, 1.83128698,
                     1.77760007, 1.77760007, 1.77760007, 1.77760007, 1.77760007,
                     1.77760007]
-        assert self.soln['sie'] == approx(expected)
+        assert self.soln['specific_internal_energy'] == approx(expected)
 
 
 class TestRiemannGenEOSSolver():
@@ -3838,8 +3838,8 @@ class TestRiemannGenEOSSolver():
         assert self.soln['velocity'] == approx(expected)
 
     def test_sie(self):
-        assert len(self.soln['sie']) == 11
+        assert len(self.soln['specific_internal_energy']) == 11
         expected = [2.23738728, 2.13205268, 2.02925777, 1.92900253, 1.83128698,
                     1.77760007, 1.77760007, 1.77760007, 1.77760007, 1.77760007,
                     1.77760007]
-        assert self.soln['sie'] == approx(expected)
+        assert self.soln['specific_internal_energy'] == approx(expected)

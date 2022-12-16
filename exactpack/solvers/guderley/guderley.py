@@ -32,4 +32,4 @@ class Guderley(ExactSolver):
                                     'velocity',
                                     'pressure',
                                     'sound',
-                                    'sie'])
+                                    'specific_internal_energy'])

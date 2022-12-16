@@ -83,4 +83,5 @@ class TestGuderleyRamseyGamma3():
 
     def test_sie(self):
         """Regression test for specific internal energy."""
-        assert self.solution.sie[0] == pytest.approx(0.050627305536782685)
+        assert self.solution.specific_internal_energy[0] == \
+            pytest.approx(0.050627305536782685)
