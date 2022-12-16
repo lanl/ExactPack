@@ -25,6 +25,7 @@ ExactPack is designed to be an open project, readily expandable to include new t
   * Coggeshall problems
   * Reinicke Meyer-ter-Vehn problem
   * Su-Olson problem
+  * Radshock problem
 * Solid mechanics
   * Blake problem
   * Elastic-Plastic Piston problem
@@ -88,6 +89,13 @@ W. Fickett and W. C. Davis, *Detonation: Theory and Experiment*, University of C
 
 W. Fickett and C. Rivard, *Test Problems for Hydrocodes*, LASL Report, LA-5479 (1974, Rev 1981).
 
+#### Mader Problem
+W. Fickett and W. C. Davis, *Detonation: Theory and Experiment*, University of California Press, Berkeley, 1979.
+
+Francis X. Timmes, Galen Gisler, and George M. Hrbek, *Automated Analyses of the Tri-Lab Verification Test Suite on Uniform and Adaptive Grids for Code Project A*, LA-UR-05-6865, Los Alamos National Laboratory (2005).
+
+R. Kirkpatrick, C. Wingate, and J.R. Kamm, *HE Burn Test Problem*, X-3-19U (2004).
+
 #### Coggeshall Problems
 S. V. Coggeshall, *Analytic Solutions of Hydrodynamics Equations*, Physics of FLuids A **3**, no. 5, p. 757 (1991).
 
@@ -98,6 +106,9 @@ J. R. Kamm, *Investigation of the Reinicke & Meyer-ter-Vehn Equations: I. The St
 
 #### Su-Olson Problem
 B. Su, G. L. Olson, *Benchmark Results for the Non-equilibrium Marshak Diffusion Problem*, Journal of Quantitative Spectroscopic Radiative Transfer **56** p. 337 (1996).
+
+#### Radshocks Problem
+J. Ferguson, J. Morel and R. Lowrie *The equilibrium-diffusion limit for radiation hydrodynamics*, Journal of Quantitative Spectroscopy and Radiative Transfer, 202 (2017) 176-186
 
 #### Blake Problem
 D. F. Aldridge, *Elastic Wave Radiation from a Pressurized Spherical Cavity*, Sandia National Laboratories Report, SAND2002-1882 (2002).

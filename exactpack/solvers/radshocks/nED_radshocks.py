@@ -108,7 +108,7 @@ class ED_Solver(ExactSolver):
                                     'density',
                                     'velocity',
                                     'pressure',
-                                    'sie',
+                                    'specific_internal_energy',
                                     'rade',
                                     'sound_speed'])
 
@@ -342,7 +342,7 @@ class Sn_Solver(ExactSolver):
                                     'density',
                                     'velocity',
                                     'pressure',
-                                    'sie',
+                                    'specific_internal_energy',
                                     'rade',
                                     'sound_speed',
                                     'VEF'])
@@ -439,5 +439,5 @@ class ie_Solver(ExactSolver):
                                     'density',
                                     'velocity',
                                     'pressure',
-                                    'sie',
+                                    'specific_internal_energy',
                                     'sound_speed'])

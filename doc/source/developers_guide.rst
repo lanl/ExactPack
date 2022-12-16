@@ -99,23 +99,6 @@ which provide solvers, while others contain supporting code.
     includes several important subdirectories which are described
     below.
 
-    :file:`contrib/`
-
-        This is the location for third-party or other contributed
-	solvers that are sufficiently developed to be redistributed as
-	part of the standard distribution, but which are provided
-	as-is, with no support.  This may be because the solver is not
-	up to the requirements listed in :ref:`coding-style`, or
-	because support is provided by someone outside the development
-	team.
-
-	If you add a solver, it should be initially added in the
-	:file:`contrib/` directory, and the documentation should
-	include your contact information as the support
-	point-of-contact, using the :rst:role:`codeauthor` directive.
-	The ExactPack development team may decide to move your solver
-	to the :file:`solvers/` directory, if appropriate.
-
     :file:`solvers/`
 
 	The ``solvers`` directory contains the supported solver
@@ -131,7 +114,7 @@ which provide solvers, while others contain supporting code.
 	will watch the watchers" variety), and is discussed in
 	:ref:`testing`.
 
-:file:`examples/`
+    :file:`examples/`
 
     Several example files are provided as templates for how to write
     Python scripts that use the ExactPack package.

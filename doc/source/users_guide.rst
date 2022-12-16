@@ -24,7 +24,7 @@ be in sub-sub-packages.  The base package will load a default choice
 of the solver, which is the solver recommended for general use by the
 maintainers of ExactPack.
 
-For example, the default Noh solver is really
+For example, the default Noh2 solver is really
 :mod:`exactpack.solvers.noh2.noh2`, and this is what you get if you import
 :mod:`exactpack.solvers.noh2`.  If you want an interface to the solver which is
 implemented in terms of the Coggeshall solver then you can explicitly import
@@ -69,13 +69,12 @@ attribute :attr:`ExactSolver.parameters` is a dictionary with keywords
 which are the available parameters, and values which are help strings
 for each parameter.  If there are uninitialized parameters, or the
 constructor is passed parameters that it does not know, it will raise
-an exception.  Relying on default parameters will generate a warning,
-to make sure the user knows exactly what parameters are being used.
+an exception. 
 
-For example, the :class:`exactpack.solvers.noh.noh1.Noh` takes four
+For example, the :class:`exactpack.solvers.noh.noh1.Noh` class takes four
 parameters, the geometry, the gas constant, and the reference velocity
 and density.  To instantiate a solver for the spherical Noh problem,
-with the value :math:`\gamma=5/3` as in the original paper by Noh[#]_,
+with the value :math:`\gamma=5/3` as in the original paper by Noh[Noh1987]_,
 we can use the following code
 
 .. testcode::

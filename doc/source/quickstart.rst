@@ -13,8 +13,8 @@ Installation
 Installing ExactPack is simple.  Just unpack the tar file and run the
 setup script::
 
-    tar xzf ExactPack-1.0.tar.gz
-    cd ExactPack-1.0
+    tar xzf ExactPack-1.7.0.tar.gz
+    cd ExactPack-1.7.0
     pip install ./
 
 This will install to the system Python library directories.  If you
@@ -41,7 +41,7 @@ by::
 The following is an example of a script that computes a spherical Noh
 solution, with a specific-heat ratio of 1.4, and then plots it::
 
-   import numpy
+   from numpy import linspace
    from exactpack.solvers.noh import Noh
    
    solver = Noh(gamma=1.4, geometry=3)

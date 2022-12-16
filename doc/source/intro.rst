@@ -27,7 +27,7 @@ the convergence analysis tools.  Examples are located in the
 distribution directory under :file:`exactpack/examples`, and can be
 run as standalone Python scripts, or as Python modules::
 
-  python -m exactpack.<example name>
+  python -m exactpack.examples.<example name>
 
 If you want to use ExactPack for code verification or physics
 exploration, the :ref:`users-guide` gives a complete explanation of
