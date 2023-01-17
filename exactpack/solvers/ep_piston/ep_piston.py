@@ -115,9 +115,11 @@ class EPpiston(ExactSolver):
         self.e2 = self.e_y + (1./(2.*self.rho_y*self.rho2))*\
         (self.p_y+self.p2-2*self.sdev_y)*(self.rho2-self.rho_y)
     
-    def _run(self, xvec, xmax, t):
+    def _run(self, xvec, t, xmax=None):
         r''' Evaluate the physical variables at (x,t).
         '''
+        if xmax is None:
+            xmax = max(xvec)
 
         # Initialize the physical variables
         vel_x = np.empty_like(xvec)

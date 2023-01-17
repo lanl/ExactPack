@@ -79,7 +79,7 @@ class TestGuderleyRamseyGamma3():
 
     def test_speed_of_sound(self):
         """Regression test for the speed of sound."""
-        assert self.solution.sound[0] == pytest.approx(0.5511477417360032)
+        assert self.solution.sound_speed[0] == pytest.approx(0.5511477417360032)
 
     def test_sie(self):
         """Regression test for specific internal energy."""

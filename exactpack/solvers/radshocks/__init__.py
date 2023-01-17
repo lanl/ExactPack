@@ -86,5 +86,4 @@ Therefore, the two ODEs to be integrated are:
    \frac{d {\cal P}}{d {\cal M}} = \frac{d {\cal P}}{d {\cal M}} \left( {\cal P}, {\cal M} \right) = \frac{d {\cal P}}{d x} \frac{d x}{d {\cal M}} \, .
 """
 
-# import nED_radshocks
-from exactpack.solvers.radshocks import nED_radshocks
+from .nED_radshocks import ED_Solver, nED_Solver, Sn_Solver, ie_Solver

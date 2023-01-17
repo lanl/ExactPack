@@ -104,9 +104,12 @@ class TestEPpistonSolution():
         Y = 0.0026
         rho0 = 2.79
 
-        assert EPpiston().rho_hypoYield(G,Y,rho0) == 2.8027106842157106
-        assert EPpiston().rho_hyperIfinYield(G,Y,rho0) == 2.802739726027397
-        assert EPpiston().rho_hyperFinYield(G,Y,rho0) == 2.802749184157357
+        result_hypo = EPpiston().rho_hypoYield(G,Y,rho0)
+        result_hyperIfin = EPpiston().rho_hyperIfinYield(G,Y,rho0)
+        result_hyperFin = EPpiston().rho_hyperFinYield(G,Y,rho0)
+        assert result_hypo == pytest.approx(2.8027106842157106, abs=1.0e-12)
+        assert result_hyperIfin == pytest.approx(2.802739726027397, abs=1.0e-12)
+        assert result_hyperFin == pytest.approx(2.802749184157357, abs=1.0e-12)
 
     def test_Gruneisen(self):
         gamma = 2.
@@ -116,7 +119,8 @@ class TestEPpistonSolution():
         rho = 2.802739726027397
         e = 4.3893303503475645e-06
 
-        assert EPpiston().Gruneisen(rho0,gamma,c0,s0,rho,e) == 0.003655008604753384
+        result_grun = EPpiston().Gruneisen(rho0,gamma,c0,s0,rho,e)
+        assert result_grun == pytest.approx(0.003655008604753384, abs=1.0e-12)
 
     def test_residual(self):
         

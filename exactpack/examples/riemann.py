@@ -315,7 +315,7 @@ x1_ig = riem1_ig_result['position']
 u1_ig = riem1_ig_result['velocity']
 p1_ig = riem1_ig_result['pressure']
 r1_ig = riem1_ig_result['density']
-e1_ig = riem1_ig_result['sie']
+e1_ig = riem1_ig_result['specific_internal_energy']
 plt.plot(x1_ig, u1_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x1_ig, p1_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x1_ig, r1_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -338,7 +338,7 @@ x1_gen = riem1_gen_result['position']
 u1_gen = riem1_gen_result['velocity']
 p1_gen = riem1_gen_result['pressure']
 r1_gen = riem1_gen_result['density']
-e1_gen = riem1_gen_result['sie']
+e1_gen = riem1_gen_result['specific_internal_energy']
 plt.plot(x1_gen, u1_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x1_gen, p1_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x1_gen, r1_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -361,7 +361,7 @@ x1Rev_ig = riem1Rev_ig_result['position']
 u1Rev_ig = riem1Rev_ig_result['velocity']
 p1Rev_ig = riem1Rev_ig_result['pressure']
 r1Rev_ig = riem1Rev_ig_result['density']
-e1Rev_ig = riem1Rev_ig_result['sie']
+e1Rev_ig = riem1Rev_ig_result['specific_internal_energy']
 plt.plot(x1Rev_ig, u1Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x1Rev_ig, p1Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x1Rev_ig, r1Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -384,7 +384,7 @@ x1Rev_gen = riem1Rev_gen_result['position']
 u1Rev_gen = riem1Rev_gen_result['velocity']
 p1Rev_gen = riem1Rev_gen_result['pressure']
 r1Rev_gen = riem1Rev_gen_result['density']
-e1Rev_gen = riem1Rev_gen_result['sie']
+e1Rev_gen = riem1Rev_gen_result['specific_internal_energy']
 plt.plot(x1Rev_gen, u1Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x1Rev_gen, p1Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x1Rev_gen, r1Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -407,7 +407,7 @@ x2_ig = riem2_ig_result['position']
 u2_ig = riem2_ig_result['velocity']
 p2_ig = riem2_ig_result['pressure']
 r2_ig = riem2_ig_result['density']
-e2_ig = riem2_ig_result['sie']
+e2_ig = riem2_ig_result['specific_internal_energy']
 plt.plot(x2_ig, u2_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x2_ig, p2_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x2_ig, r2_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -430,7 +430,7 @@ x2_gen = riem2_gen_result['position']
 u2_gen = riem2_gen_result['velocity']
 p2_gen = riem2_gen_result['pressure']
 r2_gen = riem2_gen_result['density']
-e2_gen = riem2_gen_result['sie']
+e2_gen = riem2_gen_result['specific_internal_energy']
 plt.plot(x2_gen, u2_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x2_gen, p2_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x2_gen, r2_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -453,7 +453,7 @@ x2Rev_ig = riem2Rev_ig_result['position']
 u2Rev_ig = riem2Rev_ig_result['velocity']
 p2Rev_ig = riem2Rev_ig_result['pressure']
 r2Rev_ig = riem2Rev_ig_result['density']
-e2Rev_ig = riem2Rev_ig_result['sie']
+e2Rev_ig = riem2Rev_ig_result['specific_internal_energy']
 plt.plot(x2Rev_ig, u2Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x2Rev_ig, p2Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x2Rev_ig, r2Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -476,7 +476,7 @@ x2Rev_gen = riem2Rev_gen_result['position']
 u2Rev_gen = riem2Rev_gen_result['velocity']
 p2Rev_gen = riem2Rev_gen_result['pressure']
 r2Rev_gen = riem2Rev_gen_result['density']
-e2Rev_gen = riem2Rev_gen_result['sie']
+e2Rev_gen = riem2Rev_gen_result['specific_internal_energy']
 plt.plot(x2Rev_gen, u2Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x2Rev_gen, p2Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x2Rev_gen, r2Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -499,7 +499,7 @@ x3_ig = riem3_ig_result['position']
 u3_ig = riem3_ig_result['velocity']
 p3_ig = riem3_ig_result['pressure']
 r3_ig = riem3_ig_result['density']
-e3_ig = riem3_ig_result['sie']
+e3_ig = riem3_ig_result['specific_internal_energy']
 plt.plot(x3_ig, u3_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x3_ig, p3_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x3_ig, r3_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -522,7 +522,7 @@ x3_gen = riem3_gen_result['position']
 u3_gen = riem3_gen_result['velocity']
 p3_gen = riem3_gen_result['pressure']
 r3_gen = riem3_gen_result['density']
-e3_gen = riem3_gen_result['sie']
+e3_gen = riem3_gen_result['specific_internal_energy']
 plt.plot(x3_gen, u3_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x3_gen, p3_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x3_gen, r3_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -545,7 +545,7 @@ x3Rev_ig = riem3Rev_ig_result['position']
 u3Rev_ig = riem3Rev_ig_result['velocity']
 p3Rev_ig = riem3Rev_ig_result['pressure']
 r3Rev_ig = riem3Rev_ig_result['density']
-e3Rev_ig = riem3Rev_ig_result['sie']
+e3Rev_ig = riem3Rev_ig_result['specific_internal_energy']
 plt.plot(x3Rev_ig, u3Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x3Rev_ig, p3Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x3Rev_ig, r3Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -568,7 +568,7 @@ x3Rev_gen = riem3Rev_gen_result['position']
 u3Rev_gen = riem3Rev_gen_result['velocity']
 p3Rev_gen = riem3Rev_gen_result['pressure']
 r3Rev_gen = riem3Rev_gen_result['density']
-e3Rev_gen = riem3Rev_gen_result['sie']
+e3Rev_gen = riem3Rev_gen_result['specific_internal_energy']
 plt.plot(x3Rev_gen, u3Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x3Rev_gen, p3Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x3Rev_gen, r3Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -591,7 +591,7 @@ x4_ig = riem4_ig_result['position']
 u4_ig = riem4_ig_result['velocity']
 p4_ig = riem4_ig_result['pressure']
 r4_ig = riem4_ig_result['density']
-e4_ig = riem4_ig_result['sie']
+e4_ig = riem4_ig_result['specific_internal_energy']
 plt.plot(x4_ig, u4_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x4_ig, p4_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x4_ig, r4_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -614,7 +614,7 @@ x4_gen = riem4_gen_result['position']
 u4_gen = riem4_gen_result['velocity']
 p4_gen = riem4_gen_result['pressure']
 r4_gen = riem4_gen_result['density']
-e4_gen = riem4_gen_result['sie']
+e4_gen = riem4_gen_result['specific_internal_energy']
 plt.plot(x4_gen, u4_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x4_gen, p4_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x4_gen, r4_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -637,7 +637,7 @@ x4Rev_ig = riem4Rev_ig_result['position']
 u4Rev_ig = riem4Rev_ig_result['velocity']
 p4Rev_ig = riem4Rev_ig_result['pressure']
 r4Rev_ig = riem4Rev_ig_result['density']
-e4Rev_ig = riem4Rev_ig_result['sie']
+e4Rev_ig = riem4Rev_ig_result['specific_internal_energy']
 plt.plot(x4Rev_ig, u4Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x4Rev_ig, p4Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x4Rev_ig, r4Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -660,7 +660,7 @@ x4Rev_gen = riem4Rev_gen_result['position']
 u4Rev_gen = riem4Rev_gen_result['velocity']
 p4Rev_gen = riem4Rev_gen_result['pressure']
 r4Rev_gen = riem4Rev_gen_result['density']
-e4Rev_gen = riem4Rev_gen_result['sie']
+e4Rev_gen = riem4Rev_gen_result['specific_internal_energy']
 plt.plot(x4Rev_gen, u4Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x4Rev_gen, p4Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x4Rev_gen, r4Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -683,7 +683,7 @@ x5_ig = riem5_ig_result['position']
 u5_ig = riem5_ig_result['velocity']
 p5_ig = riem5_ig_result['pressure']
 r5_ig = riem5_ig_result['density']
-e5_ig = riem5_ig_result['sie']
+e5_ig = riem5_ig_result['specific_internal_energy']
 plt.plot(x5_ig, u5_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x5_ig, p5_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x5_ig, r5_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -706,7 +706,7 @@ x5_gen = riem5_gen_result['position']
 u5_gen = riem5_gen_result['velocity']
 p5_gen = riem5_gen_result['pressure']
 r5_gen = riem5_gen_result['density']
-e5_gen = riem5_gen_result['sie']
+e5_gen = riem5_gen_result['specific_internal_energy']
 plt.plot(x5_gen, u5_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x5_gen, p5_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x5_gen, r5_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -729,7 +729,7 @@ x5Rev_ig = riem5Rev_ig_result['position']
 u5Rev_ig = riem5Rev_ig_result['velocity']
 p5Rev_ig = riem5Rev_ig_result['pressure']
 r5Rev_ig = riem5Rev_ig_result['density']
-e5Rev_ig = riem5Rev_ig_result['sie']
+e5Rev_ig = riem5Rev_ig_result['specific_internal_energy']
 plt.plot(x5Rev_ig, u5Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x5Rev_ig, p5Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x5Rev_ig, r5Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -752,7 +752,7 @@ x5Rev_gen = riem5Rev_gen_result['position']
 u5Rev_gen = riem5Rev_gen_result['velocity']
 p5Rev_gen = riem5Rev_gen_result['pressure']
 r5Rev_gen = riem5Rev_gen_result['density']
-e5Rev_gen = riem5Rev_gen_result['sie']
+e5Rev_gen = riem5Rev_gen_result['specific_internal_energy']
 plt.plot(x5Rev_gen, u5Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x5Rev_gen, p5Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x5Rev_gen, r5Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -775,7 +775,7 @@ x5Rev_gen = riem5Rev_gen_result['position']
 u5Rev_gen = riem5Rev_gen_result['velocity']
 p5Rev_gen = riem5Rev_gen_result['pressure']
 r5Rev_gen = riem5Rev_gen_result['density']
-e5Rev_gen = riem5Rev_gen_result['sie']
+e5Rev_gen = riem5Rev_gen_result['specific_internal_energy']
 plt.plot(x5Rev_gen, u5Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x5Rev_gen, p5Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x5Rev_gen, r5Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -798,7 +798,7 @@ x5Rev_gen = riem5Rev_gen_result['position']
 u5Rev_gen = riem5Rev_gen_result['velocity']
 p5Rev_gen = riem5Rev_gen_result['pressure']
 r5Rev_gen = riem5Rev_gen_result['density']
-e5Rev_gen = riem5Rev_gen_result['sie']
+e5Rev_gen = riem5Rev_gen_result['specific_internal_energy']
 plt.plot(x5Rev_gen, u5Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x5Rev_gen, p5Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x5Rev_gen, r5Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -821,7 +821,7 @@ x6_ig = riem6_ig_result['position']
 u6_ig = riem6_ig_result['velocity']
 p6_ig = riem6_ig_result['pressure']
 r6_ig = riem6_ig_result['density']
-e6_ig = riem6_ig_result['sie']
+e6_ig = riem6_ig_result['specific_internal_energy']
 plt.plot(x6_ig, u6_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x6_ig, p6_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x6_ig, r6_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -844,7 +844,7 @@ x6_gen = riem6_gen_result['position']
 u6_gen = riem6_gen_result['velocity']
 p6_gen = riem6_gen_result['pressure']
 r6_gen = riem6_gen_result['density']
-e6_gen = riem6_gen_result['sie']
+e6_gen = riem6_gen_result['specific_internal_energy']
 plt.plot(x6_gen, u6_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x6_gen, p6_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x6_gen, r6_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -867,7 +867,7 @@ x6Rev_ig = riem6Rev_ig_result['position']
 u6Rev_ig = riem6Rev_ig_result['velocity']
 p6Rev_ig = riem6Rev_ig_result['pressure']
 r6Rev_ig = riem6Rev_ig_result['density']
-e6Rev_ig = riem6Rev_ig_result['sie']
+e6Rev_ig = riem6Rev_ig_result['specific_internal_energy']
 plt.plot(x6Rev_ig, u6Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x6Rev_ig, p6Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x6Rev_ig, r6Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -890,7 +890,7 @@ x6Rev_gen = riem6Rev_gen_result['position']
 u6Rev_gen = riem6Rev_gen_result['velocity']
 p6Rev_gen = riem6Rev_gen_result['pressure']
 r6Rev_gen = riem6Rev_gen_result['density']
-e6Rev_gen = riem6Rev_gen_result['sie']
+e6Rev_gen = riem6Rev_gen_result['specific_internal_energy']
 plt.plot(x6Rev_gen, u6Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x6Rev_gen, p6Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x6Rev_gen, r6Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -913,7 +913,7 @@ x7_ig = riem7_ig_result['position']
 u7_ig = riem7_ig_result['velocity']
 p7_ig = riem7_ig_result['pressure']
 r7_ig = riem7_ig_result['density']
-e7_ig = riem7_ig_result['sie']
+e7_ig = riem7_ig_result['specific_internal_energy']
 plt.plot(x7_ig, u7_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x7_ig, p7_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x7_ig, r7_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -936,7 +936,7 @@ x7_gen = riem7_gen_result['position']
 u7_gen = riem7_gen_result['velocity']
 p7_gen = riem7_gen_result['pressure']
 r7_gen = riem7_gen_result['density']
-e7_gen = riem7_gen_result['sie']
+e7_gen = riem7_gen_result['specific_internal_energy']
 plt.plot(x7_gen, u7_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x7_gen, p7_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x7_gen, r7_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -959,7 +959,7 @@ x7Rev_ig = riem7Rev_ig_result['position']
 u7Rev_ig = riem7Rev_ig_result['velocity']
 p7Rev_ig = riem7Rev_ig_result['pressure']
 r7Rev_ig = riem7Rev_ig_result['density']
-e7Rev_ig = riem7Rev_ig_result['sie']
+e7Rev_ig = riem7Rev_ig_result['specific_internal_energy']
 plt.plot(x7Rev_ig, u7Rev_ig, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x7Rev_ig, p7Rev_ig, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x7Rev_ig, r7Rev_ig, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -982,7 +982,7 @@ x7Rev_gen = riem7Rev_gen_result['position']
 u7Rev_gen = riem7Rev_gen_result['velocity']
 p7Rev_gen = riem7Rev_gen_result['pressure']
 r7Rev_gen = riem7Rev_gen_result['density']
-e7Rev_gen = riem7Rev_gen_result['sie']
+e7Rev_gen = riem7Rev_gen_result['specific_internal_energy']
 plt.plot(x7Rev_gen, u7Rev_gen, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x7Rev_gen, p7Rev_gen, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x7Rev_gen, r7Rev_gen, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -1005,7 +1005,7 @@ x_Shyue = riem_Shyue_result['position']
 u_Shyue = riem_Shyue_result['velocity']
 p_Shyue = riem_Shyue_result['pressure']
 r_Shyue = riem_Shyue_result['density']
-e_Shyue = riem_Shyue_result['sie']
+e_Shyue = riem_Shyue_result['specific_internal_energy']
 plt.plot(x_Shyue, u_Shyue, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x_Shyue, p_Shyue, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x_Shyue, r_Shyue, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -1027,7 +1027,7 @@ x_ShyueRev = riem_ShyueRev_result['position']
 u_ShyueRev = riem_ShyueRev_result['velocity']
 p_ShyueRev = riem_ShyueRev_result['pressure']
 r_ShyueRev = riem_ShyueRev_result['density']
-e_ShyueRev = riem_ShyueRev_result['sie']
+e_ShyueRev = riem_ShyueRev_result['specific_internal_energy']
 plt.plot(x_ShyueRev, u_ShyueRev, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x_ShyueRev, p_ShyueRev, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x_ShyueRev, r_ShyueRev, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -1049,7 +1049,7 @@ x_Lee = riem_Lee_result['position']
 u_Lee = riem_Lee_result['velocity']
 p_Lee = riem_Lee_result['pressure']
 r_Lee = riem_Lee_result['density']
-e_Lee = riem_Lee_result['sie']
+e_Lee = riem_Lee_result['specific_internal_energy']
 plt.plot(x_Lee, u_Lee, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x_Lee, p_Lee, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x_Lee, r_Lee, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)
@@ -1071,7 +1071,7 @@ x_LeeRev = riem_LeeRev_result['position']
 u_LeeRev = riem_LeeRev_result['velocity']
 p_LeeRev = riem_LeeRev_result['pressure']
 r_LeeRev = riem_LeeRev_result['density']
-e_LeeRev = riem_LeeRev_result['sie']
+e_LeeRev = riem_LeeRev_result['specific_internal_energy']
 plt.plot(x_LeeRev, u_LeeRev, 'r', label=r'Velocity [$cm/s$]', linewidth=5.)
 plt.plot(x_LeeRev, p_LeeRev, 'g', label=r'Pressure [$dyn/cm^2$]', linewidth=5.)
 plt.plot(x_LeeRev, r_LeeRev, 'b', label=r'Density [$g/cm^3$]', linewidth=5.)

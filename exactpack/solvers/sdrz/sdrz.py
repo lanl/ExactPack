@@ -211,5 +211,6 @@ class SteadyDetonationReactionZone(ExactSolver):
 
         xsolution['position'] = xvec
 
-        return xsolution
+        return ExactSolution(xsolution.values(),
+                             names=list(xsolution.keys()))
 

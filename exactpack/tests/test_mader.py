@@ -41,7 +41,7 @@ class TestMaderTimmes():
         r = np.array([0.7, 0.8])
         t = 6.25e-6
         solrt = sol(r, t)
-        np.testing.assert_allclose(solrt.sound[0], 544000.0)
+        np.testing.assert_allclose(solrt.sound_speed[0], 544000.0)
 
     def test_density(self):
         """Regression test for density."""
