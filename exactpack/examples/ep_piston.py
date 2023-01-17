@@ -58,13 +58,13 @@ xvec = np.linspace(0, xmax, NP)
 
 #  Evaluate the solution
 print('Values for Infinitesimal Strain Hyperelastic-plastic')
-result_Ifin = solution_Ifin._run(xvec, xmax, t)
+result_Ifin = solution_Ifin._run(xvec, t, xmax)
 
 print('Values for Finite Strain Hyperelastic-plastic')
-result_Fin = solution_Fin._run(xvec, xmax, t)
+result_Fin = solution_Fin._run(xvec, t, xmax)
 
 print('Values for Hypoelastic-plastic')
-result_Hypo = solution_Hypo._run(xvec, xmax, t)
+result_Hypo = solution_Hypo._run(xvec, t, xmax)
 
 wv_elx=solution_Ifin.wv_el*t
 wv_plx=solution_Ifin.wv_pl*t

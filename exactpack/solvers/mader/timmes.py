@@ -45,6 +45,6 @@ class Mader(ExactSolver):
                              names=['position',
                                     'velocity',
                                     'pressure',
-                                    'sound',
+                                    'sound_speed',
                                     'density',
                                     'xdet'])
