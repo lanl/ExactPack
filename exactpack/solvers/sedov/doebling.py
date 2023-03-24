@@ -20,6 +20,7 @@ at small values of radius may be able to mitigate this problem and should be
 developed.
 '''
 
+import sys
 import scipy.integrate as sci_int
 import scipy.optimize as sci_opt
 from scipy.interpolate import interp1d
@@ -181,8 +182,7 @@ class Sedov(ExactSolver):
     def _run(self, r, t, npts=3001, vtol=1.e-8):
 
         # Time must be greater than zero
-        if t <= 0.:
-            raise ValueError("time must be greater than zero")
+        t = max(sys.float_info.min ** 0.25, t)
 
         # Re-map the desired list of points r to a list of points linearly
         # spaced between radius of 0.0 and max(r)
