@@ -36,12 +36,19 @@ def suolson(t, x, trad_bc_ev, opac, alpha):
     nstep = len(x)
     trad_ev = np.zeros(nstep)
     tmat_ev = np.zeros(nstep)
-    
-    for i in range(nstep):
-        zpos = x[i]
-        _, _, trad_ev_out, _, tmat_ev_out = so_wave(t, zpos, trad_bc_ev, opac, alpha)
-        trad_ev[i] = trad_ev_out
-        tmat_ev[i] = tmat_ev_out
+
+    # At t=0 the solution is invalid
+    if t <= 0:
+        trad_ev[:] = np.nan
+        tmat_ev[:] = np.nan
+
+    else:
+        for i in range(nstep):
+            zpos = x[i]
+            _, _, trad_ev_out, _, tmat_ev_out = so_wave(t, zpos, trad_bc_ev,
+                                                        opac, alpha)
+            trad_ev[i] = trad_ev_out
+            tmat_ev[i] = tmat_ev_out
 
     return trad_ev, tmat_ev
 
