@@ -136,6 +136,13 @@ class TestSedovDoeblingAssignments():
         with pytest.raises(ValueError):
             Sedov(omega=2.0, geometry=1.0)
 
+    def test_illegal_value_time(self):
+        solver = Sedov()
+        soln = solver(r=[0., 1.], t=0.0)
+        for quant in ['density', 'pressure', 'specific_internal_energy',
+                      'velocity', 'sound_speed']:
+            assert np.all(np.isnan(soln[quant]))
+
 
 class TestSedovDoeblingSpecialSingularities():
     """Tests :class:`exactpack.solvers.sedov.doebling.Sedov`.
@@ -786,17 +793,3 @@ class TestSedovDoeblingShock():
         for ikey in self.analytic_postshock:
             assert self.solution[ikey][self.ishock] == \
                     pytest.approx(self.analytic_postshock[ikey], abs=1.0e-5)
-
-    def test_t0(self):
-        """Test solution at t=0.
-
-        This would normally be an error but we actually force t to be a very
-        small positive number.
-        """
-        solution = Sedov()
-        result = solution(r=[0., 1.], t=0.0)
-        assert result['density'] == pytest.approx([5.92288583e-06, 1.0])
-        assert result['pressure'] == pytest.approx([9.62895116e+90, 0.0])
-        assert result['specific_internal_energy'] == pytest.approx([4.06429882e+96, 0.0])
-        assert result['velocity'] == pytest.approx([0.0, 0.0])
-        assert result['sound_speed'] == pytest.approx([1.50864421e+48, 0.0])

@@ -181,8 +181,18 @@ class Sedov(ExactSolver):
 
     def _run(self, r, t, npts=3001, vtol=1.e-8):
 
-        # Time must be greater than zero
-        t = max(sys.float_info.min ** 0.25, t)
+        # There is no valid solution a t = 0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            return ExactSolution([r, nan_array, nan_array, nan_array, nan_array,
+                                  nan_array],
+                                 names=['position',
+                                        'density',
+                                        'pressure',
+                                        'specific_internal_energy',
+                                        'velocity',
+                                        'sound_speed'])
 
         # Re-map the desired list of points r to a list of points linearly
         # spaced between radius of 0.0 and max(r)
