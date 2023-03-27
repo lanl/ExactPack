@@ -72,40 +72,49 @@ class Cog17(ExactSolver):
             print("*** warning: beta lies outside range [1,3] ***")
 
     def _run(self, r, t):
+        # No valid solution at t=0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            density = nan_array
+            velocity = nan_array
+            temperature = nan_array
+            pressure = nan_array
+            sie = nan_array
+        else:
+            bigGamma = self.Gamma
+            k = self.geometry - 1.
+            c = 2.997e10    # speed of light [cm/s]
+            a = 1.3720e+02  # erg cm^-3 ev^-4
+                            # a   = 7.5657e-15 erg cm^-3 K^-4
+                            #     = 1.3720e+02 erg cm^-3 ev^-4
+                            # k_B = 8.6173324e-5 eV K^-1
+            x1 = 2 * self.beta - 4
+            x2 = 2 * self.beta + 5
+            c0 = 1 / (1 - self.alpha)
+            c1 = x1 * c0
+            c2 = x2 * c0
+            c3 = -self.beta - 3
+            x3 = x1 + (1 - self.alpha) * (k + 1)
+            x4 = 9 - (1 - self.alpha) * (k + 1)
+            x5 = x1 + 2 * (1 - self.alpha)
 
-        bigGamma = self.Gamma
-        k = self.geometry - 1.
-        c = 2.997e10    # speed of light [cm/s]
-        a = 1.3720e+02  # erg cm^-3 ev^-4
-                        # a   = 7.5657e-15 erg cm^-3 K^-4
-                        #     = 1.3720e+02 erg cm^-3 ev^-4
-                        # k_B = 8.6173324e-5 eV K^-1
-        x1 = 2 * self.beta - 4
-        x2 = 2 * self.beta + 5
-        c0 = 1 / (1 - self.alpha)
-        c1 = x1 * c0
-        c2 = x2 * c0
-        c3 = -self.beta - 3
-        x3 = x1 + (1 - self.alpha) * (k + 1)
-        x4 = 9 - (1 - self.alpha) * (k + 1)
-        x5 = x1 + 2 * (1 - self.alpha)
+            u0 = x2 / x3
+            temp0 = x2 * (self.alpha - 1) / bigGamma / pow(x3, 2)
+            temp0 = temp0 * x4 / x5
+            x6 = -2 + u0 * (2 + (self.gamma - 1) * (k + 1))
+            x7 = 2 * (self.alpha * x1 * c0 + 2 * self.beta + k + 7)
+            x8 = 3 / (4 * c * self.lambda0 * a)
+            x8 = x8 * bigGamma / (self.gamma - 1)
+            x8 = x8 * pow(temp0, c3)
+            rho0 = (x6 / x7) * x8
+            rho0 = pow(rho0, c0)
 
-        u0 = x2 / x3
-        temp0 = x2 * (self.alpha - 1) / bigGamma / pow(x3, 2)
-        temp0 = temp0 * x4 / x5
-        x6 = -2 + u0 * (2 + (self.gamma - 1) * (k + 1))
-        x7 = 2 * (self.alpha * x1 * c0 + 2 * self.beta + k + 7)
-        x8 = 3 / (4 * c * self.lambda0 * a)
-        x8 = x8 * bigGamma / (self.gamma - 1)
-        x8 = x8 * pow(temp0, c3)
-        rho0 = (x6 / x7) * x8
-        rho0 = pow(rho0, c0)
-
-        density = rho0 * pow(r, c1) * pow(t, c2) * np.ones(shape=r.shape)
-        velocity = u0 * (r / t) * np.ones(shape=r.shape)
-        temperature = temp0 * pow((r / t), 2) * np.ones(shape=r.shape)
-        pressure = bigGamma * density * temperature
-        sie = pressure / density / (self.gamma - 1)
+            density = rho0 * pow(r, c1) * pow(t, c2) * np.ones(shape=r.shape)
+            velocity = u0 * (r / t) * np.ones(shape=r.shape)
+            temperature = temp0 * pow((r / t), 2) * np.ones(shape=r.shape)
+            pressure = bigGamma * density * temperature
+            sie = pressure / density / (self.gamma - 1)
 
         return ExactSolution([r, density, velocity, temperature, pressure,
                              sie],

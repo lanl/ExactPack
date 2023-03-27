@@ -52,18 +52,28 @@ class Cog1(ExactSolver):
             raise ValueError("geometry must be 1, 2, or 3")
 
     def _run(self, r, t):
+        # No valid solution at t=0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            density = nan_array
+            velocity = nan_array
+            temperature = nan_array
+            pressure = nan_array
+            sie = nan_array
 
-        bigGamma = self.Gamma
-        k = self.geometry - 1
-        c1 = self.b
-        c2 = -self.b - k - 1
-        c3 = self.b - (self.gamma - 1) * (k + 1)
-        density = self.rho0 * pow(r, c1) * pow(t, c2) * np.ones(shape=r.shape)
-        velocity = (r / t) * np.ones(shape=r.shape)
-        temperature = self.temp0 * pow(r, -c1) * pow(t, c3) * \
-            np.ones(shape=r.shape)  # temperature [eV]
-        pressure = bigGamma * density * temperature
-        sie = pressure / density / (self.gamma - 1)
+        else:
+            bigGamma = self.Gamma
+            k = self.geometry - 1
+            c1 = self.b
+            c2 = -self.b - k - 1
+            c3 = self.b - (self.gamma - 1) * (k + 1)
+            density = self.rho0 * pow(r, c1) * pow(t, c2) * np.ones(shape=r.shape)
+            velocity = (r / t) * np.ones(shape=r.shape)
+            temperature = self.temp0 * pow(r, -c1) * pow(t, c3) * \
+                np.ones(shape=r.shape)  # temperature [eV]
+            pressure = bigGamma * density * temperature
+            sie = pressure / density / (self.gamma - 1)
 
         return ExactSolution([r, density, velocity, temperature, pressure,
                               sie],
