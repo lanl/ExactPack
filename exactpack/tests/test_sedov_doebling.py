@@ -137,9 +137,11 @@ class TestSedovDoeblingAssignments():
             Sedov(omega=2.0, geometry=1.0)
 
     def test_illegal_value_time(self):
-        solution = Sedov()
-        with pytest.raises(ValueError):
-            solution(r=[0., 1.], t=0.0)
+        solver = Sedov()
+        soln = solver(r=[0., 1.], t=0.0)
+        for quant in ['density', 'pressure', 'specific_internal_energy',
+                      'velocity', 'sound_speed']:
+            assert np.all(np.isnan(soln[quant]))
 
 
 class TestSedovDoeblingSpecialSingularities():

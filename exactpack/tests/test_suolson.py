@@ -17,6 +17,12 @@ class TestSuOlsonTimmes():
     data = np.linspace(0, 20.0, 4)
     soln = solver(data, 1.e-9)
 
+    def test_invalid_time(self):
+        """There is no valid solution at :math:`t=0`"""
+        soln = self.solver(self.data, 0.0)
+        for quant in ['Tmaterial', 'Tradiation']:
+            assert np.all(np.isnan(soln[quant]))
+
     def test_mat_temperature(self):
         """SuOlson problem: mat temperature"""
         expected = [955.9875670217054, 388.14357235758376,

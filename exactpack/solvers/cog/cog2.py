@@ -52,21 +52,32 @@ class Cog2(ExactSolver):
 
     def _run(self, r, t):
 
-        bigGamma = self.Gamma
-        k = self.geometry - 1.
-        c1 = 2 + (self.gamma - 1) * (k + 1)
-        c2 = -2 * (self.b + k + 1) / c1
-        u1 = 2 / c1
-        t1 = 2 * (self.gamma - 1) * (k + 1) / bigGamma / (self.b + 2) / \
-            pow(c1, 2)
+        # No valid solution at t=0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            density = nan_array
+            velocity = nan_array
+            temperature = nan_array
+            pressure = nan_array
+            sie = nan_array
 
-        density = self.rho0 * pow(r, self.b) * pow(t, c2) * \
-            np.ones(shape=r.shape)
-        velocity = u1 * (r / t) * np.ones(shape=r.shape)
-        temperature = t1 * pow((r / t), 2) * \
-            np.ones(shape=r.shape)  # [eV]
-        pressure = bigGamma * density * temperature  # pressure [dyn/cm^2]
-        sie = pressure / density / (self.gamma - 1)  # specific energy [erg/g]
+        else:
+            bigGamma = self.Gamma
+            k = self.geometry - 1.
+            c1 = 2 + (self.gamma - 1) * (k + 1)
+            c2 = -2 * (self.b + k + 1) / c1
+            u1 = 2 / c1
+            t1 = 2 * (self.gamma - 1) * (k + 1) / bigGamma / (self.b + 2) / \
+                pow(c1, 2)
+
+            density = self.rho0 * pow(r, self.b) * pow(t, c2) * \
+                np.ones(shape=r.shape)
+            velocity = u1 * (r / t) * np.ones(shape=r.shape)
+            temperature = t1 * pow((r / t), 2) * \
+                np.ones(shape=r.shape)  # [eV]
+            pressure = bigGamma * density * temperature  # pressure [dyn/cm^2]
+            sie = pressure / density / (self.gamma - 1)  # specific energy [erg/g]
 
         return ExactSolution([r, density, velocity, temperature, pressure,
                               sie],

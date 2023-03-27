@@ -78,32 +78,41 @@ class Cog7(ExactSolver):
             raise ValueError("geometry must be 1, 2, or 3")
 
     def _run(self, r, t):
+        # No valid solution at t=0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            density = nan_array
+            velocity = nan_array
+            temperature = nan_array
+            pressure = nan_array
+            sie = nan_array
+        else:
+            k = self.geometry - 1.
+            gamma = (k + 3) / (k + 1)
+            bigGamma = self.Gamma
+            x1 = pow(self.tau, 2) - pow(t, 2)
+            x2 = sqrt(x1)
+            c1 = 2 - self.b / gamma
+            x3 = pow(r / x2, c1) - pow(self.Ri / self.tau, c1)
+            c2 = 1 / (gamma - 1)
+            c3 = k + 1 - self.b / gamma
+            c4 = 2 + self.b / gamma
+            c5 = ((k + 1) * gamma - 1 - self.b) / (gamma - 1)
+            x4 = pow(r / x2, c3)
+            x5 = pow(r / x2, c4)
+            x6 = pow((self.tau / r), 2) * (gamma - 1) / \
+                 bigGamma / (2 * gamma - self.b)
+            x7 = pow(self.R0, self.b / gamma) / pow(pow(self.R0, c1) - \
+                 pow(self.Ri, c1), c2)
+            rho0 = x7 * x4 * pow(x3, c2) * pow(self.tau, c5) * pow(r, -k - 1)
+            temp0 = x6 * x5 * x3
 
-        k = self.geometry - 1.
-        gamma = (k + 3) / (k + 1)
-        bigGamma = self.Gamma
-        x1 = pow(self.tau, 2) - pow(t, 2)
-        x2 = sqrt(x1)
-        c1 = 2 - self.b / gamma
-        x3 = pow(r / x2, c1) - pow(self.Ri / self.tau, c1)
-        c2 = 1 / (gamma - 1)
-        c3 = k + 1 - self.b / gamma
-        c4 = 2 + self.b / gamma
-        c5 = ((k + 1) * gamma - 1 - self.b) / (gamma - 1)
-        x4 = pow(r / x2, c3)
-        x5 = pow(r / x2, c4)
-        x6 = pow((self.tau / r), 2) * (gamma - 1) / \
-             bigGamma / (2 * gamma - self.b)
-        x7 = pow(self.R0, self.b / gamma) / pow(pow(self.R0, c1) - \
-             pow(self.Ri, c1), c2)
-        rho0 = x7 * x4 * pow(x3, c2) * pow(self.tau, c5) * pow(r, -k - 1)
-        temp0 = x6 * x5 * x3
-
-        density = rho0 * np.ones(shape=r.shape)
-        velocity = - (r * t / x1) * np.ones(shape=r.shape)
-        temperature = temp0 * np.ones(shape=r.shape)
-        pressure = bigGamma * density * temperature
-        sie = pressure / density / (gamma - 1)
+            density = rho0 * np.ones(shape=r.shape)
+            velocity = - (r * t / x1) * np.ones(shape=r.shape)
+            temperature = temp0 * np.ones(shape=r.shape)
+            pressure = bigGamma * density * temperature
+            sie = pressure / density / (gamma - 1)
 
         return ExactSolution([r, density, velocity, temperature, pressure,
                              sie],

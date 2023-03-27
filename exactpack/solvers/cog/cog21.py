@@ -60,21 +60,30 @@ class Cog21(ExactSolver):
         super(Cog21, self).__init__(**kwargs)
 
     def _run(self, r, t):
-
-        gamma = 5.0
-        geometry = 3
-        k = geometry - 1.
-        bigGamma = self.Gamma
-        shock_location = 2 / (bigGamma * self.temp0 * pow(t, 2))
-        density = self.rho0 * pow(r, -3) * np.where(r < shock_location,
-                  1.5, 1) * np.ones(shape=r.shape)
-        velocity = np.where(r < shock_location,
-                               0, r / t) * np.ones(shape=r.shape)
-        temperature = np.where(r < shock_location,
-                               self.temp0 * pow(r, 3), 0) * \
-                               np.ones(shape=r.shape)
-        pressure = bigGamma * density * temperature
-        sie = pressure / density / (gamma - 1)
+        # No valid solution at t=0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            density = nan_array
+            velocity = nan_array
+            temperature = nan_array
+            pressure = nan_array
+            sie = nan_array
+        else:
+            gamma = 5.0
+            geometry = 3
+            k = geometry - 1.
+            bigGamma = self.Gamma
+            shock_location = 2 / (bigGamma * self.temp0 * pow(t, 2))
+            density = self.rho0 * pow(r, -3) * np.where(r < shock_location,
+                      1.5, 1) * np.ones(shape=r.shape)
+            velocity = np.where(r < shock_location,
+                                   0, r / t) * np.ones(shape=r.shape)
+            temperature = np.where(r < shock_location,
+                                   self.temp0 * pow(r, 3), 0) * \
+                                   np.ones(shape=r.shape)
+            pressure = bigGamma * density * temperature
+            sie = pressure / density / (gamma - 1)
 
         return ExactSolution([r, density, velocity, temperature, pressure,
                              sie],
