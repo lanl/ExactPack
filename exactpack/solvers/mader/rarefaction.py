@@ -34,15 +34,23 @@ def mader(t, x, p_cj, d_cj, gamma, u_piston):
     c = np.zeros(nstep)
     rho = np.zeros(nstep)
     xdet = np.zeros(nstep)
-    
-    for i in range(nstep):
-        xi = x[i]
-        ui, pi, ci, rhoi, xdeti = rare(t, xi, dx, p_cj, d_cj, gamma, u_piston)
-        u[i] = ui
-        p[i] = pi
-        c[i] = ci
-        rho[i] = rhoi
-        xdet[i] = xdeti
+
+    # There is no valid solution at t = 0
+    if t <= 0:
+        u[:] = np.nan
+        p[:] = np.nan
+        c[:] = np.nan
+        rho[:] = np.nan
+        xdet[:] = np.nan
+    else:
+        for i in range(nstep):
+            xi = x[i]
+            ui, pi, ci, rhoi, xdeti = rare(t, xi, dx, p_cj, d_cj, gamma, u_piston)
+            u[i] = ui
+            p[i] = pi
+            c[i] = ci
+            rho[i] = rhoi
+            xdet[i] = xdeti
 
     return u, p, c, rho, xdet
 
