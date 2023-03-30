@@ -1,7 +1,7 @@
 r""" ExactPack wrapper for the Riemann solvers.
 """
 
-from exactpack.base import ExactSolver, ExactSolution
+from exactpack.base import ExactSolver, ExactSolution, print_when_verbose
 
 from exactpack.solvers.riemann import riemann
 from numpy import interp
@@ -72,7 +72,7 @@ class IGEOS_Solver(ExactSolver):
         """
         super(IGEOS_Solver, self).__init__(**kwargs)
 
-
+    @print_when_verbose
     def _run(self, x, t):
         self.t = t
         prob = riemann.RiemannIGEOS(
@@ -185,7 +185,7 @@ class GenEOS_Solver(ExactSolver):
         """
         super(GenEOS_Solver, self).__init__(**kwargs)
 
-
+    @print_when_verbose
     def _run(self, x, t):
         self.t = t
         # instantiate the GenEOS solver, and 'drive' the solver (below)

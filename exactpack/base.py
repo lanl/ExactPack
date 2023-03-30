@@ -1,5 +1,7 @@
 import csv
 import re
+import os
+from contextlib import redirect_stdout
 from textwrap import dedent
 from warnings import warn
 
@@ -8,6 +10,20 @@ import numpy
 
 _whitespace_only_re = re.compile('^[ \t]+$', re.MULTILINE)
 _leading_whitespace_re = re.compile('(^[ \t]*)(?:[^ \t\n])', re.MULTILINE)
+
+
+def print_when_verbose(method):
+    """Capture all stdout and redirect to null unless verbose = True"""
+    def wrapper(cls, *args, **kwargs):
+        if cls.verbose:
+            result = method(cls, *args, **kwargs)
+        else:
+            with open(os.devnull, 'w') as f, redirect_stdout(f):
+                result = method(cls, *args, **kwargs)
+        
+        return result
+
+    return wrapper
 
 
 def _get_margin(text):
@@ -214,7 +230,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
     #: the solver's constructor.
     parameters = {}
 
-    def __init__(self, **params):
+    def __init__(self, verbose=False, **params):
         
         # Check that all params are in the self.parameters list
         if not params.keys() <= set(self.parameters):
@@ -222,6 +238,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
                              +",".join(params.keys() - set(self.parameters)))
 
         self.__dict__.update(params)
+        self.verbose = verbose
 
         for param in self.parameters:
             # Check that all parameters have been set

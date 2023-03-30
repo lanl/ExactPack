@@ -4,7 +4,7 @@ This Blake version handles only spherical geometry with a constant (for
 :math:`t > 0`) pressure history as in :ref:`formul-soln` above.
 """
 
-from ...base import ExactSolver, ExactSolution
+from ...base import ExactSolver, ExactSolution, print_when_verbose
 from . import set_check_elastic_params as elas_prms_mod
 
 import warnings
@@ -223,6 +223,7 @@ class Blake(ExactSolver):
 
         return None
 
+    @print_when_verbose
     def _run(self, radii, tsnap):
         """Run the solver instance."""
 

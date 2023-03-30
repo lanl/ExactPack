@@ -2,7 +2,7 @@ r""" The radiative-shock solvers.
 """
 
 # from ...base import ExactSolver, ExactSolution
-from exactpack.base import ExactSolver, ExactSolution
+from exactpack.base import ExactSolver, ExactSolution, print_when_verbose
 
 from exactpack.solvers.radshocks import radshock
 import numpy
@@ -59,7 +59,10 @@ class ED_Solver(ExactSolver):
         """Set default values if necessary and check for valid inputs.
         """
         super(ED_Solver, self).__init__(**kwargs)
+        self.setup_solver()
 
+    @print_when_verbose
+    def setup_solver(self):
         # instantiate the ED solver, and 'drive' the solver (below)
         prob = radshock.greyED_RadShock(
                M0 = self.M0,
@@ -92,6 +95,7 @@ class ED_Solver(ExactSolver):
         self.P0 = prob.P0
         self.__prob = prob
 
+    @print_when_verbose
     def _run(self, x, t):
         temperature = numpy.interp(x, self.x, self.Tm)
         density = numpy.interp(x, self.x, self.Density)
@@ -170,7 +174,10 @@ class nED_Solver(ExactSolver):
 
     def __init__(self, **kwargs):
         super(nED_Solver, self).__init__(**kwargs)
+        self.setup_solver()
 
+    @print_when_verbose
+    def setup_solver(self):
         prob = radshock.greyNED_RadShock(
                M0 = self.M0,
                rho0 = self.rho0,
@@ -206,6 +213,7 @@ class nED_Solver(ExactSolver):
         self.problem = prob.problem
         self.__prob = prob
 
+    @print_when_verbose
     def _run(self, x, t):
         temperature_mat = numpy.interp(x, self.x, self.Tm)
         temperature_rad = numpy.interp(x, self.x, self.Tr)
@@ -288,7 +296,10 @@ class Sn_Solver(ExactSolver):
 
     def __init__(self, **kwargs):
         super(Sn_Solver, self).__init__(**kwargs)
+        self.setup_solver()
 
+    @print_when_verbose
+    def setup_solver(self):
         prob = radshock.greySn_RadShock(
                M0 = self.M0,
                rho0 = self.rho0,
@@ -323,6 +334,7 @@ class Sn_Solver(ExactSolver):
         self.P0 = prob.P0
         self.__prob = prob
 
+    @print_when_verbose
     def _run(self, x, t):
         temperature_mat = numpy.interp(x, self.x, self.Tm)
         temperature_rad = numpy.interp(x, self.x, self.Tr)
@@ -388,7 +400,10 @@ class ie_Solver(ExactSolver):
 
     def __init__(self, **kwargs):
         super(ie_Solver, self).__init__(**kwargs)
+        self.setup_solver()
 
+    @print_when_verbose
+    def setup_solver(self):
         prob = radshock.Shock_2Tie(
                M0 = self.M0,
                rho0 = self.rho0,
@@ -419,6 +434,7 @@ class ie_Solver(ExactSolver):
         self.Fe = prob.IE_profile.Fe
         self.__prob = prob
 
+    @print_when_verbose
     def _run(self, x, t):
         temperature_ion = numpy.interp(x, self.x, self.Ti)
         temperature_mat = numpy.interp(x, self.x, self.Tm)
