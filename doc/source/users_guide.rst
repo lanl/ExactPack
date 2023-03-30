@@ -111,6 +111,14 @@ the solution at time :math:`t=0.6` in the interval :math:`x\in[0,1]`:
 an evenly spaced set of points.  It has three arguments: the start point,
 the stop point, and an optional number of points to use.)
 
+The ``verbose`` option
+^^^^^^^^^^^^^^^^^^^^^^
+
+As a special case, all solvers take an optional argument called ``verbose``.
+Setting this arguments to ``True`` causes the solver to print extra debug
+information to the screen while it is running. By default all standard output
+from the solver is suppressed. 
+
 A Note on Dimensions
 ^^^^^^^^^^^^^^^^^^^^
 

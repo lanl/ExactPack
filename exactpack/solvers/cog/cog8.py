@@ -69,7 +69,7 @@ class Cog8(ExactSolver):
             print("*** warning: alpha lies outside range [-2,-1] ***")
         if self.beta < 1.0 or self.beta > 3.0:
             print("*** warning: beta lies outside range [1,3] ***")
-        
+    
     def _run(self, r, t):
 
         # No valid solution at t=0

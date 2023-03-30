@@ -241,7 +241,7 @@ def derivs(t, y):
     alphainv = 1.0 / alpha
 
     if (abs(y[1]) <= eps16 or abs(y[3]) <= eps16):
-        # print('derivs:  y[1] or y[3] <  eps16')
+        print('derivs:  y[1] or y[3] <  eps16')
         omega = 1.0 / eps12 * np.sign(1.0, y[2]) * np.sign(1.0, beta0) \
                 * np.sign(1.0, y[1]) * np.sign(1.0, y[3])
     else:
