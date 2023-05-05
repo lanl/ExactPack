@@ -4,9 +4,9 @@ The Sedov problem.
 
 The Sedov blast wave problem [Sedov1959]_ [Kamm2000]_ models a rapid
 point-source explosion in an
-invisid, non-heat conducting polytropic gas, caused by a release of
+inviscid, non-heat conducting polytropic gas, caused by a release of
 of energy :math:`E_0` at the origin :math:`r=0` at time :math:`t=0`.
-The independent fluid variables are (i) the mas density :math:`\rho(r,t)`,
+The independent fluid variables are (i) the mass density :math:`\rho(r,t)`,
 (ii) the velocity of the gas :math:`u(r,t)`, and (iii) the pressure
 :math:`P(r,t)`, each at spatial location :math:`r` and time :math:`t`. The
 specific internal energy :math:`e(r,t)` is related to the other fluid variables
@@ -45,7 +45,7 @@ radially outward, with energy
   E_0 = \int dV \Bigg[\frac{1}{2}\, \rho u^2 + \frac{P}{\gamma-1}\Bigg] \ ,
 
 where the integration runs over the volume behind the shock at time :math:`t`,
-i.e. the integration runs over :math:`0 \le r \le r_{\rm shock}(t)`. The volume
+i.e., the integration runs over :math:`0 \le r \le r_{\rm shock}(t)`. The volume
 element takes the form :math:`dV = 4\pi\, r^2 dr` for :math:`k=3` (spherical),
 :math:`dV =2\pi\, r dr` for :math:`k=2` (cylindrical), and :math:`dV = dr` for
 :math:`k=1` (planar). We take the gas
@@ -59,30 +59,28 @@ shock}=0.75, 0.5` at :math:`t=1`, respectively (these conventions allow all
 three cases to be plotted on the same graph at the final time).
 
 By default, :py:mod:`exactpack.solvers.sedov` attempts to load
-:py:mod:`exactpack.solvers.sedov.timmes`. If that load fails (due to FORTRAN
+:py:mod:`exactpack.solvers.sedov.timmes`. If that load fails (due to Fortran
 linking errors, for example), it loads
-:py:mod:`exactpack.solvers.sedov.doebling`
+:py:mod:`exactpack.solvers.sedov.doebling`.
 
 NOTE: The values of density and specific internal energy produced by the
 Doebling solver at small values of radius, for the standard Sedov case,
-are not trustworthy. See the solver documentation for more detail.
+are not trustworthy. See the solver documentation
+(:py:mod:`exactpack.solvers.sedov.doebling`) for more detail.
 
 NOTE: Currently, the Kamm solver does not return the correct value of the
 physical variables at the shock location, for at least some cases. The
 development team recommends not using the Kamm solver until this is resolved.
-(see unit test exactpack.tests.test_sedov_kamm.TestSedovKammShock)
+(see unit test :py:mod:`exactpack.tests.test_sedov_kamm.TestSedovKammShock`)
 
 
 """
 
-try:
-    from .timmes import Sedov
-except ImportError:
-    from .doebling import Sedov
+from .doebling import Sedov
 
 
 class PlanarSedov(Sedov):
-    """The standard planar Sedov problem, with a default value of \
+    r"""The standard planar Sedov problem, with a default value of \
     :math:`\gamma=7/5` and :math:`E_0=0.0673185` erg.
     """
 
@@ -93,7 +91,7 @@ class PlanarSedov(Sedov):
 
 
 class CylindricalSedov(Sedov):
-    """The standard cylindrical Sedov problem, with a default value of \
+    r"""The standard cylindrical Sedov problem, with a default value of \
     :math:`\gamma=7/5` and :math:`E_0=0.3113572` erg.
     """
 
@@ -104,7 +102,7 @@ class CylindricalSedov(Sedov):
 
 
 class SphericalSedov(Sedov):
-    """The standard spherical Sedov problem, with a default value of \
+    r"""The standard spherical Sedov problem, with a default value of \
     :math:`\gamma=7/5` and :math:`E_0=0.851072` erg.
     """
 

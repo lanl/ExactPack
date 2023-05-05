@@ -1,4 +1,4 @@
-r'''A Python implementation of the Timmes Sedov solver in double precision.
+r'''A Python implementation of the Sedov solver in double precision.
 
 This is a pure Python implentation of the Timmes Sedov solver in ExactPack.
 It uses SciPy optimization to find values of v that minimize the
@@ -20,6 +20,7 @@ at small values of radius may be able to mitigate this problem and should be
 developed.
 '''
 
+import sys
 import scipy.integrate as sci_int
 import scipy.optimize as sci_opt
 from scipy.interpolate import interp1d
@@ -37,9 +38,9 @@ class Sedov(ExactSolver):
 
     parameters = {
         'geometry': '1=planar, 2=cylindrical, 3=spherical',
-        'gamma': 'specific heat ratio :math:`\gamma \equiv c_p/c_v`',
+        'gamma': r'specific heat ratio :math:`\gamma \equiv c_p/c_v`',
         'rho0': 'initial density',
-        'omega': 'initial density power-law exponent,\
+        'omega': r'initial density power-law exponent,\
                  :math:`\\rho \equiv \\rho_0 r^{-\omega}`',
         'eblast': 'total amount of energy deposited at the origin\
                   at time zero',
@@ -180,9 +181,18 @@ class Sedov(ExactSolver):
 
     def _run(self, r, t, npts=3001, vtol=1.e-8):
 
-        # Time must be greater than zero
-        if t <= 0.:
-            raise ValueError("time must be greater than zero")
+        # There is no valid solution a t = 0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            return ExactSolution([r, nan_array, nan_array, nan_array, nan_array,
+                                  nan_array],
+                                 names=['position',
+                                        'density',
+                                        'pressure',
+                                        'specific_internal_energy',
+                                        'velocity',
+                                        'sound_speed'])
 
         # Re-map the desired list of points r to a list of points linearly
         # spaced between radius of 0.0 and max(r)

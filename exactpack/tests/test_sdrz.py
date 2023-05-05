@@ -1,24 +1,18 @@
-'''
-  tests the solver implementation for the Steady Detonation Reaction zone
-  test problem
-  (sdrz for short)
-'''
+"""Unit tests for Steady Detonation Reaction (sdrz) solver.
+"""
 
-
-import unittest
+import pytest
 
 import numpy as np
-
-from numpy.testing import assert_almost_equal
 
 from exactpack.solvers.sdrz import SteadyDetonationReactionZone
 
 
-class TestSDRZAssignments(unittest.TestCase):
+class TestSDRZAssignments():
     """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
     These tests confirm proper assignment of variables, including default
-    values
+    values.
     """
     def test_defaults(self):
 
@@ -29,9 +23,9 @@ class TestSDRZAssignments(unittest.TestCase):
 
         solution = SteadyDetonationReactionZone()
 
-        self.assertEqual(solution.D, D)
-        self.assertEqual(solution.rho_0, rho_0)
-        self.assertEqual(solution.gamma, gamma)
+        assert solution.D == D
+        assert solution.rho_0 == rho_0
+        assert solution.gamma == gamma
 
     def test_assignment(self):
         # tests proper assignment of parameters
@@ -46,40 +40,41 @@ class TestSDRZAssignments(unittest.TestCase):
 
         solution = SteadyDetonationReactionZone(D=D, rho_0=rho_0, gamma=gamma)
 
-        self.assertEqual(solution.D, D)
-        self.assertEqual(solution.rho_0, rho_0)
-        self.assertEqual(solution.gamma, gamma)
+        assert solution.D == D
+        assert solution.rho_0 == rho_0
+        assert solution.gamma == gamma
 
     #
     # Confirm that illegal parameter values raise an error
     #
 
     def test_illegal_value_D(self):
-        self.assertRaises(ValueError, SteadyDetonationReactionZone,
-                          D=-1.0)
+        with pytest.raises(ValueError):
+            SteadyDetonationReactionZone(D=-1.0)
 
     def test_illegal_value_rho_0(self):
-        self.assertRaises(ValueError, SteadyDetonationReactionZone,
-                          rho_0=-1.0)
+        with pytest.raises(ValueError):
+            SteadyDetonationReactionZone(rho_0=-1.0)
 
     def test_illegal_value_gamma(self):
-        self.assertRaises(ValueError, SteadyDetonationReactionZone,
-                          gamma=-1.0)
+        with pytest.raises(ValueError):
+            SteadyDetonationReactionZone(gamma=-1.0)
 
     def test_illegal_value_geometry(self):
-        self.assertRaises(ValueError, SteadyDetonationReactionZone,
-                          geometry=2)
+        with pytest.raises(ValueError):
+            SteadyDetonationReactionZone(geometry=2)
 
-class TestSDRZSolution(unittest.TestCase):
-    """Tests :class:`exactpack.contrib.sdrz.SteadyDetonationReactionZone`.
+class TestSDRZSolution():
+    """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
-    These tests confirm proper solution values for specific cases
+    These tests confirm proper solution values for specific cases.
     """
 
     def test_fickett_table10_1(self):
-        """ Tests proper solution values by comparing default case
-        to the Table 10.1 in Fickett & Rivard
+        """Tests proper solution values
 
+        This test compares the default case to the Table 10.1 in
+        Fickett & Rivard
         """
 
         def compare_to_table(self, dataray):
@@ -99,21 +94,13 @@ class TestSDRZSolution(unittest.TestCase):
 
             result = solution.run_tvec(time) # run_tvec method expects vector of times
 
-            for i in range(len(time)):
-                self.assertAlmostEqual(result['position_relative'][i],
-                                       position[i], sigfigs)
-                self.assertAlmostEqual(result['pressure'][i],
-                                       pressure[i], sigfigs)
-                self.assertAlmostEqual(result['velocity'][i],
-                                       velocity[i], sigfigs)
-                self.assertAlmostEqual(result['density'][i],
-                                       density[i], sigfigs)
-                self.assertAlmostEqual(result['sound_speed'][i],
-                                       sound_speed[i], sigfigs)
-                self.assertAlmostEqual(result['reaction_progress'][i],
-                                       reaction_progress[i], sigfigs)
-
-            return
+            np.testing.assert_allclose(result['position_relative'], position, rtol=1.0e-6)
+            np.testing.assert_allclose(result['pressure'], pressure, rtol=1.0e-6)
+            np.testing.assert_allclose(result['velocity'], velocity, rtol=1.0e-6)
+            np.testing.assert_allclose(result['density'], density, rtol=1.0e-6)
+            np.testing.assert_allclose(result['sound_speed'], sound_speed, rtol=1.0e-6)
+            np.testing.assert_allclose(result['reaction_progress'],
+                                       reaction_progress, rtol=1.0e-6)
 
         # Table 10.1
 
@@ -153,10 +140,7 @@ class TestSDRZSolution(unittest.TestCase):
         compare_to_table(self, dataray)
 
     def test_sdrz_reaction_progress_limit(self):
-
-        """ Tests that burn rate is limited to be monotonic
-        and cannot exceed 1.0
-
+        """ Tests that burn rate is limited to be monotonic and cannot exceed 1.0.
         """
 
         solution = SteadyDetonationReactionZone()
@@ -171,16 +155,16 @@ class TestSDRZSolution(unittest.TestCase):
                   1.  ,  1.  ,  1.  ])
 
             
-        assert_almost_equal(result['reaction_progress'], answer)
+        np.testing.assert_allclose(result['reaction_progress'], answer)
 
 
-class TestSDRZNumericalIntegration(unittest.TestCase):
-    """Tests :class:`exactpack.contrib.sdrz.SteadyDetonationReactionZone`.
+class TestSDRZNumericalIntegration():
+    """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
     These tests verify that the numerical integration scheme is working correctly.
     """
 
-    def testNumericalVersusExact(self):
+    def test_numerical_versus_exact(self):
 
         solution = SteadyDetonationReactionZone()
 
@@ -190,27 +174,27 @@ class TestSDRZNumericalIntegration(unittest.TestCase):
 
         resultNumerical = solution.run_tvec(tvec, useExactLambda=False) # Use numerical integration to get reaction progress
 
-        for i in range(len(tvec)):
-            self.assertAlmostEqual(resultExact['position_relative'][i],
-                                   resultNumerical['position_relative'][i])
-            self.assertAlmostEqual(resultExact['pressure'][i],
-                                   resultNumerical['pressure'][i])
-            self.assertAlmostEqual(resultExact['velocity'][i],
-                                   resultNumerical['velocity'][i])
-            self.assertAlmostEqual(resultExact['density'][i],
-                                   resultNumerical['density'][i])
-            self.assertAlmostEqual(resultExact['sound_speed'][i],
-                                   resultNumerical['sound_speed'][i])
-            self.assertAlmostEqual(resultExact['reaction_progress'][i],
-                                   resultNumerical['reaction_progress'][i])
+        np.testing.assert_allclose(resultExact['position_relative'],
+                                   resultNumerical['position_relative'])
+        np.testing.assert_allclose(resultExact['pressure'],
+                                   resultNumerical['pressure'])
+        np.testing.assert_allclose(resultExact['velocity'],
+                                   resultNumerical['velocity'])
+        np.testing.assert_allclose(resultExact['density'],
+                                   resultNumerical['density'])
+        np.testing.assert_allclose(resultExact['sound_speed'],
+                                   resultNumerical['sound_speed'])
+        np.testing.assert_allclose(resultExact['reaction_progress'],
+                                   resultNumerical['reaction_progress'])
 
-class TestSDRZFullSolution(unittest.TestCase):
-    """Tests :class:`exactpack.contrib.sdrz.SteadyDetonationReactionZone`.
+
+class TestSDRZFullSolution():
+    """Tests :class:`exactpack.solvers.sdrz.SteadyDetonationReactionZone`.
 
     These tests verify that the full solution to SDRZ is behaving as expected.
     """
 
-    def testFullSolution(self):
+    def test_full_solution(self):
 
         solution = SteadyDetonationReactionZone(D=0.85, rho_0=1.6, gamma=3.0)
 
@@ -233,11 +217,6 @@ class TestSDRZFullSolution(unittest.TestCase):
               0.,          0.        ])
             
 
-        np.testing.assert_almost_equal(result['density'], answer_density)
+        np.testing.assert_allclose(result['density'], answer_density)
         
-        np.testing.assert_almost_equal(result['velocity'], answer_velocity)
-        
-
-
-if __name__ == '__main__':
-    unittest.main()
+        np.testing.assert_allclose(result['velocity'], answer_velocity)

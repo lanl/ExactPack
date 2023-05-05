@@ -17,7 +17,7 @@ class Noh2(ExactSolver):
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'rho0': "initial density",
         'e0': "initial internal energy",
         }
@@ -55,7 +55,7 @@ class Noh2(ExactSolver):
 
 
 class PlanarNoh2(Noh2):
-    """The standard planar Noh2 problem.
+    r"""The standard planar Noh2 problem.
 
     The planar Noh2 problem as defined in [Noh1987]_, with a default value
     of :math:`\gamma=5/3`.
@@ -72,7 +72,7 @@ class PlanarNoh2(Noh2):
 
 
 class CylindricalNoh2(Noh2):
-    """The standard cylindrical Noh2 problem.
+    r"""The standard cylindrical Noh2 problem.
 
     The cylindrical Noh2 problem as defined in [Noh1987]_, with a default
     value of :math:`\gamma=5/3`.
@@ -88,7 +88,7 @@ class CylindricalNoh2(Noh2):
     e0 = 1
 
 class SphericalNoh2(Noh2):
-    """The standard spherical Noh2 problem.
+    r"""The standard spherical Noh2 problem.
 
     The spherical Noh2 problem as defined in [Noh1987]_, with a default
     value of :math:`\gamma=5/3`.

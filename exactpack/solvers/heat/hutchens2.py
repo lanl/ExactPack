@@ -109,7 +109,7 @@ class Hutchens2(ExactSolver):
         temperature = self.T0 + (self.TL - self.T0) * z / self.L + \
             (self.g0 / (2 * self.k)) * z * (self.L - z)
         sum = 0
-        for n in xrange(0, self.Nsum):
+        for n in range(0, self.Nsum):
             nodd = float(2 * n + 1)
             lam = nodd * np.pi / self.L
             iratio = (2. / np.pi) * i0(lam * r) / i0(lam * self.b)

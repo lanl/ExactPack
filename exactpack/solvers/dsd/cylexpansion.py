@@ -72,7 +72,6 @@ class CylindricalExpansion(ExactSolver):
     in [Bdzil]_. Default values are **geometry** :math:`=2`, :math:`r_1=1.0`,
     :math:`r_2=2.0`, :math:`D_{{CJ}_1}=0.5`, :math:`D_{{CJ}_2}=1.0`,
     :math:`\alpha_1=0.1`, :math:`\alpha_2=0.1` and :math:`t_d=0.0`.
-
     """
 
     parameters = {

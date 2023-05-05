@@ -1,2 +1,3 @@
 from .base import ExactSolver
-from .utils import discover_solvers
+
+__version__ = '1.7.5'

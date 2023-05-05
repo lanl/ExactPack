@@ -1,5 +1,5 @@
-Coggeshall Problems
-===================
+The Coggeshall Problems
+=======================
 
 .. automodule:: exactpack.solvers.cog
    :members:
@@ -50,11 +50,6 @@ Coggeshall Problems
 ---------------------------------
 
 .. automodule:: exactpack.solvers.cog.cog8
-   :members:
-
-:mod:`exactpack.solvers.cog.cog8_timmes`
-----------------------------------------
-.. automodule:: exactpack.solvers.cog.cog8_timmes
    :members:
 
 :mod:`exactpack.solvers.cog.cog9`

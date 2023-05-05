@@ -25,7 +25,7 @@ the speed of light, :math:`a` is the radiation constant, and
 can be solved for the (non-physical) model in which
 
 .. math::
-   c_v(T) &= \alpha\, T^3
+   c_{\rm v}(T) &= \alpha\, T^3
    \\
    \kappa(T) &= \kappa_0 \ .
    :label: cvkappaDef
@@ -52,4 +52,4 @@ condition is :math:`E(\infty,t)=0`.  The initial conditions are
 
 """
 
-from .timmes import SuOlson
+from .suolson import SuOlson

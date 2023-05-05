@@ -1,18 +1,20 @@
+"""Unit tests for the Escape of High Explosive Products (EHEP) solver.
+"""
 #
 #  tests the solver implementation for the Escape of HE Products test problem
 #  (ehep for short)
 #
 #
 
-import unittest
+import pytest
 
 import numpy as np
 
 from exactpack.solvers.ehep import EscapeOfHEProducts
 
 
-class TestEHEPAssignments(unittest.TestCase):
-    """Tests :class:`exactpack.solvers.ehep.EscapeOfHEProducts`.
+class TestEHEPAssignments():
+    """Tests :class:`exactpack.solvers.ehep.ehep.EscapeOfHEProducts`.
 
     These tests confirm proper assignment of variables, including default
     values
@@ -30,12 +32,12 @@ class TestEHEPAssignments(unittest.TestCase):
 
         solution = EscapeOfHEProducts()
 
-        self.assertEqual(solution.D, D)
-        self.assertEqual(solution.rho_0, rho_0)
-        self.assertEqual(solution.up, up)
-        self.assertEqual(solution.xtilde, xtilde)
-        self.assertEqual(solution.xmax, xmax)
-        self.assertEqual(solution.tmax, tmax)
+        assert solution.D == D
+        assert solution.rho_0 == rho_0
+        assert solution.up == up
+        assert solution.xtilde == xtilde
+        assert solution.xmax == xmax
+        assert solution.tmax == tmax
 
     def test_assignment(self):
         # tests proper assignment of parameters
@@ -55,49 +57,49 @@ class TestEHEPAssignments(unittest.TestCase):
         solution = EscapeOfHEProducts(D=D, rho_0=rho_0, up=up,
                                       xtilde=xtilde, xmax=xmax, tmax=tmax)
 
-        self.assertEqual(solution.D, D)
-        self.assertEqual(solution.rho_0, rho_0)
-        self.assertEqual(solution.up, up)
-        self.assertEqual(solution.xtilde, xtilde)
-        self.assertEqual(solution.ttilde, ttilde)
-        self.assertEqual(solution.xmax, xmax)
-        self.assertEqual(solution.tmax, tmax)
+        assert solution.D == D
+        assert solution.rho_0 == rho_0
+        assert solution.up == up
+        assert solution.xtilde == xtilde
+        assert solution.ttilde == ttilde
+        assert solution.xmax == xmax
+        assert solution.tmax == tmax
 
     #
     # Confirm that illegal parameter values raise an error
     #
 
     def test_illegal_value_D(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          D=-1.0)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(D=-1.0)
 
     def test_illegal_value_rho_0(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          rho_0=-1.0)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(rho_0=-1.0)
 
     def test_illegal_value_up(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          up=-1.0)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(up=-1.0)
 
     def test_illegal_value_up_2(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          D=1.0, gamma=3.0, up=0.3)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(D=1.0, gamma=3.0, up=0.3)
 
     def test_illegal_value_xtilde(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          xtilde=-1.0)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(xtilde=-1.0)
 
     def test_illegal_value_xmax(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          xmax=-1.0)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(xmax=-1.0)
 
     def test_illegal_value_tmax(self):
-        self.assertRaises(ValueError, EscapeOfHEProducts,
-                          tmax=-1.0)
+        with pytest.raises(ValueError):
+            EscapeOfHEProducts(tmax=-1.0)
 
 
-class TestEhepSolution(unittest.TestCase):
-    """Tests :class:`exactpack.ehep.EscapeOfHEProducts`.
+class TestEhepSolution():
+    """Tests :class:`exactpack.solvers.ehep.ehep.EscapeOfHEProducts`.
 
     These tests confirm proper solution values for specific cases
     """
@@ -119,79 +121,58 @@ class TestEhepSolution(unittest.TestCase):
     #  test whether a set of points are on the boundaries of the polygon
 
     def test_point_on_boundary_1(self):
-        """Test 1 for point_on_boundary function
-
-        """
+        """Test 1 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (7.5, 5.0)  # on
-        self.assertTrue(EscapeOfHEProducts.point_on_boundary
-                        (soln, corn, point))
+        assert EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_point_on_boundary_2(self):
-        """Test 2 for point_on_boundary function
-
-        """
+        """Test 2 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (10.0, 7.5)  # on
-        self.assertTrue(EscapeOfHEProducts.point_on_boundary
-                        (soln, corn, point))
+        assert EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_point_on_boundary_3(self):
-        """Test 3 for point_on_boundary function
-
-        """
+        """Test 3 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (5., 9.99)  # on
-        self.assertTrue(EscapeOfHEProducts.point_on_boundary
-                        (soln, corn, point))
+        assert EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_point_on_boundary_4(self):
-        """Test 4 for point_on_boundary function
-
-        """
+        """Test 4 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (2.5, 2.5)  # off
-        self.assertFalse(EscapeOfHEProducts.point_on_boundary
-                         (soln, corn, point))
+        assert not EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_point_on_boundary_5(self):
-        """Test 5 for point_on_boundary function
-
-        """
+        """Test 5 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (4.99, 10.)  # off
-        self.assertFalse(EscapeOfHEProducts.point_on_boundary
-                         (soln, corn, point))
+        assert not EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_point_on_boundary_6(self):
-        """Test 6 for point_on_boundary function
-
-        """
+        """Test 6 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (5.0, 10.01)  # off
-        self.assertFalse(EscapeOfHEProducts.point_on_boundary
-                         (soln, corn, point))
+        assert not EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_point_on_boundary_7(self):
-        """Test 7 for point_on_boundary function
-
-        """
+        """Test 7 for point_on_boundary function"""
 
         corn, soln = self.getsoln()
         point = (5.0, 10.0)  # on
-        self.assertTrue(EscapeOfHEProducts.point_on_boundary
-                        (soln, corn, point))
+        assert EscapeOfHEProducts.point_on_boundary(soln, corn, point)
 
     def test_corners1(self):
-        """ Tests proper calculation of polygon corners by comparing to
-         results from hand calculations
+        """ Tests proper calculation of polygon corners
 
+        Compare to results from hand calculations.
         """
 
         D = 0.85       # Detonation velocity of HE
@@ -204,15 +185,12 @@ class TestEhepSolution(unittest.TestCase):
         solution = EscapeOfHEProducts(D=D, rho_0=rho_0, up=up,
                                       xtilde=xtilde, xmax=xmax, tmax=tmax)
 
-        self.assertSequenceEqual(
-            solution.corners['00'],
-            [(0., 0.), (0., 6.5), (0.325, 6.5)]
-            )
+        assert solution.corners['00'] == [(0., 0.), (0., 6.5), (0.325, 6.5)]
 
     def test_corners2(self):
-        """ Tests proper calculation of polygon corners by comparing to
-         results from hand calculations
+        """ Tests proper calculation of polygon corners
 
+        Compare to results from hand calculations.
         """
 
         D = 0.85       # Detonation velocity of HE
@@ -225,18 +203,16 @@ class TestEhepSolution(unittest.TestCase):
         solution = EscapeOfHEProducts(D=D, rho_0=rho_0, up=up,
                                       xtilde=xtilde, xmax=xmax, tmax=tmax)
 
-        self.assertSequenceEqual(
-            solution.corners['II'],
-            [(1., 1.1764705882352942),
-             (0.8289473684210525, 1.5789473684210527),
-             (3.4125, 6.5),
-             (3.5, 4.11764705882353)]
-            )
+        assert solution.corners['II'] == [(1., 1.1764705882352942),
+                                          (0.8289473684210525, 1.5789473684210527),
+                                          (3.4125, 6.5),
+                                          (3.5, 4.11764705882353)]
 
     def test_0_regions(self):
-        """ Tests proper evaluation of point locations inside
-        regions 00, 0V, and 0H, and outside of all regions
+        """ Test point locations.
 
+        Tests proper evaluation of point locations inside
+        regions 00, 0V, and 0H, and outside of all regions.
         """
 
         rho_0 = 1.6
@@ -255,16 +231,17 @@ class TestEhepSolution(unittest.TestCase):
 
             result = solution._run([x], tvec[i])
 
-            self.assertEqual(result['sound_speed'], 0.0)
-            self.assertEqual(result['pressure'], 0.0)
-            self.assertEqual(result['density'], densoln[i])
-            self.assertEqual(result['velocity'], 0.0)
-            self.assertEqual(result['region'][0], regsoln[i])
+            assert result['sound_speed'] == 0.0
+            assert result['pressure'] == 0.0
+            assert result['density'] == densoln[i]
+            assert result['velocity'] == 0.0
+            assert result['region'][0] == regsoln[i]
 
     def test_fickett_table6_1(self):
-        """ Tests proper solution values by comparing default case
-        to the Table 6.1 in Fickett & Rivard
+        """ Test solution with Ficket & Rivard.
 
+        Tests proper solution values by comparing default case
+        to the Table 6.1 in Fickett & Rivard.
         """
 
         def compare_to_table(self, data, time):
@@ -282,13 +259,13 @@ class TestEhepSolution(unittest.TestCase):
 
             for i in range(len(x)):
                 result = solution._run([x[i]], time)
-                self.assertAlmostEqual(result['density'],
+                np.testing.assert_array_almost_equal(result['density'],
                                        density[i], 4)
-                self.assertAlmostEqual(result['pressure'],
+                np.testing.assert_array_almost_equal(result['pressure'],
                                        pressure[i], 4)
-                self.assertAlmostEqual(result['velocity'],
+                np.testing.assert_array_almost_equal(result['velocity'],
                                        velocity[i], 4)
-                self.assertAlmostEqual(result['sound_speed'],
+                np.testing.assert_array_almost_equal(result['sound_speed'],
                                        sound_speed[i], 4)
 
             return
@@ -324,9 +301,10 @@ class TestEhepSolution(unittest.TestCase):
         compare_to_table(self, data, time=5.00)
 
     def test_fickett_table6_2(self):
-        """ Tests proper solution values by comparing default case
-        to the Table 6.2 in Fickett & Rivard
+        """Test solution against Fickett & Rivard.
 
+        Tests proper solution values by comparing default case
+        to the Table 6.2 in Fickett & Rivard.
         """
 
         def compare_to_table(self, data):
@@ -353,13 +331,13 @@ class TestEhepSolution(unittest.TestCase):
 
                 result = solution._run([x[i]], t[i])
                 #  Check for correct values of the physical variables
-                self.assertAlmostEqual(result['density'],
+                np.testing.assert_array_almost_equal(result['density'],
                                        density[i], 4)
-                self.assertAlmostEqual(result['pressure'],
+                np.testing.assert_array_almost_equal(result['pressure'],
                                        pressure[i], 4)
-                self.assertAlmostEqual(result['velocity'],
+                np.testing.assert_array_almost_equal(result['velocity'],
                                        velocity[i], 4)
-                self.assertAlmostEqual(result['sound_speed'],
+                np.testing.assert_array_almost_equal(result['sound_speed'],
                                        sound_speed[i], 4)
 
             return
@@ -394,6 +372,3 @@ class TestEhepSolution(unittest.TestCase):
                   6.0      3.56625 0.00003  0.56320   0.10432       0.03117
                   '''
         compare_to_table(self, data)
-
-if __name__ == '__main__':
-    unittest.main()

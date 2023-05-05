@@ -1,8 +1,7 @@
 import numpy as np
-import matplotlib.pylab as plt
-from matplotlib import rc, rcParams
-#rc('text',usetex=True)
-rc('font',**{'family':'serif','serif':['Computer Modern']})
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
 
 # import ExactPack solver and analysis tools
 from exactpack.solvers.suolson import SuOlson as mySuOlson
@@ -23,7 +22,7 @@ soln2 = solver(r,t)
 t = 0.01e-9
 soln3 = solver(r,t)
 
-
+fig = plt.figure(figsize=(10, 7))
 soln1.plot('Tradiation',label=r'$T_{\rm rad} ~ t=1\,{\rm ns}$')
 soln1.plot('Tmaterial',label=r'$T_{\rm mat} ~ t=1\,{\rm ns}$')
 soln2.plot('Tradiation',label=r'$T_{\rm rad} ~ t=0.1\,{\rm ns}$')
@@ -35,4 +34,7 @@ plt.title('ExactPack solver class SuOlson')
 plt.ylim(0,1000)
 plt.legend(loc=0)
 plt.grid(True)
+plt.tight_layout()
 plt.show()
+
+plt.close()

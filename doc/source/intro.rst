@@ -4,16 +4,13 @@ Introduction
 For code verification, one compares the code output against known
 exact solutions. There are many standard test problems used in this
 capacity, such as the Noh and Sedov problems.
-ExactPack is a utility that integrates many of these exact
-solution codes into a common API (application program interface), and
-can be used as a stand-alone code or as a python package. ExactPack
+ExactPack is a python package that integrates many of these exact
+solution codes into a common API (application program interface). ExactPack
 consists of python driver scripts that access a library of exact
-solutions written in Fortran or Python. The spatial profiles of the
+solutions written in Python. The spatial profiles of the
 relevant physical quantities, such as the density, fluid velocity, sound
 speed, or internal energy, are returned at a time specified by the
-user. The solution profiles can be viewed and examined by a command
-line interface or a graphical user interface, and a number of analysis
-tools and unit tests are also provided. We have documented the physics
+user.  We have documented the physics
 of each problem in the solution library, and provided complete
 documentation on how to extend the library to include additional exact
 solutions.  ExactPack's code architecture makes it easy to extend the
@@ -30,7 +27,7 @@ the convergence analysis tools.  Examples are located in the
 distribution directory under :file:`exactpack/examples`, and can be
 run as standalone Python scripts, or as Python modules::
 
-  python -m exactpack.<example name>
+  python -m exactpack.examples.<example name>
 
 If you want to use ExactPack for code verification or physics
 exploration, the :ref:`users-guide` gives a complete explanation of
@@ -42,8 +39,7 @@ For those who want to add new solvers to ExactPack, read the
 :ref:`coding-style` and :ref:`adding-a-solver`.  The
 :ref:`reference-guide` is mostly intended for those wishing a more
 thorough understanding of ExactPack's internals, such as developers
-adding additional functionality for the code verification tools, GUI,
-etc.
+adding additional functionality for the code verification tools, etc.
 
 Finally, the :ref:`testing` section documents what internal self-tests
 ExactPack uses to verify the solutions it provides.

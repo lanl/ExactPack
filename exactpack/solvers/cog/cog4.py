@@ -25,15 +25,19 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog4(ExactSolver):
     """Computes the solution to the Cog4 problem.
+
+    Computes the solution to the Cog4 problem with defaults geometry = 3, gamma = 1.4, 
+    rho0 = 1.4, u0 = 2.3, Gamma = 40.
     """
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v` (must be < 1)",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v` (must be < 1)",
         'rho0': "density coefficient",
         'u0': "velocity coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.4
@@ -48,7 +52,7 @@ class Cog4(ExactSolver):
             raise ValueError("geometry must be 1, 2, or 3")
 
         if self.gamma >= 1:
-            print "*** warning: gamma > 1 gives T < 0 ***"
+            print("*** warning: gamma > 1 gives T < 0 ***")
 
     def _run(self, r, t):
 

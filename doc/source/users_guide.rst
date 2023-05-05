@@ -14,21 +14,21 @@ Available Solvers
 Importing :mod:`exactpack` loads some base code and utility functions,
 but no actual solvers.  Individual solvers should be imported as
 needed.  A solver sub-package is given by the name of the problem in
-lower case, preceded by its path. So the default Noh problem solver is
+lower case, preceded by its path. So the default Noh2 problem solver is
 imported using [#]_::
 
-    import exactpack.solvers.noh
+    import exactpack.solvers.noh2
 
 If there are multiple solvers available for a given problem, they will
 be in sub-sub-packages.  The base package will load a default choice
 of the solver, which is the solver recommended for general use by the
 maintainers of ExactPack.
 
-For example, the default Noh solver is really
-:mod:`exactpack.solvers.noh.noh1`, and this is what you get if you import
-:mod:`exactpack.solvers.noh`.  If you want an interface to the Fortran
-implementation of Frank Timmes, then you can explicitly import
-:mod:`exactpack.solvers.noh.timmes`.
+For example, the default Noh2 solver is really
+:mod:`exactpack.solvers.noh2.noh2`, and this is what you get if you import
+:mod:`exactpack.solvers.noh2`.  If you want an interface to the solver which is
+implemented in terms of the Coggeshall solver then you can explicitly import
+:mod:`exactpack.solvers.noh2.noh2_cog`.
 
 The solver itself is a Python class.  Multiple solver variants may be
 available within a given package, but these will all use the same
@@ -44,10 +44,6 @@ For readability, it is often preferable to use a ``from ... import
 
     from exactpack.solvers.noh import SphericalNoh
 
-To obtain a list of all available solvers, use the
-:func:`exactpack.utils.discover_solvers` function.  The example
-scripts are also a good place to learn about importing solvers.
-      
 .. [#] Due to its simplicity, the Noh solver will be used as the
    example and reference implementation throughout this document.
 
@@ -73,13 +69,12 @@ attribute :attr:`ExactSolver.parameters` is a dictionary with keywords
 which are the available parameters, and values which are help strings
 for each parameter.  If there are uninitialized parameters, or the
 constructor is passed parameters that it does not know, it will raise
-an exception.  Relying on default parameters will generate a warning,
-to make sure the user knows exactly what parameters are being used.
+an exception. 
 
-For example, the :class:`exactpack.solvers.noh.noh1.Noh` takes four
+For example, the :class:`exactpack.solvers.noh.noh1.Noh` class takes four
 parameters, the geometry, the gas constant, and the reference velocity
 and density.  To instantiate a solver for the spherical Noh problem,
-with the value :math:`\gamma=5/3` as in the original paper by Noh[#]_,
+with the value :math:`\gamma=5/3` as in the original paper by Noh[Noh1987]_,
 we can use the following code
 
 .. testcode::
@@ -116,8 +111,13 @@ the solution at time :math:`t=0.6` in the interval :math:`x\in[0,1]`:
 an evenly spaced set of points.  It has three arguments: the start point,
 the stop point, and an optional number of points to use.)
 
-.. [#] Be careful not to use integer division to represent rationals;
-   in Python ``5/3`` is ``1``.
+The ``verbose`` option
+^^^^^^^^^^^^^^^^^^^^^^
+
+As a special case, all solvers take an optional argument called ``verbose``.
+Setting this arguments to ``True`` causes the solver to print extra debug
+information to the screen while it is running. By default all standard output
+from the solver is suppressed. 
 
 A Note on Dimensions
 ^^^^^^^^^^^^^^^^^^^^
@@ -238,49 +238,3 @@ each variable:
    >>> solution.jumps[0].density.right
    16.0
    
-.. _convergence-analysis:
-  
-Convergence Analysis
-====================
-
-ExactPack is primarily designed as a tool for code verification.  A
-comprehensive introduction to code verification is beyond the scope of
-this guide.  In brief, the idea is to compare the output of a
-numerical solution produced by a PDE solver to an exact analytic or
-semi-analytic solution, such as those provided by ExactPack.  The
-magnitude of the error in the solution is computed for a seriers of
-grid or timestep refinements, and one confirms the error converges to
-zero.  Ideally, the rate of convergence is also compared to the rate
-predicted by theory, if one is available.
-
-Although ExactPack can provide solutions for any user script for
-analyzing convergence, there are also some built-in tools for
-convergence analysis in :mod:`exactpack.analysis`.  The basic object
-for doing verification analysis is
-:class:`~exactpack.analysis.Study`.  To perform a code
-verification study, instantiate a study object by passing it a list of
-data files, an ExactPack solver, and a data reader::
-
-    from exactpack.analysis import Study
-    from exactpack.analysis.readers import TextReader
-    from exactpack.solvers.riemann import Sod
-
-    study = Study(['coarse.dat', 'medium.dat', 'fine.dat'],
-                  reference=Sod(),
-                  reader=TextReader)
-
-The user can then perform and display a convergence fit using one of several routines,
-for example::
-
-    from exactpack.analysis import FitConvergenceRate
-
-    fitstudy = FitConvergenceRate(study)
-
-    print fitstudy.report()
-
-    fitstudy.plot('pressure')
-    plt.show() 
-
-The above works for three convergence fit methods: :class:`~exactpack.analysis.FitConvergenceRate` (uses scipy optimization fit), :class:`~exactpack.analysis.RoacheConvergenceRate`,
-(uses Richardson-extrapolation based method as described in Roache's book), 
-and :class:`~exactpack.analysis.RegressionConvergenceRate` (uses linear regression).

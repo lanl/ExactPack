@@ -3,9 +3,9 @@
 #
 
 import numpy as np
-import matplotlib.pylab as plt
-
-plt.rc('font', family='serif', size=12)
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=14)
 
 # import ExactPack solver and analysis tools
 from exactpack.solvers.kenamond.kenamond1 import Kenamond1
@@ -33,6 +33,7 @@ r3 = np.sqrt(soln3.position_x ** 2 + soln3.position_y ** 2 +
              soln3.position_z ** 2)
 
 # plot exact solutions
+fig = plt.figure(figsize=(10, 7))
 plt.subplot(2, 2, 1)
 plt.plot(r2, soln2.burntime, 'b.')
 plt.xlabel('distance')
@@ -128,7 +129,7 @@ ibdyz = np.linspace(-3.0, 3.0, 121)
 ibdyx = np.sqrt(9.0 - ibdyz ** 2)
 
 # plot exact solutions
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 fig.add_subplot(2, 2, 1, aspect=1.)
 p1 = plt.contour(soln2.position_x.reshape(len(theta2), len(r)),
                  soln2.position_y.reshape(len(theta2), len(r)),
@@ -163,7 +164,8 @@ plt.plot(obdyx, obdyz, 'k-', lw=2)
 plt.plot(ibdyx, ibdyz, 'k--')
 
 fig.add_subplot(2, 2, 4, aspect=1.)
-start = (len(phi) + 1) / 2 - 1
+start = int((len(phi) + 1) / 2 - 1)
+
 p4 = plt.contour(soln3.position_x[start::len(phi)].reshape(len(r),
                                                            len(theta3)),
                  soln3.position_y[start::len(phi)].reshape(len(r),
@@ -177,7 +179,7 @@ plt.clabel(p4, inline=1, fmt='%1.1f')
 plt.title('3D Burntime, z=0 plane')
 plt.plot(obdyx[200:], obdyz[200:], 'k-', lw=2)
 plt.plot(ibdyx[60:], ibdyz[60:], 'k--')
-
+plt.grid(True)
 plt.tight_layout()
 plt.show()
 
@@ -239,7 +241,7 @@ ibdyz = np.linspace(-3.0, 3.0, 121)
 ibdyx = np.sqrt(9.0 - ibdyz ** 2)
 
 # plot exact solutions
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 fig.add_subplot(2, 2, 1, aspect=1.)
 p1 = plt.contour(soln2.position_x.reshape(len(theta2), len(r)),
                  soln2.position_y.reshape(len(theta2), len(r)),
@@ -274,7 +276,7 @@ plt.plot(obdyx, obdyz, 'k-', lw=2)
 plt.plot(ibdyx, ibdyz, 'k-', lw=2)
 
 plt.subplot(2, 2, 4)
-start = (len(phi) + 1) / 2 - 1
+start = int((len(phi) + 1) / 2 - 1)
 p4 = plt.contour(soln3.position_x[start::len(phi)].reshape(len(r),
                                                            len(theta3)),
                  soln3.position_y[start::len(phi)].reshape(len(r),
@@ -289,6 +291,8 @@ plt.title('3D Burntime, z=0 plane')
 plt.plot(obdyx[200:], obdyz[200:], 'k-', lw=2)
 plt.plot(ibdyx[60:], ibdyz[60:], 'k-', lw=2)
 plt.axis('scaled')
-
+plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+plt.close()

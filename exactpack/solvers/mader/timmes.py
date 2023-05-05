@@ -9,7 +9,7 @@ travel 5 cm. This time has been hardwired into Timmes' code.
 """
 
 from ...base import ExactSolver, ExactSolution
-from _timmes import mader
+from .rarefaction import mader
 
 
 class Mader(ExactSolver):
@@ -19,7 +19,7 @@ class Mader(ExactSolver):
     parameters = {
         'p_cj': 'Chapman-Jouget pressure',
         'd_cj': 'Chapman-Jouget density',
-        'gamma': 'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
+        'gamma': r'ratio of specific heats :math:`\gamma \equiv c_p/c_v`',
         'u_piston': 'speed of piston',
         }
 
@@ -45,6 +45,6 @@ class Mader(ExactSolver):
                              names=['position',
                                     'velocity',
                                     'pressure',
-                                    'sound',
+                                    'sound_speed',
                                     'density',
                                     'xdet'])

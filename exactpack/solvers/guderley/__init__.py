@@ -37,7 +37,7 @@ For the Guderley problem, the state of the pre-shocked region is :
 pressure, :math:`u(r,0)=0` and :math:`p(r,0)=0`. The default density is in cgs
 units is :math:`\rho_0= 1\,{\rm g/cm^3}`.
 
-Note:  :py:mod:`exactpack.solvers.guderley` loads :py:mod:`exactpack.solvers.guderley.ramsey`. 
+Note:  :py:mod:`exactpack.solvers.guderley` loads :py:mod:`exactpack.solvers.guderley.guderley`. 
 
 """
-from ramsey import Guderley
+from .guderley import Guderley

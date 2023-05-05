@@ -32,16 +32,20 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog16(ExactSolver):
     """Computes the solution to the Cog16 problem.
+
+    Computes the solution to the Cog16 problem with defaults geometry = 3,
+    gamma = 1.4, u0 = 2.3, b = 1.2, lambda0 = 0.1, Gamma = 40.
     """
 
     parameters = {
         'geometry': "2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'u0': "velocity coefficient",
         'b': r"dimensionless constant",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     u0 = 2.3

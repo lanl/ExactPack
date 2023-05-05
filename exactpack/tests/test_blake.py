@@ -1,21 +1,20 @@
-r"""Unittests for the spherical, isotropic, linear elastic Blake solver in
-:class:`exactpack.solvers.Blake`.
+r"""Unit tests for the spherical, isotropic, linear elastic Blake solver.
 """
-
+import pytest
 from exactpack.solvers.blake import Blake
 
 import warnings
-import unittest
 import numpy as np
 
 
-class TestBlakeParamErrWarnChecks(unittest.TestCase):
-    r"""Test :class:`Blake` instance parameter checks."""
+class TestBlakeParamErrWarnChecks():
+    r"""Tests :class:`exactpack.solvers.blake.blake.Blake` instance parameter checks.
+    """
 
     elas_dflt_prms = Blake.elas_prm_dflts
 
     def test_defaults(self):
-        """Test default param values are present in the default solver."""
+        """Test that default param values are present in the default solver."""
 
         lame_mod = 25.0e9
         shear_mod = 25.0e9
@@ -31,17 +30,17 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
         blake_debug = False
 
         slvr = Blake()
-        self.assertEqual(slvr.lame_mod, lame_mod)
-        self.assertEqual(slvr.shear_mod, shear_mod)
-        self.assertEqual(slvr.youngs_mod, youngs_mod)
-        self.assertEqual(slvr.poisson_ratio, poisson_ratio)
-        self.assertEqual(slvr.bulk_mod, bulk_mod)
-        self.assertEqual(slvr.long_mod, long_mod)
-        self.assertEqual(slvr.geometry, geometry)
-        self.assertEqual(slvr.ref_density, ref_density)
-        self.assertEqual(slvr.cavity_radius, cavity_radius)
-        self.assertEqual(slvr.pressure_scale, pressure_scale)
-        self.assertEqual(slvr.blake_debug, blake_debug)
+        assert slvr.lame_mod == lame_mod
+        assert slvr.shear_mod == shear_mod
+        assert slvr.youngs_mod == youngs_mod
+        assert slvr.poisson_ratio == poisson_ratio
+        assert slvr.bulk_mod == bulk_mod
+        assert slvr.long_mod == long_mod
+        assert slvr.geometry == geometry
+        assert slvr.ref_density == ref_density
+        assert slvr.cavity_radius == cavity_radius
+        assert slvr.pressure_scale == pressure_scale
+        assert slvr.blake_debug == blake_debug
 
     def test_assign_non_elastic_params(self):
         """Test that the non-elastic parameters are passed to the instance."""
@@ -54,53 +53,48 @@ class TestBlakeParamErrWarnChecks(unittest.TestCase):
 
         slvr = Blake(geometry=geom, ref_density=refd, cavity_radius=crad,
                      pressure_scale=pscl, blake_debug=dbgflag)
-        self.assertEqual(slvr.geometry, geom)
-        self.assertEqual(slvr.ref_density, refd)
-        self.assertEqual(slvr.cavity_radius, crad)
-        self.assertEqual(slvr.pressure_scale, pscl)
-        self.assertEqual(slvr.blake_debug, dbgflag)
+        assert slvr.geometry == geom
+        assert slvr.ref_density == refd
+        assert slvr.cavity_radius == crad
+        assert slvr.pressure_scale == pscl
+        assert slvr.blake_debug == dbgflag
 
     def test_check_cavity_radius(self):
         """Test cavity_radius parameter positive check."""
-        self.assertRaisesRegexp(ValueError, "cavity_radius.*non-positive",
-                                Blake, cavity_radius=-1.0)
+        with pytest.raises(ValueError, match="cavity_radius.*non-positive"):
+            Blake(cavity_radius=-1)
 
     def test_check_geometry(self):
         """Test geometry parameter range check."""
-        self.assertRaisesRegexp(ValueError, "value of geometry",
-                                Blake, geometry=4)
+        with pytest.raises(ValueError, match="value of geometry"):
+            Blake(geometry=4)
 
     def test_check_pressure_scale_pos(self):
         """Test pressure_scale parameter positive check."""
-        self.assertRaisesRegexp(ValueError, "pressure_scale.*non-positive",
-                                Blake, pressure_scale=-1.0)
+        with pytest.raises(ValueError, match="pressure_scale.*non-positive"):
+            Blake(pressure_scale=-1.0)
 
     def test_check_ref_density(self):
         """Test ref_density parameter positive check."""
-        self.assertRaisesRegexp(ValueError, "ref_density.*non-positive",
-                                Blake, ref_density=-1.0)
+        with pytest.raises(ValueError, match="ref_density.*non-positive"):
+            Blake(ref_density=-1.0)
 
     def test_pscale_warn_check(self):
         """Test the pressure_scale parameter range warning."""
-        with warnings.catch_warnings(record=True) as wcm:
+        with pytest.warns(UserWarning, match='pressure_scale parameter'):
             # Default bulk_mod big enough to trigger this warning.
             big_pscale = self.elas_dflt_prms['bulk_mod']
             blk_slvr = Blake(pressure_scale=big_pscale)  # trigger
-            # test
-            assert len(wcm) > 0
-            assert issubclass(wcm[-1].category, UserWarning)
-            assert 'pressure_scale parameter' in str(wcm[-1].message)
 
     def test_check_blake_debug(self):
         """Test that blake_debug parameter is boolean."""
-        self.assertRaisesRegexp(ValueError, "blake_debug.*boolean.*",
-                                Blake, blake_debug='string')
+        with pytest.raises(ValueError, match="blake_debug.*boolean.*"):
+            Blake(blake_debug='string')
 
 
-class TestBlakeSolution(unittest.TestCase):
-    r"""Tests :class:`exactpack.blake.Blake` solver.
-
-    These tests confirm proper solution values in some specific cases.
+class TestBlakeSolution():
+    r"""Tests :class:`exactpack.solvers.blake.blake.Blake`
+    to confirm proper solution values in some specific cases.
     """
 
     elas_dflt_keys = Blake.elas_prm_names
@@ -164,7 +158,7 @@ class TestBlakeSolution(unittest.TestCase):
         standard output, :attr:`TestBlakeSolution.blk_dflt_std`.
         """
 
-        print ' '
+        print(' ')
         tsnap = Blake.tsnap_default
         grid = TestBlakeSolution.intl_test_grid
         blk_dflt_std = self.blk_dflt_std
@@ -229,8 +223,8 @@ class TestBlakeSolution(unittest.TestCase):
                                    verbose=True, err_msg=errmsg)
 
 
-class TestBlakeRunChecks(unittest.TestCase):
-    r"""Test :class:`Blake` run-time checks."""
+class TestBlakeRunChecks():
+    r"""Tests :class:`exactpack.solvers.blake.blake.Blake` run-time checks."""
 
     def test_radii_positive_check(self):
         """Test execution radial coordinates positive check."""
@@ -240,11 +234,11 @@ class TestBlakeRunChecks(unittest.TestCase):
         tsnap = Blake.tsnap_default
         args = [radii, tsnap]
         kwargs = {}
-        self.assertRaisesRegexp(ValueError, "Minimum coordinate.*is negative",
-                                blk_slvr, *args, **kwargs)
+        with pytest.raises(ValueError, match="Minimum coordinate.*is negative"):
+            blk_slvr(*args, **kwargs)
 
 
-class TestBlakeVsKamm(unittest.TestCase):
+class TestBlakeVsKamm():
     r"""
     .. |nbsp| unicode:: 0xA0
        :trim:
@@ -360,10 +354,10 @@ class TestBlakeVsKamm(unittest.TestCase):
         soln = brock_blk_solver(radii, tsnap)
 
         abstol = 0.0
-        print '\nAbs. tolerance = ', abstol
+        print('\nAbs. tolerance = ', abstol)
 
         for ky in attr_to_kmprms:
-            cmd = 'pyth = soln.' + ky
+            cmd = 'global pyth; pyth = soln.' + ky
             exec(cmd, None, None)
             kamm = kamm_sph_dat[:, attr_to_kmprms[ky][0]]
             errormsg = ('Blake solver and Kamm data for: ' + ky +
@@ -374,8 +368,4 @@ class TestBlakeVsKamm(unittest.TestCase):
             # If here then OK
             okmsg = ('Blake solver and Kamm data agree for: ' + ky +
                      ', \twith rel. tol. = ' + str(attr_to_kmprms[ky][1]))
-            print okmsg
-
-
-if __name__ == '__main__':
-    unittest.main()
+            print(okmsg)

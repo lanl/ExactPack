@@ -1,0 +1,68 @@
+# image: registry.gitlab.com/truchas/ci-images:tpl-mpich-centos7-1.2.0
+# image: continuumio/anaconda3
+image: python:latest
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python -V  # Print out python version for debugging
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+  - pip install -U setuptools
+  - pip install -U numpy
+  - pip install -U scipy
+  - pip install -U sphinx
+  - pip install -U matplotlib
+  - pip install -U pytest
+  - pip install -U pytest-cov
+  - pip install ./
+  # artifacts:
+  #   paths:
+  #     - exactpack
+  #     - doc
+
+ep_tests:
+  stage: test
+  script:
+    - pytest --junitxml=report.xml --cov=exactpack.solvers exactpack/tests/
+    - coverage xml
+  coverage: /(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+      
+
+teststyle:
+  stage: test
+  script:
+    # - pylint --rcfile=.pylint.conf vts/
+    # - flake8 --config .flake8rc vts/
+    - sphinx-build -W -b html doc/source public
+
+pages:
+  stage: deploy
+  script:
+    - sphinx-build -b html doc/source public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

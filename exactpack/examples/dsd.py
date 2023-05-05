@@ -3,14 +3,14 @@
 #
 
 import numpy as np
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('font', size=16)
 
 # import ExactPack solver and analysis tools
 from exactpack.solvers.dsd.ratestick import RateStick
 from exactpack.solvers.dsd.cylexpansion import CylindricalExpansion
 from exactpack.solvers.dsd.explosivearc import ExplosiveArc
-
-plt.rc('font', family='serif', size=12)
 
 #####################################################################
 # RateStick examples
@@ -48,7 +48,7 @@ soln2 = RateStick(geometry=2, xnodes=nodesx, ynodes=nodesy)(xy2, time)
 
 # plot exact solutions on requested grid
 tcontours = [0.25, 0.5, 1.0, 2.0, 5.0]
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 fig.add_subplot(1, 2, 1)
 p1 = plt.contour(soln1.position_x.reshape(len(y1), len(x1)),
                  soln1.position_y.reshape(len(y1), len(x1)),
@@ -110,7 +110,7 @@ soln4 = RateStick(geometry=2, IC=2, xnodes=nodesx, ynodes=nodesy, R=0.9,
 
 # plot exact solutions on requested grid
 tcontours = [0.25, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 fig.add_subplot(1, 2, 1)
 p3 = plt.contour(soln3.position_x.reshape(len(y3), len(x3)),
                  soln3.position_y.reshape(len(y3), len(x3)),
@@ -171,7 +171,7 @@ soln6 = RateStick(geometry=2, IC=3, xnodes=nodesx, ynodes=nodesy,
 
 # plot exact solutions on requested grid
 tcontours = [0.25, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 fig.add_subplot(1, 2, 1)
 p5 = plt.contour(soln5.position_x.reshape(len(y5), len(x5)),
                  soln5.position_y.reshape(len(y5), len(x5)),
@@ -229,7 +229,7 @@ mbdyx = np.sqrt(4.0 - mbdyz ** 2.0)
 r2 = np.sqrt(soln.position_x ** 2.0 + soln.position_y ** 2.0)
 
 # plot exact solutions
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 fig.add_subplot(1, 2, 1, aspect=1.)
 p1 = plt.plot(r2, soln.burntime, 'b.')
 plt.xlabel('distance')
@@ -281,7 +281,7 @@ ibdyx = np.sqrt(4.0 - ibdyy ** 2.0)
 
 # plot exact solution on requested grid
 tcontours = [0.1, 0.5, 4.0, 8.0]
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 7))
 p1 = plt.contour(soln1.position_x.reshape(len(y1), len(x1)),
                  soln1.position_y.reshape(len(y1), len(x1)),
                  soln1.burntime.reshape(len(y1), len(x1)),
@@ -296,3 +296,4 @@ plt.plot(ibdyx, ibdyy, 'k-', lw=2)
 plt.tight_layout()
 plt.show()
 
+plt.close()

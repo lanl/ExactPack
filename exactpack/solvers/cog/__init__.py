@@ -1,5 +1,7 @@
 r"""The Coggeshall problems.
 
+.. |Gruneisen| replace:: Grüneisen
+
 The Coggeshall [Coggeshall1991]_ problems are a collection of exact
 solutions to the one-dimensional Euler equations with heat conduction and
 no viscosity.  The fluid field variables are the mass density :math:`\rho(r,t)`,
@@ -7,8 +9,7 @@ the fluid velocity
 :math:`u(r,t)`, the fluid temperature :math:`T(r,t)`, and the specific
 internal energy :math:`e(r,t)` of the fluid material, where :math:`r`
 is the spatial coordinate in planar, cylindrical, or spherical
-geometry. The :math:`\gamma`-law Equation of State (EOS) for the gas
-is written
+geometry. The Equation of State (EOS) for the gas takes the form
 
 .. math::
   P &= \Gamma\, \rho T
@@ -75,25 +76,25 @@ flux can also be written in term of the heat conductivity :math:`K`, defined by
   \frac{4 c \lambda a T^3}{3} ~ {\vec \nabla} T \equiv K(\rho,T) {\vec \nabla} T .
 """
 
-from cog1  import Cog1
-from cog2  import Cog2
-from cog3  import Cog3
-from cog4  import Cog4
-from cog5  import Cog5
-from cog6  import Cog6
-from cog7  import Cog7
-from cog8  import Cog8
-from cog9  import Cog9
-from cog10 import Cog10
-from cog11 import Cog11
-from cog12 import Cog12
-from cog13 import Cog13
-from cog14 import Cog14
-from cog16 import Cog16
-from cog17 import Cog17
-from cog18 import Cog18
-from cog19 import Cog19
-from cog20 import Cog20
-from cog21 import Cog21
+from .cog1  import Cog1
+from .cog2  import Cog2
+from .cog3  import Cog3
+from .cog4  import Cog4
+from .cog5  import Cog5
+from .cog6  import Cog6
+from .cog7  import Cog7
+from .cog8  import Cog8
+from .cog9  import Cog9
+from .cog10 import Cog10
+from .cog11 import Cog11
+from .cog12 import Cog12
+from .cog13 import Cog13
+from .cog14 import Cog14
+from .cog16 import Cog16
+from .cog17 import Cog17
+from .cog18 import Cog18
+from .cog19 import Cog19
+from .cog20 import Cog20
+from .cog21 import Cog21
 
 

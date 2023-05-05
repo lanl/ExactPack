@@ -34,17 +34,21 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog14(ExactSolver):
     """Computes the solution to the Cog14 problem.
+    
+    Computes the solution to the Cog14 problem with defaults geometry = 3,
+    gamma = 1.4, rho0 = 1.8, alpha = 2.0, beta = 1.0, lambda0 = 0.1, Gamma = 40.
     """
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'rho0': "density coefficient",
         'alpha': r"dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8
@@ -61,9 +65,9 @@ class Cog14(ExactSolver):
             raise ValueError("geometry must be 1, 2, or 3")
 
         if self.alpha < -2.0 or self.alpha > -1.0:
-            print "*** warning: alpha lies outside range [-2,-1] ***"
+            print("*** warning: alpha lies outside range [-2,-1] ***")
         if self.beta < 1.0 or self.beta > 3.0:
-            print "*** warning: beta lies outside range [1,3] ***"
+            print("*** warning: beta lies outside range [1,3] ***")
 
     def _run(self, r, t):
 

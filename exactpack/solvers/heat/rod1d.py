@@ -355,7 +355,7 @@ class Rod1D(ExactSolver):
         T2 = self.gamma2 / self.alpha2
         Ta = self.TL - T1
         Tb = self.TR - T2
-        for n in xrange(self.Nsum):
+        for n in range(self.Nsum):
             self.kn[n] = n * np.pi / self.L
             if n != 0:
                 self.Bn[n] = 2 * Ta * (1 - (-1)**n) / float(n * np.pi)  # constant
@@ -371,7 +371,7 @@ class Rod1D(ExactSolver):
         F1 = self.gamma1 / self.beta1
         Ta = self.TL
         Tb = self.TR - F1 * self.L
-        for n in xrange(self.Nsum):
+        for n in range(self.Nsum):
             self.kn[n] = n * np.pi / self.L
             if n == 0:
                 self.An[n] = float(Ta + Tb) / 2
@@ -389,7 +389,7 @@ class Rod1D(ExactSolver):
         F2 = self.gamma2 / self.beta2
         Ta = self.TL - T1
         Tb = self.TR - (T1 + F2 * self.L)
-        for n in xrange(self.Nsum):
+        for n in range(self.Nsum):
             self.kn[n] = (2 * n + 1) * np.pi / (2 * self.L)
             self.Bn[n] = 4 * Ta / ((2 * n + 1) * np.pi)  # constant
             self.Bn[n] = self.Bn[n] + 8 * (Tb - Ta) * (-1)**n / ((2 * n + 1) * np.pi)**2  # linear
@@ -405,7 +405,7 @@ class Rod1D(ExactSolver):
         T2 = self.gamma2 / self.alpha2
         Ta = self.TL - (T2 - F1 * self.L)
         Tb = self.TR - T2
-        for n in xrange(self.Nsum):
+        for n in range(self.Nsum):
             self.kn[n] = (2 * n + 1) * np.pi / (2 * self.L)
             self.An[n] = 4 * Ta * (-1)**n / ((2 * n + 1) * np.pi)  # constant
             self.An[n] = self.An[n] - 8 * (Tb - Ta) / ((2 * n + 1) * np.pi)**2 + \
@@ -424,7 +424,7 @@ class Rod1D(ExactSolver):
         b2 = float(self.beta2) / self.L
         if (a1 != 0.0):
             func = lambda mu: np.tan(mu) - (a2 * b1 - a1 * b2) * mu / (a1 * a2 + b1 * b2 * mu**2)
-            for n in xrange(self.Nsum):
+            for n in range(self.Nsum):
                 if n != 0:
                     muinit = n * np.pi  # initial guess for wave number
                     mu = fsolve(func, muinit)[0]
@@ -440,7 +440,7 @@ class Rod1D(ExactSolver):
         else:
             a = a2 / b2  # b2 =/= 0, as a1 = 0 and b2 = 0 is case B4 above
             func = lambda mu: np.tan(mu) - a / mu
-            for n in xrange(self.Nsum):
+            for n in range(self.Nsum):
                 if (n == 0):
                     muinit = 0.1
                     muasym = 0
@@ -516,7 +516,7 @@ class Rod1D(ExactSolver):
             tempnonhom = T1 + (T2 - T1) * x / self.L
 
         # construct time dependent solution
-        for n in xrange(self.Nsum):
+        for n in range(self.Nsum):
             temperature += (self.An[n] * np.cos(self.kn[n] * x) + self.Bn[n] * np.sin(self.kn[n] * x)) * \
               np.exp(-self.kappa * self.kn[n]**2 * t)
 

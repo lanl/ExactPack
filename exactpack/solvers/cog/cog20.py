@@ -43,17 +43,21 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 
 class Cog20(ExactSolver):
-    """Computes the solution to the Cog20 problem. No conduction.
+    """Computes the solution to the Cog20 problem.
+
+    Computes the solution to the Cog20 problem with defaults geometry = 3,
+    gamma = 1.4, rho0 = 1.8, u0 = 2.3, a = 0.3, Gamma = 40.
     """
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'rho0': "density coefficient",
         'u0': "velocity coefficient",
         'a': "free parameter with dimensions of inverse time",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     rho0 = 1.8

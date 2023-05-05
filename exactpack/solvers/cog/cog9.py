@@ -28,16 +28,20 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog9(ExactSolver):
     """Computes the solution to the Cog9 problem.
+
+    Computes the solution to the Cog9 problem with geometry = 3, gamma = 1.4, 
+    alpha = 2.0, beta = 1.0, rho0 = 1.8, Gamma = 40.
     """
 
     parameters = {
         'geometry': "1=planar, 2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'alpha': r"dimensionless constant :math:`\alpha` in Eq. :eq:`lambdaDef`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
+
     geometry = 3
     gamma = 1.4
     alpha = 2.0
@@ -53,27 +57,36 @@ class Cog9(ExactSolver):
             raise ValueError("geometry must be 1, 2, or 3")
 
         if self.alpha < -2.0 or self.alpha > -1.0:
-            print "*** warning: alpha lies outside range [-2,-1] ***"
+            print("*** warning: alpha lies outside range [-2,-1] ***")
         if self.beta < 1.0 or self.beta > 3.0:
-            print "*** warning: beta lies outside range [1,3] ***"
+            print("*** warning: beta lies outside range [1,3] ***")
 
     def _run(self, r, t):
+        # No valid solution at t=0
+        if t <= 0:
+            nan_array = np.empty(len(r))
+            nan_array[:] = np.nan
+            density = nan_array
+            velocity = nan_array
+            temperature = nan_array
+            pressure = nan_array
+            sie = nan_array
+        else:
+            bigGamma = self.Gamma
+            k = self.geometry - 1
+            c1 = 2 * self.beta + k + 7
+            c2 = -c1 / self.alpha
+            c3 = 2 + (self.gamma - 1) * (k + 1)
+            c4 = -2 * (self.alpha * (k + 1) - c1) / self.alpha / c3
+            c5 = 2 * self.alpha * (self.gamma - 1) * (k + 1) / bigGamma / \
+                 pow(c3, 2) / (2 * self.alpha - 2 * self.beta - k - 7)
 
-        bigGamma = self.Gamma
-        k = self.geometry - 1
-        c1 = 2 * self.beta + k + 7
-        c2 = -c1 / self.alpha
-        c3 = 2 + (self.gamma - 1) * (k + 1)
-        c4 = -2 * (self.alpha * (k + 1) - c1) / self.alpha / c3
-        c5 = 2 * self.alpha * (self.gamma - 1) * (k + 1) / bigGamma / \
-             pow(c3, 2) / (2 * self.alpha - 2 * self.beta - k - 7)
-
-        density = self.rho0 * pow(r, c2) * pow(t, c4) * \
-            np.ones(shape=r.shape)    # mass density [g/cc]
-        velocity = (2 / c3) * (r / t) * np.ones(shape=r.shape)
-        temperature = c5 * pow((r / t), 2) * np.ones(shape=r.shape)
-        pressure = bigGamma * density * temperature  # pressure [dyn/cm^2]
-        sie = pressure / density / (self.gamma - 1)
+            density = self.rho0 * pow(r, c2) * pow(t, c4) * \
+                np.ones(shape=r.shape)    # mass density [g/cc]
+            velocity = (2 / c3) * (r / t) * np.ones(shape=r.shape)
+            temperature = c5 * pow((r / t), 2) * np.ones(shape=r.shape)
+            pressure = bigGamma * density * temperature  # pressure [dyn/cm^2]
+            sie = pressure / density / (self.gamma - 1)
 
         return ExactSolution([r, density, velocity, temperature, pressure,
                              sie],

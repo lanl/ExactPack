@@ -143,12 +143,11 @@ which can be solved for :math:`D_n` using the orthogonality condition
 
 """
 
-from rod1d import Rod1D
-from planar_sandwich import PlanarSandwich
-from planar_sandwich_hot import PlanarSandwichHot
-from planar_sandwich_half import PlanarSandwichHalf
-from planar_sandwich_dawes import PlanarSandwichDawes
-from cylindrical_sandwich import CylindricalSandwich
-from rectangle import Rectangle
-from hutchens1 import Hutchens1
-from hutchens2 import Hutchens2
+from .rod1d import Rod1D
+from .planar_sandwich import PlanarSandwich
+from .planar_sandwich_hot import PlanarSandwichHot
+from .planar_sandwich_half import PlanarSandwichHalf
+from .cylindrical_sandwich import CylindricalSandwich
+from .hutchens1 import Hutchens1
+from .hutchens2 import Hutchens2
+from .rectangle import Rectangle

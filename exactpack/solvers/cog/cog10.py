@@ -27,16 +27,19 @@ from ...base import ExactSolver, ExactSolution, Jump, JumpCondition
 
 class Cog10(ExactSolver):
     """Computes the solution to the Cog10 problem.
+
+    Computes the solution to the Cog10 problem with defaults geometry = 3,
+    gamma = 1.4, beta = 1.0, lambda0 = 0.1, rho0 = 1.8, temp0 = 1.4, Gamma = 40.
     """
 
     parameters = {
         'geometry': "2=cylindrical, 3=spherical",
-        'gamma': "specific heat ratio :math:`\gamma \equiv c_p/c_v`",
+        'gamma': r"specific heat ratio :math:`\gamma \equiv c_p/c_v`",
         'beta': r"dimensionless constant :math:`\beta` in Eq. :eq:`lambdaDef`",
         'lambda0': r"constant :math:`\lambda_0` in Eq. :eq:`lambdaDef`",
         'rho0': "density coefficient",
         'temp0': "temperature coefficient",
-        'Gamma': "Gruneisen gas parameter",
+        'Gamma': "|Gruneisen| gas parameter",
         }
     geometry = 3
     gamma = 1.4
@@ -54,7 +57,7 @@ class Cog10(ExactSolver):
             raise ValueError("geometry must be 2, or 3")
 
         if self.beta < 1.0 or self.beta > 3.0:
-            print "*** warning: beta lies outside range [1,3] ***"
+            print("*** warning: beta lies outside range [1,3] ***")
         
     def _run(self, r, t):
 
@@ -62,7 +65,7 @@ class Cog10(ExactSolver):
         k = self.geometry - 1.
         alpha = self.beta + 4 - 1 / k
         if alpha < -2.0 or alpha > -1.0:
-            print "*** warning: alpha lies outside range [-2,-1] ***"
+            print("*** warning: alpha lies outside range [-2,-1] ***")
         c = 2.997e10   # speed of light [cm/s]
         a = 1.3720e+02  # erg cm^-3 ev^-4
         c1 = 4 * c * self.lambda0 * a / 3
