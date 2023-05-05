@@ -1,7 +1,6 @@
 # ExactPack: An Open-Source Software Package for Code Verification
 
-ExactPack (LA-CC-14-047) is an open-source software package that has been
-developed for the verification & validation community. The package is capable of the generation of exact solutions for common benchmark problems in computational physics.
+ExactPack (LA-CC-14-047, C23033) is an open-source software package that has been developed for the verification & validation community. The package is capable of the generation of exact solutions for common benchmark problems in computational physics.
 
 ExactPack is designed to be an open project, readily expandable to include new test problems for new physical models. At present, it contains the following modules and solutions (see reference list and documentation for details on these test problems):
 
