@@ -35,7 +35,7 @@ ExactPack is designed to be an open project, readily expandable to include new t
 Installation
 ------------
 
-The repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using `pip install ./`. The following dependencies are required:
+The repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using `pip install -r requirements.txt`. The following dependencies are required:
 
 ### Dependencies
 
