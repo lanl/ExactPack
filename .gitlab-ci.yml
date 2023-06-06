@@ -22,14 +22,7 @@ before_script:
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
-  - pip install -U setuptools
-  - pip install -U numpy
-  - pip install -U scipy
-  - pip install -U sphinx
-  - pip install -U matplotlib
-  - pip install -U pytest
-  - pip install -U pytest-cov
-  - pip install ./
+  - pip install -r requirements.txt
   # artifacts:
   #   paths:
   #     - exactpack
