@@ -23,5 +23,6 @@ setup(
     author_email = '',
     license = read('LICENSE.txt'),
     packages = find_packages(),
+    python_requires='>=3.6',
+    install_requires=['numpy >= 1.13.3', 'scipy >= 1.4.0']
     )
-
