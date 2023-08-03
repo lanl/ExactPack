@@ -97,13 +97,14 @@ class ED_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature = numpy.interp(x, self.x, self.Tm)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        rade = numpy.interp(x, self.x, self.RADE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
+        tmp_x = numpy.flip(x + t * self.sound * self.M0)
+        temperature = numpy.interp(tmp_x, self.x, self.Tm)
+        density = numpy.interp(tmp_x, self.x, self.Density)
+        velocity = numpy.interp(tmp_x, self.x, self.Speed)
+        pressure = numpy.interp(tmp_x, self.x, self.Pressure)
+        sie = numpy.interp(tmp_x, self.x, self.SIE)
+        rade = numpy.interp(tmp_x, self.x, self.RADE)
+        sound_speed = numpy.interp(tmp_x, self.x, self.Sound_Speed)
 
         return ExactSolution([x, temperature, density, velocity, pressure, sie,
                               rade, sound_speed],
@@ -215,14 +216,15 @@ class nED_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature_mat = numpy.interp(x, self.x, self.Tm)
-        temperature_rad = numpy.interp(x, self.x, self.Tr)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        rade = numpy.interp(x, self.x, self.RADE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
+        tmp_x = numpy.flip(x + t * self.sound * self.M0)
+        temperature_mat = numpy.interp(tmp_x, self.x, self.Tm)
+        temperature_rad = numpy.interp(tmp_x, self.x, self.Tr)
+        density = numpy.interp(tmp_x, self.x, self.Density)
+        velocity = numpy.interp(tmp_x, self.x, self.Speed)
+        pressure = numpy.interp(tmp_x, self.x, self.Pressure)
+        sie = numpy.interp(tmp_x, self.x, self.SIE)
+        rade = numpy.interp(tmp_x, self.x, self.RADE)
+        sound_speed = numpy.interp(tmp_x, self.x, self.Sound_Speed)
 
         return ExactSolution([x, temperature_mat, temperature_rad, density,
                               velocity, pressure, sie, rade, sound_speed],
@@ -336,15 +338,16 @@ class Sn_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature_mat = numpy.interp(x, self.x, self.Tm)
-        temperature_rad = numpy.interp(x, self.x, self.Tr)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        rade = numpy.interp(x, self.x, self.RADE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
-        VEF = numpy.interp(x, self.x, self.VEF)
+        tmp_x = numpy.flip(x + t * self.sound * self.M0)
+        temperature_mat = numpy.interp(tmp_x, self.x, self.Tm)
+        temperature_rad = numpy.interp(tmp_x, self.x, self.Tr)
+        density = numpy.interp(tmp_x, self.x, self.Density)
+        velocity = numpy.interp(tmp_x, self.x, self.Speed)
+        pressure = numpy.interp(tmp_x, self.x, self.Pressure)
+        sie = numpy.interp(tmp_x, self.x, self.SIE)
+        rade = numpy.interp(tmp_x, self.x, self.RADE)
+        sound_speed = numpy.interp(tmp_x, self.x, self.Sound_Speed)
+        VEF = numpy.interp(tmp_x, self.x, self.VEF)
 
         return ExactSolution([x, temperature_mat, temperature_rad, density,
                               velocity, pressure, sie, rade, sound_speed, VEF],
@@ -436,14 +439,15 @@ class ie_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature_ion = numpy.interp(x, self.x, self.Ti)
-        temperature_mat = numpy.interp(x, self.x, self.Tm)
-        temperature_elec = numpy.interp(x, self.x, self.Te)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
+        tmp_x = numpy.flip(x + t * self.sound * self.M0)
+        temperature_ion = numpy.interp(tmp_x, self.x, self.Ti)
+        temperature_mat = numpy.interp(tmp_x, self.x, self.Tm)
+        temperature_elec = numpy.interp(tmp_x, self.x, self.Te)
+        density = numpy.interp(tmp_x, self.x, self.Density)
+        velocity = numpy.interp(tmp_x, self.x, self.Speed)
+        pressure = numpy.interp(tmp_x, self.x, self.Pressure)
+        sie = numpy.interp(tmp_x, self.x, self.SIE)
+        sound_speed = numpy.interp(tmp_x, self.x, self.Sound_Speed)
 
         return ExactSolution([x, temperature_ion, temperature_mat,
                               temperature_elec, density, velocity, pressure,
