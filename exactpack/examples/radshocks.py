@@ -27,8 +27,8 @@ ie_soln = ie_Solver(M0 = 1.4)
 
 #  Set vector of times to evaluate the solution.
 
-xmin = -10.0
-xmax = 10.0
+xmin = -0.01
+xmax = 0.1
 t = 0.0
 NP = 1e5
 
