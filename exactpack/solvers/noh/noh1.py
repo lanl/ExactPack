@@ -71,7 +71,7 @@ class Noh(ExactSolver):
                              names=['position',
                                     'density',
                                     'pressure',
-                                    'sie',
+                                    'specific_internal_energy',
                                     'velocity'],
                              jumps=[JumpCondition(shock_location,
                                     "Shock",

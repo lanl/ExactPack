@@ -12,8 +12,7 @@ solver :mod:`exactpack.solvers.noh`.  This should be considered the reference
 implementation, and a good template for new solvers.  Potential
 developers are advised to carefully look through the source code for
 :mod:`exactpack.solvers.noh` in conjunction with reading this chapter,
-particularly :class:`exactpack.solvers.noh.noh1.Noh` and
-:class:`exactpack.solvers.noh.timmes.Noh`. (In the HTML version of
+particularly :class:`exactpack.solvers.noh.noh1.Noh`. (In the HTML version of
 this manual, there is a hyperlink to the source code from the
 documentation for each class and function.)
        
@@ -69,12 +68,12 @@ requirements have been met.
     including the choices of any default values.  (See the notes 
     in :ref:`doc-params` for the correct format to do this.)
 
-* Unittests for the solver are provided.
+* Unit tests for the solver are provided.
 
-  * Unittests should be documented to indicate what they do and why
+  * Unit tests should be documented to indicate what they do and why
     these tests are selected.
 
-  * At a minimum, unittests should demonstrate that the solver
+  * At a minimum, unit tests should demonstrate that the solver
     reproduces the correct results in limiting cases and
     well established, previously published, data.
 
@@ -100,40 +99,12 @@ which provide solvers, while others contain supporting code.
     includes several important subdirectories which are described
     below.
 
-    :file:`contrib/`
-
-        This is the location for third-party or other contributed
-	solvers that are sufficiently developed to be redistributed as
-	part of the standard distribution, but which are provided
-	as-is, with no support.  This may be because the solver is not
-	up to the requirements listed in :ref:`coding-style`, or
-	because support is provided by someone outside the development
-	team.
-
-	If you add a solver, it should be initially added in the
-	:file:`contrib/` directory, and the documentation should
-	include your contact information as the support
-	point-of-contact, using the :rst:role:`codeauthor` directive.
-	The ExactPack development team may decide to move your solver
-	to the :file:`solvers/` directory, if appropriate.
-
     :file:`solvers/`
 
 	The ``solvers`` directory contains the supported solver
         packages. For example, the ``noh`` directory in ``solvers`` is
         a package providing an exact solution code for the Noh
-        problem.  This includes two different implementations of the
-        Noh problem, ``noh1.py`` is written in pure Python code using
-        Numpy, and ``timmes.py`` is a wrapper for the Fortran
-        implementation whose source code is in
-        ``src/timmes/noh/noh.f90``.  The dynamically loadable shared
-        object library ``_timmes.so`` is not actually distributed with
-        the source, as it is automatically compiled when the package
-        is installed using the ``setup.py`` script, and it might have
-        different names on different architectures.  It is a Python
-        importable object, but is not meant to be accessed directly,
-        but rather, via the ``timmes.py`` wrapper (which is why it is
-        named with a leading underscore).
+        problem.
 	
     :file:`tests/`
 
@@ -143,7 +114,7 @@ which provide solvers, while others contain supporting code.
 	will watch the watchers" variety), and is discussed in
 	:ref:`testing`.
 
-:file:`examples/`
+    :file:`examples/`
 
     Several example files are provided as templates for how to write
     Python scripts that use the ExactPack package.
@@ -152,12 +123,6 @@ which provide solvers, while others contain supporting code.
 
     This is the setuptools packaging script for building and
     installing ExactPack.
-
-:file:`src/`
-
-    Fortran or other non-Python source files for exact solution codes
-    is stored here.  The :file:`src` directory is organized into
-    sub-directories by author or contributor, and then by problem.
 
 This description does not include every file that you will see if you
 browse the source tree.  There will be many more package directories
@@ -214,7 +179,7 @@ rendered nicely by Sphinx as part of this document.  The ``r`` at the
 beginning indicates a raw string, which means that backslashes and
 other control codes will not be processed by the Python interpreter.
 
-In order to insure a uniform API, the initialization of solver
+In order to ensure a uniform API, the initialization of solver
 attributes is handled by :class:`ExactSolver`, and the solver class
 itself should not set any parameters.  Instead the class definition
 should set a ``parameters`` attribute, which is a dictionary with each
@@ -323,11 +288,11 @@ right)`` states.
 Setting the Default Solver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the :mod:`exactpack.solvers.noh` package, there are two available
+For the :mod:`exactpack.solvers.noh2` package, there are two available
 implementations of the solver.  The ``__init__.py`` file loads the
 default solver, in this case::
 
-   from noh1 import Noh
+   from noh2 import Noh2
 
 Even in cases with a single solver, it is preferable to put it in a
 separate file, and import it in ``__init__.py``.  This is consistent
@@ -375,134 +340,6 @@ parameter to the constructor.
    nothing stopping someone from typing ``SphericalNoh.geometry = 2``;
    it should be obvious that this is a very bad idea.)
 
-A Fortran Solver
-----------------
-
-Often we already have a solver in another language, usually some
-variant of Fortran, and we wish to incorporate it into the ExactPack
-framework.  Converting the solver to pure Python may not be advisable:
-there may be to high a risk of introducing new bugs, it may run too
-slowly, or the time involved may just be too great to justify.  In this
-case we can use the `F2PY <http://cens.ioc.ee/projects/f2py2e>`_
-package to wrap the existing Fortran code for easy access from Python.
-
-The first step is to decorate the original Fortran code with F2PY
-directives.  These are specially formatted Fortran comments that are
-used by the F2PY package to determine the calling interface.
-
-For our Noh problem example, we started with the code from `Frank
-Timmes verification website
-<http://cococubed.asu.edu/research_pages/noh.shtml>`_.  Some
-modifications to the source code are needed, such as removing the main
-driver (this will be provided on the Python side) and unused support
-routines, removing the input and output statements (this will also by handled in
-Python), and moving the loop over spatial points into the main
-driver routine (for efficiency).  Once this is done, the
-driver routine is decorated with F2PY directives:
-
-.. literalinclude:: ../../src/timmes/noh/noh.f90
-   :language: fortran
-   :end-before: solves the standard case
-
-The ``cf2py`` prefix is a Fortran comment and identifies an F2PY
-directive.  ``intent(out)`` is used to identify which variable will be
-passed to Python as return values.  ``intent(hide)`` is used to hide
-an argument so it doesn't appear explicitly in the Python interface.
-In this case the variable in question, ``nstep``, does not need to be
-explicitly passed from Python because it can be determined by the
-wrapper based on the length of ``xpos``.  The type declarations are
-used by the Python wrapper to do type checking and conversion on the
-arguments.
-
-With the addition of these directives, this Fortran source can now be
-compiled into a shared library, which is loadable by Python.  The
-signature for this function is:
-
-.. currentmodule:: exactpack.solvers.noh._timmes
-
-.. function:: noh_1d(time, xpos, rho1, u1, gamma, xgeom) -> (den, ener, pres, vel, jumps)
-
-It takes six positional or keyword arguments, which map to the
-arguments of the Fortran function with the exception of those tagged
-either ``intent(out)`` or the ``intent(hide)``.  It returns a tuple of
-Numpy arrays, which are the Fortran arrays with ``intent(out)``, in
-the order given.  F2PY takes care of creating arrays that will
-persist after the Fortran subroutine exits.
-
-Compilation can be done from the command line using the ``f2py``
-utility, but we automate it through ExactPack's ``setup.py`` file.
-This allows us to make a source distribution that compiles automatically
-when installing using Python's packaging tools.  This is done by
-adding a :class:`numpy.distutils.core.Extension` object to the
-``ext_modules`` list of the ``setup`` class:
-
-.. literalinclude:: ../../setup.py
-   :start-after: packages =
-   :end-before: sedov
-
-where ``name`` is the name that will be used for the compiled package.  On
-most systems, for this example, building ExactPack will generate a
-file ``exactpack/noh/_timmmes.so``, which is the loadable library.  We
-choose a name with a leading underscore to indicate that this module
-is not meant to be called directly by the user (as we shall see).  ``sources`` is a
-list of source files to compile.  By convention, ExactPack groups
-source files in problem specific directories, organized first by
-source code author, then by problem.
-
-Sometimes a source file includes multiple routines, only some of which
-need to be exposed in the Python interface.  In that case, an
-``f2py_options`` argument should be passed to
-:class:`numpy.distutils.core.Extension`'s constructor, with an
-``only:`` flag.  The syntax is::
-
-   f2py_options = ['only:'] + [ 'noh_1d' ] + [':']
-
-In our Noh example, this is not necessary, since the source file
-contains only one routine.
-
-At this point we are only half finished.  We now have a Fortran library
-that can be accessed by importing::
-
-   import exactpack.solvers.noh._timmes
-   
-but the interface is hard to use and does not conform to the ExactPack
-API.  We next must create a solver class to wrap the Fortran
-library.  This we put in the file ``exactpack/noh/timmes.py``.  The
-class header is almost identical to the one for the Python solver:
-
-.. literalinclude:: ../../exactpack/solvers/noh/timmes.py
-   :pyobject: Noh
-   :end-before: def __init__
-
-The constructor in this case also looks identical:
-
-.. literalinclude:: ../../exactpack/solvers/noh/timmes.py
-   :pyobject: Noh.__init__
-
-For more complex problems, we might want to call some Fortran code
-immediately in the constructor to compute intermediate values that
-will not change between calls to the ``_run`` method.
-
-The ``_run`` method now is simply a wrapper to the Fortran function:
-
-.. literalinclude:: ../../exactpack/solvers/noh/timmes.py
-   :pyobject: Noh._run
-
-Note that we do not need to create the arrays ``density``, etc., since
-that is taken care of by the F2PY wrapper.  They are then passed to
-the :class:`exactpack.base.ExactSolution` constructor.  The original
-Fortran source was modified to return an additional array, ``jumps``,
-into which is packed the location of the shock, and pre- and post-shock states.
-These could equally well have been returned as nine separate scalars.
-The result would have been a more complex call signature, but would
-have eliminated the need to make sure the array is packed and unpacked
-consistently on the Fortran and Python sides, respectively.
-
-For more information about F2PY and using it to interface with Numpy
-arrays, see the `F2PY User's Guide and Reference Manual
-<http://cens.ioc.ee/projects/f2py2e/usersguide>`_ and `Using Python as Glue
-<http://docs.scipy.org/doc/numpy/user/c-info.python-as-glue.html>`_.
-
 Unit Tests
 ----------
 
@@ -520,7 +357,7 @@ testing framework.
 Tests for solvers are found in the ``tests`` directory, with file
 names ``test_<solver>.py``.  For examples of testing, see the files in
 that directory.  The tests are built using the standard Python
-:mod:`unittest` framework.
+:mod:`pytest` framework.
 
 A complete description of all the unit tests for ExactPack, as well as
 a discussion of the testing strategy, can be found in :ref:`Testing`.

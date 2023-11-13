@@ -137,7 +137,7 @@ class IEShockProfile(BasicShockProfile):
           a = gamma * (2. * M02 - 1.) + 1.
           b = - 2. * (gamma * M02 * M02 + 1.)
           c = M02 * ((gamma - 1.) * M02 + 2.)
-#         the positive value returns M0 and is a good unittest
+#         the positive value returns M0 and is a good unit test
 #         M0_test = numpy.sqrt((- b + numpy.sqrt(b * b - 4. * a * c)) / 2. / a)
 #         M0_test == M0; if not exit gracefully on warning
           M1 = numpy.sqrt((- b - numpy.sqrt(b * b - 4. * a * c)) / 2. / a)

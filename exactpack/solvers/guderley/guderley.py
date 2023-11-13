@@ -31,5 +31,5 @@ class Guderley(ExactSolver):
                                     'density',
                                     'velocity',
                                     'pressure',
-                                    'sound',
-                                    'sie'])
+                                    'sound_speed',
+                                    'specific_internal_energy'])

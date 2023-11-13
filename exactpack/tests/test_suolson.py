@@ -1,4 +1,4 @@
-"""Unittests for the Su-Olson solver.
+"""Unit tests for the Su-Olson solver.
 """
 
 import pytest
@@ -16,6 +16,12 @@ class TestSuOlsonTimmes():
     solver = SuOlson(trad_bc_ev=1.0e3, opac=1.0)
     data = np.linspace(0, 20.0, 4)
     soln = solver(data, 1.e-9)
+
+    def test_invalid_time(self):
+        """There is no valid solution at :math:`t=0`"""
+        soln = self.solver(self.data, 0.0)
+        for quant in ['Tmaterial', 'Tradiation']:
+            assert np.all(np.isnan(soln[quant]))
 
     def test_mat_temperature(self):
         """SuOlson problem: mat temperature"""

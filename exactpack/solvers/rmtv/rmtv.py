@@ -5,7 +5,7 @@ Timmes website <http://cococubed.asu.edu/research_pages/rmtv.shtml>`_.
 This code is released under LA-CC-05-101.
 """
 
-from ...base import ExactSolver, ExactSolution
+from ...base import ExactSolver, ExactSolution, print_when_verbose
 from .timmes import rmtv
 
 
@@ -38,6 +38,7 @@ class Rmtv(ExactSolver):
     beta0 = 7.197534e7 # LA-UR-05-6865 p. 31
     g0 = 1.0
 
+    @print_when_verbose
     def _run(self, r, t=None):
         # The 't' parameter is required by the ExactPAck API but is not used
         # here. Ideally we would have some way of converting 't' to a value of

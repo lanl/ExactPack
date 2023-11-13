@@ -186,7 +186,7 @@ Test                  :math:`x_M` :math:`t_f` :math:`\rho_L` :math:`u_L` :math:`
 ===================== =========== =========== ============== =========== =========== ============== =========== =========== ================ ================
 
 Plots of each solution are given below.
-These seven problems, and their reversed states provide the basis of for most of the unittests for both the ideal-gas and general EOS solvers.
+These seven problems, and their reversed states provide the basis of for most of the unit tests for both the ideal-gas and general EOS solvers.
 
 +-------------------------------------+------------------------------------------+
 | .. figure:: sod.png                 | .. figure:: einfeldt.png                 |
@@ -236,7 +236,7 @@ JWL parameters        :math:`\rho_0` :math:`e_0` :math:`\Gamma_0` :math:`A`   :m
 ===================== ============== =========== ================ =========== =========== ============== =========== ===========
 
 Plots of each solution are given below.
-These two problems, and their reversed states, provide the basis for many of the unittests for the general EOS solver.
+These two problems, and their reversed states, provide the basis for many of the unit tests for the general EOS solver.
 
 +-----------------------+------------------------+
 | .. figure:: shyue.png | .. figure:: lee.png    |

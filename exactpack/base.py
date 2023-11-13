@@ -1,5 +1,7 @@
 import csv
 import re
+import os
+from contextlib import redirect_stdout
 from textwrap import dedent
 from warnings import warn
 
@@ -8,6 +10,20 @@ import numpy
 
 _whitespace_only_re = re.compile('^[ \t]+$', re.MULTILINE)
 _leading_whitespace_re = re.compile('(^[ \t]*)(?:[^ \t\n])', re.MULTILINE)
+
+
+def print_when_verbose(method):
+    """Capture all stdout and redirect to null unless verbose = True"""
+    def wrapper(cls, *args, **kwargs):
+        if cls.verbose:
+            result = method(cls, *args, **kwargs)
+        else:
+            with open(os.devnull, 'w') as f, redirect_stdout(f):
+                result = method(cls, *args, **kwargs)
+        
+        return result
+
+    return wrapper
 
 
 def _get_margin(text):
@@ -111,71 +127,84 @@ class Jump(object):
         return "Jump(left={}, right={})".format(self.left, self.right)
             
 
-class JumpCondition(object):
-    """A class for jump conditions.
-
-    By definition, weak solutions of differential equations may have discontinuities.
-    These are points at which the solution, considered as a function,
-    has no value, but for which the left and right limits on the
-    function value are different.  Numerically computed discrete
-    solutions cannot directly capture discontinuities.  The
-    :class:`JumpCondition` class is used to provide a numerical
-    description of the mathematical properties of the jump.
-
-    Each solution discontinuity has a location and a set of variables
-    for which the left and right states are provided.  In addition to
-    the attributes described below, a :class:`JumpCondition` object
-    will have an attribute for each problem variable, with a value of
-    type :class:`Jump` giving the left and right states.
-
-    For example, the jump in the Heaviside step function could be
-    described by the following::
-
-       JumpCondition(location=0,
-                     description="Mathematical Discontinuity",
-                     H=(0, 1))
-
-    For more information see :ref:`jump-conditions`.
-    """
-    
-    def __init__(self, location, description="", **kwargs):
-        """
-        :param Number location: the location of the jump point
-        :param str description: a short description of the type of
-          discontinuity (e.g., 'Shock', 'Material Interface')
-        :param kwargs: the remaining keywords arguments set the jump
-          conditions: the keywords are the variable names, and the
-          values are either of type :class:`Jump`, or a 2-tuple to be
-          converted
-        """
-        
-        #: The location of the jump point
-        self.location = location
-
-        #: A short description of the type of discontinuity
-        self.description = description
-
-        self._vars = {}
-        for key, val in kwargs.items():
-            self._vars[key] = Jump(val)
-
-    def __getattr__(self, name):
-
-        try:
-            return self._vars[name]
-        except KeyError:
-            raise AttributeError("JumpCondition has no attribute '{}'".format(name))
-            
-    def __repr__(self):
-
-
-        vars = [ "{}=({},{})".format(key, val.left, val.right)
-                 for key, val in self._vars.items() ]
-        
-        return "JumpCondition(location={},{})".format(self.location,
-                                                      ",".join(vars))
+# class JumpCondition(object):
+#     """A class for jump conditions.
+#
+#     By definition, weak solutions of differential equations may have discontinuities.
+#     These are points at which the solution, considered as a function,
+#     has no value, but for which the left and right limits on the
+#     function value are different.  Numerically computed discrete
+#     solutions cannot directly capture discontinuities.  The
+#     :class:`JumpCondition` class is used to provide a numerical
+#     description of the mathematical properties of the jump.
+#
+#     Each solution discontinuity has a location and a set of variables
+#     for which the left and right states are provided.  In addition to
+#     the attributes described below, a :class:`JumpCondition` object
+#     will have an attribute for each problem variable, with a value of
+#     type :class:`Jump` giving the left and right states.
+#
+#     For example, the jump in the Heaviside step function could be
+#     described by the following::
+#
+#        JumpCondition(location=0,
+#                      description="Mathematical Discontinuity",
+#                      H=(0, 1))
+#
+#     For more information see :ref:`jump-conditions`.
+#     """
+#
+#     def __init__(self, location, description="", **kwargs):
+#         """
+#         :param Number location: the location of the jump point
+#         :param str description: a short description of the type of
+#           discontinuity (e.g., 'Shock', 'Material Interface')
+#         :param kwargs: the remaining keywords arguments set the jump
+#           conditions: the keywords are the variable names, and the
+#           values are either of type :class:`Jump`, or a 2-tuple to be
+#           converted
+#         """
+#
+#         #: The location of the jump point
+#         self.location = location
+#
+#         #: A short description of the type of discontinuity
+#         self.description = description
+#
+#         self._vars = {}
+#         for key, val in kwargs.items():
+#             self._vars[key] = Jump(val)
+#
+#     def __getattr__(self, name):
+#
+#         try:
+#             return self._vars[name]
+#         except KeyError:
+#             raise AttributeError("JumpCondition has no attribute '{}'".format(name))
+#
+#     def __repr__(self):
+#
+#
+#         vars = [ "{}=({},{})".format(key, val.left, val.right)
+#                  for key, val in self._vars.items() ]
+#
+#         return "JumpCondition(location={},{})".format(self.location,
+#                                                       ",".join(vars))
      
-            
+
+def JumpCondition(location, *args, **kwargs):
+    """This dummy function essentially removes most of the functionality of the
+    JumpCondition class, leaving only the location.
+
+    Args:
+        location (float): Location of the Jump
+
+    Returns:
+        float: The location of the Jump
+    """
+    return location
+
+
 class ExactSolver(object, metaclass=_AddParametersToDocstring):
     """A virtual base class for ExactPack solvers.
 
@@ -201,7 +230,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
     #: the solver's constructor.
     parameters = {}
 
-    def __init__(self, **params):
+    def __init__(self, verbose=False, **params):
         
         # Check that all params are in the self.parameters list
         if not params.keys() <= set(self.parameters):
@@ -209,6 +238,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
                              +",".join(params.keys() - set(self.parameters)))
 
         self.__dict__.update(params)
+        self.verbose = verbose
 
         for param in self.parameters:
             # Check that all parameters have been set

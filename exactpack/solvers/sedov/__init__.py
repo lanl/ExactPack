@@ -76,10 +76,7 @@ development team recommends not using the Kamm solver until this is resolved.
 
 """
 
-try:
-    from .timmes import Sedov
-except ImportError:
-    from .doebling import Sedov
+from .doebling import Sedov
 
 
 class PlanarSedov(Sedov):

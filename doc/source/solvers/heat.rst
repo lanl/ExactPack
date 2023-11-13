@@ -25,13 +25,6 @@ Heat Conduction Problems
    :members:
       
 
-:mod:`exactpack.solvers.heat.planar_sandwich_dawes`
----------------------------------------------------
-
-.. automodule:: exactpack.solvers.heat.planar_sandwich_dawes
-   :members:
-
-
 :mod:`exactpack.solvers.heat.rectangle`
 ---------------------------------------------------
 

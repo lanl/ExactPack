@@ -14,21 +14,21 @@ Available Solvers
 Importing :mod:`exactpack` loads some base code and utility functions,
 but no actual solvers.  Individual solvers should be imported as
 needed.  A solver sub-package is given by the name of the problem in
-lower case, preceded by its path. So the default Noh problem solver is
+lower case, preceded by its path. So the default Noh2 problem solver is
 imported using [#]_::
 
-    import exactpack.solvers.noh
+    import exactpack.solvers.noh2
 
 If there are multiple solvers available for a given problem, they will
 be in sub-sub-packages.  The base package will load a default choice
 of the solver, which is the solver recommended for general use by the
 maintainers of ExactPack.
 
-For example, the default Noh solver is really
-:mod:`exactpack.solvers.noh.noh1`, and this is what you get if you import
-:mod:`exactpack.solvers.noh`.  If you want an interface to the Fortran
-implementation of Frank Timmes, then you can explicitly import
-:mod:`exactpack.solvers.noh.timmes`.
+For example, the default Noh2 solver is really
+:mod:`exactpack.solvers.noh2.noh2`, and this is what you get if you import
+:mod:`exactpack.solvers.noh2`.  If you want an interface to the solver which is
+implemented in terms of the Coggeshall solver then you can explicitly import
+:mod:`exactpack.solvers.noh2.noh2_cog`.
 
 The solver itself is a Python class.  Multiple solver variants may be
 available within a given package, but these will all use the same
@@ -69,13 +69,12 @@ attribute :attr:`ExactSolver.parameters` is a dictionary with keywords
 which are the available parameters, and values which are help strings
 for each parameter.  If there are uninitialized parameters, or the
 constructor is passed parameters that it does not know, it will raise
-an exception.  Relying on default parameters will generate a warning,
-to make sure the user knows exactly what parameters are being used.
+an exception. 
 
-For example, the :class:`exactpack.solvers.noh.noh1.Noh` takes four
+For example, the :class:`exactpack.solvers.noh.noh1.Noh` class takes four
 parameters, the geometry, the gas constant, and the reference velocity
 and density.  To instantiate a solver for the spherical Noh problem,
-with the value :math:`\gamma=5/3` as in the original paper by Noh[#]_,
+with the value :math:`\gamma=5/3` as in the original paper by Noh[Noh1987]_,
 we can use the following code
 
 .. testcode::
@@ -112,8 +111,13 @@ the solution at time :math:`t=0.6` in the interval :math:`x\in[0,1]`:
 an evenly spaced set of points.  It has three arguments: the start point,
 the stop point, and an optional number of points to use.)
 
-.. [#] Be careful not to use integer division to represent rationals;
-   in Python ``5/3`` is ``1``.
+The ``verbose`` option
+^^^^^^^^^^^^^^^^^^^^^^
+
+As a special case, all solvers take an optional argument called ``verbose``.
+Setting this arguments to ``True`` causes the solver to print extra debug
+information to the screen while it is running. By default all standard output
+from the solver is suppressed. 
 
 A Note on Dimensions
 ^^^^^^^^^^^^^^^^^^^^

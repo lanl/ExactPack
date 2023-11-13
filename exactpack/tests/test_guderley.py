@@ -1,4 +1,4 @@
-"""Unittests for the Guderley solver.
+"""Unit tests for the Guderley solver.
 """
 
 import pytest
@@ -79,8 +79,9 @@ class TestGuderleyRamseyGamma3():
 
     def test_speed_of_sound(self):
         """Regression test for the speed of sound."""
-        assert self.solution.sound[0] == pytest.approx(0.5511477417360032)
+        assert self.solution.sound_speed[0] == pytest.approx(0.5511477417360032)
 
     def test_sie(self):
         """Regression test for specific internal energy."""
-        assert self.solution.sie[0] == pytest.approx(0.050627305536782685)
+        assert self.solution.specific_internal_energy[0] == \
+            pytest.approx(0.050627305536782685)
