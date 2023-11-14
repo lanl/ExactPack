@@ -10,8 +10,23 @@
 References
 ==========
 
+.. [Anderson2020]
+   J. D. Anderson,
+   *Modern Compressible Flow with Historical Perspective*,
+   McGraw-Hill, United Kingdom, 2020.
+
+.. [BenDor2007]
+   G. Ben-Dor,
+   *Shock Wave Reflection Phenomena*,
+   Springer, Berlin, 2007.
+
 .. [Bdzil]
    Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
+
+.. [Chapman2000]
+   C. J. Chapman,
+   *High Speed Flow*,
+   Cambridge University Press, United Kingdom, 2000.
 
 .. [Chisnell1998]
    Chisnell, R.F.,
@@ -218,18 +233,3 @@ References
    H.S. Udaykumar, L. Tran, D.M. Belk, and K.J. Vanden,
    *An Eulerian method for computation of multimaterial impact with ENO shock-capturing and sharp interfaces*,
    JCP **186** (2003) 136-177.
-
-.. [BenDor2007]
-   G. Ben-Dor,
-   *Shock Wave Reflection Phenomena*,
-   Springer, Berlin, 2007.
-
-.. [Chapman2000]
-   C. J. Chapman,
-   *High Speed Flow*,
-   Cambridge University Press, United Kingdom, 2000.
-
-.. [Anderson2020]
-   J. D. Anderson,
-   *Modern Compressible Flow with Historical Perspective*,
-   McGraw-Hill, United Kingdom, 2020.
