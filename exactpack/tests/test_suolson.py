@@ -20,21 +20,21 @@ class TestSuOlsonTimmes():
     def test_invalid_time(self):
         """There is no valid solution at :math:`t=0`"""
         soln = self.solver(self.data, 0.0)
-        for quant in ['Tmaterial', 'Tradiation']:
+        for quant in ['temperature_mat', 'temperature_rad']:
             assert np.all(np.isnan(soln[quant]))
 
     def test_mat_temperature(self):
         """SuOlson problem: mat temperature"""
         expected = [955.9875670217054, 388.14357235758376,
                     72.16540048091636, 7.158933356184126]
-        result = self.soln.Tmaterial
+        result = self.soln.temperature_mat
         np.testing.assert_allclose(result, expected, rtol=1.0e-2)
 
     def test_radiation_temperature(self):
         """SuOlson problem: radiation temperature"""
         expected = [956.7434855255531, 396.89673904429804,
                     76.45509373805481, 7.802002997462728]
-        result = self.soln.Tradiation
+        result = self.soln.temperature_rad
         np.testing.assert_allclose(result, expected, rtol=1.0e-2)
 
 

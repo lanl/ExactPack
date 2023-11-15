@@ -37,5 +37,5 @@ class SuOlson(ExactSolver):
 
         return ExactSolution([r, trad_ev, tmat_ev],
                              names=['position',
-                                    'Tradiation',
-                                    'Tmaterial'])
+                                    'temperature_rad',
+                                    'temperature_mat'])
