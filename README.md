@@ -55,20 +55,26 @@ The online documentation may be compiled via Sphinx by moving to the doc directo
 References
 ----------
 #### The Noh Problem
-W. F. Noh, *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*, Journal of Computational Physics, **72** (1978), pp 78-120.
+W. F. Noh, *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*, Journal of Computational Physics, **72** (1987), pp 78-120.
 
 Francis X. Timmes, Galen Gisler, George Hrbek, *Automated analyses of the Tri-Lab verification test suite on uniform and adaptive grids for Code Project A*, Los Alamos report, LA-UR-05-6865 (2005).
 
 M. Gehmeyr, B. Cheng, D. Mihalas, *Noh's Constant-Velocity Shock Problem Revisited*, Shock Waves, **7** 255 (1997).
 
 #### Uniform collapse problem (a.k.a. Noh2, Shockless Noh)
-W. F. Noh, *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*, Journal of Computational Physics, **72** (1978), pp 78-120.
+W. F. Noh, *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*, Journal of Computational Physics, **72** (1987), pp 78-120.
 
 #### The Sedov Problem
 L. I. Sedov, *Similarity and Dimensional Methods in Mechanics*, Academic Press, New York, NY, p. 146 ff. (1959).
 
 #### The Riemann Problem
+J. J. Gottlieb and C. P. T. Groth, *Assessment of Riemann Solvers for Unsteady One-Dimensional Inviscid Flows of Perfect Gases*, Journal of Computational Physics, **78** (1988) pp 437-458.
+
+R. Menikoff and B. J. Plohr, *The Riemann problem for fluid flow of real materials*, Reviews of Modern Physics, **61**, no. 1, p. 75 (1989).
+
 E. F. Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*, Springer, 2009.
+
+F. D. Lora-Clavijo, J. P. Cruz-Perez, F. Siddhartha Guzman, J. A. Gonzalez, *Exact solution of the 1D riemann problem in Newtonian and relativistic hydrodynamics*, Revista Mexicana de Fisica, **59** (2013), pp 28-50.
 
 #### The Guderley Problem
 S. D. Ramsey, J. R. Kamm, J. H. Bolstad, *The Guderley Problem Revisited*, International Journal of Computational Fluid Dynamics **26**, no. 2, p. 79-99 (2012).
