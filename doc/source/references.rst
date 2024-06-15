@@ -18,15 +18,20 @@ References
    An Analytic Description of Converging Shock Waves,
    J. Fluid Mech. 354, pp. 357-375 (1998).
 
+.. [CJST1997]
+   B. Cockburn, C. Johnson, C.-W. Shu,
+   *Advanced Numerical Approximation on Nonlinear Hyperbolic Equations*,
+   Lecture Notes in Mathematics, 1997.
+
 .. [Coggeshall1991]
    S. V. Coggeshall,
    *Analytic solutions of hydrodynamics equations*,
    Phys. Fluids A **3** (1991) 757.
 
 .. [Dawes2015]
-  A Dawes, 
-  *3D Multi-Material Polyhedral Methods for Diffusion*, 
-  MultiMat Conference, Warzberg, Germany (2015).    
+   A Dawes, 
+   *3D Multi-Material Polyhedral Methods for Diffusion*, 
+   MultiMat Conference, Warzberg, Germany (2015).    
    
 .. [Dawes2016]
    A. Dawes, C. Malone, M. Shashkov,
@@ -69,8 +74,8 @@ References
    Journal of Computational Physics, **78** (1988) 437.
 
 .. [Guderley1942]
-  G. Guderley,
-  Luftahrtforschung **19** (1942) 302.
+   G. Guderley,
+   Luftahrtforschung **19** (1942) 302.
 
 .. [Guderley2012]
    Scott D. Ramsey, James R. Kamm, and John H. Bolstad,
@@ -101,11 +106,6 @@ References
    James R. Kamm,
    *Investigation of the Reinicke & Meyer-ter-Vehn Equations: I. The Strong Conduction Case*,
    LA-UR-00-4304, Los Alamos National Laboratory (2000).
-
-# .. [Kamm2005]
-#    James R. Kamm,
-#    *An Exact, Compressible One-Dimensional Riemann Solver for General, Convex Equations of State*,
-#    LA-UR-15-21616, Los Alamos National Laboratory (2005).
 
 .. [Kamm2008]
    James R. Kamm, Jerry S. Brock, Scott T. Brandon, David L. Cotrell,
@@ -186,8 +186,8 @@ References
    Reviews of Modern Physics, **61**, (1989) 1.
 
 .. [Noh1987]
-   W. F. Noh, *Errors for Calculations of Strong Shocks Using an
-   Artificial Viscosity and an Artificial Heat Flux*,
+   W. F. Noh,
+   *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*,
    JCP **72** (1987) 78-120.
    
 .. [Reinicke1991] P. Reinicke and J. Meyer-ter-Vehn,
