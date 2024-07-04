@@ -4,7 +4,8 @@ r""" ExactPack wrapper for the Riemann solvers.
 from exactpack.base import ExactSolver, ExactSolution, print_when_verbose
 
 from exactpack.solvers.riemann import riemann
-from numpy import interp
+from numpy import interp, mgrid, array
+import matplotlib.pyplot as plt
 
 class IGEOS_Solver(ExactSolver):
     r"""Computes the analytic solution to the Riemann problem for an ideal-gas
@@ -70,7 +71,7 @@ class IGEOS_Solver(ExactSolver):
     def __init__(self, **kwargs):
         """Set default values if necessary and check for valid inputs.
         """
-        super(IGEOS_Solver, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @print_when_verbose
     def _run(self, x, t):
@@ -105,6 +106,8 @@ class IGEOS_Solver(ExactSolver):
         self.r = prob.r
         self.u = prob.u
         self.e = prob.e
+        self.Vregs = prob.Vregs
+        self.soln_type = prob.soln_type
 
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
@@ -117,6 +120,39 @@ class IGEOS_Solver(ExactSolver):
                                     'density',
                                     'velocity',
                                     'specific_internal_energy'])
+
+
+    def _streakplot(self, soln, xs, t, N=21, var_str='pressure'):
+        X, T = mgrid[xs[0]:xs[-1]:complex(0,N), 0:t:complex(0,N)]
+        T[:,0] += T[0,:][1] / T[0,:][-1] * 1.e-4
+        Z = [interp(x, (xs - self.xd0) * t / T[0][-1], soln[var_str])
+             for x in (X[:,0] - self.xd0) for t in T[0]]
+        Z = array(Z)
+        Z.resize(N,N)
+        plt.pcolor(X, T, Z, shading='auto')
+        morphology = self.soln_type.split('-')[-1]
+        ii = 0
+        if (morphology[0] == 'R'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            ii += 1
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+        elif (morphology[0] == 'S'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+        ii += 1
+        plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], ':k')
+        ii += 1
+        if (morphology[2] == 'R'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            ii += 1
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+        elif (morphology[2] == 'S'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+        plt.xlim((xs[0], xs[-1]))
+        plt.ylim((0., t))
+        plt.xlabel('position')
+        plt.ylabel('time')
+        plt.title(' '.join(var_str.split('_')))
+        plt.show()
 
 
 class GenEOS_Solver(ExactSolver):
@@ -183,7 +219,7 @@ class GenEOS_Solver(ExactSolver):
     def __init__(self, **kwargs):
         """Set default values if necessary and check for valid inputs.
         """
-        super(GenEOS_Solver, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @print_when_verbose
     def _run(self, x, t):
@@ -219,6 +255,8 @@ class GenEOS_Solver(ExactSolver):
         self.r = prob.r
         self.u = prob.u
         self.e = prob.e
+        self.Vregs = prob.Vregs
+        self.soln_type = prob.soln_type
 
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
@@ -231,3 +269,36 @@ class GenEOS_Solver(ExactSolver):
                                     'density',
                                     'velocity',
                                     'specific_internal_energy'])
+
+
+    def _streakplot(self, soln, xs, t, N=21, var_str='pressure'):
+        X, T = mgrid[xs[0]:xs[-1]:complex(0,N), 0:t:complex(0,N)]
+        T[:,0] += T[0,:][1] / T[0,:][-1] * 1.e-4
+        Z = [interp(x, (xs - self.xd0) * t / T[0][-1], soln[var_str])
+             for x in (X[:,0] - self.xd0) for t in T[0]]
+        Z = array(Z)
+        Z.resize(N,N)
+        plt.pcolor(X, T, Z, shading='auto')
+        morphology = self.soln_type.split('-')[-1]
+        ii = 0
+        if (morphology[0] == 'R'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            ii += 1
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+        elif (morphology[0] == 'S'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+        ii += 1
+        plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], ':k')
+        ii += 1
+        if (morphology[2] == 'R'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            ii += 1
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+        elif (morphology[2] == 'S'):
+            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+        plt.xlim((xs[0], xs[-1]))
+        plt.ylim((0., t))
+        plt.xlabel('position')
+        plt.ylabel('time')
+        plt.title(' '.join(var_str.split('_')))
+        plt.show()
