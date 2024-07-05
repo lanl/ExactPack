@@ -28,6 +28,11 @@ riem1_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
                              xmin=0.,  xd0=0.5, xmax=1., t=t_final)
 
 riem1_ig_result = riem1_ig_soln._run(xvec, t_final)
+N = 1001
+riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='pressure')
+riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='density')
+riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='velocity')
+riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='specific_internal_energy')
 
 # The Sod shocktube problem solved using the generalized EOS (GenEOS) solver.
 riem1_gen_soln = GenEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
@@ -334,13 +339,14 @@ riem1_gen_result = riem1_gen_soln(xvec, t_final)
 # 
 # 
 # fig = plt.figure(figsize=(10,7))
-# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=21, var_str='pressure')
+# N = 101
+# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='pressure')
 # fig = plt.figure(figsize=(10,7))
-# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=21, var_str='density')
+# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='density')
 # fig = plt.figure(figsize=(10,7))
-# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=21, var_str='velocity')
+# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='velocity')
 # fig = plt.figure(figsize=(10,7))
-# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=21, var_str='specific_internal_energy')
+# riem1_ig_soln._streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='specific_internal_energy')
 # 
 # 
 # fig = plt.figure(figsize=(10,7))

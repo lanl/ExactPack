@@ -129,7 +129,14 @@ class IGEOS_Solver(ExactSolver):
              for x in (X[:,0] - self.xd0) for t in T[0]]
         Z = array(Z)
         Z.resize(N,N)
-        plt.pcolor(X, T, Z, shading='auto')
+        zmin = min(Z[0])
+        zmin = [min(min(z), zmin) for z in Z]
+        zmin = min(zmin)
+        zmax = max(Z[0])
+        zmax = [max(max(z), zmax) for z in Z]
+        zmax = max(zmax)
+        fig, ax = plt.subplots(1,1)
+        c = ax.pcolor(X, T, Z, shading='auto', vmin=zmin, vmax=zmax)
         morphology = self.soln_type.split('-')[-1]
         ii = 0
         if (morphology[0] == 'R'):
@@ -152,6 +159,7 @@ class IGEOS_Solver(ExactSolver):
         plt.xlabel('position')
         plt.ylabel('time')
         plt.title(' '.join(var_str.split('_')))
+        fig.colorbar(c, ax=ax)
         plt.show()
 
 
@@ -278,7 +286,15 @@ class GenEOS_Solver(ExactSolver):
              for x in (X[:,0] - self.xd0) for t in T[0]]
         Z = array(Z)
         Z.resize(N,N)
-        plt.pcolor(X, T, Z, shading='auto')
+        zmin = min(Z[0])
+        zmin = [min(min(z), zmin) for z in Z]
+        zmin = min(zmin)
+        zmax = max(Z[0])
+        zmax = [max(max(z), zmax) for z in Z]
+        zmax = max(zmax)
+        fig, ax = plt.subplots(1,1)
+        ax.set_aspect('equal', adjustable='box')
+        c = ax.pcolor(X, T, Z, shading='auto', vmin=zmin, vmax=zmax)
         morphology = self.soln_type.split('-')[-1]
         ii = 0
         if (morphology[0] == 'R'):
@@ -301,4 +317,5 @@ class GenEOS_Solver(ExactSolver):
         plt.xlabel('position')
         plt.ylabel('time')
         plt.title(' '.join(var_str.split('_')))
+        fig.colorbar(c, ax=ax)
         plt.show()
