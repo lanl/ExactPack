@@ -1,5 +1,3 @@
-# image: registry.gitlab.com/truchas/ci-images:tpl-mpich-centos7-1.2.0
-# image: continuumio/anaconda3
 image: python:latest
 
 # Change pip's cache directory to be inside the project directory since we can
@@ -22,13 +20,7 @@ before_script:
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
-  - pip install -U setuptools
-  - pip install -U numpy
-  - pip install -U scipy
-  - pip install -U sphinx
-  - pip install -U matplotlib
-  - pip install -U pytest
-  - pip install -U pytest-cov
+  - pip install -r requirements.txt
   - pip install ./
   # artifacts:
   #   paths:
@@ -48,14 +40,15 @@ ep_tests:
       coverage_report:
         coverage_format: cobertura
         path: coverage.xml
-      
+  tags:
+    - darwin-docker-shared
 
 teststyle:
   stage: test
   script:
-    # - pylint --rcfile=.pylint.conf vts/
-    # - flake8 --config .flake8rc vts/
     - sphinx-build -W -b html doc/source public
+  tags:
+    - darwin-docker-shared
 
 pages:
   stage: deploy
@@ -66,3 +59,5 @@ pages:
       - public
   only:
     - master
+  tags:
+    - darwin-docker-shared

@@ -15,6 +15,7 @@ setup script::
 
     tar xzf ExactPack-1.7.0.tar.gz
     cd ExactPack-1.7.0
+    pip install -r requirements.txt
     pip install ./
 
 This will install to the system Python library directories.  If you

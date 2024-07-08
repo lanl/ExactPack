@@ -5,7 +5,7 @@ r""" The radiative-shock solvers.
 from exactpack.base import ExactSolver, ExactSolution, print_when_verbose
 
 from exactpack.solvers.radshocks import radshock
-import numpy
+import numpy as np
 
 
 class ED_Solver(ExactSolver):
@@ -40,7 +40,7 @@ class ED_Solver(ExactSolver):
     Tref = 100.
     Cv = 1.4472799784454e12
     gamma = 5. / 3.
-    sound = numpy.sqrt(gamma * (gamma - 1.) * Cv * Tref)
+    sound = np.sqrt(gamma * (gamma - 1.) * Cv * Tref)
     sigA = 577.35
     sigS = 0.
     expDensity_abs = 0.
@@ -97,13 +97,14 @@ class ED_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature = numpy.interp(x, self.x, self.Tm)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        rade = numpy.interp(x, self.x, self.RADE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
+        tmp_x = -np.flip(self.x) + t * self.sound * self.M0
+        temperature = np.interp(x, tmp_x, np.flip(self.Tm))
+        density = np.interp(x, tmp_x, np.flip(self.Density))
+        velocity = np.interp(x, tmp_x, np.flip(self.Speed))
+        pressure = np.interp(x, tmp_x, np.flip(self.Pressure))
+        sie = np.interp(x, tmp_x, np.flip(self.SIE))
+        rade = np.interp(x, tmp_x, np.flip(self.RADE))
+        sound_speed = np.interp(x, tmp_x, np.flip(self.Sound_Speed))
 
         return ExactSolution([x, temperature, density, velocity, pressure, sie,
                               rade, sound_speed],
@@ -154,7 +155,7 @@ class nED_Solver(ExactSolver):
     Tref = 100.
     Cv = 1.4472799784454e12
     gamma = 5. / 3.
-    sound = numpy.sqrt(gamma * (gamma - 1.) * Cv * Tref)
+    sound = np.sqrt(gamma * (gamma - 1.) * Cv * Tref)
     sigA = 577.35
     sigS = 0.
     expDensity_abs = 0.
@@ -215,14 +216,15 @@ class nED_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature_mat = numpy.interp(x, self.x, self.Tm)
-        temperature_rad = numpy.interp(x, self.x, self.Tr)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        rade = numpy.interp(x, self.x, self.RADE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
+        tmp_x = -np.flip(self.x) + t * self.sound * self.M0
+        temperature_mat = np.interp(x, tmp_x, np.flip(self.Tm))
+        temperature_rad = np.interp(x, tmp_x, np.flip(self.Tr))
+        density = np.interp(x, tmp_x, np.flip(self.Density))
+        velocity = np.interp(x, tmp_x, np.flip(self.Speed))
+        pressure = np.interp(x, tmp_x, np.flip(self.Pressure))
+        sie = np.interp(x, tmp_x, np.flip(self.SIE))
+        rade = np.interp(x, tmp_x, np.flip(self.RADE))
+        sound_speed = np.interp(x, tmp_x, np.flip(self.Sound_Speed))
 
         return ExactSolution([x, temperature_mat, temperature_rad, density,
                               velocity, pressure, sie, rade, sound_speed],
@@ -274,7 +276,7 @@ class Sn_Solver(ExactSolver):
     Tref = 100.
     Cv = 1.4472799784454e12
     gamma = 5. / 3.
-    sound = numpy.sqrt(gamma * (gamma - 1.) * Cv * Tref)
+    sound = np.sqrt(gamma * (gamma - 1.) * Cv * Tref)
     sigA = 577.35
     sigS = 0.
     expDensity_abs = 0.
@@ -329,22 +331,23 @@ class Sn_Solver(ExactSolver):
         self.SIE = self.Pressure / self.Density / (self.gamma - 1.)
         self.RADE = prob.ar * self.Tr**4
         self.Sound_Speed = self.Speed / self.Mach
-        self.VEF = numpy.interp(self.x, prob.Sn_profile.x_RT, prob.Sn_profile.f)
+        self.VEF = np.interp(self.x, prob.Sn_profile.x_RT, prob.Sn_profile.f)
         self.C0 = prob.C0
         self.P0 = prob.P0
         self.__prob = prob
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature_mat = numpy.interp(x, self.x, self.Tm)
-        temperature_rad = numpy.interp(x, self.x, self.Tr)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        rade = numpy.interp(x, self.x, self.RADE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
-        VEF = numpy.interp(x, self.x, self.VEF)
+        tmp_x = -np.flip(self.x) + t * self.sound * self.M0
+        temperature_mat = np.interp(x, tmp_x, np.flip(self.Tm))
+        temperature_rad = np.interp(x, tmp_x, np.flip(self.Tr))
+        density = np.interp(x, tmp_x, np.flip(self.Density))
+        velocity = np.interp(x, tmp_x, np.flip(self.Speed))
+        pressure = np.interp(x, tmp_x, np.flip(self.Pressure))
+        sie = np.interp(x, tmp_x, np.flip(self.SIE))
+        rade = np.interp(x, tmp_x, np.flip(self.RADE))
+        sound_speed = np.interp(x, tmp_x, np.flip(self.Sound_Speed))
+        VEF = np.interp(x, tmp_x, np.flip(self.VEF))
 
         return ExactSolution([x, temperature_mat, temperature_rad, density,
                               velocity, pressure, sie, rade, sound_speed, VEF],
@@ -387,7 +390,7 @@ class ie_Solver(ExactSolver):
     Tref = 100.
     Cv = 1.4472799784454e12
     gamma = 5. / 3.
-    sound = numpy.sqrt(gamma * (gamma - 1.) * Cv * Tref)
+    sound = np.sqrt(gamma * (gamma - 1.) * Cv * Tref)
     problem = 'ie'
     eps_precursor_equil = 1.e-6
     eps_relaxation_equil = 1.e-6
@@ -436,14 +439,15 @@ class ie_Solver(ExactSolver):
 
     @print_when_verbose
     def _run(self, x, t):
-        temperature_ion = numpy.interp(x, self.x, self.Ti)
-        temperature_mat = numpy.interp(x, self.x, self.Tm)
-        temperature_elec = numpy.interp(x, self.x, self.Te)
-        density = numpy.interp(x, self.x, self.Density)
-        velocity = numpy.interp(x, self.x, self.Speed)
-        pressure = numpy.interp(x, self.x, self.Pressure)
-        sie = numpy.interp(x, self.x, self.SIE)
-        sound_speed = numpy.interp(x, self.x, self.Sound_Speed)
+        tmp_x = -np.flip(self.x) + t * self.sound * self.M0
+        temperature_ion = np.interp(x, tmp_x, np.flip(self.Ti))
+        temperature_mat = np.interp(x, tmp_x, np.flip(self.Tm))
+        temperature_elec = np.interp(x, tmp_x, np.flip(self.Te))
+        density = np.interp(x, tmp_x, np.flip(self.Density))
+        velocity = np.interp(x, tmp_x, np.flip(self.Speed))
+        pressure = np.interp(x, tmp_x, np.flip(self.Pressure))
+        sie = np.interp(x, tmp_x, np.flip(self.SIE))
+        sound_speed = np.interp(x, tmp_x, np.flip(self.Sound_Speed))
 
         return ExactSolution([x, temperature_ion, temperature_mat,
                               temperature_elec, density, velocity, pressure,

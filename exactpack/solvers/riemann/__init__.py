@@ -183,10 +183,12 @@ Test                  :math:`x_M` :math:`t_f` :math:`\rho_L` :math:`u_L` :math:`
 5 Shock Contact Shock 0.5         0.3         1.0            0.5         1.0         1.25           -0.5        1.0         7/5              7/5
 6 LeBlanc             0.3         0.5         1.0            0.0         1/15        0.01           0.0         2/(3e10)    5/3              5/3
 7 Modified Sod        0.5         0.2         1.0            0.0         2.0         0.125          0.0         0.1         2                7/5
+8 Lax                 0.5         0.15        0.445          0.698       3.528       0.5            0.0         0.571       7/5              7/5
 ===================== =========== =========== ============== =========== =========== ============== =========== =========== ================ ================
 
 Plots of each solution are given below.
-These seven problems, and their reversed states provide the basis of for most of the unit tests for both the ideal-gas and general EOS solvers.
+The first seven problems, and their reversed states, provide the basis of for most of the unit tests for both the ideal-gas and general EOS solvers.
+The eighth problem is taken from p399 and Fig. 5.1 on p400 in Ch. 4 of [CJST1997]_.
 
 +-------------------------------------+------------------------------------------+
 | .. figure:: sod.png                 | .. figure:: einfeldt.png                 |
@@ -195,7 +197,7 @@ These seven problems, and their reversed states provide the basis of for most of
 +-------------------------------------+------------------------------------------+
 | .. figure:: shock_contact_shock.png | .. figure:: leblanc.png                  |
 +-------------------------------------+------------------------------------------+
-| .. figure:: sod_modified.png        | this space intentionally left blank      |
+| .. figure:: sod_modified.png        | .. figure:: lax.png                      |
 +-------------------------------------+------------------------------------------+
 
 Two JWL EOS problem statements
