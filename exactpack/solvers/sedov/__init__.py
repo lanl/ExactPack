@@ -61,12 +61,12 @@ three cases to be plotted on the same graph at the final time).
 By default, :py:mod:`exactpack.solvers.sedov` attempts to load
 :py:mod:`exactpack.solvers.sedov.timmes`. If that load fails (due to Fortran
 linking errors, for example), it loads
-:py:mod:`exactpack.solvers.sedov.doebling`.
+:py:mod:`exactpack.solvers.sedov.sedov`.
 
 NOTE: The values of density and specific internal energy produced by the
 Doebling solver at small values of radius, for the standard Sedov case,
 are not trustworthy. See the solver documentation
-(:py:mod:`exactpack.solvers.sedov.doebling`) for more detail.
+(:py:mod:`exactpack.solvers.sedov.sedov`) for more detail.
 
 NOTE: Currently, the Kamm solver does not return the correct value of the
 physical variables at the shock location, for at least some cases. The
@@ -76,7 +76,7 @@ development team recommends not using the Kamm solver until this is resolved.
 
 """
 
-from .doebling import Sedov
+from .sedov import Sedov
 
 
 class PlanarSedov(Sedov):

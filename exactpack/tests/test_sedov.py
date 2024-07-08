@@ -1,4 +1,4 @@
-""" Unit tests for Doebling Sedov solver :class:`exactpack.solvers.sedov.doebling`.
+""" Unit tests for Sedov solver :class:`exactpack.solvers.sedov.sedov`.
 """
 
 import pytest
@@ -8,7 +8,7 @@ import numpy as np
 import scipy.optimize as sci_opt
 from scipy.integrate import IntegrationWarning
 
-from exactpack.solvers.sedov.doebling import Sedov
+from exactpack.solvers.sedov.sedov import Sedov
 
 
 def sedovFcnTable(solution, lamvec):
@@ -59,8 +59,8 @@ def sed_lam_min(v, solution, lam_want):
     return (l_fun - lam_want)**2
 
 
-class TestSedovDoeblingAssignments():
-    """Tests :class:`exactpack.solvers.sedov.doebling.Sedov`.
+class TestSedovAssignments():
+    """Tests :class:`exactpack.solvers.sedov.sedov.Sedov`.
 
     These tests confirm proper assignment of variables, including default
     values
@@ -144,8 +144,8 @@ class TestSedovDoeblingAssignments():
             assert np.all(np.isnan(soln[quant]))
 
 
-class TestSedovDoeblingSpecialSingularities():
-    """Tests :class:`exactpack.solvers.sedov.doebling.Sedov`.
+class TestSedovSpecialSingularities():
+    """Tests :class:`exactpack.solvers.sedov.sedov.Sedov`.
 
     These test the special sigularity cases of denom2=0 and denom3=0
     """
@@ -159,7 +159,7 @@ class TestSedovDoeblingSpecialSingularities():
         assert solution.special_singularity == 'omega3'
 
 
-class TestSedovDoeblingFunctionsTable1():
+class TestSedovFunctionsTable1():
     r""" Compare results to Kamm & Timmes, Table 1.
     Sedov Functions for gamma=1.4, planar geometry case"""
 
@@ -213,7 +213,7 @@ class TestSedovDoeblingFunctionsTable1():
 
 
 
-class TestSedovDoeblingFunctionsTable2():
+class TestSedovFunctionsTable2():
     r""" Compare results to Kamm & Timmes,
     Table 2. Sedov Functions for gamma=1.4, cylindrical geometry case"""
 
@@ -272,7 +272,7 @@ class TestSedovDoeblingFunctionsTable2():
         np.testing.assert_allclose(self.h_fun, self.h_fun_ref, atol=1.0e-4)
 
 
-class TestSedovDoeblingFunctionsTable3():
+class TestSedovFunctionsTable3():
     r""" Compare results to Kamm & Timmes,
     Table 3. Sedov Functions for gamma=1.4, spherical geometry case"""
 
@@ -326,7 +326,7 @@ class TestSedovDoeblingFunctionsTable3():
 
 
 
-class TestSedovDoeblingFunctionsTables45():
+class TestSedovFunctionsTables45():
     r"""Compare results to Kamm & Timmes, Tables 4 & 5
     Values of key variables for the gamma = 1.4 uniform density
     test cases at t=1s"""
@@ -537,7 +537,7 @@ class TestSedovDoeblingFunctionsTables45():
                 pytest.approx(1.33334e-1, abs=1.0e-5)
 
 
-class TestSedovDoeblingFunctionsTable67():
+class TestSedovFunctionsTable67():
     r"""Compare results to Kamm & Timmes, Tables 6 & 7.
     Values of key variables for the gamma = 1.4 singular test cases at t=1s"""
 
@@ -651,7 +651,7 @@ class TestSedovDoeblingFunctionsTable67():
                 pytest.approx(4.68750e-1, abs=1.0e-5)
 
 
-class TestSedovDoeblingFunctionsTable89():
+class TestSedovFunctionsTable89():
     r"""Compare results to Kamm & Timmes, Tables 8 & 9.
     Values of key variables for the gamma = 1.4 vacuum test cases at t=1s"""
 
@@ -792,8 +792,8 @@ class TestSedovDoeblingFunctionsTable89():
                 pytest.approx(4.93097e-01, abs=1.0e-6)
 
 
-class TestSedovDoeblingShock():
-    """Tests Doebling Sedov for correct pre and post shock values.
+class TestSedovShock():
+    """Tests Sedov for correct pre and post shock values.
     """
     # construct spatial grid and choose time
     rmax = 1.2

@@ -204,8 +204,6 @@ class Sedov(ExactSolver):
         density = np.zeros(npts)
         velocity = np.zeros(npts)
         pressure = np.zeros(npts)
-        specific_internal_energy = np.zeros(npts)
-        sound_speed = np.zeros(npts)
 
         l_fun = np.zeros(npts)
         dlamdv = np.zeros(npts)
@@ -226,8 +224,6 @@ class Sedov(ExactSolver):
 
         self.p1 = 0.
         self.u1 = 0.
-        self.e1 = 0.
-        self.cs1 = 0.
 
         # post-shock
 
@@ -236,8 +232,6 @@ class Sedov(ExactSolver):
         self.u2 = 2.0 * self.us / self.gamp1
         self.rho2 = self.gpogm * self.rho1
         self.p2 = 2.0 * self.rho1 * self.us**2 / self.gamp1
-        self.e2 = self.p2/(self.gamm1*self.rho2)
-        self.cs2 = math.sqrt(self.gamma*self.p2/self.rho2)
 
         # Assign shock-jump conditions to JumpCondition object
 
@@ -245,8 +239,6 @@ class Sedov(ExactSolver):
                                     description='Shock',
                                     density=(self.rho1, self.rho2),
                                     pressure=(self.p1, self.p2),
-                                    specific_internal_energy=(self.e1,
-                                                              self.e2),
                                     velocity=(self.u1, self.u2))]
 
         # For vacuum case, find radius corresponding to vv
@@ -320,8 +312,7 @@ class Sedov(ExactSolver):
                             vconverged = True
 
                 # Compute physical variables from Sedov functions
-                density[i], velocity[i], pressure[i],\
-                    specific_internal_energy[i], sound_speed[i] =\
+                density[i], velocity[i], pressure[i], _, _=\
                     self.physical(f_fun[i], g_fun[i], h_fun[i])
 
             # if outside the shock, solution is equal to inital conditions
@@ -329,8 +320,6 @@ class Sedov(ExactSolver):
                 density[i] = self.rho0 * rwant**(-self.omega)
                 velocity[i] = 0.0
                 pressure[i] = 0.0
-                specific_internal_energy[i] = 0.0
-                sound_speed[i] = 0.0
 
             i += 1
 
@@ -340,8 +329,6 @@ class Sedov(ExactSolver):
         density = density[0:i-1]
         velocity = velocity[0:i-1]
         pressure = pressure[0:i-1]
-        specific_internal_energy = specific_internal_energy[0:i-1]
-        sound_speed = sound_speed[0:i-1]
 
         # Compute Sedov functions at origin
 
@@ -366,8 +353,6 @@ class Sedov(ExactSolver):
         density = np.append(density, deno)
         velocity = np.append(velocity, 0.0)
         pressure = np.append(pressure, preso)
-        specific_internal_energy = np.append(specific_internal_energy, sieo)
-        sound_speed = np.append(sound_speed, sso)
 
         # interpolate from r_eval back to desired r list
 
@@ -380,11 +365,9 @@ class Sedov(ExactSolver):
         interp = interp1d(r_eval, pressure)
         pressure = interp(r)
 
-        interp = interp1d(r_eval, specific_internal_energy)
-        specific_internal_energy = interp(r)
 
-        interp = interp1d(r_eval, sound_speed)
-        sound_speed = interp(r)
+        specific_internal_energy = pressure / self.gamm1 / density
+        sound_speed = (self.gamma * pressure / density)**(1./2.)
 
         return ExactSolution([r, density, pressure, specific_internal_energy,
                               velocity, sound_speed],

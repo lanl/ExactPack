@@ -1,5 +1,5 @@
 The Sedov Problem
 =================
 
-.. automodule:: exactpack.tests.test_sedov_doebling
+.. automodule:: exactpack.tests.test_sedov
    :members:
