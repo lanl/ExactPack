@@ -122,38 +122,33 @@ class IGEOS_Solver(ExactSolver):
                                     'specific_internal_energy'])
 
 
-    def _streakplot(self, soln, xs, t, N=21, var_str='pressure'):
+    def streakplot(self, soln, xs, t, N=21, var_str='pressure'):
         X, T = mgrid[xs[0]:xs[-1]:complex(0,N), 0:t:complex(0,N)]
         T[:,0] += T[0,:][1] / T[0,:][-1] * 1.e-4
-        Z = [interp(x, (xs - self.xd0) * t / T[0][-1], soln[var_str])
-             for x in (X[:,0] - self.xd0) for t in T[0]]
-        Z = array(Z)
-        Z.resize(N,N)
-        zmin = min(Z[0])
-        zmin = [min(min(z), zmin) for z in Z]
-        zmin = min(zmin)
-        zmax = max(Z[0])
-        zmax = [max(max(z), zmax) for z in Z]
-        zmax = max(zmax)
+        Z = [interp((X[:,0] - self.xd0), (xs - self.xd0) * t / T[0][-1],
+             soln[var_str]) for t in T[0]]
+        Z = array(Z).T
         fig, ax = plt.subplots(1,1)
-        c = ax.pcolor(X, T, Z, shading='auto', vmin=zmin, vmax=zmax)
+        c = ax.pcolor(X, T, Z, shading='auto', vmin=Z.min(), vmax=Z.max())
         morphology = self.soln_type.split('-')[-1]
+        xd0 = self.xd0
+        Vregs = self.Vregs
         ii = 0
         if (morphology[0] == 'R'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
             ii += 1
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
         elif (morphology[0] == 'S'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], 'k')
         ii += 1
-        plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], ':k')
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], ':k')
         ii += 1
         if (morphology[2] == 'R'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
             ii += 1
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
         elif (morphology[2] == 'S'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], 'k')
         plt.xlim((xs[0], xs[-1]))
         plt.ylim((0., t))
         plt.xlabel('position')
@@ -279,39 +274,33 @@ class GenEOS_Solver(ExactSolver):
                                     'specific_internal_energy'])
 
 
-    def _streakplot(self, soln, xs, t, N=21, var_str='pressure'):
+    def streakplot(self, soln, xs, t, N=21, var_str='pressure'):
         X, T = mgrid[xs[0]:xs[-1]:complex(0,N), 0:t:complex(0,N)]
         T[:,0] += T[0,:][1] / T[0,:][-1] * 1.e-4
-        Z = [interp(x, (xs - self.xd0) * t / T[0][-1], soln[var_str])
-             for x in (X[:,0] - self.xd0) for t in T[0]]
-        Z = array(Z)
-        Z.resize(N,N)
-        zmin = min(Z[0])
-        zmin = [min(min(z), zmin) for z in Z]
-        zmin = min(zmin)
-        zmax = max(Z[0])
-        zmax = [max(max(z), zmax) for z in Z]
-        zmax = max(zmax)
+        Z = [interp((X[:,0] - self.xd0), (xs - self.xd0) * t / T[0][-1],
+             soln[var_str]) for t in T[0]]
+        Z = array(Z).T
         fig, ax = plt.subplots(1,1)
-        ax.set_aspect('equal', adjustable='box')
-        c = ax.pcolor(X, T, Z, shading='auto', vmin=zmin, vmax=zmax)
+        c = ax.pcolor(X, T, Z, shading='auto', vmin=Z.min(), vmax=Z.max())
         morphology = self.soln_type.split('-')[-1]
+        xd0 = self.xd0
+        Vregs = self.Vregs
         ii = 0
         if (morphology[0] == 'R'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
             ii += 1
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
         elif (morphology[0] == 'S'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], 'k') 
         ii += 1
-        plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], ':k')
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], ':k')
         ii += 1
         if (morphology[2] == 'R'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
             ii += 1
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], '--k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
         elif (morphology[2] == 'S'):
-            plt.plot([self.xd0, self.Vregs[ii]*t + self.xd0], [0., t], 'k')
+            plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], 'k') 
         plt.xlim((xs[0], xs[-1]))
         plt.ylim((0., t))
         plt.xlabel('position')
