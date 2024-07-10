@@ -54,7 +54,7 @@ class NohBlackBoxEos(ExactSolver):
 
         def _run(self, r,t):
                 if(self.shock_speed == None or self.shocked_density == None or self.shocked_pressure == None):
-                     raise ValueError("In _run: please solve the jump conditions first, ie, run class.solve_jump_conditions()")
+                     self.solve_jump_conditions()
                 shock_location = self.shock_speed*t
 
                 with np.errstate(all="ignore"): 

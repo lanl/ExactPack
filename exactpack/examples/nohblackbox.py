@@ -35,7 +35,6 @@ ideal_gas = ideal_gas_eos()
 #####################################################################
 # solver object
 solver = PlanarNohBlackBox(ideal_gas)
-solver.solve_jump_conditions()
 soln = solver(r,t)
 # plot exact solution
 fig = plt.figure(figsize=(10,7))
@@ -55,7 +54,6 @@ plt.show()
 #####################################################################
 # solver object
 cyl_solver = CylindricalNohBlackBox(ideal_gas)
-cyl_solver.solve_jump_conditions()
 cyl_soln = cyl_solver(r,t)
 # plot exact solution
 cyl_fig = plt.figure(figsize=(10,7))
@@ -75,7 +73,6 @@ plt.show()
 #####################################################################
 # solver object
 sph_solver = SphericalNohBlackBox(ideal_gas)
-sph_solver.solve_jump_conditions()
 sph_soln = sph_solver(r,t)
 # plot exact solution
 sph_fig = plt.figure(figsize=(10,7))
