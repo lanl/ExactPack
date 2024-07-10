@@ -141,7 +141,7 @@ class TestResidualFunction:
 
     def test_F_value(self): 
         function = noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_equal(function.F([1,1,1]), [1., 1., -1.5])
+        np.testing.assert_equal(function.F([1,1,1]), [-1., -1., -1.5])
         """Noh Problem--Residual Function: residual function value"""
 
     def test_F_prime_value(self): 

@@ -139,7 +139,7 @@ class noh_residual(newton_solver_residual_function):
         temp = self.F_prime([rho, P,D]) # Computes F_prime 
         det = self.determinant(temp) # Computes the determinant of F_prime
         if(det == 0): # Check that determinant isn't 0; helps to gurantee that the inverse exists
-            raise ValueError("Zero determinant; inverse does not exist. Exiting iteration.")
+            raise ZeroDeterminantError("Zero determinant; inverse does not exist. Exiting iteration.")
         self.DF_inv = np.linalg.inv(temp) # Invert F_prime 
         return self.DF_inv
 
