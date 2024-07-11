@@ -4,7 +4,8 @@ r""" ExactPack wrapper for the Riemann solvers.
 from exactpack.base import ExactSolver, ExactSolution, print_when_verbose
 
 from exactpack.solvers.riemann import riemann
-from numpy import interp
+from numpy import interp, mgrid, array
+import matplotlib.pyplot as plt
 
 class IGEOS_Solver(ExactSolver):
     r"""Computes the analytic solution to the Riemann problem for an ideal-gas
@@ -70,7 +71,7 @@ class IGEOS_Solver(ExactSolver):
     def __init__(self, **kwargs):
         """Set default values if necessary and check for valid inputs.
         """
-        super(IGEOS_Solver, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @print_when_verbose
     def _run(self, x, t):
@@ -105,6 +106,8 @@ class IGEOS_Solver(ExactSolver):
         self.r = prob.r
         self.u = prob.u
         self.e = prob.e
+        self.Vregs = prob.Vregs
+        self.soln_type = prob.soln_type
 
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
@@ -183,7 +186,7 @@ class GenEOS_Solver(ExactSolver):
     def __init__(self, **kwargs):
         """Set default values if necessary and check for valid inputs.
         """
-        super(GenEOS_Solver, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @print_when_verbose
     def _run(self, x, t):
@@ -219,6 +222,8 @@ class GenEOS_Solver(ExactSolver):
         self.r = prob.r
         self.u = prob.u
         self.e = prob.e
+        self.Vregs = prob.Vregs
+        self.soln_type = prob.soln_type
 
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
@@ -231,3 +236,48 @@ class GenEOS_Solver(ExactSolver):
                                     'density',
                                     'velocity',
                                     'specific_internal_energy'])
+
+
+def streakplot(solver, soln, xs, t, N=21, var_str='pressure'):
+    """Create a streakplot of the solution as a function of time.
+
+    Args:
+        solver (ExactSolver): An ExactPack Riemann Solver object
+        soln (ExactSolution): The corresponding solution object
+        xs (list, array): A list or 1-D array of positions to compute the solution at
+        t (float): The final time to plot
+        N (int): Number of ponts to include in the plot
+        var_str (str): The name of the value to plot (e.g. 'pressure')
+    """
+    X, T = mgrid[xs[0]:xs[-1]:complex(0,N), 0:t:complex(0,N)]
+    T[:,0] += T[0,:][1] / T[0,:][-1] * 1.e-4
+    Z = [interp((X[:,0] - solver.xd0), (xs - solver.xd0) * t / T[0][-1],
+         soln[var_str]) for t in T[0]]
+    Z = array(Z).T
+    fig, ax = plt.subplots(1,1)
+    c = ax.pcolor(X, T, Z, shading='auto', vmin=Z.min(), vmax=Z.max())
+    morphology = solver.soln_type.split('-')[-1]
+    xd0 = solver.xd0
+    Vregs = solver.Vregs
+    ii = 0
+    if (morphology[0] == 'R'):
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
+        ii += 1
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
+    elif (morphology[0] == 'S'):
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], 'k')
+    ii += 1
+    plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], ':k')
+    ii += 1
+    if (morphology[2] == 'R'):
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
+        ii += 1
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], '--k')
+    elif (morphology[2] == 'S'):
+        plt.plot([xd0, Vregs[ii]*t + xd0], [0., t], 'k')
+    plt.xlim((xs[0], xs[-1]))
+    plt.ylim((0., t))
+    plt.xlabel('position')
+    plt.ylabel('time')
+    plt.title(' '.join(var_str.split('_')))
+    fig.colorbar(c, ax=ax)

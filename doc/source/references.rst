@@ -18,7 +18,7 @@ References
    An Analytic Description of Converging Shock Waves,
    J. Fluid Mech. 354, pp. 357-375 (1998).
 
-.. [CJST1997]
+.. [Cockburn1997]
    B. Cockburn, C. Johnson, C.-W. Shu,
    *Advanced Numerical Approximation on Nonlinear Hyperbolic Equations*,
    Lecture Notes in Mathematics, 1997.
