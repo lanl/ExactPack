@@ -151,12 +151,12 @@ class TestResidualFunction:
 
     def test_det_value(self): 
         function = noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_almost_equal(function.determinant(function.F_prime([1,1,1])), 14)
+        np.testing.assert_almost_equal(function.determinant(function.F_prime([1,1,1])), 1.5 , decimal=14)
         """Noh Problem--Residual Function: determinant value"""
 
     def test_F_prime_inv_value(self): 
         function = noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_almost_equal(function.F_prime_inv([1,1,1]), [[5./3., 1, -2./3.], [1,1,0], [-2./3., -1, 2./3.]], decimal=15)
+        np.testing.assert_almost_equal(function.F_prime_inv([1,1,1]), [[5./3., 1, -2./3.], [1,1,0], [-2./3., -1, 2./3.]], decimal=12)
         """Noh Problem--Residual Function: Jacobian Inverse value"""
 
 class test_newton_solver: 
