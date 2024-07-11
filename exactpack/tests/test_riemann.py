@@ -8,7 +8,7 @@ from numpy import array, interp, diff, sqrt, abs, argmin, linspace
 
 import numpy.random
 
-from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver
+from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver, streakplot
 from exactpack.solvers.riemann.riemann import *
 
 warnings.simplefilter('ignore', RuntimeWarning)
@@ -3843,3 +3843,16 @@ class TestRiemannGenEOSSolver():
                     1.77760007, 1.77760007, 1.77760007, 1.77760007, 1.77760007,
                     1.77760007]
         assert self.soln['specific_internal_energy'] == approx(expected)
+
+
+class TestRiemannStreakPlot():
+    """Simple test of creating a streakplot"""
+    def test_streakplot_sod(self):
+        xvec = linspace(0., 1., int(1e5))
+        t_final = 0.25
+        riem1_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
+                                     rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
+                                     xmin=0.,  xd0=0.5, xmax=1., t=t_final)
+
+        riem1_ig_result = riem1_ig_soln._run(xvec, t_final)
+        streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final)
