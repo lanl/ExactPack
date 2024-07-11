@@ -16,7 +16,7 @@ from matplotlib import rc
 from numpy import linspace, mgrid, array
 
 # import ExactPack solvers
-from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver
+from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver, streakplot
 
 xvec = linspace(0., 1., int(1e5))
 t_final = 0.25
@@ -29,10 +29,10 @@ riem1_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
 
 riem1_ig_result = riem1_ig_soln._run(xvec, t_final)
 N = 101
-riem1_ig_soln.streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='pressure')
-riem1_ig_soln.streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='density')
-riem1_ig_soln.streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='velocity')
-riem1_ig_soln.streakplot(soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='specific_internal_energy')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='pressure')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='density')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='velocity')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='specific_internal_energy')
 
 # The Sod shocktube problem solved using the generalized EOS (GenEOS) solver.
 riem1_gen_soln = GenEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
