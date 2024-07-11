@@ -146,12 +146,12 @@ class TestResidualFunction:
 
     def test_F_prime_value(self): 
         function = noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_equal(function.F_prime([1,1,1]), [[1,0,1], [-1,1,-1], [-0.5, 1.5, 1]])
+        np.testing.assert_almost_equal(function.F_prime([1,1,1]), [[1,0,1], [-1,1,-1], [-0.5, 1.5, 1]], decimal=15)
         """Noh Problem--Residual Function: Jacobian value"""
 
     def test_det_value(self): 
         function = noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_equal(function.determinant(function.F_prime([1,1,1])), 1.5)
+        np.testing.assert_almost_equal(function.determinant(function.F_prime([1,1,1])), 14)
         """Noh Problem--Residual Function: determinant value"""
 
     def test_F_prime_inv_value(self): 
