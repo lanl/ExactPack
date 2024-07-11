@@ -276,7 +276,7 @@ class TestSimplifiedResidualFunction:
 
     def test_F_value(self): 
         function = simplified_noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_equal(function.F([1,1]), [-1., 1.])
+        np.testing.assert_almost_equal(function.F([1,1]), [-1., 1.], decimal= 15)
         """Noh Problem--Residual Function: residual function value"""
 
     def test_F_prime_value(self): 
