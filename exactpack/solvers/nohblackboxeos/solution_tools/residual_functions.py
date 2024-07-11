@@ -144,7 +144,7 @@ class noh_residual(newton_solver_residual_function):
         return self.DF_inv
 
 # Class for the an eos modular. This function is a 2D function that solves for rho, P. If this classed is used, then P_0 = 0 MUST BE THE INITIAL PRESSURE. 
-class eos_noh_residual(newton_solver_residual_function): 
+class simplified_noh_residual(newton_solver_residual_function): 
     def __init__(self, initial_conditions, equation_of_state): # Initializer. Requires the initial conditions as a dictionary of the Noh problem and the desired eos (eos should come from the eos_library.py file).
         self.valid_instance = True
         self.required_eos_methods = ['e', 'de_drho', 'de_dP']
@@ -155,13 +155,15 @@ class eos_noh_residual(newton_solver_residual_function):
         if(self.rho_0 <= 0): 
             raise ValueError("Error: initial density must be postive and nonzero.")
         self.P_0 = initial_conditions['pressure'] # Set initial pressure 
-        if(self.P_0 <0):
-            raise ValueError("Error: initial pressure must be nonnegative for the Noh Problem.")
+        if(self.P_0 !=0 ):
+            raise ValueError("Error: This residual assumes the initial pressure is 0.")
         self.symmetry = initial_conditions['symmetry'] # Sets the geometry of the problem, ie, 0 (planar), 1 (cylindrical), 2 (sphereical)
         if self.symmetry not in [0,1,2]: 
             raise ValueError("Error: Symmetry must be 0, 1, or 2.")
-        if( self.symmetry != 0):
-            raise ValueError("Error: This alogrithm assumes symmetry = 0.")
+        if(self.symmetry != 0):
+            raise ValueError("Error: This residual assumes symmetry = 0.")
+        if(self.symmetry!=0 or self.P_0!=0):
+            raise ValueError("Error: The residual assume P_0 = 0 and m = 0.")
         for method in self.required_eos_methods:
             if not hasattr(equation_of_state, method):
                 raise ValueError(f"Error: The equation of state class does not have the required member method: {method}.")
@@ -206,8 +208,6 @@ class eos_noh_residual(newton_solver_residual_function):
         if (rho ==0): # Make sure density isn't 0
             raise ZeroDensityError("rho cannot be zero.")
         det_result = self.equation_of_state.de_dP(rho,P)*(P/rho**2)*self.rho_0 - self.equation_of_state.de_drho(rho,P)*(1 - (1/rho)*self.rho_0)
-        if(det_result == 0.0): 
-            print("Warning, 0 determinant, and F_prime is singular. Inverse does not exist.")
         return det_result
 
     def F_prime_inv(self, state, *args, **kwargs): # Input must be an array--this makes this compatible with the generic Newton solver class, newton_solver, in newton_solver.py. Computes the inverse DIRECTLY. 
