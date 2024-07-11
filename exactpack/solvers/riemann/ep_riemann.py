@@ -281,4 +281,3 @@ def streakplot(solver, soln, xs, t, N=21, var_str='pressure'):
     plt.ylabel('time')
     plt.title(' '.join(var_str.split('_')))
     fig.colorbar(c, ax=ax)
-    plt.show()

@@ -41,7 +41,7 @@ riem1_gen_soln = GenEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
 
 riem1_gen_result = riem1_gen_soln(xvec, t_final)
 
-
+plt.show()
 # # The Sod shocktube flipping the left & right states, using the IGEOS solver.
 # # This problem is probably more relevant for checking that the analytic solution
 # # works correctly.
