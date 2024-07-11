@@ -51,10 +51,26 @@ The goal, therefore, is to find these values. The solver does so by solving the 
 
 The solver consists of a residual function based on the above equations, its Jacobian, and the Jacobian's inverse, and uses
 a Newton Solver to find the root of the residual function.  
-The residual function is found in `solution_tools/residual_functions.noh_residual` and the Newton solver is found in 
-`solution_tools/newton_solver.newton_solver`.
 
-The residual function requires the initial conditions of the problem (fluid variables and the geometry of the problem) and an EoS object. 
+Within `solution_tools/residual_functions`, there are two residual functions. The first is `noh_residual` and the second is 
+`simplified_noh_residual`. This warrants some explanation. 
+
+The `noh_residual` is a :math:'\mathbb{R}^3 \to \mathbb{R}^3` function that solves for the shocked density, pressure, and shock 
+speed values. This is the work-horse function: it is meant to solve the Noh problem in any geomety (1,2,3) with any initial conditions 
+and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17] for restrictions). 
+
+The 'simplified_noh_residual`, by constrast, is a :math:'\mathbb{R}^2 \to \mathbb{R}^2` function that solves for the shocked density and pressure. 
+That is, it does not solve for the shock speed. However, this is possible because of a simplifying assumption: :math:`m=0` and :math:`P_0 = 0`. 
+Therefore, `simplified_noh_residual` should only be used if the Noh problem is being posed in planar geometry and the initial pressure is zero. 
+
+We include both for a simple reason: if the `noh_residual` is struggling to find a solution, then perhaps the `simplified_noh_residual` will have better
+luck since it only has to solve for two variables instead of three. Furthermore, since `simplified_noh_residual` is a 2D system, computing the determinant 
+and inverse of the Jacobian can easily be done by hand (and has been done) and hardcoded. Thus, all computations done in `simplified_noh_residual` are done directly, 
+whereas `noh_residual` involves a numerical inversion to find the Jacobian's inverse. (Of course, this is not difficult as it is a 3D system, but the point stands, especially
+if many iterations are being done.) In short: users should default to using `noh_residual` and use `simplified_noh_residual` if they are encountering 
+difficulties finding a solution. 
+
+Both residual functions require the initial conditions of the problem (fluid variables and the geometry of the problem) and an EoS object. 
 This object must have a set of member functions. (Observe that it is precisely this location that makes the solver "Black Box": the EoS object does not need to 
 be algebraic or analytic sense. For example, a wrapper that accesses tabulated values is an acceptable EoS object!) Furthermore, 
 as with any good Newton Solver, the user can select the initial guess, convergence tolerance, and maximum number of iterations. 
