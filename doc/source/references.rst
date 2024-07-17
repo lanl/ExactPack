@@ -218,3 +218,8 @@ References
    H.S. Udaykumar, L. Tran, D.M. Belk, and K.J. Vanden,
    *An Eulerian method for computation of multimaterial impact with ENO shock-capturing and sharp interfaces*,
    JCP **186** (2003) 136-177.
+
+.. [Ramsey17]
+   Scott Ramsey, Z. M. Boyd, and S.C. Burnett, 
+   *Solution of the Noh problem using the universal symmetry of the gas dynamics equations*, 
+   Shock Waves **27** (2017) 477-485. 
