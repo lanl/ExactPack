@@ -24,7 +24,7 @@ class ZeroDeterminantError(Exception):
         return f"Error: Zero Determinant computed; {self.message}"
 
 class ZeroDensityError(Exception):
-    def __init__(self, message, code):
+    def __init__(self, message):
         self.message = message
         super().__init__(message)
     
