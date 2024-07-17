@@ -117,7 +117,7 @@ class TestResidualFunction:
     
     def test_matrix_size(self):
         function = noh_residual(self.good_ic, self.eos)
-        with pytest.raises(ValueError):
+        with pytest.raises(np.linalg.LinAlgError):
             function.determinant(self.wrong_matrix)
         """Noh Problem--Residual Function: Test for value size of matrix"""
     
