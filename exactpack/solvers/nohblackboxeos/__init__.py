@@ -5,49 +5,44 @@ wave in an ideal gas, and it can be formulated in spherical,
 cylindrical, or planar geometry. The independent fluid variables are
 (i) the mass density :math:`\rho(r,t)`, (ii) the velocity of the gas
 :math:`u(r,t)`, and (iii) the pressure :math:`P(r,t)`, each at spatial
-location :math:`r` and time :math:`t`. We denote the shock speed by :math:'D'. Note that in spherical coordinates,
+location :math:`r` and time :math:`t`. We denote the shock speed by :math:`D`. Note that in spherical coordinates,
 :math:`u(r,t)` is the radial velocity of the gas, and a negative value 
 indicates that gas is flowing in toward the origin. 
 
 This solver rests on the fact that the solution to the Noh Problem is completely determined 
-by the Rankine-Hugoinot conditions, also called the jump conditions. Indeed, if shocked density (:math:'\rho_L'), pressure (:math:'P_L')
-and shock speed (:math:'D') values are known, then the complete solution for the Noh Problem is given by: 
+by the Rankine-Hugoinot conditions, also called the jump conditions. Indeed, if shocked density (:math:`\rho_L`), pressure (:math:`P_L`)
+and shock speed (:math:`D`) values are known, then the complete solution for the Noh Problem is given by: 
 
 .. math::
-
-    \begin{subequations}
-        \begin{equation}
             \rho(t,x) = \begin{cases}
                 \rho_L & \frac{x}{t}< D \\
             \rho_0 \left(1 - \frac{u_0 t}{x} \right)^m & \frac{x}{t} > D
             \end{cases} 
-        \end{equation}
-        \begin{equation}
+
+.. math::
             P(t,x) = \begin{cases}
                 P_L & \frac{x}{t}< D \\
                 P_0 & \frac{x}{t}> D 
             \end{cases} 
-        \end{equation}
-        \begin{equation}
+
+.. math::
             u(t,x) = \begin{cases}
                 0 & \frac{x}{t}< D \\
                 u_0 & \frac{x}{t}> D 
             \end{cases} 
-        \end{equation}
-    \end{subequations} 
+
 
 The goal, therefore, is to find these values. The solver does so by solving the jump conditions given by: 
 
 .. math:: 
-    \begin{equation}
          \rho_0 \left( 1 - \frac{u_0}{D}\right)^{m+1}  = \rho_L 
-    \end{equation}
-    \begin{equation}
+
+.. math::
         P_L = P_R  - \rho_L D u_0 
-    \end{equation}    
-    \begin{equation}
-    e_L  =  e_R + \frac{1}{2} u_0^2 - \frac{u_0 P_0}{\rho_L D}
-    \end{equation}
+
+.. math::
+        e_L  =  e_R + \frac{1}{2} u_0^2 - \frac{u_0 P_0}{\rho_L D}
+
 
 The solver consists of a residual function based on the above equations, its Jacobian, and the Jacobian's inverse, and uses
 a Newton Solver to find the root of the residual function.  
@@ -55,11 +50,11 @@ a Newton Solver to find the root of the residual function.
 Within `solution_tools/residual_functions`, there are two residual functions. The first is `noh_residual` and the second is 
 `simplified_noh_residual`. This warrants some explanation. 
 
-The `noh_residual` is a :math:'\mathbb{R}^3 \to \mathbb{R}^3` function that solves for the shocked density, pressure, and shock 
+The `noh_residual` is a :math:`\mathbb{R}^3 \to \mathbb{R}^3` function that solves for the shocked density, pressure, and shock 
 speed values. This is the work-horse function: it is meant to solve the Noh problem in any geomety (1,2,3) with any initial conditions 
 and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17] for restrictions). 
 
-The 'simplified_noh_residual`, by constrast, is a :math:'\mathbb{R}^2 \to \mathbb{R}^2` function that solves for the shocked density and pressure. 
+The `simplified_noh_residual`, by constrast, is a :math:`\mathbb{R}^2 \to \mathbb{R}^2` function that solves for the shocked density and pressure. 
 That is, it does not solve for the shock speed. However, this is possible because of a simplifying assumption: :math:`m=0` and :math:`P_0 = 0`. 
 Therefore, `simplified_noh_residual` should only be used if the Noh problem is being posed in planar geometry and the initial pressure is zero. 
 
