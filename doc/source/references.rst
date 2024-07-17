@@ -189,7 +189,12 @@ References
    W. F. Noh,
    *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*,
    JCP **72** (1987) 78-120.
-   
+
+.. [Ramsey17]
+   Scott Ramsey, Z. M. Boyd, and S.C. Burnett, 
+   *Solution of the Noh problem using the universal symmetry of the gas dynamics equations*, 
+   Shock Waves **27** (2017) 477-485. 
+
 .. [Reinicke1991] P. Reinicke and J. Meyer-ter-Vehn,
    *The point explosion with heat conduction*,
    Phys. Fluids A **3** (1991) 1807.
