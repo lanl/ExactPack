@@ -52,7 +52,7 @@ Within `solution_tools/residual_functions`, there are two residual functions. Th
 
 The `noh_residual` is a :math:`\mathbb{R}^3 \to \mathbb{R}^3` function that solves for the shocked density, pressure, and shock 
 speed values. This is the work-horse function: it is meant to solve the Noh problem in any geomety (1,2,3) with any initial conditions 
-and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17] for restrictions). 
+and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17]_ for restrictions). 
 
 The `simplified_noh_residual`, by constrast, is a :math:`\mathbb{R}^2 \to \mathbb{R}^2` function that solves for the shocked density and pressure. 
 That is, it does not solve for the shock speed. However, this is possible because of a simplifying assumption: :math:`m=0` and :math:`P_0 = 0`. 
