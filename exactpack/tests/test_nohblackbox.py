@@ -652,7 +652,7 @@ class TestPressureResidualFunction:
 
     def test_F_prime_value(self): 
         function = pressure_noh_residual(self.value_test_ic, self.eos)
-        np.testing.assert_almost_equal(function.F_prime([1,1,1]), [[-1,0,1], [-1./3., 2./3. ,-1], [-1, 1, 1]], decimal=15)
+        np.testing.assert_almost_equal(function.F_prime([1,1,1]), [[1,0,1], [-1./3., 2./3. ,-1], [-1, 1, 1]], decimal=15)
         """Noh Problem--Residual Function: Jacobian value"""
 
     def test_det_value(self): 
@@ -699,104 +699,104 @@ class TestSimplifiedPressureResidualFunction:
 
     def test_wrong_velocity(self):
         with pytest.raises(ValueError): 
-            bad_velocity_function = simplified_noh_residual(self.wrong_velocity_ic, self.eos)
+            bad_velocity_function = simplified_pressure_noh_residual(self.wrong_velocity_ic, self.eos)
         """Noh Problem--Residual Function: Test for valid value of velocity"""
     
     def test_wrong_density(self):
         with pytest.raises(ValueError):
-            bad_density_function = simplified_noh_residual(self.wrong_density_ic, self.eos)
+            bad_density_function = simplified_pressure_noh_residual(self.wrong_density_ic, self.eos)
         """Noh Problem--Residual Function: Test for valid value of density"""
 
     def test_wrong_pressure(self):
         with pytest.raises(ValueError): 
-            bad_pressure_function = simplified_noh_residual(self.wrong_pressure_ic, self.eos)
+            bad_pressure_function = simplified_pressure_noh_residual(self.wrong_pressure_ic, self.eos)
         """Noh Problem--Residual Function: Test for valid value of pressure"""
     
     def test_wrong_symmetry(self):
         with pytest.raises(ValueError): 
-            bad_symmetry_funciton = simplified_noh_residual(self.wrong_symmetry_ic, self.eos)
+            bad_symmetry_funciton = simplified_pressure_noh_residual(self.wrong_symmetry_ic, self.eos)
         """Noh Problem--Residual Function: Test for valid value of symmetry"""
     
     def test_wrong_eos(self):
         with pytest.raises(ValueError): 
-            bad_eos_function = simplified_noh_residual(self.good_ic, self.wrong_eos)
+            bad_eos_function = simplified_pressure_noh_residual(self.good_ic, self.wrong_eos)
         """Noh Problem--Residual Function: Test for valid eos object"""
     
     def test_pressure_symmetry_error(self):
         with pytest.raises(ValueError):
-            bad_pressure_symmetry_function = simplified_noh_residual(self.wrong_pressure_symmetry_ic, self.eos)
+            bad_pressure_symmetry_function = simplified_pressure_noh_residual(self.wrong_pressure_symmetry_ic, self.eos)
         """Noh Problem--Residual Function: Test for admissability of symmetry and initial pressure"""
 
     def test_wrong_array_size_F(self): 
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ValueError):
             function.F(self.wrong_array)
         """Noh Problem--Residual Function: Test for valid array size for F"""
     
     def test_zero_density_F(self): 
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ZeroDensityError):
             function.F_prime(self.zero_density_array)
         """Noh Problem--Residual Function: Test for zero density for F"""
     
     def test_wrong_array_size_F_prime(self): 
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ValueError):
             function.F_prime_inv(self.wrong_array)
         """Noh Problem--Residual Function: Test for valid array size for F_prime"""
 
     def test_zero_density_F_prime(self): 
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ZeroDensityError):
             function.F_prime(self.zero_density_array)
         """Noh Problem--Residual Function: Test for zero density for F_prime"""
 
     def test_wrong_array_size_det(self): 
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ValueError):
             function.determinant(self.wrong_array)
         """Noh Problem--Residual Function: Test for valid array size for F_prime"""
 
     def test_zero_density_det(self): 
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ZeroDensityError):
             function.determinant(self.zero_density_array)
         """Noh Problem--Residual Function: Test for zero density for F_prime"""
 
     def test_wrong_array_size_F_prime_inv(self):
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ValueError):
             function.F_prime_inv(self.wrong_array)
         """Noh Problem--Residual Function: Test for valid array size for F_prime_inv"""
     
     def test_zero_density_F_prime_inv(self):
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ZeroDensityError):
             function.F_prime_inv(self.zero_density_array)
         """Noh Problem--Residual Function: Test for zero density for F_prime_inv"""
     
     def test_zero_determinant_in_F_prime_inv(self):
-        function = simplified_noh_residual(self.good_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.good_ic, self.eos)
         with pytest.raises(ZeroDeterminantError): 
             function.F_prime_inv(self.zero_determinant_array)
         """Noh Problem--Residual Function: Test for zero determinant in F_prime_inv"""
 
     def test_F_value(self): 
-        function = simplified_noh_residual(self.value_test_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.value_test_ic, self.eos)
         np.testing.assert_almost_equal(function.F([1,1]), [-1., 0.5], decimal= 15)
         """Noh Problem--Residual Function: residual function value"""
 
     def test_F_prime_value(self): 
-        function = simplified_noh_residual(self.value_test_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.value_test_ic, self.eos)
         np.testing.assert_almost_equal(function.F_prime([1,1]), [[2./3.,0], [0,1.]], decimal=15)
         """Noh Problem--Residual Function: Jacobian value"""
 
     def test_det_value(self): 
-        function = simplified_noh_residual(self.value_test_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.value_test_ic, self.eos)
         np.testing.assert_almost_equal(function.determinant([1,1]), 2./3., decimal=14)
         """Noh Problem--Residual Function: determinant value"""
 
     def test_F_prime_inv_value(self): 
-        function = simplified_noh_residual(self.value_test_ic, self.eos)
+        function = simplified_pressure_noh_residual(self.value_test_ic, self.eos)
         np.testing.assert_almost_equal(function.F_prime_inv([1,1]), [[3./2., 0], [0, 1.]], decimal=12)
         """Noh Problem--Residual Function: Jacobian Inverse value"""   
