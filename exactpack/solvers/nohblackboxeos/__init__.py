@@ -47,25 +47,40 @@ The goal, therefore, is to find these values. The solver does so by solving the 
 The solver consists of a residual function based on the above equations, its Jacobian, and the Jacobian's inverse, and uses
 a Newton Solver to find the root of the residual function.  
 
-Within `solution_tools/residual_functions`, there are two residual functions. The first is `noh_residual` and the second is 
-`simplified_noh_residual`. This warrants some explanation. 
+Within `solution_tools/residual_functions`, there are four residual functions. The first is `noh_residual`, the second is 
+`simplified_noh_residual`, the third is `pressure_noh_residual`, and `simplified_pressure_noh_residual`. This warrants some explanation. 
 
 The `noh_residual` is a :math:`\mathbb{R}^3 \to \mathbb{R}^3` function that solves for the shocked density, pressure, and shock 
 speed values. This is the work-horse function: it is meant to solve the Noh problem in any geomety (1,2,3) with any initial conditions 
-and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17]_ for restrictions). 
+and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17]_ for restrictions). Note that 
+this class solves the jump conditions by closing the system using :math:`e=e(\rho, P)`. 
 
 The `simplified_noh_residual`, by constrast, is a :math:`\mathbb{R}^2 \to \mathbb{R}^2` function that solves for the shocked density and pressure. 
 That is, it does not solve for the shock speed. However, this is possible because of a simplifying assumption: :math:`m=0` and :math:`P_0 = 0`. 
-Therefore, `simplified_noh_residual` should only be used if the Noh problem is being posed in planar geometry and the initial pressure is zero. 
+Therefore, `simplified_noh_residual` should only be used if the Noh problem is being posed in planar geometry and the initial pressure is zero. Note that 
+this class solves the jump conditions by closing the system using :math:`e=e(\rho, P)`. 
 
-We include both for a simple reason: if the `noh_residual` is struggling to find a solution, then perhaps the `simplified_noh_residual` will have better
-luck since it only has to solve for two variables instead of three. Furthermore, since `simplified_noh_residual` is a 2D system, computing the determinant 
-and inverse of the Jacobian can easily be done by hand (and has been done) and hardcoded. Thus, all computations done in `simplified_noh_residual` are done directly, 
-whereas `noh_residual` involves a numerical inversion to find the Jacobian's inverse. (Of course, this is not difficult as it is a 3D system, but the point stands, especially
-if many iterations are being done.) In short: users should default to using `noh_residual` and use `simplified_noh_residual` if they are encountering 
+The 'pressure_noh_residual` is similar to `noh_residual` in structure and purpose. However, instead of closing the jump conditions with :math:`e = e(\rho, P)`, it does so instead 
+with :math:`P = P(\rho, e)`, and so instead solves for the shocked density, energy, and shock speed. It has the same level of general-pupose intent as `noh_residual`. 
+
+The 'simplified_pressure_noh_residual` is to `pressure_noh_residual` as `simplified_noh_residual` is to `noh_residual`. It uses the simplifying assumptions to 
+reduce the jump conditions to two equations of three variables---it's just that instead of closing them with :math:`e = e(\rho, P)` (as in `simplified_noh_residual`), 
+it closes them with :math:`P = P(\rho,e)`. 
+
+We include all four for two reasons. First, we include the `pressure` versions because certain equation of state libraries do not provide a call for 
+:math:`e = e(\rho, P)`. While it is possible to perform an energy inversion--given :math:`\rho, P` compute :math:`e` using :math:`P = P(\rho,e)`-- 
+it can be a serious problem when dealing with complicated equations of state. The Newton iteration now has to find the energy for its computations in addition to its own iteration. 
+The `pressure` versions avoid this problem by directly accessing :math:`P(\rho,e)` from 
+the library. It is still necessary to compute initial energy, which would require an inversion, but it is only one inversion outside of the Newton iteration. 
+
+We include the `simplified` versions for a simple reason\: if the `noh_residual` or `pressure_noh_residual` is struggling to find a solution, then perhaps the `simplified_noh_residual` or `simplfied_pressure_noh_residual`
+will have better luck since they only have to solve for two variables instead of three. Furthermore, since they are 2D systems, computing the determinants
+and inverse of the Jacobians can easily be done by hand (and has been done) and hardcoded. Thus, all computations done in `simplified_noh_residual` and `simplified_pressure_noh_residual` are done directly, 
+whereas `noh_residual` and `pressure_noh_residual` involve a numerical inversion to find the Jacobian's inverse. (Of course, this is not difficult as it is a 3D system, but the point stands, especially
+if many iterations are being done.) In short: users should default to using `noh_residual` or `pressure_noh_residual` and use `simplified_noh_residual` or `simplified_pressure_noh_residual` if they are encountering 
 difficulties finding a solution. 
 
-Both residual functions require the initial conditions of the problem (fluid variables and the geometry of the problem) and an EoS object. 
+All residual functions require the initial conditions of the problem (fluid variables and the geometry of the problem) and an EoS object. 
 This object must have a set of member functions. (Observe that it is precisely this location that makes the solver "Black Box": the EoS object does not need to 
 be algebraic or analytic sense. For example, a wrapper that accesses tabulated values is an acceptable EoS object!) Furthermore, 
 as with any good Newton Solver, the user can select the initial guess, convergence tolerance, and maximum number of iterations. 
@@ -89,15 +104,5 @@ cylindrically, and spherical geometries, respectively. To cast the equations in
 terms of dimensionless coordinates, set :math:`u_0=1` and :math:`\rho_0 = 1`.
 
 """
-
-
-
-
-
-
-
-
-
-
 
 from .blackboxnoh import NohBlackBoxEos, PlanarNohBlackBox, CylindricalNohBlackBox, SphericalNohBlackBox
