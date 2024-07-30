@@ -53,12 +53,12 @@ Within `solution_tools/residual_functions`, there are four residual functions. T
 The `noh_residual` is a :math:`\mathbb{R}^3 \to \mathbb{R}^3` function that solves for the shocked density, pressure, and shock 
 speed values. This is the work-horse function: it is meant to solve the Noh problem in any geomety (1,2,3) with any initial conditions 
 and any equation of state (assuming that they are theoretically admissible for the Noh problem; see [Ramsey17]_ for restrictions). Note that 
-this class solves the jumps conditions by closing the system using :math:`e=e(\rho, P)`. 
+this class solves the jump conditions by closing the system using :math:`e=e(\rho, P)`. 
 
 The `simplified_noh_residual`, by constrast, is a :math:`\mathbb{R}^2 \to \mathbb{R}^2` function that solves for the shocked density and pressure. 
 That is, it does not solve for the shock speed. However, this is possible because of a simplifying assumption: :math:`m=0` and :math:`P_0 = 0`. 
 Therefore, `simplified_noh_residual` should only be used if the Noh problem is being posed in planar geometry and the initial pressure is zero. Note that 
-this class solves the jumps conditions by closing the system using :math:`e=e(\rho, P)`. 
+this class solves the jump conditions by closing the system using :math:`e=e(\rho, P)`. 
 
 The 'pressure_noh_residual` is similar to `noh_residual` in structure and purpose. However, instead of closing the jump conditions with :math:`e = e(\rho, P)`, it does so instead 
 with :math:`P = P(\rho, e)`, and so instead solves for the shocked density, energy, and shock speed. It has the same level of general-pupose intent as `noh_residual`. 
@@ -69,7 +69,7 @@ it closes them with :math:`P = P(\rho,e)`.
 
 We include all four for two reasons. First, we include the `pressure` versions because certain equation of state libraries do not provide a call for 
 :math:`e = e(\rho, P)`. While it is possible to perform an energy inversion--given :math:`\rho, P` compute :math:`e` using :math:`P = P(\rho,e)`-- 
-it can be a serious problems when dealing with complicated equations of state. The Newton iteration now has to find the energy for its computations in addition to its own iteration. 
+it can be a serious problem when dealing with complicated equations of state. The Newton iteration now has to find the energy for its computations in addition to its own iteration. 
 The `pressure` versions avoid this problem by directly accessing :math:`P(\rho,e)` from 
 the library. It is still necessary to compute initial energy, which would require an inversion, but it is only one inversion outside of the Newton iteration. 
 
