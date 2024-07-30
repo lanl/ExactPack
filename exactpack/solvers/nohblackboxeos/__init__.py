@@ -73,9 +73,8 @@ it can be a serious problems when dealing with complicated equations of state. T
 The `pressure` versions avoid this problem by directly accessing :math:`P(\rho,e)` from 
 the library. It is still necessary to compute initial energy, which would require an inversion, but it is only one inversion outside of the Newton iteration. 
 
-We include the `simplified` versions for a simple reason: if the `noh_residual` or `pressure_noh_residual` is struggling to find a solution, then perhaps the `simplified_noh_residual` or `simplfied_pressure_noh_residual`
- will have better
-luck since they only have to solve for two variables instead of three. Furthermore, since they are is a 2D systems, computing the determinants 
+We include the `simplified` versions for a simple reason\: if the `noh_residual` or `pressure_noh_residual` is struggling to find a solution, then perhaps the `simplified_noh_residual` or `simplfied_pressure_noh_residual`
+will have better luck since they only have to solve for two variables instead of three. Furthermore, since they are 2D systems, computing the determinants
 and inverse of the Jacobians can easily be done by hand (and has been done) and hardcoded. Thus, all computations done in `simplified_noh_residual` and `simplified_pressure_noh_residual` are done directly, 
 whereas `noh_residual` and `pressure_noh_residual` involve a numerical inversion to find the Jacobian's inverse. (Of course, this is not difficult as it is a 3D system, but the point stands, especially
 if many iterations are being done.) In short: users should default to using `noh_residual` or `pressure_noh_residual` and use `simplified_noh_residual` or `simplified_pressure_noh_residual` if they are encountering 
@@ -105,15 +104,5 @@ cylindrically, and spherical geometries, respectively. To cast the equations in
 terms of dimensionless coordinates, set :math:`u_0=1` and :math:`\rho_0 = 1`.
 
 """
-
-
-
-
-
-
-
-
-
-
 
 from .blackboxnoh import NohBlackBoxEos, PlanarNohBlackBox, CylindricalNohBlackBox, SphericalNohBlackBox
