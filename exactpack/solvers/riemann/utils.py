@@ -11,7 +11,7 @@ def JWL_f(r, g, inst):
   R1r = inst.R1 * r0 / r
   R2r = inst.R2 * r0 / r
   A, B = inst.A, inst.B
-  return A * (1. - G / R1r) * exp(- R1r) + B * (1. - G / R1r) * exp(- R2r)
+  return A * (1. - G / R1r) * exp(- R1r) + B * (1. - G / R2r) * exp(- R2r)
 
 def JWL_dfdr(r, g, inst):
   G  = g - 1.
