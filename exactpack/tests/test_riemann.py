@@ -3509,22 +3509,20 @@ class Test_RiemannJWL_Shyue():
     soln_gen.driver()
 
     # Test that star state values are computed correctly.
-    pstar  = 4.409360935472674
-    ustar1 = 1.6945593277042843
-    ustar2 = 1.6945593277033082
-    rstar1 = 0.8882712086127579
-    rstar2 = 3.7668623157768932
-    estar1 = 19.798338129896145
-    estar2 = 3.7296576856663672
-    astar1 = 2.4963291337873743
-    astar2 = 1.2954310985969357
+    pstar  = 4.407101735576622
+    ustar1 = 1.6952362789470772
+    ustar2 = 1.6952362789473674
+    rstar1 = 0.8880765637317387
+    rstar2 = 3.781280243757399
+    estar1 = 19.796096879271513
+    estar2 = 3.7361758546784607
+    astar1 = 2.496140921360204
+    astar2 = 1.2955224481797556
 
     # Test that spatial region boundaries are computed correctly.
     # Xregs = Vregs * t + xd0
-    Xregs = array([17.17071528464863, 40.37876232700292,
-                   70.33471193245141, 77.68408853918551])
-    Vregs = array([-2.7357737262792807, -0.80176980608309,
-                    1.6945593277042843, 2.3070073782654594])
+    Xregs = array([17.16330032209335, 40.38914429104248, 70.34283534736493, 77.65703780340685])
+    Vregs = array([-2.73639163982555, -0.80090464241313,  1.69523627894708,  2.3047531502839 ])
 
     def test_riemShyuegen_star_states(self):
         """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
@@ -3635,22 +3633,23 @@ class Test_RiemannJWL_Lee():
     soln_gen.driver()
 
     # Test that star state values are computed correctly.
-    pstar  = 1.1906972944417038
-    ustar1 = -0.13281939826625017
-    ustar2 = -0.1328193982662211
-    rstar1 = 1.0445383101056884
-    rstar2 = 3.5165512209201375
-    estar1 = 1.2812058376690656
-    estar2 = 0.008405040874636158
-    astar1 = 1.469701835538411
-    astar2 = 1.525557446779137
+    pstar  = 1.1911636719202543
+    ustar1 = -0.13299594880743928
+    ustar2 = -0.1329959488075938
+    rstar1 = 1.0445599160997083
+    rstar2 = 3.5156639171076782
+    estar1 = 1.279298064619773
+    estar2 = -0.0010148657564458242
+    astar1 = 1.4692503217111825
+    astar2 = 1.5222127467374922
 
     # Test that spatial region boundaries are computed correctly.
     # Xregs = Vregs * t + xd0
-    Xregs = array([19.852754491950297, 47.343612034675,
-                   77.85476097025833, 85.80228712253455])
-    Vregs = array([-1.5073622754024851, -0.13281939826625017,
-                    1.392738048512916, 1.7901143561267274])
+    Xregs = array([19.852754491950297, 47.343612034675, 77.85476097025833, 85.80228712253455])
+    Vregs = array([-1.5073622754024851, -0.13281939826625017,1.392738048512916, 1.7901143561267274])
+    Xregs = array([19.81914240303341, 47.34008102385121, 77.78433595859796, 85.74918935763472])
+    Vregs = array([-1.50904287984833, -0.13299594880744, 1.3892167979299, 1.78745946788174])
+
 
     def test_riemLeegen_star_states(self):
         """Using the general EOS solver, test star-state values adjacent to the contact discontinuity.
