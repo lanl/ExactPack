@@ -348,22 +348,18 @@ class ExplosiveArc(ExactSolver):
             # check for points in rtmesh behind new detonation front
             # and interpolate detonation time (on tpts[step:step+1])
             # find starting and ending rows to speed up process
-            startrow = -10
-            stoprow = -10
+            btime_r = btime.reshape((self.ynodes, self.xnodes))
 
-            for row in range(self.ynodes):
-                if startrow < 0:
-                    lowest = min(btime[row*self.xnodes:(row+1)*self.xnodes])
-                    if lowest < 0.0:
-                        startrow = row
-                if startrow >= 0:
-                    highest = max(btime[row*self.xnodes:(row+1)*self.xnodes])
-                    if highest < 0.0:
-                        stoprow = row
-                        break
-            if startrow == -10:
+            starttest = np.where(btime_r.min(axis=1) < 0)
+            if starttest[0].any():
+                startrow = starttest[0][0]
+            else:
                 startrow = self.ynodes
-            if stoprow == -10:
+
+            stoptest = np.where(btime_r.max(axis=1) < 0)
+            if stoptest[0].any():
+                stoprow = stoptest[0][0]
+            else:
                 stoprow = self.ynodes
 
             for count, vec in enumerate(rtmesh[startrow*self.xnodes:
