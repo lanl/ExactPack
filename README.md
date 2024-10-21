@@ -35,12 +35,12 @@ ExactPack is designed to be an open project, readily expandable to include new t
 Installation
 ------------
 
-The repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using `pip install ./`. The minimum set of required dependencies should be installed automatically. If you wish to run the test suite or build the documentation then run `pip install -r requirements.txt` before install Exactpack.
+The repository may be cloned from the GitHub repository located at https://github.com/lanl/ExactPack, and installed using `pip install ./`. The minimum set of required dependencies should be installed automatically. If you wish to run the test suite or build the documentation then run `pip install -r requirements.txt` before installing Exactpack.
 
 ### Dependencies
 
 Python dependencies:
-* Python 3.6
+* Python >=3.6
 * setuptools
 * numpy
 * sphinx
