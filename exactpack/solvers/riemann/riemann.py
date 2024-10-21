@@ -255,7 +255,7 @@ class RiemannGenEOS(SetupRiemannProblem):
       px = bisect(lambda px:   interp(px, ps_left_splice, us_left_splice)
                              - interp(px, ps_right_splice, us_right_splice),
                   bisect_min, bisect_max)
-      
+
       # Determine whether px is an element in integ_ps_left, integ_ps_right,
       # shock_ps_left, shock_ps_right. This determines the solution's structure.
       # !!! This set of quantities are time independent.

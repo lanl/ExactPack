@@ -166,10 +166,10 @@ Problem Statements
 In this section we present 7 problem statements for the ideal-gas EOS, and two problem statements for the Jones-Wilkins-Lee (JWL) EOS.
 The JWL EOS is of the Mie-Gruneisen form and typically used for high-explosive modeling.
 
-Seven ideal-gas EOS problem statements
+Eight ideal-gas EOS problem statements
 ++++++++++++++++++++++++++++++++++++++
 
-We define seven standard Riemann problems in the table below.
+We define the seven standard Riemann problems in the table below, along with one due to Lax [Cockburn1997]_.
 The first six all use the same :math:`\gamma` for both the left and right states, while the seventh uses different gammas.
 For convenience, variable dimensions are: :math:`x_M \, [cm]`, :math:`t_f \, [s]`, :math:`\rho \, [g/cm^3]`, :math:`u \, [cm/s]`, :math:`p \, [dyn/cm^2]`, :math:`\gamma` is dimensionless.
 
@@ -188,7 +188,7 @@ Test                  :math:`x_M` :math:`t_f` :math:`\rho_L` :math:`u_L` :math:`
 
 Plots of each solution are given below.
 The first seven problems, and their reversed states, provide the basis of for most of the unit tests for both the ideal-gas and general EOS solvers.
-The eighth problem is taken from p399 and Fig. 5.1 on p400 in Ch. 4 of [CJST1997]_.
+The eighth problem is taken from p399 and Fig. 5.1 on p400 in Ch. 4 of [Cockburn1997]_.
 
 +-------------------------------------+------------------------------------------+
 | .. figure:: sod.png                 | .. figure:: einfeldt.png                 |
@@ -202,6 +202,14 @@ The eighth problem is taken from p399 and Fig. 5.1 on p400 in Ch. 4 of [CJST1997
 
 Two JWL EOS problem statements
 ++++++++++++++++++++++++++++++
+
+Streak plots of pressure, density, specific internal energy and velocity for the Sod shocktube are shown below.
+
++------------------------------+-------------------------------+
+| .. figure:: sod_density.png  | .. figure:: sod_pressure.png  |
++------------------------------+-------------------------------+
+| .. figure:: sod_sie.png      | .. figure:: sod_velocity.png  |
++------------------------------+-------------------------------+
 
 We define two standard Riemann problems in the table below.
 In addition to defining values for density, velocity and pressure for the left- and right-states, we also have to define parameters for the JWL EOS.
