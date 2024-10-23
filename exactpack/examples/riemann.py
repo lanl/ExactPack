@@ -13,10 +13,10 @@
 from matplotlib import pyplot as plt
 from matplotlib import rc
 
-from numpy import linspace
+from numpy import linspace, mgrid, array
 
 # import ExactPack solvers
-from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver
+from exactpack.solvers.riemann.ep_riemann import IGEOS_Solver, GenEOS_Solver, streakplot
 
 xvec = linspace(0., 1., int(1e5))
 t_final = 0.25
@@ -25,9 +25,15 @@ t_final = 0.25
 # The Sod shocktube problem solved using the ideal gas EOS (IGEOS) solver.
 riem1_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
                              rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
-                             xmin=0.,  xd0=0.5, xmax=1., t=0.25)
+                             xmin=0.,  xd0=0.5, xmax=1., t=t_final)
 
 riem1_ig_result = riem1_ig_soln._run(xvec, t_final)
+N = 101
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='pressure')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='density')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='velocity')
+streakplot(solver=riem1_ig_soln, soln=riem1_ig_result, xs=xvec, t=t_final, N=N, var_str='specific_internal_energy')
+plt.show()
 
 # The Sod shocktube problem solved using the generalized EOS (GenEOS) solver.
 riem1_gen_soln = GenEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
@@ -36,13 +42,12 @@ riem1_gen_soln = GenEOS_Solver(rl=1.0,   ul=0.,   pl=1.0,  gl=1.4,
 
 riem1_gen_result = riem1_gen_soln(xvec, t_final)
 
-
 # The Sod shocktube flipping the left & right states, using the IGEOS solver.
 # This problem is probably more relevant for checking that the analytic solution
 # works correctly.
 riem1Rev_ig_soln = IGEOS_Solver(rr=1.0,   ur=0.,   pr=1.0,  gr=1.4,
-                                rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
-                                xmin=0.,  xd0=0.5, xmax=1., t=0.25)
+                             rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                             xmin=0.,  xd0=0.5, xmax=1., t=0.25)
 
 riem1Rev_ig_result = riem1Rev_ig_soln(xvec, t_final)
 
@@ -51,8 +56,8 @@ riem1Rev_ig_result = riem1Rev_ig_soln(xvec, t_final)
 # This problem is probably more relevant for checking that the semi-analytic
 # integrator works correctly.
 riem1Rev_gen_soln = GenEOS_Solver(rr=1.0,   ur=0.,   pr=1.0,  gr=1.4,
-                                  rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
-                                  xmin=0.,  xd0=0.5, xmax=1., t=0.25)
+                               rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                               xmin=0.,  xd0=0.5, xmax=1., t=0.25)
 
 riem1Rev_gen_result = riem1Rev_gen_soln(xvec, t_final)
 
@@ -60,32 +65,32 @@ riem1Rev_gen_result = riem1Rev_gen_soln(xvec, t_final)
 t_final = 0.15
 # The Einfeldt problem solved using the IGEOS solver.
 riem2_ig_soln = IGEOS_Solver(rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
-                             rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
-                             xmin=0., xd0=0.5, xmax=1., t=0.15)
+                          rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
+                          xmin=0., xd0=0.5, xmax=1., t=0.15)
 
 riem2_ig_result = riem2_ig_soln(xvec, t_final)
 
 
 # The reverse Einfeldt problem solved using the IGEOS solver.
 riem2Rev_ig_soln = IGEOS_Solver(rr=1.,   ur=2.0,  pr=0.4,  gr=1.4,
-                                rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
-                                xmin=0., xd0=0.5, xmax=1., t=0.15)
+                             rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
+                             xmin=0., xd0=0.5, xmax=1., t=0.15)
 
 riem2Rev_ig_result = riem2Rev_ig_soln(xvec, t_final)
 
 
 # The Einfeldt problem solved using the GenEOS solver.
 riem2_gen_soln = GenEOS_Solver(rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
-                               rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
-                               xmin=0., xd0=0.5, xmax=1., t=0.15)
+                            rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
+                            xmin=0., xd0=0.5, xmax=1., t=0.15)
 
 riem2_gen_result = riem2_gen_soln(xvec, t_final)
 
 
 # The reverse Einfeldt problem solved using the GenEOS solver.
 riem2Rev_gen_soln = GenEOS_Solver(rr=1.,   ur= 2.0, pr=0.4,  gr=1.4,
-                                  rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
-                                  xmin=0., xd0=0.5, xmax=1., t=0.15)
+                               rl=1.,   ul=-2.0, pl=0.4,  gl=1.4,
+                               xmin=0., xd0=0.5, xmax=1., t=0.15)
 
 riem2Rev_gen_result = riem2Rev_gen_soln(xvec, t_final)
 
@@ -93,32 +98,32 @@ riem2Rev_gen_result = riem2Rev_gen_soln(xvec, t_final)
 t_final = 0.012
 # The Stationary Contact problem solved using the IGEOS solver.
 riem3_ig_soln=IGEOS_Solver(rl=1.,   ul=-19.59745, pl=1000.0,  gl=1.4,
-                           rr=1.,   ur=-19.59745, pr=   0.01, gr=1.4,
-                           xmin=0., xd0=0.8,      xmax=1.,    t=0.012)
+                        rr=1.,   ur=-19.59745, pr=   0.01, gr=1.4,
+                        xmin=0., xd0=0.8,      xmax=1.,    t=0.012)
 
 riem3_ig_result = riem3_ig_soln(xvec, t_final)
 
 
 # The reverse Stationary Contact problem solved using the IGEOS solver.
 riem3Rev_ig_soln=IGEOS_Solver(rr=1.,   ur=19.59745, pr=1000.0,  gr=1.4,
-                              rl=1.,   ul=19.59745, pl=   0.01, gl=1.4,
-                              xmin=0., xd0=0.2,     xmax=1.,    t=0.012)
+                           rl=1.,   ul=19.59745, pl=   0.01, gl=1.4,
+                           xmin=0., xd0=0.2,     xmax=1.,    t=0.012)
 
 riem3Rev_ig_result = riem3Rev_ig_soln(xvec, t_final)
 
 
 # The Stationary Contact problem solved using the GenEOS solver.
 riem3_gen_soln = GenEOS_Solver(rl=1.,   ul=-19.59745, pl=1000.0,  gl=1.4,
-                               rr=1.,   ur=-19.59745, pr=   0.01, gr=1.4,
-                               xmin=0., xd0=0.8,      xmax=1.,    t=0.012)
+                            rr=1.,   ur=-19.59745, pr=   0.01, gr=1.4,
+                            xmin=0., xd0=0.8,      xmax=1.,    t=0.012)
 
 riem3_gen_result = riem3_gen_soln(xvec, t_final)
 
 
 # The reverse Stationary Contact problem solved using the GenEOS solver.
 riem3Rev_gen_soln = GenEOS_Solver(rr=1.,   ur=19.59745, pr=1000.0, gr=1.4,
-                                  rl=1.,   ul=19.59745, pl=  0.01, gl=1.4,
-                                  xmin=0., xd0=0.2,     xmax=1.,   t=0.012)
+                               rl=1.,   ul=19.59745, pl=  0.01, gl=1.4,
+                               xmin=0., xd0=0.2,     xmax=1.,   t=0.012)
 
 riem3Rev_gen_result = riem3Rev_gen_soln(xvec, t_final)
 
@@ -126,32 +131,32 @@ riem3Rev_gen_result = riem3Rev_gen_soln(xvec, t_final)
 t_final = 1.
 # The Slow Shock problem solved using the IGEOS solver.
 riem4_ig_soln = IGEOS_Solver(rl=3.857143, ul=-0.810631, pl=31./3., gl=1.4,
-                             rr=1.,       ur=-3.44,     pr=1.,     gr=1.4,
-                             xmin=0.,     xd0=0.5,      xmax=1.,   t=1.)
+                          rr=1.,       ur=-3.44,     pr=1.,     gr=1.4,
+                          xmin=0.,     xd0=0.5,      xmax=1.,   t=1.)
 
 riem4_ig_result = riem4_ig_soln(xvec, t_final)
 
 
 # The reverse Slow Shock problem solved using the IGEOS solver.
 riem4Rev_ig_soln = IGEOS_Solver(rr=3.857143, ur=0.810631, pr=31./3., gr=1.4,
-                                rl=1.,       ul=3.44,     pl=1.,     gl=1.4,
-                                xmin=0.,     xd0=0.5,     xmax=1.,   t=1.)
+                             rl=1.,       ul=3.44,     pl=1.,     gl=1.4,
+                             xmin=0.,     xd0=0.5,     xmax=1.,   t=1.)
 
 riem4Rev_ig_result = riem4Rev_ig_soln(xvec, t_final)
 
 
 # The Slow Shock problem solved using the GenEOS solver.
 riem4_gen_soln = GenEOS_Solver(rl=3.857143, ul=-0.810631, pl=31./3., gl=1.4,
-                               rr=1.,       ur=-3.44,     pr=1.,     gr=1.4,
-                               xmin=0.,     xd0=0.5,      xmax=1.,   t=1.)
+                            rr=1.,       ur=-3.44,     pr=1.,     gr=1.4,
+                            xmin=0.,     xd0=0.5,      xmax=1.,   t=1.)
 
 riem4_gen_result = riem4_gen_soln(xvec, t_final)
 
 
 # The reverse Slow Shock problem solved using the GenEOS solver.
 riem4Rev_gen_soln = GenEOS_Solver(rr=3.857143, ur=0.810631, pr=31./3., gr=1.4,
-                                  rl=1.,       ul=3.44,     pl=1.,     gl=1.4,
-                                  xmin=0.,     xd0=0.5,     xmax=1.,   t=1.)
+                               rl=1.,       ul=3.44,     pl=1.,     gl=1.4,
+                               xmin=0.,     xd0=0.5,     xmax=1.,   t=1.)
 
 riem4Rev_gen_result = riem4Rev_gen_soln(xvec, t_final)
 
@@ -159,32 +164,32 @@ riem4Rev_gen_result = riem4Rev_gen_soln(xvec, t_final)
 t_final = 0.3
 # The Shock Contact Shock problem solved using the IGEOS solver.
 riem5_ig_soln = IGEOS_Solver(rl=1.0,  ul= 0.5, pl=1.,   gl=1.4,
-                             rr=1.25, ur=-0.5, pr=1.,   gr=1.4,
-                             xmin=0., xd0=0.5, xmax=1., t=0.3)
+                          rr=1.25, ur=-0.5, pr=1.,   gr=1.4,
+                          xmin=0., xd0=0.5, xmax=1., t=0.3)
 
 riem5_ig_result = riem5_ig_soln(xvec, t_final)
 
 
 # The reversed Shock Contact Shock problem solved using the IGEOS solver.
 riem5Rev_ig_soln = IGEOS_Solver(rr=1.0,  ur=-0.5, pr=1.,   gr=1.4,
-                                rl=1.25, ul= 0.5, pl=1.,   gl=1.4,
-                                xmin=0., xd0=0.5, xmax=1., t=0.3)
+                             rl=1.25, ul= 0.5, pl=1.,   gl=1.4,
+                             xmin=0., xd0=0.5, xmax=1., t=0.3)
 
 riem5Rev_ig_result = riem5Rev_ig_soln(xvec, t_final)
 
 
 # The Shock Contact Shock problem solved using the GenEOS solver.
 riem5_gen_soln = GenEOS_Solver(rl=1.0,  ul= 0.5, pl=1.,   gl=1.4,
-                               rr=1.25, ur=-0.5, pr=1.,   gr=1.4,
-                               xmin=0., xd0=0.5, xmax=1., t=0.3)
+                            rr=1.25, ur=-0.5, pr=1.,   gr=1.4,
+                            xmin=0., xd0=0.5, xmax=1., t=0.3)
 
 riem5_gen_result = riem5_gen_soln(xvec, t_final)
 
 
 # The reversed Shock Contact Shock problem solved using the GenEOS solver.
 riem5Rev_gen_soln = GenEOS_Solver(rr=1.0,  ur=-0.5, pr=1.,   gr=1.4,
-                                  rl=1.25, ul= 0.5, pl=1.,   gl=1.4,
-                                  xmin=0., xd0=0.5, xmax=1., t=0.3)
+                               rl=1.25, ul= 0.5, pl=1.,   gl=1.4,
+                               xmin=0., xd0=0.5, xmax=1., t=0.3)
 
 riem5Rev_gen_result = riem5Rev_gen_soln(xvec, t_final)
 
@@ -192,32 +197,32 @@ riem5Rev_gen_result = riem5Rev_gen_soln(xvec, t_final)
 t_final = 0.5
 # The LeBlanc problem solved using the IGEOS solver.
 riem6_ig_soln = IGEOS_Solver(rl=1.0,  ul=0.,   pl=1./15.,     gl=5./3.,
-                             rr=0.01, ur=0.,   pr=2./(3.e10), gr=5./3.,
-                             xmin=0., xd0=0.3, xmax=1.,       t=0.5)
+                          rr=0.01, ur=0.,   pr=2./(3.e10), gr=5./3.,
+                          xmin=0., xd0=0.3, xmax=1.,       t=0.5)
 
 riem6_ig_result = riem6_ig_soln(xvec, t_final)
 
 
 # The reversed LeBlanc problem solved using the IGEOS solver.
 riem6Rev_ig_soln = IGEOS_Solver(rr=1.0,  ur=0.,   pr=1./15.,     gr=5./3.,
-                                rl=0.01, ul=0.,   pl=2./(3.e10), gl=5./3.,
-                                xmin=0., xd0=0.7, xmax=1.,       t=0.5)
+                             rl=0.01, ul=0.,   pl=2./(3.e10), gl=5./3.,
+                             xmin=0., xd0=0.7, xmax=1.,       t=0.5)
 
 riem6Rev_ig_result = riem6Rev_ig_soln(xvec, t_final)
 
 
 # The LeBlanc problem solved using the GenEOS solver.
 riem6_gen_soln = GenEOS_Solver(rl=1.0,  ul=0.,   pl=1./15.,     gl=5./3.,
-                               rr=0.01, ur=0.,   pr=2./(3.e10), gr=5./3.,
-                               xmin=0., xd0=0.3, xmax=1.,       t=0.5)
+                            rr=0.01, ur=0.,   pr=2./(3.e10), gr=5./3.,
+                            xmin=0., xd0=0.3, xmax=1.,       t=0.5)
  
 riem6_gen_result = riem6_gen_soln(xvec, t_final)
 
 
 # The reversed LeBlanc problem solved using the GenEOS solver.
 riem6Rev_gen_soln = GenEOS_Solver(rr=1.0,  ur=0.,   pr=1./15.,      gr=5./3.,
-                                  rl=0.01, ul=0.,   pl=2./(3.e10) , gl=5./3.,
-                                  xmin=0., xd0=0.7, xmax=1.,        t=0.5)
+                               rl=0.01, ul=0.,   pl=2./(3.e10) , gl=5./3.,
+                               xmin=0., xd0=0.7, xmax=1.,        t=0.5)
 
 riem6Rev_gen_result = riem6Rev_gen_soln(xvec, t_final)
 
@@ -226,8 +231,8 @@ t_final = 0.2
 # The Sod shocktube with different gammas for the left & right states, using the
 # IGEOS solver.
 riem7_ig_soln = IGEOS_Solver(rl=1.0,   ul=0.,   pl=2.0,  gl=2.0,
-                                rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
-                                xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+                             rr=0.125, ur=0.,   pr=0.1,  gr=1.4,
+                             xmin=0.,  xd0=0.5, xmax=1., t=0.2)
 
 riem7_ig_result = riem7_ig_soln(xvec, t_final)
 
@@ -235,8 +240,8 @@ riem7_ig_result = riem7_ig_soln(xvec, t_final)
 # The Sod shocktube with different gammas for the left & right states, using the
 # GenEOS solver.
 riem7_gen_soln = GenEOS_Solver(rl=1.0,    ul=0.,  pl=2.0,  gl=2.0,
-                                  rr=0.125,  ur=0.,  pr=0.1,  gr=1.4,
-                                  xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+                               rr=0.125,  ur=0.,  pr=0.1,  gr=1.4,
+                               xmin=0.,  xd0=0.5, xmax=1., t=0.2)
 
 riem7_gen_result = riem7_gen_soln(xvec, t_final)
 
@@ -244,8 +249,8 @@ riem7_gen_result = riem7_gen_soln(xvec, t_final)
 # The reversed Sod shocktube with different gammas for the left & right states,
 # using the IGEOS solver.
 riem7Rev_ig_soln = IGEOS_Solver(rr=1.0,   ur=0.,   pr=2.0,  gr=2.0,
-                                   rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
-                                   xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+                                rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                                xmin=0.,  xd0=0.5, xmax=1., t=0.2)
 
 riem7Rev_ig_result = riem7Rev_ig_soln(xvec, t_final)
 
@@ -253,8 +258,8 @@ riem7Rev_ig_result = riem7Rev_ig_soln(xvec, t_final)
 # The reversed Sod shocktube with different gammas for the left & right states,
 # using the GenEOS solver.
 riem7Rev_gen_soln=GenEOS_Solver(rr=1.0,   ur=0.,   pr=2.0,  gr=2.0,
-                                   rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
-                                   xmin=0.,  xd0=0.5, xmax=1., t=0.2)
+                                rl=0.125, ul=0.,   pl=0.1,  gl=1.4,
+                                xmin=0.,  xd0=0.5, xmax=1., t=0.2)
 
 riem7Rev_gen_result = riem7Rev_gen_soln(xvec, t_final)
 
@@ -263,24 +268,24 @@ t_final = 20.
 xvec = linspace(0., 100., int(1e5))
 # The Lee JWL shocktube problem solved using the GenEOS solver.
 riem_Lee_soln = GenEOS_Solver(rl=0.9525, ul=0.,   pl=1.,     gl=1.8938,
-                              rr=3.81,   ur=0.,   pr=2.,     gr=1.8938,
-                              xmin=0.,   xd0=50., xmax=100., t=20.,
-                              A=632.1,   B=-0.04472,
-                              R1=11.3,   R2=1.13,
-                              r0=1.905,  e0=0.,
-                              problem='JWL')
+                           rr=3.81,   ur=0.,   pr=2.,     gr=1.8938,
+                           xmin=0.,   xd0=50., xmax=100., t=20.,
+                           A=632.1,   B=-0.04472,
+                           R1=11.3,   R2=1.13,
+                           r0=1.905,  e0=0.,
+                           problem='JWL')
 
 riem_Lee_result = riem_Lee_soln(xvec, t_final)
 
 
 # The Lee JWL shocktube problem reversed solved using the GenEOS solver.
 riem_LeeRev_soln = GenEOS_Solver(rr=0.9525, ur=0.,   pr=1.,     gr=1.8938,
-                                 rl=3.81,   ul=0.,   pl=2.,     gl=1.8938,
-                                 xmin=0.,   xd0=50., xmax=100., t=20.,
-                                 A=632.1,   B=-0.04472,
-                                 R1=11.3,   R2=1.13,
-                                 r0=1.905,  e0=0.,
-                                 problem='JWL')
+                              rl=3.81,   ul=0.,   pl=2.,     gl=1.8938,
+                              xmin=0.,   xd0=50., xmax=100., t=20.,
+                              A=632.1,   B=-0.04472,
+                              R1=11.3,   R2=1.13,
+                              r0=1.905,  e0=0.,
+                              problem='JWL')
 
 riem_LeeRev_result = riem_LeeRev_soln(xvec, t_final)
 
@@ -288,24 +293,24 @@ riem_LeeRev_result = riem_LeeRev_soln(xvec, t_final)
 t_final = 12.
 # The Shyue JWL shocktube problem solved using the GenEOS solver.
 riem_Shyue_soln = GenEOS_Solver(rl=1.7,  ul=0.,   pl=10.0,   gl=1.25,
-                                rr=1.0,  ur=0.,   pr= 0.5,   gr=1.25,
-                                xmin=0., xd0=50., xmax=100., t=12.,
-                                A=8.545, B=0.205,
-                                R1=4.6,  R2=1.35,
-                                r0=1.84, e0=0.,
-                                problem='JWL')
+                             rr=1.0,  ur=0.,   pr= 0.5,   gr=1.25,
+                             xmin=0., xd0=50., xmax=100., t=12.,
+                             A=8.545, B=0.205,
+                             R1=4.6,  R2=1.35,
+                             r0=1.84, e0=0.,
+                             problem='JWL')
 
 riem_Shyue_result = riem_Shyue_soln(xvec, t_final)
 
 
 # The Shyue JWL shocktube problem reversed solved using the GenEOS solver.
 riem_ShyueRev_soln = GenEOS_Solver(rr=1.7,  ur=0.,   pr=10.0,   gr=1.25,
-                                   rl=1.0,  ul=0.,   pl= 0.5,   gl=1.25,
-                                   xmin=0., xd0=50., xmax=100., t=12.,
-                                   A=8.545, B=0.205,
-                                   R1=4.6,  R2=1.35,
-                                   r0=1.84, e0=0.,
-                                   problem='JWL')
+                                rl=1.0,  ul=0.,   pl= 0.5,   gl=1.25,
+                                xmin=0., xd0=50., xmax=100., t=12.,
+                                A=8.545, B=0.205,
+                                R1=4.6,  R2=1.35,
+                                r0=1.84, e0=0.,
+                                problem='JWL')
 
 riem_ShyueRev_result = riem_ShyueRev_soln(xvec, t_final)
 
@@ -353,6 +358,13 @@ plt.grid(which='major', axis='both')
 title_str = 'Riemann Problem 1: Sod using the GenEOS solver' 
 plt.title(title_str, fontsize=20.)
 plt.legend(fontsize=20.)
+plt.show()
+
+N = 21
+streakplot(solver=riem1_gen_soln, soln=riem1_gen_result, xs=xvec, t=t_final, N=N, var_str='pressure')
+streakplot(solver=riem1_gen_soln, soln=riem1_gen_result, xs=xvec, t=t_final, N=N, var_str='density')
+streakplot(solver=riem1_gen_soln, soln=riem1_gen_result, xs=xvec, t=t_final, N=N, var_str='velocity')
+streakplot(solver=riem1_gen_soln, soln=riem1_gen_result, xs=xvec, t=t_final, N=N, var_str='specific_internal_energy')
 plt.show()
 
 

@@ -18,7 +18,7 @@ References
    An Analytic Description of Converging Shock Waves,
    J. Fluid Mech. 354, pp. 357-375 (1998).
 
-.. [CJST1997]
+.. [Cockburn1997]
    B. Cockburn, C. Johnson, C.-W. Shu,
    *Advanced Numerical Approximation on Nonlinear Hyperbolic Equations*,
    Lecture Notes in Mathematics, 1997.
@@ -189,7 +189,12 @@ References
    W. F. Noh,
    *Errors for Calculations of Strong Shocks Using an Artificial Viscosity and an Artificial Heat Flux*,
    JCP **72** (1987) 78-120.
-   
+
+.. [Ramsey17]
+   Scott Ramsey, Z. M. Boyd, and S.C. Burnett, 
+   *Solution of the Noh problem using the universal symmetry of the gas dynamics equations*, 
+   Shock Waves **27** (2017) 477-485. 
+
 .. [Reinicke1991] P. Reinicke and J. Meyer-ter-Vehn,
    *The point explosion with heat conduction*,
    Phys. Fluids A **3** (1991) 1807.
