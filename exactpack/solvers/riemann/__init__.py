@@ -28,7 +28,8 @@ These problems exercise the 1D, planar Riemann solver of a hydrodynamics code fo
 Solution Method for General EOS
 ===============================
 
-In this section we present the solution method for a general EOS.
+In this section we describe the solution method for a general EOS.
+The procedure outlined here is similar to Section 4D in [Menikoff1989]_, but developed independently.
 As shown below, given the initial left- and right-state values, :math:`(p, u, \rho)_L` and :math:`(p, u, \rho)_R`, and the speed of sound as a function of density and pressure, self-similar solutions representing either rarefaction or shock conditions are constructed for the left and right states.
 When generically discussing either of the left- or right-states, they may be denoted :math:`(p, u, \rho)_0`.
 In the solution process, the contact discontinuity separating the left and right states yields equal pressures and velocities, :math:`p^{\star}_L = p^{\star}_R` and :math:`u^{\star}_L = u^{\star}_R`, but unequal densities, :math:`\rho^{\star}_L \neq \rho^{\star}_R`.
