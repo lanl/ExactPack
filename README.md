@@ -67,14 +67,27 @@ W. F. Noh, *Errors for Calculations of Strong Shocks Using an Artificial Viscosi
 #### The Sedov Problem
 L. I. Sedov, *Similarity and Dimensional Methods in Mechanics*, Academic Press, New York, NY, p. 146 ff. (1959).
 
-#### The Riemann Problem
+#### The 1D Riemann Problem
 J. J. Gottlieb and C. P. T. Groth, *Assessment of Riemann Solvers for Unsteady One-Dimensional Inviscid Flows of Perfect Gases*, Journal of Computational Physics, **78** (1988) pp 437-458.
 
 R. Menikoff and B. J. Plohr, *The Riemann problem for fluid flow of real materials*, Reviews of Modern Physics, **61**, no. 1, p. 75 (1989).
 
+R. J. LeVeque, *Finite Volume Methods for Hyperbolic Problems*, Cambridge University Press, 2002.
+
 E. F. Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*, Springer, 2009.
 
 F. D. Lora-Clavijo, J. P. Cruz-Perez, F. Siddhartha Guzman, J. A. Gonzalez, *Exact solution of the 1D riemann problem in Newtonian and relativistic hydrodynamics*, Revista Mexicana de Fisica, **59** (2013), pp 28-50.
+
+#### The Supersonic Steady-State 2-section 2D Riemann Problem
+H.M. Glaz and A.B. Wardlaw, *A High-Order Godunov Scheme for Steady Supersonic Gas Dynamics*, Journal of Computational Physics **58**, 157-187 (1985).
+
+C.Y. Loh and W.H. Hui, *New Lagrangian Method for Steady Supersonic Flow Computation I: Godunov Scheme*, Journal of Computational Physics **89**, 207-240 (1990).
+
+C.Y. Loh and M.S. Liou, *New Lagrangian Method for Three-Dimensional Steady Supersonic Flows*, Journal of Computational Physics **113**, 224-248 (1994).
+
+W.H. Hui, P.Y. Li and Z.W. Li, *Unified Coordinate System for Solving the Two-Dimensional Euler Equations*, Journal of Computational Physics **153**, 596-637 (1999).
+
+W.H. Hui and K. Xu, *Computational Fluid Dynamics Based on the Unified Coordinates*, Springer, 2012.
 
 #### The Guderley Problem
 S. D. Ramsey, J. R. Kamm, J. H. Bolstad, *The Guderley Problem Revisited*, International Journal of Computational Fluid Dynamics **26**, no. 2, p. 79-99 (2012).
@@ -112,7 +125,13 @@ J. R. Kamm, *Investigation of the Reinicke & Meyer-ter-Vehn Equations: I. The St
 #### Su-Olson Problem
 B. Su, G. L. Olson, *Benchmark Results for the Non-equilibrium Marshak Diffusion Problem*, Journal of Quantitative Spectroscopic Radiative Transfer **56** p. 337 (1996).
 
-#### Radshocks Problem
+#### Radshock Problems
+R. Lowrie and R. Rauenzahn, *Radiative shock solutions in the equilibrium diffusion limit* Shock Waves **18** (2007) 445.
+
+R. Lowrie and J. Edwards, *Radiative shock solutions with grey nonequilibrium diffusion* Shock Waves **18** (2008) 129.
+
+J. Ferguson, J. Morel and R. Lowrie *Nonrelativistic grey Sn-transport radiative-shock solutions*, High Energy Density Physics, 23 (2017) 95-114.
+
 J. Ferguson, J. Morel and R. Lowrie *The equilibrium-diffusion limit for radiation hydrodynamics*, Journal of Quantitative Spectroscopy and Radiative Transfer, 202 (2017) 176-186
 
 #### Blake Problem

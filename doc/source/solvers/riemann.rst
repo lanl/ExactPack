@@ -1,5 +1,5 @@
-The Riemann Problem
-===================
+The 1D Riemann Problems
+=======================
 
 .. automodule:: exactpack.solvers.riemann
    :members:
