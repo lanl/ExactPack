@@ -112,9 +112,9 @@ class IGEOS_Solver(ExactSolver):
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
         velocity = interp(x, self.x, self.u)
-        sie = interp(x, self.x, self.e)
+        specific_internal_energy = interp(x, self.x, self.e)
 
-        return ExactSolution([x, pressure, density, velocity, sie],
+        return ExactSolution([x, pressure, density, velocity, specific_internal_energy],
                              names=['position',
                                     'pressure',
                                     'density',
@@ -124,7 +124,7 @@ class IGEOS_Solver(ExactSolver):
 
 class GenEOS_Solver(ExactSolver):
     r"""Computes the semi-analytic solution to the Riemann problem for a
-        general EOS. See [MenikoffPlohr1989]_ for the solution description. The
+        general EOS. See [Menikoff1989]_ for the solution description. The
         problem default values are for the Sod shocktube, which is also Riemann
         problem #1.
 
@@ -228,9 +228,9 @@ class GenEOS_Solver(ExactSolver):
         pressure = interp(x, self.x, self.p)
         density = interp(x, self.x, self.r)
         velocity = interp(x, self.x, self.u)
-        sie = interp(x, self.x, self.e)
+        specific_internal_energy = interp(x, self.x, self.e)
 
-        return ExactSolution([x, pressure, density, velocity, sie],
+        return ExactSolution([x, pressure, density, velocity, specific_internal_energy],
                              names=['position',
                                     'pressure',
                                     'density',

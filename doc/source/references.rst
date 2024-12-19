@@ -14,8 +14,8 @@ References
    Bdzil, J. B., R. J. Henninger, and J. W. Walter, Test Problems for DSD2D, LA-14277, 2006.
 
 .. [Chisnell1998]
-   Chisnell, R.F.,
-   An Analytic Description of Converging Shock Waves,
+   R.F. Chisnell,
+   *An Analytic Description of Converging Shock Waves*,
    J. Fluid Mech. 354, pp. 357-375 (1998).
 
 .. [Cockburn1997]
@@ -29,7 +29,7 @@ References
    Phys. Fluids A **3** (1991) 757.
 
 .. [Dawes2015]
-   A Dawes, 
+   A. Dawes, 
    *3D Multi-Material Polyhedral Methods for Diffusion*, 
    MultiMat Conference, Warzberg, Germany (2015).    
    
@@ -50,8 +50,13 @@ References
 
 .. [Ferguson2017]
    J. Ferguson, J. Morel and R. Lowrie
+   *Nonrelativistic grey Sn-transport radiative-shock solutions*,
+   High Energy Density Physics, 23 (2017) 95-114.
+
+.. [Ferguson2017a]
+   J. Ferguson, J. Morel and R. Lowrie
    *The equilibrium-diffusion limit for radiation hydrodynamics*,
-   Journal of Quantitative Spectroscopy and Radiative Transfer, 202 (2017) 176-186
+   Journal of Quantitative Spectroscopy and Radiative Transfer, 202 (2017) 176-186.
 
 .. [Fickett1974]
    W. Fickett and C. Rivard,
@@ -67,6 +72,11 @@ References
    M. Gehmeyr, B. Cheng, and D. Mihalas,
    *Noh's constant-velocity shock problem revisited*,
    Shock Waves **7** (1997) 255.
+
+.. [Glaz1985]
+   H.M. Glaz and A.B. Wardlaw,
+   *A High-Order Godunov Scheme for Steady Supersonic Gas Dynamics*,
+   Journal of Computational Physics **58**, 157-187 (1985).
 
 .. [GottliebGroth1988]
    J.J. Gottlieb and C.P.T. Groth,
@@ -88,13 +98,23 @@ References
    Physical Review **108** (1957) 560.
 
 .. [Heaslet1963]
-   Heaslet and Baldwin,
    M. Heaslet and B. Baldwin,
    *Predictions of the structure of radiation-resisted shock waves*,
    Physics of Fluids **6** (1963) 781.
 
+.. [Hui1999]
+   W.H. Hui, P.Y. Li and Z.W. Li,
+   *Unified Coordinate System for Solving the Two-Dimensional Euler Equations*,
+   Journal of Computational Physics **153**, 596-637 (1999).
+
+.. [Hui2012]
+   W.H. Hui and K. Xu,
+   *Computational Fluid Dynamics Based on the Unified Coordinates*,
+   Springer, 2012.
+
 .. [Hutchens2009]   
-   G J Hutchens, *A Generalized Set of Heat Conduction Test Problems*,
+   G.J. Hutchens,
+   *A Generalized Set of Heat Conduction Test Problems*,
    LA-UR-09-01692, Los Alamos National Laboratory (2009).   
 
 .. [Kamm2000]
@@ -147,12 +167,12 @@ References
 
 .. [Lazarus1981]
    Lazarus, R.B.,
-   Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
+   *Self-Similar Solutions for Converging Shocks and Collapsing Cavities*,
    SIAM J. NUMER. ANAL. 18.2 (1981) 316.
 
 .. [Lazarus1982]
    Lazarus, R.B, 
-   Erratum: Self-Similar Solutions for Converging Shocks and Collapsing Cavities,
+   *Erratum: Self-Similar Solutions for Converging Shocks and Collapsing Cavities*,
    SIAM J. Numer Anal. 19, p. 1090 (1982)
 
 .. [Lee2013]
@@ -164,6 +184,17 @@ References
    Evan J. Lieberman, Xiaodong Liu, Nathaniel R. Morgan, Darby J. Luscher, and Donald E. Burton,
    *A higher-order Lagrangian discontinuous Galerkin hydrodynamic method for solid dynamics*,
    CMAME **353** (2019) 467-490.
+
+.. [Loh1990]
+   C.Y. Loh and W.H. Hui,
+   *New Lagrangian Method for Steady Supersonic Flow Computation I: Godunov Scheme*,
+   Journal of Computational Physics **89**, 207-240 (1990).
+
+.. [Loh1994]
+   C.Y. Loh and M.S. Liou,
+   *New Lagrangian Method for Three-Dimensional Steady Supersonic Flows*,
+   Journal of Computational Physics **113**, 224-248 (1994).
+   
 
 .. [LoraClavijo2013]
    F. LoraClavijo, J. Cruz-Perez, F. Guzman and J. Gonzalez,
@@ -180,7 +211,7 @@ References
    *Radiative shock solutions with grey nonequilibrium diffusion*
    Shock Waves **18** (2008) 129.
 
-.. [MenikoffPlohr1989]
+.. [Menikoff1989]
    R. Menikoff and B. Plohr,
    *The Riemann problem for fluid flow of real materials*,
    Reviews of Modern Physics, **61**, (1989) 1.
@@ -211,7 +242,7 @@ References
 
 .. [Su1996]
    Bingjing Su and Gordon L. Olson,
-   Benchmark Results for the Non-equilibrium Marshak Diffusion Problem,
+   *Benchmark Results for the Non-equilibrium Marshak Diffusion Problem*,
    J. Quant. Spectrosc. Radiat. Transfer **56** 337 (1996).
       
 .. [Timmes2005]

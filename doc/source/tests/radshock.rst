@@ -1,4 +1,4 @@
-The RadShock Problems
+The Radshock Problems
 =====================
 
 .. automodule:: exactpack.tests.test_radshocks
