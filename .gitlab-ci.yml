@@ -20,9 +20,9 @@ ep_tests:
         coverage_format: cobertura
         path: coverage.xml
   tags:
-    - charm
     - turquoise
     - kubernetes
+    - charm
 
 teststyle:
   stage: test
