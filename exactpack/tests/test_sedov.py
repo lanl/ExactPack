@@ -40,7 +40,7 @@ def sedovFcnTable(solution, lamvec):
         v[i] = sci_opt.fminbound(sed_lam_min, vmin, vmax,
                                  args=(solution, lam_want), xtol=1e-16)
         v[i] = sci_opt.fmin(sed_lam_min, v[i], args=(solution, lam_want),
-                            disp=False, xtol=1e-16, ftol=1e-16)
+                            disp=False, xtol=1e-16, ftol=1e-16)[0]
 
         # Compute all sedov functions at v[i]
 
