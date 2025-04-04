@@ -20,7 +20,6 @@ def print_when_verbose(method):
         else:
             with open(os.devnull, 'w') as f, redirect_stdout(f):
                 result = method(cls, *args, **kwargs)
-        
         return result
 
     return wrapper
@@ -57,10 +56,10 @@ def _get_margin(text):
         else:
             margin = ""
             break
-    
+
     return margin
 
-        
+
 class _AddParametersToDocstring(type):
     """A metaclass to add information from the parameter attribute to the doctstring.
     """
@@ -76,11 +75,11 @@ class _AddParametersToDocstring(type):
 
         for key, value in dct['parameters'].items():
             doc += "{}:param {}: {}\n".format(margin, key, value)
-        
+
         dct['__doc__'] = doc
-        
+
         return super(_AddParametersToDocstring, meta).__new__(meta, name, bases, dct)
-    
+
 
 class Jump(object):
     """A class to hold values at jump points.
@@ -111,7 +110,7 @@ class Jump(object):
             #: The left state, or the limiting value at the point from below 
             #: [ :math:`\lim_{x \rightarrow a^-} f(x)` ].
             self.left = left
-            
+
             #: The right state, or the limiting value at the point from above
             #: [ :math:`\lim_{x \rightarrow a^+} f(x)` ].
             self.right = right
@@ -125,7 +124,7 @@ class Jump(object):
     def __repr__(self):
 
         return "Jump(left={}, right={})".format(self.left, self.right)
-            
+
 
 # class JumpCondition(object):
 #     """A class for jump conditions.
@@ -190,7 +189,7 @@ class Jump(object):
 #
 #         return "JumpCondition(location={},{})".format(self.location,
 #                                                       ",".join(vars))
-     
+ 
 
 def JumpCondition(location, *args, **kwargs):
     """This dummy function essentially removes most of the functionality of the
@@ -221,7 +220,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
     3-dimensional problems, the points are given by a :mod:`numpy` array of
     shape ``(N,2)`` or ``(N,3)``, or by a list of 2- or 3-tuples.  Check
     the documentation for a particular solver for details.
-    
+
     For an example of how to write an ExactSolver child class, see
     :ref:`adding-a-solver`.
     """
@@ -231,7 +230,7 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
     parameters = {}
 
     def __init__(self, verbose=False, **params):
-        
+
         # Check that all params are in the self.parameters list
         if not params.keys() <= set(self.parameters):
             raise ValueError("Unknown parameters: "
@@ -248,8 +247,8 @@ class ExactSolver(object, metaclass=_AddParametersToDocstring):
     def __call__(self, r, t):
 
         return self._run(numpy.asarray(r), t)
-    
-    
+
+
 class ExactSolution(numpy.recarray):
     r"""A class for solutions returned by ExactPack solvers.
 
@@ -299,13 +298,13 @@ class ExactSolution(numpy.recarray):
     #: about jumps (that is, there may or may not be jumps in the
     #: analytic solution).
     jumps = None
-    
+
     def __new__(cls, data, names, jumps=None):
 
         # Currently, this does a copy even if data is already an array.
-        obj = numpy.core.records.fromarrays(data, names=names).view(cls)
+        obj = numpy.rec.fromarrays(data, names=names).view(cls)
         obj.jumps = jumps
-        
+
         return obj
 
     def __array_finalize__(self, obj):
@@ -360,7 +359,7 @@ class ExactSolution(numpy.recarray):
         Plot all the variables against radial distance, using auto
         scaling.
         """
-        
+
         for name in self.dtype.names[1:]:
             self.plot(name, scale='auto')
 
@@ -370,7 +369,7 @@ class ExactSolution(numpy.recarray):
 
         with open(filename, 'w') as csvfile:
             writer = csv.writer(csvfile)
-        
+
             writer.writerow(self.dtype.names)
             writer.writerows(self)
 
