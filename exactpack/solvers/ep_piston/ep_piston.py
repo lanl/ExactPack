@@ -14,7 +14,7 @@ class EPpiston(ExactSolver):
     Default values are: G = 0.286 Mbar, Y = 0.0026 Mbar, :math:`\rho` = 2.79 g/cc,
     :math:`u_p` = 0.01 cm/us, :math:`\Gamma` = 2.0, c0 = 0.533 cm/us, s0 = 1.34, model = 'hyperIfin'
     """
-    
+
     parameters = {
         'gamma': 'Gruneisen Gamma',
         'c0': 'Gruneisen parameter (cm/us)',
@@ -39,9 +39,9 @@ class EPpiston(ExactSolver):
     rho0 = 2.79
     up = 0.01
     #xmax = 2.
-    #tmax = 2.        
-        
-    
+    #tmax = 2
+
+
     def __init__(self, **kwargs):
         """Set default values if necessary, check for valid inputs,
         and compute general analytic solution for the parameter values.
@@ -79,7 +79,7 @@ class EPpiston(ExactSolver):
         gamma = self.gamma
         c0 = self.c0
         s0 = self.s0
-            
+
         ### Solve values for the elastic wave ###
 
         #solve for deviatoric stress at yield
@@ -91,30 +91,30 @@ class EPpiston(ExactSolver):
             self.rho_y = self.rho_hyperIfinYield(G,Y,rho0)
         elif self.model=='hyperFin':
             self.rho_y = self.rho_hyperFinYield(G,Y,rho0)
-        
+
         #the rest is solving jump conditions with Hugoniot and EOS
         eta_y = 1.-(rho0/self.rho_y)
         Ph_y = (rho0*c0**2.*eta_y)/((1.-s0*eta_y)**2.)
         Eh_y = (eta_y*Ph_y)/(rho0*2.)
         self.e_y = ( (Ph_y-self.rho_y*gamma*Eh_y+(2./3.)*Y)*(self.rho_y-rho0) )\
         / ( 2.*rho0*self.rho_y-self.rho_y*gamma*(self.rho_y-rho0) )
-        
+
         self.p_y = self.Gruneisen(rho0,gamma,c0,s0,self.rho_y,self.e_y)
         sg_y = self.sdev_y-self.p_y
         self.wv_el = math.sqrt( (self.rho_y*sg_y)/(rho0*(rho0-self.rho_y)))
         self.vel_y = self.wv_el*(self.rho_y-rho0)/self.rho_y
-    
+
         ### Solve values for plastic wave ###
-        
+
         #purely a jump condition solve
         #print(Plastic_Residual(wv_el,rho0,gamma,c0,s0,up,rho_y,p_y,sdev_y,e_y,vel_y))
-        self.wv_pl = float(sci_opt.fsolve(self.Plastic_Residual,self.wv_el))
-    
+        self.wv_pl = float(sci_opt.fsolve(self.Plastic_Residual,self.wv_el)[0])
+
         self.p2 = self.p_y + self.rho_y*(self.wv_pl-self.vel_y)*(self.up-self.vel_y)
         self.rho2 = self.rho_y*( (self.wv_pl-self.vel_y)/(self.wv_pl-self.up) )
         self.e2 = self.e_y + (1./(2.*self.rho_y*self.rho2))*\
         (self.p_y+self.p2-2*self.sdev_y)*(self.rho2-self.rho_y)
-    
+
     def _run(self, xvec, t, xmax=None):
         r''' Evaluate the physical variables at (x,t).
         '''
@@ -135,7 +135,7 @@ class EPpiston(ExactSolver):
             raise ValueError('Elastic Wave went beyond xmax by',wv_el_x-xmax,', reduce time or increase xmax')
             #print('Elastic Wave went beyond xmax by ',wv_el_x-xmax)
             #print('Either reduce time or increase xmax for these parameters.')
-        
+
         # Loop over x
         for i, x in enumerate(xvec):
             if x < wv_pl_x:
@@ -188,7 +188,7 @@ class EPpiston(ExactSolver):
         def finite_yield(F,G,Y):
             R=(2./3.)*Y+(2./3.)*G*(F**(7./3.)-F**(-5./3.)+F**(-1.)-F)
             return R
-        F = float(sci_opt.fsolve(finite_yield,1,(G,Y)))
+        F = float(sci_opt.fsolve(finite_yield,1,(G,Y))[0])
         rho_y = rho0/F
         return rho_y
 
@@ -205,13 +205,12 @@ class EPpiston(ExactSolver):
         p2 = self.p_y + self.rho_y*(wv_pl-self.vel_y)*(self.up-self.vel_y)
         rho2 = self.rho_y*( (wv_pl-self.vel_y)/(wv_pl-self.up) )
         e2 = self.e_y + (1./(2.*self.rho_y*rho2))*(self.p_y+p2-2*self.sdev_y)*(rho2-self.rho_y)
-        
+
         p_eos = self.Gruneisen(self.rho0,self.gamma,self.c0,self.s0,rho2,e2)
         #eta = 1.-(rho0/rho2)
         #Ph = (rho0*c0**2.*eta)/((1.-s0*eta)**2.)
         #Eh = (eta*Ph)/(rho0*2.)
         #p_eos = Ph + gamma*rho2*(e2-Eh)
-        
+
         R = p2-p_eos
         return R
-    
