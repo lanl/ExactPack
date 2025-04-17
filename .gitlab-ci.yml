@@ -1,9 +1,9 @@
-image: "re-registry.lanl.gov/verification/python-3.10_ver_ci"
+image: "re-registry.lanl.gov/verification/python-3.11_ver_ci"
 
 before_script:
   - python -V  # Print out python version for debugging
   - source /venv/bin/activate
-  - export PYTHONPATH="${PYTHONPATH}:/venv/lib/python3.10/site-packages"
+  - export PYTHONPATH="${PYTHONPATH}:/venv/lib/python3.11/site-packages"
   - pip install --no-deps ./
 
 ep_tests:
