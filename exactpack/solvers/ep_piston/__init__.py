@@ -23,7 +23,7 @@ Infinitesimal Hyperelastic:
 ..  math::
   \boldsymbol{\sigma}^{\prime}=2\mathrm{G}(\boldsymbol{\varepsilon}^{\prime}-\boldsymbol{\varepsilon}^{\prime}_p)
 
-Infinitesimal Hyperelastic:
+Finite Hyperelastic:
 
 ..  math::
   \tilde{\bf S}=2\mathrm{G}{\bf E}^{\prime}_e

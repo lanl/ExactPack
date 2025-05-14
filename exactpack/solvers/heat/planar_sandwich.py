@@ -9,7 +9,7 @@ and boundary conditions do not vary along the :math:`x`-direction, on both the u
 lower boundaries, symmetry arguments imply that heat only flows in the :math:`y`-direction,
 
 .. math::
-  \frac{\partial T}{\partial t} &= \kappa \, \frac{\partial^2 T}{\partial y^2}
+  \frac{\partial T}{\partial t} = \kappa \, \frac{\partial^2 T}{\partial y^2}
   \ ,
 
 and the problem reduces to a 1D heat equation.
