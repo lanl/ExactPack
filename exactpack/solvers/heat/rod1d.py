@@ -161,7 +161,7 @@ with :math:`\mu_n` being the solutions to
 
 .. math::
   \tan \mu
-  &= \frac{(\alpha_2 \bar\beta_1 - \alpha_1 \bar\beta_2)\mu}
+  = \frac{(\alpha_2 \bar\beta_1 - \alpha_1 \bar\beta_2)\mu}
   {\alpha_1 \alpha_2 + \bar\beta_1 \bar\beta_2 \mu^2}
   \,\,\,\, {\rm for}\,\,\, \bar\beta_i = \beta_i/L
   \ .
@@ -252,7 +252,7 @@ to
 
 .. math::
   \tan \mu
-  &= \frac{\alpha_2}{\bar\beta_2}\,\frac{1}{\mu}
+  = \frac{\alpha_2}{\bar\beta_2}\,\frac{1}{\mu}
   \ .
 
 The coefficients of the sin-function vanish,

@@ -15,7 +15,7 @@ The heat conduction equation for the temperature profile :math:`T(r,t)`
 takes the following form in spherical coordinates,
 
 .. math::
-  \frac{\partial T}{\partial t} &= \alpha \, \frac{1}{r^2} \frac{\partial}{\partial r}
+  \frac{\partial T}{\partial t} = \alpha \, \frac{1}{r^2} \frac{\partial}{\partial r}
   \left( r^2 \frac{\partial T}{\partial r} \right)
   \ .
 
@@ -36,7 +36,7 @@ A Fourier analysis and the separation of variables technique yields the
 exact solution,
 
 .. math::
-  T(r,t) &= T_b + \frac{2b}{\pi r}\, \Big(T_b - T_0 \Big)
+  T(r,t) = T_b + \frac{2b}{\pi r}\, \Big(T_b - T_0 \Big)
   \sum_{n=1}^\infty \frac{(-1)^n}{n}\, \sin\left(\frac{n \pi}{b}\,r \right)
   \exp\left(- \alpha \frac{n^2 \pi^2}{b^2}\,t \right)
   \ .

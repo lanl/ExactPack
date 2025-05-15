@@ -6,7 +6,7 @@ In 2008, Lowrie and Edwards [Lowrie2008]_ revisited the nonequilibrium-diffusion
 Subsequently, Ferguson, Morel and Lowrie extended the nonequilibrium-diffusion solutions to incorporate :math:`\text{S}_{\text{n}}`-transport [Ferguson2017]_.
 The solution method for the equilibrium-diffusion solver implemented in ExactPack is described in the paper by Lowrie and Rauenzahn [Lowrie2007]_.
 The solution method for the nonequilibrium-diffusion solver and the :math:`\text{S}_{\text{n}}`-transport solver, as implemented in ExactPack, are described in the paper by Ferguson, Morel and Lowrie [Ferguson2017]_.
-These solvers also incorporate an asymptotic parameter ensuring that they preserve the asymptotic equilibriumd-diffusion limit [Ferguson2017a]_, which the user can vary.
+These solvers also incorporate an asymptotic parameter ensuring that they preserve the asymptotic equilibrium-diffusion limit [Ferguson2017a]_, which the user can vary.
 
 The time-independent, 1D, planar, nondinemsionalized radiation-hydrodyanmic (RH) equations are:
 

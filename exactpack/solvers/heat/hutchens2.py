@@ -13,7 +13,7 @@ The steady state heat conduction equation for the temperature profile
   \frac{\partial^2 T}{\partial z^2}
   +
   \frac{g_0}{k}
-  &= 0
+  = 0
   \ .
 
 The boundary conditions are
