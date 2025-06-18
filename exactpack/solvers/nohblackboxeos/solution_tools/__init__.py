@@ -1,2 +1,2 @@
 from .newton_solvers import newton_solver
-from .residual_functions import noh_residual, simplified_noh_residual
+from .residual_functions import energy_noh_residual, simplified_energy_noh_residual, pressure_noh_residual, simplified_pressure_noh_residual
