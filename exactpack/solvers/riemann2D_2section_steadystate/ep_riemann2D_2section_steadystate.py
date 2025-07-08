@@ -37,8 +37,11 @@ class IGEOS_Solver(ExactSolver):
         super(IGEOS_Solver, self).__init__(**kwargs)
 
     @print_when_verbose
-    def _run(self, xs, ys):
-        self.t = 1
+    def _run(self, r, t):
+        self.t = t
+        xs, ys = zip(*r)
+        xs = array(xs)
+        ys = array(ys)
         prob = riemann2D_2section_steadystate.SetupRiemannProblem(
                bottom_state = self.bottom_state,
                top_state = self.top_state)

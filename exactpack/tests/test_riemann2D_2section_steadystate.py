@@ -43,6 +43,8 @@ class TestRiemannSetup():
     ys = linspace(ylim[0], ylim[2], int(1e3)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
 
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state=top_state)
 
     solver = IGEOS_Solver(bottom_state=bottom_state,
@@ -59,7 +61,7 @@ class TestRiemannSetup():
         assert self.solver.top_state == self.top_state
 
 
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
  
     def test_set_intial_state_values(self):
         """Test that initial state values are set correctly.
@@ -276,6 +278,8 @@ class Test_example1():
     ylim=(0., 0.5, 0.8)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -293,7 +297,7 @@ class Test_example1():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = array([0.6614470466220885,0.744358584230489,
@@ -455,6 +459,8 @@ class Test_example1_reversed():
     ylim=(0., 0.3, 0.8)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -472,7 +478,7 @@ class Test_example1_reversed():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = array([0.6614470466220885, 0.9758930449685297,
@@ -638,6 +644,8 @@ class Test_example2():
     ylim=(0., 0.22, 0.42)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -655,7 +663,7 @@ class Test_example2():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = array([0.5585718504665425, 0.659693454916581,
@@ -828,6 +836,8 @@ class Test_example2_reversed():
     ylim=(0., 0.22, 0.42)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -845,7 +855,7 @@ class Test_example2_reversed():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = array([0.5585718504665426, 0.8747401996153422,
@@ -1017,6 +1027,8 @@ class Test_example3():
     ylim=(0., 0.01, 0.21)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -1034,7 +1046,7 @@ class Test_example3():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = [0.5168196501238399, 0.6240827168186247,
@@ -1208,6 +1220,8 @@ class Test_example3_reversed():
     ylim=(0., 0.2, 0.21)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -1225,7 +1239,7 @@ class Test_example3_reversed():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = [0.516819650123839,  0.5732201972606946,
@@ -1396,6 +1410,8 @@ class Test_example4():
     ylim=(0., 0.01, 0.21)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -1413,7 +1429,7 @@ class Test_example4():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = [ 0.08807958854071007, 0.1763353904126041,
@@ -1586,6 +1602,8 @@ class Test_example4_reversed():
     ylim=(0., 0.2, 0.21)
     ys = linspace(ylim[0], ylim[2], int(1e4)) - ylim[1]
     xs = 0. * ys + xlim[2] - 2. * xlim[1]
+    r_state = [[x, y] for x, y in zip(xs, ys)]
+    t = 1.
 
     pB, rB, MB, thetaB_deg, gB = bottom_state
     pT, rT, MT, thetaT_deg, gT = top_state
@@ -1603,7 +1621,7 @@ class Test_example4_reversed():
 
     prob = SetupRiemannProblem(bottom_state=bottom_state, top_state = top_state)
     solver = IGEOS_Solver(bottom_state=bottom_state, top_state=top_state)
-    soln = solver._run(xs, ys)
+    soln = solver._run(r_state, t)
 
     # Test that star state values are computed correctly: [p, r, M, u, v].
     bottom_star_vals = [0.0880795885407101, 0.18182030911580435,
