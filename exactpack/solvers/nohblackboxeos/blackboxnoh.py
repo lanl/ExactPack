@@ -12,29 +12,35 @@ class NohBlackBoxEos(ExactSolver):
         solver = newton_solver()
         geometry = 3 # Default to sphere
         solver_tolerance = 1.0e-10 # Default tolerance
+        solver_tolerance = 1.0e-10 # Default tolerance
         solver_max_iterations = 100 # Default iterations
         rho0 = 1 # Maybe refactor
         u0 = -1 # Maybe refactor
         p0 = 0 # Maybe refactor
+        u0 = -1 # Maybe refactor
+        p0 = 0 # Maybe refactor
         buffer = 0.5 # Buffer to help pick an initial guess for the Newton solver
+        initial_guess = [rho0 + buffer, p0 + buffer, buffer] # Initial guess for the Newton solver (self.solver())
         initial_guess = [rho0 + buffer, p0 + buffer, buffer] # Initial guess for the Newton solver (self.solver())
         solution_data = None
         shocked_density = None
         shocked_pressure = None
         shocked_energy = None
+        shocked_energy = None
         shock_speed = None
 
-        def __init__(self, equation_of_state, **kwargs): # EoS object (as of now) is designed to be object from the eos_library.py file.
+        def __init__(self, equation_of_state, initial_conditions = {'density': 1, 'velocity': -1, 'pressure': 0, 'symmetry': 2}, **kwargs): # EoS object (as of now) is designed to be object from the eos_library.py file.
             super(NohBlackBoxEos, self).__init__(**kwargs)
             self.eos = equation_of_state
-            self.symmetry = self.geometry-1
-            self.initial_conditions = {'density': self.rho0, 'velocity': self.u0, 'pressure': self.p0, 'symmetry': self.symmetry} # Maybe refactor this later so users can change initial conditions. For now focus on black box eos interaction.
+            self.symmetry = initial_conditions['symmetry']
+            self.initial_conditions =initial_conditions # Maybe refactor this later so users can change initial conditions. For now focus on black box eos interaction.
             self.residual_funciton = pressure_noh_residual(self.initial_conditions, self.eos)
 
             if self.geometry not in [1, 2, 3]:
                 raise ValueError("geometry must be 1, 2, or 3")
 
         def set_new_solver_initial_guess(self, new_initial_guess): # Perhaps put all of these together into one function? Or just leave independent?
+              self.initial_guess = new_initial_guess
               self.initial_guess = new_initial_guess
 
         def set_new_solver_tolerance(self, new_tolerance):
@@ -50,6 +56,9 @@ class NohBlackBoxEos(ExactSolver):
                 self.solver.set_new_initial_guess(self.initial_guess)
                 self.solution_data = self.solver.solve(verbose=False)
                 self.shocked_density = self.solution_data['solution'][0]
+                self.shocked_energy = self.solution_data['solution'][1]
+                self.shock_speed = self.solution_data['solution'][2]
+                self.shocked_pressure = self.eos.P(self.shocked_density, self.shocked_energy)
                 self.shocked_energy = self.solution_data['solution'][1]
                 self.shock_speed = self.solution_data['solution'][2]
                 self.shocked_pressure = self.eos.P(self.shocked_density, self.shocked_energy)
@@ -84,16 +93,27 @@ class NohBlackBoxEos(ExactSolver):
                                             ]
                 )
 
+                
+
 
 class PlanarNohBlackBox(NohBlackBoxEos):
+    def __init__(self,equation_of_state, initial_conditions = {'density': 1, 'velocity': -1, 'pressure': 0}):
+        initial_conditions['symmetry'] = 0
+        super().__init__(equation_of_state, initial_conditions)
     parameters = NohBlackBoxEos.parameters
     geometry = 1
 
 class CylindricalNohBlackBox(NohBlackBoxEos):
+    def __init__(self, equation_of_state, initial_conditions = {'density': 1, 'velocity': -1, 'pressure': 0}):
+        initial_conditions['symmetry'] = 1
+        super().__init__(equation_of_state, initial_conditions)
     parameters = NohBlackBoxEos.parameters
     geometry = 2
 
 class SphericalNohBlackBox(NohBlackBoxEos):
+    def __init__(self, equation_of_state, initial_conditions = {'density': 1, 'velocity': -1, 'pressure': 0}):
+        initial_conditions['symmetry'] = 2
+        super().__init__(equation_of_state, initial_conditions)
     parameters = NohBlackBoxEos.parameters
     geometry = 3
 
