@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
+from exactpack.solvers.nohblackboxeos.equations_of_state import (ideal_gas_eos, noble_abel_eos, stiffened_gas_eos, carnahan_starling_eos, aluminum_eos)
 from exactpack.solvers.nohblackboxeos import (
+        NohBlackBoxEos,
     PlanarNohBlackBox,
     CylindricalNohBlackBox,
     SphericalNohBlackBox,
@@ -17,42 +19,11 @@ r = np.linspace(0.0, rmax, 1000)
 t = 0.3
 
 
-class ideal_gas_eos:
-    def __init__(self, gamma=5 / 3):
-        self.gamma = gamma
-        assert gamma != 1, "Gamma cannot be equal to 1"
 
-    def e(self, rho, P):
-        if rho == 0.0:
-            raise ValueError(
-                "Error: rho = 0. Please do not break math and divide by zero."
-            )
-        return P / (rho * (self.gamma - 1.0))
-
-    def de_dP(self, rho, P):
-        if rho == 0.0:
-            raise ValueError(
-                "Error: rho = 0. Please do not break math and divide by zero."
-            )
-        return 1.0 / (rho * (self.gamma - 1))
-
-    def de_drho(self, rho, P):
-        if rho == 0.0:
-            raise ValueError(
-                "Error: rho = 0. Please do not break math and divide by zero."
-            )
-        return -P / (rho**2 * (self.gamma - 1))
-
-    def P(self, rho, e):
-        return rho * e * (self.gamma - 1)
-
-    def dP_drho(self, rho, e):
-        return e * (self.gamma - 1)
-
-    def dP_de(self, rho, e):
-        return rho * (self.gamma - 1)
-
-
+####################################################################
+################# EXAMPLES USING IDEAL GAS #########################
+####################################################################
+# Equation of State Object
 ideal_gas = ideal_gas_eos()
 
 #####################################################################
@@ -67,7 +38,7 @@ soln.plot("pressure")
 soln.plot("velocity", scale=10)
 soln.plot("specific_internal_energy", scale=10)
 plt.xlim(0.0, rmax)
-plt.title("ExactPack solver class PlanarNohBlackBox")
+plt.title("ExactPack solver class PlanarNohBlackBox using Ideal Gas EoS")
 plt.ylim(-15, 70)
 plt.legend(loc=1)
 plt.grid(True)
@@ -75,8 +46,8 @@ plt.tight_layout()
 plt.show()
 
 
-#####################################################################
-# solver object
+######################################################################
+## solver object
 cyl_solver = CylindricalNohBlackBox(ideal_gas)
 cyl_solver.set_new_solver_initial_guess([5, 1, 1])
 cyl_soln = cyl_solver(r, t)
@@ -87,7 +58,7 @@ cyl_soln.plot("pressure")
 cyl_soln.plot("velocity", scale=10)
 cyl_soln.plot("specific_internal_energy", scale=10)
 plt.xlim(0.0, rmax)
-plt.title("ExactPack solver class CylindricalNohBlackBox")
+plt.title("ExactPack solver class CylindricalNohBlackBox using Ideal Gas EoS")
 plt.ylim(-15, 70)
 plt.legend(loc=1)
 plt.grid(True)
@@ -107,9 +78,129 @@ sph_soln.plot("pressure")
 sph_soln.plot("velocity", scale=10)
 sph_soln.plot("specific_internal_energy", scale=10)
 plt.xlim(0.0, rmax)
-plt.title("ExactPack solver class SphericalNohBlackBox")
+plt.title("ExactPack solver class SphericalNohBlackBox using Ideal Gas EoS")
 plt.ylim(-15, 70)
 plt.legend(loc=1)
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+####################################################################
+################# EXAMPLES USING NOBLE ABLE ########################
+####################################################################
+noble_able = noble_abel_eos() # Defaul: b = 0.01, gamma = 5/3
+######################################################################
+# solver object
+
+solver = PlanarNohBlackBox(noble_able)
+solver.set_new_solver_initial_guess([5, 1, 1])
+solver.solve_jump_conditions()
+soln = solver(r, t)
+# plot exact solution
+fig = plt.figure(figsize=(10, 7))
+soln.plot("density")
+soln.plot("pressure")
+soln.plot("velocity", scale=10)
+soln.plot("specific_internal_energy", scale=10)
+plt.xlim(0.0, rmax)
+plt.title("ExactPack solver class PlanarNohBlackBox using Noble Able EoS")
+plt.ylim(-15, 70)
+plt.legend(loc=1)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
+
+##################################################################################################
+################## EXAMPLES USING STIFF GAS AND UNIQUE INITIAL CONDITIONS ########################
+##################################################################################################
+## Equation of State Object
+stiff_gas = stiffened_gas_eos() # Default: p_inf = 1, C_s = sqrt(5/3) = sqrt(gamma), gamma = 5/3
+
+#################################################################################################
+## initial conditions; be aware the Noh Problem with stiff requires symmetry = 0
+initial_conditions = {'velocity': -2, 'density': 3, 'pressure': 1}
+
+#################################################################################################
+## solver object
+
+solver = PlanarNohBlackBox(stiff_gas, initial_conditions)
+solver.set_new_solver_initial_guess([5,1,1])
+solver.solve_jump_conditions()
+soln = solver(r, t)
+# plot exact solution
+fig = plt.figure(figsize=(10, 7))
+soln.plot("density")
+soln.plot("pressure")
+soln.plot("velocity", scale=10)
+soln.plot("specific_internal_energy", scale=10)
+plt.xlim(0.0, rmax)
+plt.title("ExactPack solver class PlanarNohBlackBox using Stiff Gas EoS")
+plt.ylim(-15, 70)
+plt.legend(loc=1)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+#################################################################################################
+################# EXAMPLES USING CARNAHAN-STARLING IN HIGHER GOEMETRY ###########################
+#################################################################################################
+# Equation of State Object
+carnahan_starling = carnahan_starling_eos(b=0.01) #Default: b = 1
+
+################################################################################################
+# initial conditions; be aware the Noh Problem with stiff requires symmetry = 0
+initial_conditions = {'velocity': -2, 'density': 3, 'pressure': 0}
+
+################################################################################################
+# solver object
+
+cs_solver = SphericalNohBlackBox(carnahan_starling, initial_conditions)
+cs_solver.set_new_solver_initial_guess([15,1,1])
+cs_solver.solve_jump_conditions()
+soln = cs_solver(r,t)
+## plot exact solution
+fig = plt.figure(figsize=(10, 7))
+soln.plot("density")
+soln.plot("pressure")
+soln.plot("velocity", scale=10)
+soln.plot("specific_internal_energy", scale=10)
+plt.xlim(0.0, rmax)
+plt.title("ExactPack solver class PlanarNohBlackBox using Carnahn-Starling EoS")
+plt.ylim(-15, 100)
+plt.legend(loc=1)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+###########################################################
+################# EXAMPLES USING ALUMINUM #################
+###########################################################
+# Aluminum EOS
+
+###########################################################
+# solver object
+
+al_eos = aluminum_eos()
+al_initial_conditions = {'velocity': -1.5*0.524 * 1e3, 'density': 2.7, 'pressure': 20, 'symmetry': 0}
+rho_e_D_guess = [2.7, 1.55174098e+08, 524230]
+al_solver = PlanarNohBlackBox(al_eos, al_initial_conditions)
+al_solver.set_new_solver_initial_guess(rho_e_D_guess)
+al_solver.solve_jump_conditions()
+al_r = np.linspace(0.0, 500000, 100000)
+soln =  al_solver(al_r,t)
+## plot exact solution
+fig = plt.figure(figsize=(10, 7))
+soln.plot("density")
+soln.plot("pressure", scale = 1.0e-8)
+soln.plot("velocity")
+soln.plot("specific_internal_energy")
+plt.xlim(0.0, 500000)
+plt.title("ExactPack solver class PlanarNohBlackBox using Aluminum Steinberg EoS")
+plt.ylim(-15,100)
+plt.legend(loc=1)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+

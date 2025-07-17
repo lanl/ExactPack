@@ -87,6 +87,15 @@ This object must have a set of member functions. (Observe that it is precisely t
 be algebraic or analytic sense. For example, a wrapper that accesses tabulated values is an acceptable EoS object!) Furthermore,
 as with any good Newton Solver, the user can select the initial guess, convergence tolerance, and maximum number of iterations.
 
+In addition, we have included the folder `equations_of_state`, which contains implementations for a several equations of state. The main file in that folder is eos_library.py, which contains classes for each of the EoSs.
+In particular, it includes ideal gas, stiffened gas, Noble-Able, Carnahan-Starling, a generic Mie-Gruneisen class, a generic Steinberg EoS class (which inherits from generic Mie-Gruneisen), and an implementation of the
+aluminum EoS using the Steinberg class. These classes are designed to be passed to a residual function (any of the kind described above). As such, the base solution class (NohBlackBox) and all of the solution classes
+(NobPlanar, NohCylindrical, NohSpherical) accept an equation of state. Examples are included in the `/examples` folder. Note that these EoS classes can be used in any of the residual functions, i.e., they include both
+the e = e(rho, P), P = P(rho, e), and all other requisite information for the Newton iteration.
+
+There are other classes in the eos_library.py which currently may not be used. Namely, the `derived_singularity_eos` class is designed as a wrapper for the `singularity_eos` equation of state library (see the github
+for this library). Using this class requires that the `singularity` library be installed and built on the users computer; however, at this time `singularity` and ExactPack have not beeen integrated.
+
 The solver is found in `blackboxnoh.py`; it couples the Newton solver with the residual function to solve the jump conditions.
 Once that is done, it constructs the solution found above using the base classes.
 
